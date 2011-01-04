@@ -5,9 +5,11 @@ package org.arastreju.sge.model.associations;
 
 import java.util.Set;
 
+import org.arastreju.sge.model.nodes.SemanticNode;
+
 /**
  * <p>
- *  [DESCRIPTION]
+ * 	Generalized interface for resolving of a {@link SemanticNode}'s associations.
  * </p>
  *
  * <p>

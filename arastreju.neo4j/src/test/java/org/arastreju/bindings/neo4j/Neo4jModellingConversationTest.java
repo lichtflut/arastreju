@@ -8,7 +8,7 @@ import static org.junit.Assert.assertNotNull;
 import java.io.IOException;
 
 import org.arastreju.bindings.neo4j.impl.Neo4jDataStore;
-import org.arastreju.sge.ModellingConversation;
+import org.arastreju.sge.ModelingConversation;
 import org.arastreju.sge.apriori.RDFS;
 import org.arastreju.sge.model.associations.Association;
 import org.arastreju.sge.model.nodes.ResourceNode;
@@ -21,7 +21,7 @@ import org.junit.Test;
 
 /**
  * <p>
- *  [DESCRIPTION]
+ *  Test case for the {@link Neo4jModellingConversation}.
  * </p>
  *
  * <p>
@@ -34,20 +34,19 @@ public class Neo4jModellingConversationTest {
 	
 	@Test
 	public void testInstantiation() throws IOException{
-		ModellingConversation mc = new Neo4jModellingConversation(new Neo4jDataStore());
+		ModelingConversation mc = new Neo4jModellingConversation(new Neo4jDataStore());
 		
 		ResourceNode node = new SNResource();
 		node.setNamespace(new SimpleNamespace("http://q#"));
 		node.setName("N1");
 		mc.attach(node);
 		
-		mc.flush();
 		mc.close();
 	}
 	
 	@Test
 	public void testFind() throws IOException{
-		ModellingConversation mc = new Neo4jModellingConversation(new Neo4jDataStore());
+		ModelingConversation mc = new Neo4jModellingConversation(new Neo4jDataStore());
 		
 		QualifiedName qn = new QualifiedName("http://q#", "N1");
 		ResourceNode node = new SNResource(qn);
@@ -57,13 +56,12 @@ public class Neo4jModellingConversationTest {
 		
 		assertNotNull(node2);
 		
-		mc.flush();
 		mc.close();
 	}
 	
 	@Test
 	public void testMerge() throws IOException{
-		ModellingConversation mc = new Neo4jModellingConversation(new Neo4jDataStore());
+		ModelingConversation mc = new Neo4jModellingConversation(new Neo4jDataStore());
 		
 		QualifiedName qn = new QualifiedName("http://q#", "N1");
 		ResourceNode node = new SNResource(qn);
@@ -75,7 +73,6 @@ public class Neo4jModellingConversationTest {
 		
 		assertNotNull(node2);
 		
-		mc.flush();
 		mc.close();
 	}
 	
@@ -102,7 +99,6 @@ public class Neo4jModellingConversationTest {
 		
 		Assert.assertTrue(car.asClass().isSpecializationOf(vehicle));
 		
-		mc.flush();
 		mc.close();
 	}
 	

@@ -11,12 +11,12 @@ import org.arastreju.bindings.neo4j.extensions.NeoAssociationKeeper;
 import org.arastreju.bindings.neo4j.mapping.NodeMapper;
 import org.arastreju.sge.model.ResourceID;
 import org.arastreju.sge.model.associations.Association;
+import org.arastreju.sge.model.associations.AssociationKeeper;
 import org.arastreju.sge.model.associations.DetachedAssociationKeeper;
 import org.arastreju.sge.model.nodes.ResourceNode;
 import org.arastreju.sge.model.nodes.SNResource;
 import org.arastreju.sge.model.nodes.SemanticNode;
 import org.arastreju.sge.naming.QualifiedName;
-import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.DynamicRelationshipType;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Node;
@@ -32,7 +32,12 @@ import de.lichtflut.infra.exceptions.NotYetImplementedException;
 
 /**
  * <p>
- *  [DESCRIPTION]
+ *  The Neo4jDataStore consists of three data containers:
+ *  <ul>
+ *  	<li>The Graph Database Service, containing the actual graph</li>
+ *  	<li>An Index Service, mapping URLs and keywords to nodes</li>
+ *  	<li>A Registry mapping QualifiedNames to Arastreju Resources</li>
+ *  </ul>
  * </p>
  *
  * <p>
@@ -49,7 +54,7 @@ public class Neo4jDataStore implements NeoConstants {
 	
 	private final NodeMapper mapper;
 	
-	private final NodeRegistry registry = new NodeRegistry();
+	private final ResourceRegistry registry = new ResourceRegistry();
 	
 	private final Logger logger = LoggerFactory.getLogger(Neo4jDataStore.class);
 
@@ -121,21 +126,25 @@ public class Neo4jDataStore implements NeoConstants {
 		}
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.arastreju.sge.ModellingConversation#attach(org.arastreju.sge.model.nodes.ResourceNode)
+	/**
+	 * Attach the given node if it is not already attached.
+	 * @param resource The node to attach.
+	 * @return A node attached by guaranty.
 	 */
-	public ResourceNode attach(final ResourceNode node) {
-		if (node.isAttached()){
-			return node;
+	public ResourceNode attach(final ResourceNode resource) {
+		// 1st: check if node is already attached.
+		if (resource.isAttached()){
+			return resource;
 		}
 		return doTransacted(new TxResultAction<ResourceNode>() {
 			public ResourceNode execute(Neo4jDataStore store) {
-				// 1st: check if node does already exist and has to be merged
-				ResourceNode attached = findResource(node.getQualifiedName());
+				// 2nd: check if node for qualified name exists and has to be merged
+				ResourceNode attached = findResource(resource.getQualifiedName());
 				if (attached != null){
-					attached = merge(attached, node);
+					attached = merge(attached, resource);
 				} else {
-					attached = persist(node);
+					// 3rd: if resource is really new, create a new Neo node.
+					attached = persist(resource);
 				}
 				return attached;
 			}
@@ -143,35 +152,14 @@ public class Neo4jDataStore implements NeoConstants {
 	}
 	
 	/**
-	 * Create the given resource node in neo4j db.
-	 * @param node A not yet persisted node.
-	 * @return The persisted ResourceNode.
+	 * Unregister the node from the registry and detach the {@link AssociationKeeper}
+	 * @param node
 	 */
-	public ResourceNode persist(final ResourceNode node) {
-		final Node neoNode = gdbService.createNode();
-		mapper.toNeoNode(node, neoNode);
-		final QualifiedName qn = node.getQualifiedName();
-		indexService.index(neoNode, INDEX_KEY_RESOURCE_URI, qn.toURI());
-		logger.info("Indexed: " + qn + " --> " + neoNode);
-		
-		final Iterable<Relationship> relationships = neoNode.getRelationships(Direction.OUTGOING);
-		for (Relationship rel : relationships) {
-			rel.getEndNode();
-		}
-		
-		AssocKeeperAccess.setAssociationKeeper(node, new NeoAssociationKeeper(neoNode, this));
-		
-		return node;
-	}
-	
 	public void detach(final ResourceNode node){
+		registry.unregister(node);
 		AssocKeeperAccess.setAssociationKeeper(node, new DetachedAssociationKeeper(node.getAssociations()));
 	}
 	
-	public void createAssociation(final Association assoc) {
-		assoc.getClient();
-	}
-
 	// -----------------------------------------------------
 	
 	/**
@@ -181,6 +169,11 @@ public class Neo4jDataStore implements NeoConstants {
 		gdbService.shutdown();
 	}
 
+	/**
+	 * Add a new Association to given Neo node, or rather create a corresponding Relation.
+	 * @param subject The neo node, which shall be the subject in the new Relation.
+	 * @param assoc The Association.
+	 */
 	public void addAssociation(final Node subject, final Association assoc) {
 		doTransacted(new TxAction() {
 			public void execute(Neo4jDataStore store) {
@@ -191,7 +184,7 @@ public class Neo4jDataStore implements NeoConstants {
 					final ResourceNode arasClient = resolve(client.asResource());
 					final Node neoClient = AssocKeeperAccess.getNeoNode(arasClient);
 					
-					Relationship relationship = subject.createRelationshipTo(neoClient, 
+					final Relationship relationship = subject.createRelationshipTo(neoClient, 
 							DynamicRelationshipType.withName( "KNOWS" ));
 					relationship.setProperty(PROPERTY_URI, predicate.getQualifiedName().toURI());
 					logger.info("added relationship--> " + relationship + " to node " + subject);
@@ -227,10 +220,10 @@ public class Neo4jDataStore implements NeoConstants {
 	
 	/**
 	 * @param attached The currently attached node.
-	 * @param node An unattached node referencing the same resource.
+	 * @param changed An unattached node referencing the same resource.
 	 * @return The merged {@link ResourceNode}.
 	 */
-	public ResourceNode merge(final ResourceNode attached, final ResourceNode node) {
+	public ResourceNode merge(final ResourceNode attached, final ResourceNode changed) {
 		throw new NotYetImplementedException();
 	}
 	
@@ -242,8 +235,34 @@ public class Neo4jDataStore implements NeoConstants {
 		return gdbService;
 	}
 	
-	public NodeRegistry getRegistry() {
+	public ResourceRegistry getRegistry() {
 		return registry;
+	}
+	
+	// -----------------------------------------------------
+	
+	/**
+	 * Create the given resource node in Neo4j DB.
+	 * @param node A not yet persisted node.
+	 * @return The persisted ResourceNode.
+	 */
+	protected ResourceNode persist(final ResourceNode node) {
+		// 1st: create a corresponding Neo node.
+		final Node neoNode = gdbService.createNode();
+		mapper.toNeoNode(node, neoNode);
+		
+		// 2nd: index the Neo node.
+		final QualifiedName qn = node.getQualifiedName();
+		indexService.index(neoNode, INDEX_KEY_RESOURCE_URI, qn.toURI());
+		logger.debug("Indexed: " + qn + " --> " + neoNode);
+		
+		// 3rd: register resource.
+		registry.register(node);
+		
+		// 4th: attach the Resource with this store.
+		AssocKeeperAccess.setAssociationKeeper(node, new NeoAssociationKeeper(neoNode, this));
+		
+		return node;
 	}
 	
 	// -----------------------------------------------------

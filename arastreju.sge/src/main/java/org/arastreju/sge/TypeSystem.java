@@ -17,7 +17,8 @@ package org.arastreju.sge;
 
 /**
  * <p>
- *  [DESCRIPTION]
+ *  The Type System is a special sub graph containing information about the types and their
+ *  relations.
  * </p>
  *
  * <p>

@@ -18,11 +18,9 @@ package org.arastreju.sge.model.associations;
 
 import java.util.Set;
 
-import org.arastreju.sge.model.nodes.SemanticNode;
-
 /**
  * <p>
- * 	Generalized interface for resolving of a {@link SemanticNode}'s associations.
+ * 	AssociationKeeper for a detached Resource.
  * </p>
  * 
  * <p>

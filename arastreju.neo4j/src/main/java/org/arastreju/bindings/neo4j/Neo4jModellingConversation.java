@@ -4,8 +4,8 @@
 package org.arastreju.bindings.neo4j;
 
 import org.arastreju.bindings.neo4j.impl.Neo4jDataStore;
-import org.arastreju.bindings.neo4j.impl.NodeRegistry;
-import org.arastreju.sge.ModellingConversation;
+import org.arastreju.bindings.neo4j.impl.ResourceRegistry;
+import org.arastreju.sge.ModelingConversation;
 import org.arastreju.sge.model.ResourceID;
 import org.arastreju.sge.model.SemanticGraph;
 import org.arastreju.sge.model.nodes.ResourceNode;
@@ -20,7 +20,7 @@ import de.lichtflut.infra.exceptions.NotYetImplementedException;
 
 /**
  * <p>
- *  Implementation of {@link ModellingConversation} for Neo4j.
+ *  Implementation of {@link ModelingConversation} for Neo4j.
  * </p>
  *
  * <p>
@@ -29,7 +29,7 @@ import de.lichtflut.infra.exceptions.NotYetImplementedException;
  *
  * @author Oliver Tigges
  */
-public class Neo4jModellingConversation implements ModellingConversation {
+public class Neo4jModellingConversation implements ModelingConversation {
 	
 	private final Neo4jDataStore store;
 	
@@ -72,7 +72,7 @@ public class Neo4jModellingConversation implements ModellingConversation {
 	 * @see org.arastreju.sge.ModellingConversation#detach(org.arastreju.sge.model.nodes.ResourceNode)
 	 */
 	public void detach(final ResourceNode node) {
-		throw new NotYetImplementedException();
+		store.detach(node);
 	}
 	
 	// -----------------------------------------------------
@@ -109,24 +109,9 @@ public class Neo4jModellingConversation implements ModellingConversation {
 	// -----------------------------------------------------
 
 	/* (non-Javadoc)
-	 * @see org.arastreju.sge.ModellingConversation#commit()
-	 */
-	public void commit() {
-		// TODO Auto-generated method stub
-	}
-	
-	/* (non-Javadoc)
-	 * @see org.arastreju.sge.ModellingConversation#flush()
-	 */
-	public void flush() {
-		// TODO Auto-generated method stub
-	}
-
-	/* (non-Javadoc)
 	 * @see org.arastreju.sge.ModellingConversation#getSettings()
 	 */
 	public ConversationSettings getSettings() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
@@ -134,15 +119,7 @@ public class Neo4jModellingConversation implements ModellingConversation {
 	 * @see org.arastreju.sge.ModellingConversation#getTransactionControl()
 	 */
 	public TransactionControl getTransactionControl() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	/* (non-Javadoc)
-	 * @see org.arastreju.sge.ModellingConversation#rollback()
-	 */
-	public void rollback() {
-		// TODO Auto-generated method stub
+		throw new UnsupportedOperationException("The Neo4JBinding doesn't support external Transaction Control");
 	}
 	
 	/* (non-Javadoc)
@@ -154,7 +131,7 @@ public class Neo4jModellingConversation implements ModellingConversation {
 	
 	// -----------------------------------------------------
 	
-	protected NodeRegistry getRegistry() {
+	protected ResourceRegistry getRegistry() {
 		return store.getRegistry();
 	}
 	

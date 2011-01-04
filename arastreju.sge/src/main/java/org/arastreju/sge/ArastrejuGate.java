@@ -28,12 +28,16 @@ package org.arastreju.sge;
  */
 public interface ArastrejuGate {
 	
+	/**
+	 * Starts a new Modeling Conversation allowing to read and change the model.
+	 * @return The modeling conversation.
+	 */
+	ModelingConversation startConversation();
+	
 	TypeSystem getTypeSystem();
 	
 	ContextManager getContextManager();
 	
 	IdentityManagement getIdentityManagement();
 	
-	ModellingConversation startConversation();
-
 }

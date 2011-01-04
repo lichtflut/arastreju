@@ -17,7 +17,7 @@ package org.arastreju.sge.query;
 
 /**
  * <p>
- *  [DESCRIPTION]
+ *  Manager for queries such as SPARQL.
  * </p>
  *
  * <p>
