@@ -32,4 +32,9 @@ public interface AssociationKeeper {
 
 	Set<Association> getAssociations();
 
+	/**
+	 * @return The revoked Associations.
+	 */
+	Set<Association> getRevokedAssociations();
+
 }

@@ -7,7 +7,7 @@ import static org.junit.Assert.assertNotNull;
 
 import java.io.IOException;
 
-import org.arastreju.bindings.neo4j.impl.Neo4jDataStore;
+import org.arastreju.bindings.neo4j.impl.NeoDataStore;
 import org.arastreju.sge.ModelingConversation;
 import org.arastreju.sge.apriori.RDFS;
 import org.arastreju.sge.model.associations.Association;
@@ -34,7 +34,7 @@ public class Neo4jModellingConversationTest {
 	
 	@Test
 	public void testInstantiation() throws IOException{
-		ModelingConversation mc = new Neo4jModellingConversation(new Neo4jDataStore());
+		ModelingConversation mc = new Neo4jModellingConversation(new NeoDataStore());
 		
 		ResourceNode node = new SNResource();
 		node.setNamespace(new SimpleNamespace("http://q#"));
@@ -46,7 +46,7 @@ public class Neo4jModellingConversationTest {
 	
 	@Test
 	public void testFind() throws IOException{
-		ModelingConversation mc = new Neo4jModellingConversation(new Neo4jDataStore());
+		ModelingConversation mc = new Neo4jModellingConversation(new NeoDataStore());
 		
 		QualifiedName qn = new QualifiedName("http://q#", "N1");
 		ResourceNode node = new SNResource(qn);
@@ -61,7 +61,7 @@ public class Neo4jModellingConversationTest {
 	
 	@Test
 	public void testMerge() throws IOException{
-		ModelingConversation mc = new Neo4jModellingConversation(new Neo4jDataStore());
+		ModelingConversation mc = new Neo4jModellingConversation(new NeoDataStore());
 		
 		QualifiedName qn = new QualifiedName("http://q#", "N1");
 		ResourceNode node = new SNResource(qn);
@@ -79,7 +79,7 @@ public class Neo4jModellingConversationTest {
 	
 	@Test
 	public void testSNViews() throws IOException {
-		final Neo4jDataStore store = new Neo4jDataStore();
+		final NeoDataStore store = new NeoDataStore();
 		final Neo4jModellingConversation mc = new Neo4jModellingConversation(store);
 		
 		final QualifiedName qnVehicle = new QualifiedName("http://q#", "Verhicle");

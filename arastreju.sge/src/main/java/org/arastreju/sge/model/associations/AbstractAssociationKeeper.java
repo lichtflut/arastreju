@@ -76,8 +76,21 @@ public abstract class AbstractAssociationKeeper implements AssociationKeeper {
 		return Collections.unmodifiableSet(associations);
 	}
 	
+	/**
+	 * @return the revokedAssociations
+	 */
+	public Set<Association> getRevokedAssociations() {
+		return revokedAssociations;
+	}
+	
+	// -----------------------------------------------------
 
+	/**
+	 * To be overridden by sub classes.
+	 */
 	protected abstract void resolveAssociations();
+	
+	// -----------------------------------------------------
 	
 	protected void markResolved(){
 		resolved = true;

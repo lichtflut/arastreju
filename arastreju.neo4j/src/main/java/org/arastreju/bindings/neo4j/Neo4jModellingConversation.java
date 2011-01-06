@@ -3,7 +3,7 @@
  */
 package org.arastreju.bindings.neo4j;
 
-import org.arastreju.bindings.neo4j.impl.Neo4jDataStore;
+import org.arastreju.bindings.neo4j.impl.NeoDataStore;
 import org.arastreju.bindings.neo4j.impl.ResourceRegistry;
 import org.arastreju.sge.ModelingConversation;
 import org.arastreju.sge.model.ResourceID;
@@ -31,7 +31,7 @@ import de.lichtflut.infra.exceptions.NotYetImplementedException;
  */
 public class Neo4jModellingConversation implements ModelingConversation {
 	
-	private final Neo4jDataStore store;
+	private final NeoDataStore store;
 	
 	@SuppressWarnings("unused")
 	private final Logger logger = LoggerFactory.getLogger(Neo4jModellingConversation.class);
@@ -41,7 +41,7 @@ public class Neo4jModellingConversation implements ModelingConversation {
 	/**
 	 * Create a new Modelling Conversation instance using a given data store.
 	 */
-	public Neo4jModellingConversation(final Neo4jDataStore graphDb) {
+	public Neo4jModellingConversation(final NeoDataStore graphDb) {
 		this.store = graphDb;
 	}
 	

@@ -28,5 +28,7 @@ package org.arastreju.sge;
  * @author Oliver Tigges
  */
 public class TypeSystem {
+	
+	
 
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2010 lichtflut Forschungs- und Entwicklungsgesellschaft mbH
+ * Copyright (C) 2011 lichtflut Forschungs- und Entwicklungsgesellschaft mbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,9 +15,13 @@
  */
 package org.arastreju.sge.query;
 
+import java.util.List;
+
+import org.arastreju.sge.model.nodes.ResourceNode;
+
 /**
  * <p>
- *  Manager for queries such as SPARQL.
+ *  Manager for queries such as SPARQL and for index lookups.
  * </p>
  *
  * <p>
@@ -26,6 +30,13 @@ package org.arastreju.sge.query;
  *
  * @author Oliver Tigges
  */
-public class QueryManager {
+public abstract class QueryManager {
 
+	/**
+	 * Find resources with a given tag. 
+	 * @param tag The tag.
+	 * @return The corresponding result list.
+	 */
+	public abstract List<ResourceNode> findByTag(String tag);
+	
 }

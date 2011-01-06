@@ -6,10 +6,12 @@ package org.arastreju.bindings.neo4j.mapping;
 import org.arastreju.bindings.neo4j.NeoConstants;
 import org.arastreju.bindings.neo4j.extensions.NeoAssociationKeeper;
 import org.arastreju.bindings.neo4j.extensions.SNResourceNeo;
-import org.arastreju.bindings.neo4j.impl.Neo4jDataStore;
+import org.arastreju.bindings.neo4j.extensions.SNValueNeo;
+import org.arastreju.bindings.neo4j.impl.NeoDataStore;
 import org.arastreju.sge.model.associations.Association;
 import org.arastreju.sge.model.nodes.ResourceNode;
 import org.arastreju.sge.model.nodes.SNResource;
+import org.arastreju.sge.model.nodes.SNValue;
 import org.arastreju.sge.naming.QualifiedName;
 import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
@@ -28,13 +30,13 @@ import org.neo4j.graphdb.Relationship;
  */
 public class NodeMapper implements NeoConstants {
 	
-	private final Neo4jDataStore store;
+	private final NeoDataStore store;
 
 	/**
 	 * Default constructor.
 	 * @param neo4jDataStore 
 	 */
-	public NodeMapper(Neo4jDataStore neo4jDataStore) {
+	public NodeMapper(NeoDataStore neo4jDataStore) {
 		this.store = neo4jDataStore;
 	}
 	
@@ -54,10 +56,20 @@ public class NodeMapper implements NeoConstants {
 			new SNResourceNeo(qn, assocKeeper);
 		
 		for(Relationship rel : neoNode.getRelationships(Direction.OUTGOING)){
-			ResourceNode object = store.findResource(rel.getEndNode());
-			ResourceNode predicate = store.findResource(new QualifiedName(rel.getProperty(PROPERTY_URI).toString()));
-			
-			Association.create(arasNode, predicate, object, null);
+			final Node neoClient = rel.getEndNode();
+			if (neoClient.hasProperty(PROPERTY_URI)){
+				// Resource Relation
+				ResourceNode object = store.findResource(rel.getEndNode());
+				ResourceNode predicate = store.findResource(new QualifiedName(rel.getProperty(PROPERTY_URI).toString()));
+				Association.create(arasNode, predicate, object, null);
+			} else if (neoClient.hasProperty(PROPERTY_VALUE)){
+				// Value assignment
+				final SNValue value = new SNValueNeo(neoClient);
+				ResourceNode predicate = store.findResource(new QualifiedName(rel.getProperty(PROPERTY_URI).toString()));
+				Association.create(arasNode, predicate, value, null);
+			} else {
+				throw new IllegalStateException("Relation end has neither URI nor Value");
+			}
 		}
 		
 		return arasNode;

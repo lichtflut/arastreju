@@ -21,6 +21,6 @@ public interface TxAction {
 	/**
 	 * Execute.
 	 */
-	public void execute(Neo4jDataStore store);
+	public void execute(NeoDataStore store);
 
 }

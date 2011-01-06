@@ -74,7 +74,7 @@ public class SNValue implements ValueNode {
 	 * @see org.arastreju.api.ontology.model.sn.ValueNode#getDataType()
 	 */
 	public ElementaryDataType getDataType() {
-		return getDataType();
+		return datatype;
 	}
 	
 	/* (non-Javadoc)
@@ -120,10 +120,10 @@ public class SNValue implements ValueNode {
 	 * @see org.arastreju.sge.model.nodes.ValueNode#getStringValue()
 	 */
 	public String getStringValue() {
-		if (getValue() == null){
+		if (value == null){
 			return "";
 		} 
-		return getValue().toString();
+		return value.toString();
 	}
 	
 	/* (non-Javadoc)

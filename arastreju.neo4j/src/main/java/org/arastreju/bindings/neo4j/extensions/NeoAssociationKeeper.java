@@ -3,7 +3,7 @@
  */
 package org.arastreju.bindings.neo4j.extensions;
 
-import org.arastreju.bindings.neo4j.impl.Neo4jDataStore;
+import org.arastreju.bindings.neo4j.impl.NeoDataStore;
 import org.arastreju.sge.model.associations.AbstractAssociationKeeper;
 import org.arastreju.sge.model.associations.Association;
 import org.arastreju.sge.model.associations.AssociationKeeper;
@@ -25,7 +25,7 @@ import org.slf4j.LoggerFactory;
 public class NeoAssociationKeeper extends AbstractAssociationKeeper {
 	
 	private final Node neoNode;
-	private final Neo4jDataStore store;
+	private final NeoDataStore store;
 	
 	private final Logger logger = LoggerFactory.getLogger(NeoAssociationKeeper.class);
 	
@@ -35,7 +35,7 @@ public class NeoAssociationKeeper extends AbstractAssociationKeeper {
 	 * Create a new association keeper.
 	 * @param neoNode The neo node.
 	 */
-	public NeoAssociationKeeper(final Node neoNode, final Neo4jDataStore store) {
+	public NeoAssociationKeeper(final Node neoNode, final NeoDataStore store) {
 		this.neoNode = neoNode;
 		this.store = store;
 	}

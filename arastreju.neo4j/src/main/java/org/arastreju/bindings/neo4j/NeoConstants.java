@@ -18,7 +18,13 @@ public interface NeoConstants {
 	
 	String PROPERTY_URI = "resource-uri";
 	
+	String PROPERTY_VALUE = "value";
+	
+	String PROPERTY_DATATYPE = "datatype";
+	
 	String INDEX_KEY_RESOURCE_URI = "resource-uri";
+	
+	String INDEX_KEY_RESOURCE_VALUE = "resource-value";
 	
 
 }

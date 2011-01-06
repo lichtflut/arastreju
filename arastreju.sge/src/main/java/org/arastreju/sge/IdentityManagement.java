@@ -17,7 +17,9 @@ package org.arastreju.sge;
 
 /**
  * <p>
- *  [DESCRIPTION]
+ *  Identity Management in Arastreju is based on data in a semantic graph.
+ *  Each object of Identity Management - users, groups, roles, permissions -
+ *  are represented by resources in the graph.
  * </p>
  *
  * <p>
