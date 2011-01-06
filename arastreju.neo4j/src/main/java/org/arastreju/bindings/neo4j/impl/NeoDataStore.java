@@ -52,7 +52,7 @@ public class NeoDataStore implements NeoConstants {
 	
 	private final GraphDatabaseService gdbService;
 	
-	private final IndexService indexService;
+	private final LuceneIndexService indexService;
 	
 	private final NodeMapper mapper;
 	
