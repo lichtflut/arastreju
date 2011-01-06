@@ -103,7 +103,7 @@ public class Neo4jModellingConversation implements ModelingConversation {
 	 * @see org.arastreju.sge.ModellingConversation#createQueryManager()
 	 */
 	public QueryManager createQueryManager() {
-		throw new NotYetImplementedException();
+		return new NeoQueryManager(store);
 	}
 	
 	// -----------------------------------------------------

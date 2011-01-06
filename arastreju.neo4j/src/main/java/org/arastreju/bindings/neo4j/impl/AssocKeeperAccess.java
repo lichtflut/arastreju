@@ -28,11 +28,12 @@ public class AssocKeeperAccess {
 	 * Get the association keeper of given node.
 	 */
 	public static AssociationKeeper getAssociationKeeper(final ResourceNode node){
-		if (!(node instanceof SNResource)){
+		final ResourceNode resource = node.asResource();
+		if (!(resource instanceof SNResource)){
 			throw new IllegalArgumentException("Cannot get AssociationKeeper for class: " + node.getClass());
 		}
 		try {
-			return (AssociationKeeper) INSTANCE.assocKeeperField.get(node);
+			return (AssociationKeeper) INSTANCE.assocKeeperField.get(resource);
 		} catch (Exception e) {
 			throw new IllegalArgumentException("Cannot get AssociationKeeper", e);
 		}
@@ -56,11 +57,12 @@ public class AssocKeeperAccess {
 	 * @param ak The association keeper to be set. 
 	 */
 	public static void setAssociationKeeper(final ResourceNode node, final AssociationKeeper ak) {
-		if (!(node instanceof SNResource)){
+		final ResourceNode resource = node.asResource();
+		if (!(resource instanceof SNResource)){
 			throw new IllegalArgumentException("Cannot set AssociationKeeper for class: " + node.getClass());
 		}
 		try {
-			INSTANCE.assocKeeperField.set(node, ak);
+			INSTANCE.assocKeeperField.set(resource, ak);
 		} catch (Exception e) {
 			throw new IllegalArgumentException("Cannot get AssociationKeeper", e);
 		}

@@ -31,7 +31,6 @@ public class ArastrejuInitializationTest {
 		
 		Assert.assertNotNull(rootGate.startConversation());
 		
-		
 	}
 	
 }
