@@ -1,21 +1,37 @@
 /*
- * Copyright (C) Risk Management Solutions GmbH
+ * Copyright (C) 2010 lichtflut Forschungs- und Entwicklungsgesellschaft mbH
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package org.arastreju.bindings.neo4j.impl;
 
 import static org.arastreju.bindings.neo4j.util.test.Dumper.dumpDeep;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
 
+import org.arastreju.bindings.neo4j.ArasRelTypes;
 import org.arastreju.bindings.neo4j.NeoConstants;
-import org.arastreju.bindings.neo4j.NeoPredicate;
 import org.arastreju.sge.apriori.Aras;
 import org.arastreju.sge.apriori.RDFS;
+import org.arastreju.sge.io.OntologyIOException;
+import org.arastreju.sge.io.RdfXmlBinding;
+import org.arastreju.sge.io.SemanticGraphIO;
+import org.arastreju.sge.model.SemanticGraph;
 import org.arastreju.sge.model.associations.Association;
 import org.arastreju.sge.model.nodes.ResourceNode;
 import org.arastreju.sge.model.nodes.SNResource;
@@ -80,7 +96,7 @@ public class NeoDataStoreTest {
 		
 		tx = gdbService.beginTx();
 		
-		Relationship rel = a.createRelationshipTo(b, new NeoPredicate(new QualifiedName("http://q#p")));
+		Relationship rel = a.createRelationshipTo(b, ArasRelTypes.VALUE);
 		rel.setProperty("type", "123");
 		
 		tx.success();
@@ -210,6 +226,22 @@ public class NeoDataStoreTest {
 
 		final ValueNode propername = car2.getSingleAssociationClient(Aras.HAS_PROPER_NAME).asValue();
 		assertEquals(propername.getStringValue(), "Knut");
+	}
+
+	@Test
+	public void testGraphImport() throws IOException, OntologyIOException{
+		final SemanticGraphIO io = new RdfXmlBinding();
+		final SemanticGraph graph = io.read(getClass().getClassLoader().getResourceAsStream("n4.aras.rdf"));
+		
+		store.attach(graph);
+		
+		final QualifiedName qn = new QualifiedName("http://arastreju.org/kernel#BrandName");
+		
+		final ResourceNode node = store.findResource(qn);
+		assertNotNull(node);
+		
+		System.out.println(node.getAssociations());
+		
 	}
 
 }

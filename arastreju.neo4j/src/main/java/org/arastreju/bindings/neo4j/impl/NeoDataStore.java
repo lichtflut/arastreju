@@ -1,5 +1,17 @@
 /*
- * Copyright (C) 2009 lichtflut Forschungs- und Entwicklungsgesellschaft mbH
+ * Copyright (C) 2010 lichtflut Forschungs- und Entwicklungsgesellschaft mbH
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package org.arastreju.bindings.neo4j.impl;
 
@@ -7,10 +19,12 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Set;
 
+import org.arastreju.bindings.neo4j.ArasRelTypes;
 import org.arastreju.bindings.neo4j.NeoConstants;
 import org.arastreju.bindings.neo4j.extensions.NeoAssociationKeeper;
 import org.arastreju.bindings.neo4j.mapping.NodeMapper;
 import org.arastreju.sge.model.ResourceID;
+import org.arastreju.sge.model.SemanticGraph;
 import org.arastreju.sge.model.associations.Association;
 import org.arastreju.sge.model.associations.AssociationKeeper;
 import org.arastreju.sge.model.associations.DetachedAssociationKeeper;
@@ -19,7 +33,6 @@ import org.arastreju.sge.model.nodes.SNResource;
 import org.arastreju.sge.model.nodes.SemanticNode;
 import org.arastreju.sge.model.nodes.ValueNode;
 import org.arastreju.sge.naming.QualifiedName;
-import org.neo4j.graphdb.DynamicRelationshipType;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
@@ -164,6 +177,27 @@ public class NeoDataStore implements NeoConstants {
 	
 	// -----------------------------------------------------
 	
+	public SemanticGraph attach(final SemanticGraph graph){
+		return doTransacted(new TxResultAction<SemanticGraph>() {
+			public SemanticGraph execute(NeoDataStore store) {
+				for(ResourceNode node : graph.getSubjects()){
+					attach(node);
+				}
+				return graph;
+			}
+		});
+	}
+	
+	public void detach(final SemanticGraph graph){
+		for(SemanticNode node : graph.getNodes()){
+			if (node.isAttached() && node.isResourceNode()){
+				detach(node.asResource());
+			}
+		}
+	}
+	
+	// -----------------------------------------------------
+	
 	/**
 	 * Close the graph database;
 	 */
@@ -186,8 +220,7 @@ public class NeoDataStore implements NeoConstants {
 					final ResourceNode arasClient = resolve(client.asResource());
 					final Node neoClient = AssocKeeperAccess.getNeoNode(arasClient);
 					
-					final Relationship relationship = subject.createRelationshipTo(neoClient, 
-							DynamicRelationshipType.withName( "HAS_RELATION" ));
+					final Relationship relationship = subject.createRelationshipTo(neoClient, ArasRelTypes.REFERENCE);
 					relationship.setProperty(PROPERTY_URI, predicate.getQualifiedName().toURI());
 					logger.info("added relationship--> " + relationship + " to node " + subject);
 				} else {
@@ -197,8 +230,7 @@ public class NeoDataStore implements NeoConstants {
 					neoClient.setProperty(PROPERTY_DATATYPE, client.asValue().getDataType().name());
 					indexService.index(subject, INDEX_KEY_RESOURCE_VALUE, value.getStringValue());
 					logger.debug("Indexed: " + value.getStringValue() + " --> " + subject);
-					final Relationship relationship = subject.createRelationshipTo(neoClient, 
-							DynamicRelationshipType.withName( "HAS_VALUE" ));
+					final Relationship relationship = subject.createRelationshipTo(neoClient, ArasRelTypes.VALUE);
 					relationship.setProperty(PROPERTY_URI, predicate.getQualifiedName().toURI());
 					logger.info("added value --> " + relationship + " to node " + subject);
 				}
@@ -289,7 +321,7 @@ public class NeoDataStore implements NeoConstants {
 		}
 		
 		// 5th: attach the Resource with this store.
-		AssocKeeperAccess.setAssociationKeeper(node, new NeoAssociationKeeper(neoNode, this));
+		AssocKeeperAccess.setAssociationKeeper(node, new NeoAssociationKeeper(node, neoNode, this));
 		
 		return node;
 	}

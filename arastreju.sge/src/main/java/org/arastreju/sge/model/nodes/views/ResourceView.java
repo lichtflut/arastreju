@@ -102,6 +102,13 @@ public abstract class ResourceView implements ResourceNode {
 		return resource.references(ref);
 	}
 	
+	/* (non-Javadoc)
+	 * @see org.arastreju.sge.model.nodes.ResourceNode#isBlankNode()
+	 */
+	public boolean isBlankNode() {
+		return resource.isBlankNode();
+	}
+	
 	// -----------------------------------------------------
 	
 	/* (non-Javadoc)

@@ -64,8 +64,8 @@ public class SNResource implements ResourceNode {
 	/**
 	 * Default constructor for new unattached resource.
 	 */
-	public SNResource(final String name, final Namespace namespace) {
-		this(name, namespace, new DetachedAssociationKeeper());
+	public SNResource(final Namespace namespace, final String name) {
+		this(namespace, name, new DetachedAssociationKeeper());
 	}
 	
 	
@@ -73,7 +73,7 @@ public class SNResource implements ResourceNode {
 	 * Default constructor for new unattached resource.
 	 */
 	public SNResource(final QualifiedName qn) {
-		this(qn.getSimpleName(), qn.getNamespace(), new DetachedAssociationKeeper());
+		this(qn.getNamespace(), qn.getSimpleName(), new DetachedAssociationKeeper());
 	}
 	
 	/**
@@ -83,16 +83,16 @@ public class SNResource implements ResourceNode {
 	 * @param associationKeeper
 	 */
 	protected SNResource(final QualifiedName qn, final AssociationKeeper associationKeeper) {
-		this(qn.getSimpleName(), qn.getNamespace(), associationKeeper);
+		this(qn.getNamespace(), qn.getSimpleName(), associationKeeper);
 	}
 	
 	/**
 	 * Constructor for SPI subclasses.
-	 * @param name The local name.
 	 * @param namespace The namespace.
+	 * @param name The local name.
 	 * @param associationKeeper
 	 */
-	protected SNResource(final String name, final Namespace namespace, final AssociationKeeper associationKeeper) {
+	protected SNResource(final Namespace namespace, final String name, final AssociationKeeper associationKeeper) {
 		this.name = name;
 		this.namespace = namespace;
 		this.associationKeeper = associationKeeper;
@@ -135,6 +135,13 @@ public class SNResource implements ResourceNode {
 	public void setNamespace(final Namespace namespace) {
 		// TODO: make protected: Only changeable in SPI
 		this.namespace = namespace;
+	}
+	
+	/* (non-Javadoc)
+	 * @see org.arastreju.sge.model.nodes.ResourceNode#isBlankNode()
+	 */
+	public boolean isBlankNode() {
+		return VoidNamespace.isInVoidNamespace(this);
 	}
 	
 	// -----------------------------------------------------

@@ -15,9 +15,19 @@
  */
 package org.arastreju.sge.model;
 
+import java.util.Collection;
+import java.util.Set;
+
+import org.arastreju.sge.model.associations.Association;
+import org.arastreju.sge.model.nodes.ResourceNode;
+import org.arastreju.sge.model.nodes.SemanticNode;
+import org.arastreju.sge.naming.Namespace;
+
+
 /**
  * <p>
- *  [DESCRIPTION]
+ *  A Semantic Graph is a graph based on Semantic Nodes and Associations which connect
+ *  these nodes.
  * </p>
  *
  * <p>
@@ -27,5 +37,24 @@ package org.arastreju.sge.model;
  * @author Oliver Tigges
  */
 public interface SemanticGraph {
-
+	
+	Set<Association> getAssociations();
+	
+	Set<SemanticNode> getNodes();
+	
+	Set<ResourceNode> getSubjects();
+	
+	Collection<Namespace> getNamespaces();
+	
+	// -----------------------------------------------------
+	
+	void addAssociations(Collection<Association> associations);
+	
+	/**
+	 * Merge all data from given graph into this graph. 
+	 * The given graph will not be changed.
+	 * @param graph The graph to be merged.
+	 */
+	void merge(SemanticGraph graph);
+	
 }

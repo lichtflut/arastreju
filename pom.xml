@@ -1,50 +1,69 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<?xml version="1.0"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-
 	<groupId>org.arastreju</groupId>
 	<artifactId>arastreju</artifactId>
 	<name>Arastreju</name>
 	<version>0.5.0-SNAPSHOT</version>
 	<description>Arastreju next gen</description>
-
 	<packaging>pom</packaging>
-
 	<modules>
 		<module>arastreju.sge</module>
 		<module>arastreju.neo4j</module>
 	</modules>
-
 	<build>
 		<plugins>
 			<plugin>
 				<groupId>com.google.code.maven-license-plugin</groupId>
 				<artifactId>maven-license-plugin</artifactId>
+				<version>1.4.0</version>
 				<configuration>
 					<header>license.txt</header>
 					<headerDefinitions>
 						<headerDefinition>header.xml</headerDefinition>
 					</headerDefinitions>
+					<includes>
+						<include>src/**</include>
+					</includes>
+					<excludes>
+						<exclude>target/**</exclude>
+						<exclude>.git/**</exclude>
+						<exclude>.idea/**</exclude>
+						<exclude>.settings/**</exclude>
+						<exclude>header.xml</exclude>
+						<exclude>**/*.rdf</exclude>
+					</excludes>
 				</configuration>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
+				<version>2.3.2</version>
 				<configuration>
 					<source>1.5</source>
 					<target>1.5</target>
+					<encoding>UTF-8</encoding>
 				</configuration>
 			</plugin>
 			<plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-eclipse-plugin</artifactId>
-                <configuration>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-resources-plugin</artifactId>
+				<version>2.4.3</version>
+				<configuration>
+					<encoding>UTF-8</encoding>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-eclipse-plugin</artifactId>
+				<version>2.8</version>
+				<configuration>
 					<projectNameTemplate>[artifactId]</projectNameTemplate>
 					<wtpmanifest>true</wtpmanifest>
 					<wtpapplicationxml>true</wtpapplicationxml>
 					<wtpversion>2.0</wtpversion>
 					<manifest>${basedir}/src/main/resources/META-INF/MANIFEST.MF</manifest>
-                </configuration>
+				</configuration>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -56,10 +75,9 @@
 			</plugin>
 		</plugins>
 	</build>
-	
 	<dependencies>
 		<dependency>
-			 <groupId>org.slf4j</groupId>
+			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-log4j12</artifactId>
 			<version>1.5.10</version>
 		</dependency>
@@ -70,7 +88,6 @@
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
-	
 	<repositories>
 		<repository>
 			<id>maven2-repository.dev.java.net</id>
@@ -79,18 +96,11 @@
 			<layout>default</layout>
 		</repository>
 	</repositories>
-
 	<pluginRepositories>
 		<pluginRepository>
 			<id>maven2-repository.dev.java.net</id>
 			<name>Java.net Maven 2 Repository</name>
 			<url>http://download.java.net/maven/2</url>
-		</pluginRepository>
-		<pluginRepository>
-			<id>maven-repository.dev.java.net</id>
-			<name>Java.net Maven 1 Repository (legacy)</name>
-			<url>http://download.java.net/maven/1</url>
-			<layout>legacy</layout>
 		</pluginRepository>
 		<pluginRepository>
 			<id>mc-release</id>
@@ -104,7 +114,6 @@
 			</releases>
 		</pluginRepository>
 	</pluginRepositories>
-	
 	<distributionManagement>
 		<repository>
 			<id>lf-rep</id>
@@ -117,5 +126,4 @@
 			<url>http://www.lichtflut.de:15080/archiva/repository/lf-rep/</url>
 		</snapshotRepository>
 	</distributionManagement>
-	
 </project>

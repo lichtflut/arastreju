@@ -33,7 +33,7 @@ public class SimpleNamespace implements Namespace, Comparable<Namespace> {
 	
 	private String uri;
 	
-	private String prefix = "<no-prefix>";
+	private String prefix;
 	
 	// -----------------------------------------------------
 	

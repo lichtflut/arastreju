@@ -49,6 +49,8 @@ public interface ResourceNode extends SemanticNode, ResourceID {
 	
 	QualifiedName getQualifiedName();
 	
+	boolean isBlankNode();
+	
 	// -----------------------------------------------------
 
 	/**
