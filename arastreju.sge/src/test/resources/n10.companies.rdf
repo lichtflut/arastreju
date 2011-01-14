@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rdf:RDF
+	xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+	xmlns:aras="http://arastreju.org/kernel#"
+	xmlns:companies="http://tinybluepla.net/companies#"
+	xmlns:org="http://tinybluepla.net/org#"
+	xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+
+<rdf:Description rdf:about="http://tinybluepla.net/companies#AppleCorp">
+	<rdf:type rdf:resource="http://tinybluepla.net/org#Enterprise"/>
+	<aras:hasMediaDescription>http://i.afterdawn.com/v3/news/apple_logo_140w-silver.jpg</aras:hasMediaDescription>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/companies#BmwAG">
+	<aras:hasNamePart>http://tinybluepla.net/terminology/ANY_names#BMW</aras:hasNamePart>
+	<aras:hasNamePart>http://tinybluepla.net/terminology/ANY_names#AG</aras:hasNamePart>
+	<rdf:type rdf:resource="http://tinybluepla.net/org#Enterprise"/>
+	<aras:hasMediaDescription>http://www.freshnews.in/wp-content/uploads/2008/11/bmw-300x297.jpg</aras:hasMediaDescription>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/companies#DatimlerAG">
+	<aras:hasMediaDescription>http://www.reichsbank-aktien-shop.de/images/products/daimler-benz-ag_100rm_tn.jpg</aras:hasMediaDescription>
+	<rdf:type rdf:resource="http://tinybluepla.net/org#Enterprise"/>
+	<aras:surname>http://tinybluepla.net/terminology/ANY_names#AG</aras:surname>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/companies#DeutscheBankAG">
+	<aras:hasMediaDescription>http://www.google-earth-wereld.nl/banken/deutsche_bank_ag_01.jpg</aras:hasMediaDescription>
+	<rdf:type rdf:resource="http://tinybluepla.net/org#Enterprise"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/companies#GeneralMotorsCorp">
+	<rdf:type rdf:resource="http://tinybluepla.net/org#Enterprise"/>
+	<aras:hasMediaDescription>http://www.lovemarks.com/media/image/general_motors_html.jpg</aras:hasMediaDescription>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/companies#InnoQGmbH">
+	<aras:hasMediaDescription>http://software-families.org/images/innoq.gif</aras:hasMediaDescription>
+	<rdf:type rdf:resource="http://tinybluepla.net/org#Enterprise"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/companies#KleinRefratherLebenVvaG">
+	<aras:hasMediaDescription>http://www.esgehtmirgut.at/cmsimages/default/beach.jpg</aras:hasMediaDescription>
+	<aras:hasProperName>http://tinybluepla.net/terminology/EN_standard#Klein-Refrather</aras:hasProperName>
+	<aras:hasProperName>http://tinybluepla.net/terminology/EN_standard#Lebensversicherung</aras:hasProperName>
+	<aras:hasProperName>http://tinybluepla.net/terminology/EN_standard#Vvag</aras:hasProperName>
+	<rdf:type rdf:resource="http://tinybluepla.net/org#Enterprise"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/companies#LichtflutFEGmbH">
+	<aras:hasMediaDescription>http://www.lichtflut.de/res/logo_comp_medium.png</aras:hasMediaDescription>
+	<rdf:type rdf:resource="http://tinybluepla.net/org#Enterprise"/>
+	<aras:hasProperName>http://tinybluepla.net/terminology/ANY_names#lichtflut</aras:hasProperName>
+	<aras:hasProperName>http://tinybluepla.net/terminology/ANY_names#GmbH</aras:hasProperName>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/companies#Microsoft">
+	<aras:hasMediaDescription>http://jeenaparadies.net/img/weblog/2005/microsoft.jpg</aras:hasMediaDescription>
+	<rdf:type rdf:resource="http://tinybluepla.net/org#Enterprise"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/companies#OpelAg">
+	<aras:hasMediaDescription>http://www.avtorinok.ru/news/Opel_bpic_2855.jpg</aras:hasMediaDescription>
+	<rdf:type rdf:resource="http://tinybluepla.net/org#Enterprise"/>
+	<aras:hasProperName>http://tinybluepla.net/terminology/ANY_names#AG</aras:hasProperName>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/companies#SystemOneGmbH">
+	<aras:hasMediaDescription>http://www.sysone.de/images/peye.jpg</aras:hasMediaDescription>
+	<rdf:type rdf:resource="http://tinybluepla.net/org#Enterprise"/>
+</rdf:Description>
+
+</rdf:RDF>

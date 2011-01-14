@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rdf:RDF
+	xmlns:common="http://tinybluepla.net/common#"
+	xmlns:aras="http://arastreju.org/kernel#"
+	xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+	xmlns:persons="http://tinybluepla.net/persons#">
+
+<rdf:Description rdf:about="http://tinybluepla.net/persons#AlexanderVonAesch">
+	<aras:hasNamePart>http://tinybluepla.net/terminology/ANY_names#von</aras:hasNamePart>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Person"/>
+	<aras:hasSurname>http://tinybluepla.net/terminology/EN_standard#Aesch</aras:hasSurname>
+	<aras:hasForname>http://tinybluepla.net/terminology/ANY_names#Alexander</aras:hasForname>
+	<aras:hasMediaDescription>https://www.xing.com/img/users/7/5/4/8f834fb0b.6617792.jpg</aras:hasMediaDescription>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/persons#AngelaMerkel">
+	<aras:hasMediaDescription>http://02varvara.files.wordpress.com/2008/05/angela_merkel-1.jpg</aras:hasMediaDescription>
+	<aras:hasForname>http://tinybluepla.net/terminology/ANY_names#Angela</aras:hasForname>
+	<aras:hasSurname>http://tinybluepla.net/terminology/ANY_names#Merkel</aras:hasSurname>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Woman"/>
+	<aras:hasNickname>http://tinybluepla.net/terminology/ANY_names#Angie</aras:hasNickname>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/persons#BarackObama">
+	<aras:hasMediaDescription>http://politicalkudzu.com/wp-content/uploads/2008/02/barack-5.jpg</aras:hasMediaDescription>
+	<aras:hasSurname>http://tinybluepla.net/terminology/ANY_names#Obama</aras:hasSurname>
+	<aras:hasForname>http://tinybluepla.net/terminology/ANY_names#Barack</aras:hasForname>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Person"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/persons#BillClinton">
+	<aras:hasMediaDescription>http://www.mtholyoke.edu/~braga20a/aidsbrazil/images/bill%20clinton.jpg</aras:hasMediaDescription>
+	<aras:hasSurname>http://tinybluepla.net/terminology/ANY_names#Clinton</aras:hasSurname>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Man"/>
+	<aras:hasForname>http://tinybluepla.net/terminology/ANY_names#Bill</aras:hasForname>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/persons#BillGates">
+	<aras:hasForname>http://tinybluepla.net/terminology/ANY_names#Bill</aras:hasForname>
+	<aras:hasSurname>http://tinybluepla.net/terminology/ANY_names#Gates</aras:hasSurname>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Man"/>
+	<aras:hasMediaDescription>http://www.rotaryeclubone.org/articles/2007-Rotary/images/Bill%20Gates%201.jpg</aras:hasMediaDescription>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/persons#BorisSchickedanz">
+	<aras:hasMediaDescription>https://www.xing.com/img/users/9/0/d/f22f09206.30603,3.jpg</aras:hasMediaDescription>
+	<aras:hasSurname>http://tinybluepla.net/terminology/ANY_names#Schickedanz</aras:hasSurname>
+	<aras:hasForname>http://tinybluepla.net/terminology/ANY_names#Boris</aras:hasForname>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Person"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/persons#ChristianTrump">
+	<aras:hasSurname>http://tinybluepla.net/terminology/ANY_names#Trump</aras:hasSurname>
+	<aras:hasForname>http://tinybluepla.net/terminology/ANY_names#Christian</aras:hasForname>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Person"/>
+	<aras:hasMediaDescription>http://www.ringtone-mania.com/Themes/S60_themes_previews/Recomended/Christian%20Theme/christian_theme.jpg</aras:hasMediaDescription>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/persons#FrankWalterSteinmeier">
+	<aras:hasForname>http://tinybluepla.net/terminology/ANY_names#Frank</aras:hasForname>
+	<aras:hasMediaDescription>http://cms.ifa.de/fileadmin/content/publikationen/images/frank-walter_steinmeier.jpg</aras:hasMediaDescription>
+	<aras:hasMiddleName>http://tinybluepla.net/terminology/ANY_names#Walter</aras:hasMiddleName>
+	<aras:hasSurname>http://tinybluepla.net/terminology/ANY_names#Steinmeier</aras:hasSurname>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Person"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/persons#FritzSchramma">
+	<aras:hasForname>http://tinybluepla.net/terminology/ANY_names#Fritz</aras:hasForname>
+	<aras:hasMediaDescription>http://www.mckb.de/images/portraits/schramma_fritz.jpg</aras:hasMediaDescription>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Person"/>
+	<aras:hasSurname>http://tinybluepla.net/terminology/ANY_names#Schramma</aras:hasSurname>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/persons#GeorgeWashington">
+	<aras:hasSurname>http://tinybluepla.net/terminology/ANY_names#Washington</aras:hasSurname>
+	<aras:hasMediaDescription>http://www.jesuismort.com/biographie_celebrite_photo/biographie_photo_celebrite/1291_photo_fiche_washington_george.jpg</aras:hasMediaDescription>
+	<aras:hasForname>http://tinybluepla.net/terminology/ANY_names#George</aras:hasForname>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Person"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/persons#HeidiKlum">
+	<aras:hasMediaDescription>http://upload.wikimedia.org/wikipedia/commons/thumb/5/52/Heidi_Klum2_edit.jpg/140px-Heidi_Klum2_edit.jpg</aras:hasMediaDescription>
+	<aras:hasSurname>http://tinybluepla.net/terminology/ANY_names#Klum</aras:hasSurname>
+	<aras:hasForname>http://tinybluepla.net/terminology/ANY_names#Heidi</aras:hasForname>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Woman"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/persons#HillaryClinton">
+	<aras:hasMediaDescription>http://blogs.zdnet.com/open-source/images/hillary%20clinton.jpg</aras:hasMediaDescription>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Woman"/>
+	<aras:hasSurname>http://tinybluepla.net/terminology/ANY_names#Clinton</aras:hasSurname>
+	<aras:hasForname>http://tinybluepla.net/terminology/ANY_names#Hillary</aras:hasForname>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/persons#HorstKoehler">
+	<aras:hasMediaDescription>http://www.nndb.com/people/756/000111423/horst-koehler-1-sized.jpg</aras:hasMediaDescription>
+	<aras:hasForename>http://tinybluepla.net/terminology/ANY_names#Horst</aras:hasForename>
+	<aras:hasSurname>http://tinybluepla.net/terminology/EN_standard#Köhler</aras:hasSurname>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Man"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/persons#JoachimLoew">
+	<aras:hasSurname>http://tinybluepla.net/terminology/EN_standard#Löw</aras:hasSurname>
+	<aras:hasMediaDescription>http://www.sportgate.de/typo3temp/pics/Joachim-Loew-kann-derzeit-keine-klare-Mannschaft-nominieren_feeee149c6.jpg</aras:hasMediaDescription>
+	<aras:hasForname>http://tinybluepla.net/terminology/ANY_names#Joachim</aras:hasForname>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Man"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/persons#JohannWolfgangVonGoethe">
+	<aras:hasMiddleName>http://tinybluepla.net/terminology/ANY_names#Wolfgang</aras:hasMiddleName>
+	<aras:hasMediaDescription>http://www.spotlightstranscom.de/images/goethe_johann_wolfgang_von-3.jpg</aras:hasMediaDescription>
+	<aras:hasNamePart>http://tinybluepla.net/terminology/ANY_names#von</aras:hasNamePart>
+	<aras:hasForname>http://tinybluepla.net/terminology/ANY_names#Johann</aras:hasForname>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Person"/>
+	<aras:hasSurname>http://tinybluepla.net/terminology/ANY_names#Goethe</aras:hasSurname>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/persons#KarlTheodorZuGuttenberg">
+	<aras:hasSurname>http://tinybluepla.net/terminology/ANY_names#Guttenberg</aras:hasSurname>
+	<aras:hasMiddleName>http://tinybluepla.net/terminology/ANY_names#Theodor</aras:hasMiddleName>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Man"/>
+	<aras:hasMediaDescription>http://www.merkur-online.de/bilder/2009/02/09/70501/317660743-karltheodor-guttenberg.9.jpg</aras:hasMediaDescription>
+	<aras:hasForname>http://tinybluepla.net/terminology/ANY_names#Karl</aras:hasForname>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/persons#KristianCvetkovic">
+	<aras:hasForname>http://tinybluepla.net/terminology/ANY_names#Kristijan</aras:hasForname>
+	<aras:hasMediaDescription>http://www.soa-expertenwissen.de/images/autoren/Foto_Cvetkovic.gif</aras:hasMediaDescription>
+	<aras:hasSurname>http://tinybluepla.net/terminology/ANY_names#Cvetkovic</aras:hasSurname>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Man"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/persons#NicolasSarkozy">
+	<aras:hasSurname>http://tinybluepla.net/terminology/ANY_names#Sarkozy</aras:hasSurname>
+	<aras:hasMediaDescription>http://www.globalvoicesonline.org/wp-content/uploads/2007/04/nicolas-sarkozy.jpg</aras:hasMediaDescription>
+	<aras:hasForname>http://tinybluepla.net/terminology/ANY_names#Nicolas</aras:hasForname>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Person"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/persons#OliverTigges">
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Person"/>
+	<aras:hasMediaDescription>http://www.java-forum-stuttgart.de/jfs/2007/abb/speakers/TiggesOliver.jpg</aras:hasMediaDescription>
+	<aras:hasForname>http://tinybluepla.net/terminology/ANY_names#Oliver</aras:hasForname>
+	<aras:hasSurname>http://tinybluepla.net/terminology/ANY_names#Tigges</aras:hasSurname>
+</rdf:Description>
+
+</rdf:RDF>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rdf:RDF
+	xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+	xmlns:aras="http://arastreju.org/kernel#"
+	xmlns:bpm="http://tinybluepla.net/bpm#"
+	xmlns:owl="http://www.w3.org/2002/07/owl#"
+	xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+	xmlns:biz="http://tinybluepla.net/org#">
+
+<rdf:Description rdf:about="http://tinybluepla.net/bpm#BusinessProcessOwner">
+	<rdfs:subClassOf rdf:resource="http://tinybluepla.net/org#Employee"/>
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/bpm#BusinessProcess">
+	<rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+	<aras:hasMediaDescription>http://glasnost.lichtflut.de/resources/images/bpm_icon.png</aras:hasMediaDescription>
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+</rdf:Description>
+
+</rdf:RDF>

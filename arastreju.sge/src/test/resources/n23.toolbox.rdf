@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rdf:RDF
+	xmlns:it="http://tinybluepla.net/it#"
+	xmlns:toolbox="http://ontologies.lichtflut.de/glasnost/toolbox#"
+	xmlns:common="http://tinybluepla.net/common#"
+	xmlns:org="http://tinybluepla.net/org#"
+	xmlns:owl="http://www.w3.org/2002/07/owl#"
+	xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+
+<rdf:Description rdf:about="http://ontologies.lichtflut.de/glasnost/toolbox#DefaultToolbox">
+	<toolbox:containsTool rdf:resource="http://tinybluepla.net/common#Person"/>
+	<toolbox:containsTool rdf:resource="http://tinybluepla.net/it#Application"/>
+	<toolbox:containsTool rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+	<rdf:type rdf:resource="http://ontologies.lichtflut.de/glasnost/toolbox#Toolbox"/>
+	<toolbox:containsTool rdf:resource="http://tinybluepla.net/it#InfrastructureComponent"/>
+	<toolbox:containsTool rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+	<toolbox:containsTool rdf:resource="http://tinybluepla.net/bpm#BusinessProcess"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://ontologies.lichtflut.de/glasnost/toolbox#EAMToolbox">
+	<toolbox:containsTool rdf:resource="http://tinybluepla.net/it#SoftwareComponent"/>
+	<rdf:type rdf:resource="http://ontologies.lichtflut.de/glasnost/toolbox#Toolbox"/>
+	<toolbox:containsTool rdf:resource="http://tinybluepla.net/it#HardwareComponent"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://ontologies.lichtflut.de/glasnost/toolbox#Toolbox">
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+	<rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://ontologies.lichtflut.de/glasnost/toolbox#containsTool">
+	<rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+	<rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://ontologies.lichtflut.de/glasnost/toolbox#hasToolbox">
+	<rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+	<rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+</rdf:Description>
+
+</rdf:RDF>

@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rdf:RDF
+	xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+	xmlns:aras="http://arastreju.org/kernel#"
+	xmlns:common="http://tinybluepla.net/common#"
+	xmlns:owl="http://www.w3.org/2002/07/owl#"
+	xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+	xmlns:org="http://tinybluepla.net/org#">
+
+<rdf:Description rdf:about="http://tinybluepla.net/org#02da336e-84ce-4236-afaa-55de16204718">
+	<aras:hasTypeConstraint rdf:resource="http://tinybluepla.net/common#Corporation"/>
+	<aras:declaresProperty rdf:resource="http://tinybluepla.net/org#isEmployedByloyedBy"/>
+	<rdf:type rdf:resource="http://arastreju.org/kernel#PropertyDeclaration"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/org#5d7a443c-c51f-44a4-8931-35540d99ef0d">
+	<aras:declaresProperty rdf:resource="http://tinybluepla.net/org#hasRoleInCorporation"/>
+	<rdf:type rdf:resource="http://arastreju.org/kernel#PropertyDeclaration"/>
+	<aras:hasTypeConstraint rdf:resource="http://tinybluepla.net/org#RoleInCorporation"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/org#86352e51-11ac-47cf-b423-715dac3ebb36">
+	<aras:declaresProperty rdf:resource="http://tinybluepla.net/org#hasLegalStructure"/>
+	<rdf:type rdf:resource="http://arastreju.org/kernel#PropertyDeclaration"/>
+	<aras:hasTypeConstraint rdf:resource="http://tinybluepla.net/org#LegalStructure"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/org#Contractor">
+	<rdfs:subClassOf rdf:resource="http://tinybluepla.net/org#HumanResource"/>
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/org#Employee">
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+	<rdfs:subClassOf rdf:resource="http://tinybluepla.net/org#HumanResource"/>
+	<rdfs:label>http://tinybluepla.net/terminology/DE_standard#Arbeitnehmer</rdfs:label>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/org#Employer">
+	<rdfs:label>http://tinybluepla.net/terminology/DE_standard#Arbeitgeber</rdfs:label>
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+	<rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/org#Enterprise">
+	<rdfs:subClassOf rdf:resource="http://tinybluepla.net/common#Corporation"/>
+	<aras:hasPropertyDeclaration rdf:resource="http://tinybluepla.net/org#86352e51-11ac-47cf-b423-715dac3ebb36"/>
+	<rdfs:label>http://tinybluepla.net/terminology/DE_standard#Unternehmen</rdfs:label>
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/org#Entrepreneur">
+	<rdfs:label>http://tinybluepla.net/terminology/DE_standard#Unternehmer</rdfs:label>
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+	<rdfs:subClassOf rdf:resource="http://tinybluepla.net/common#Occupation"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/org#Freelancer">
+	<rdfs:subClassOf rdf:resource="http://tinybluepla.net/org#Contractor"/>
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+	<rdfs:label>http://tinybluepla.net/terminology/DE_standard#Freiberufler</rdfs:label>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/org#GeneralManager">
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+	<rdfs:subClassOf rdf:resource="http://tinybluepla.net/org#RoleInCorporation"/>
+	<rdfs:label>http://tinybluepla.net/terminology/DE_standard#Geschäftsführer</rdfs:label>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/org#HumanResource">
+	<aras:hasPropertyDeclaration rdf:resource="http://tinybluepla.net/org#02da336e-84ce-4236-afaa-55de16204718"/>
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+	<rdfs:subClassOf rdf:resource="http://tinybluepla.net/common#Person"/>
+	<aras:hasPropertyDeclaration rdf:resource="http://tinybluepla.net/org#5d7a443c-c51f-44a4-8931-35540d99ef0d"/>
+	<rdfs:label>http://tinybluepla.net/terminology/DE_standard#Mitarbeiter</rdfs:label>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/org#LegalStructure">
+	<rdfs:label>http://tinybluepla.net/terminology/DE_standard#Rechtsform</rdfs:label>
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+	<rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/org#RoleInCorporation">
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+	<rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/org#ServiceEnterprise">
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+	<rdfs:subClassOf rdf:resource="http://tinybluepla.net/org#Enterprise"/>
+	<rdfs:label>http://tinybluepla.net/terminology/DE_standard#Dienstleister</rdfs:label>
+	<rdfs:label>http://tinybluepla.net/terminology/DE_standard#Dienstleistungsunternehmen</rdfs:label>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/org#hasEmployed">
+	<rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+	<rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/org#hasLegalStructure">
+	<rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+	<rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/org#hasRoleInCorporation">
+	<rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+	<rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/org#isContractedBy">
+	<rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+	<rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/org#isEmployedBy">
+	<rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+	<rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/org#worksFor">
+	<rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+	<rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+</rdf:Description>
+
+</rdf:RDF>

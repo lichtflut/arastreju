@@ -1,0 +1,729 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rdf:RDF
+	xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+	xmlns:aras="http://arastreju.org/kernel#"
+	xmlns:common="http://tinybluepla.net/common#"
+	xmlns:owl="http://www.w3.org/2002/07/owl#"
+	xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+
+<rdf:Description rdf:about="http://tinybluepla.net/common#21c89cf9-54f9-41b5-84de-f7a923384f3c">
+	<aras:hasTypeConstraint rdf:resource="http://arastreju.org/kernel#String"/>
+	<aras:declaresProperty rdf:resource="http://tinybluepla.net/common#hasIsoAlpha2Code"/>
+	<rdf:type rdf:resource="http://arastreju.org/kernel#PropertyDeclaration"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/common#hasCapital">
+	<rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/common#hasSeatOfGovernment">
+	<rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/common#City">
+	<rdfs:subClassOf rdf:resource="http://tinybluepla.net/common#Locality"/>
+	<rdfs:label>http://tinybluepla.net/terminology/DE_standard#Stadt</rdfs:label>
+	<aras:hasPropertyDeclaration rdf:resource="http://tinybluepla.net/common#64a826f0-85df-4877-b238-edc6351eb643"/>
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/common#Water">
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+	<rdfs:subClassOf rdf:resource="http://tinybluepla.net/common#Liquid"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/common#Vehicle">
+	<rdfs:label>http://tinybluepla.net/terminology/DE_standard#Fahrzeug</rdfs:label>
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+	<rdfs:subClassOf rdf:resource="http://tinybluepla.net/common#PhysicalObject"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/common#Continent">
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+	<rdfs:subClassOf rdf:resource="http://tinybluepla.net/common#Locality"/>
+	<rdfs:label>http://tinybluepla.net/terminology/DE_standard#Kontinent</rdfs:label>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/common#Feeling">
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+	<rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/common#River">
+	<rdfs:subClassOf rdf:resource="http://tinybluepla.net/common#Water"/>
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+	<rdfs:subClassOf rdf:resource="http://tinybluepla.net/common#Track"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/common#Male">
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+	<rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+	<rdfs:label>http://tinybluepla.net/terminology/DE_standard#männlich</rdfs:label>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/common#Lake">
+	<rdfs:subClassOf rdf:resource="http://tinybluepla.net/common#Water"/>
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/common#September">
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+	<rdfs:subClassOf rdf:resource="http://tinybluepla.net/common#Month"/>
+	<rdfs:label>http://tinybluepla.net/terminology/DE_standard#September</rdfs:label>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/common#Road">
+	<rdfs:subClassOf rdf:resource="http://tinybluepla.net/common#Track"/>
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/common#hasHabitation">
+	<rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/common#Person">
+	<aras:hasPropertyDeclaration rdf:resource="http://tinybluepla.net/common#2d440106-2c3b-4859-9ca9-50d1b149622f"/>
+	<aras:hasPropertyDeclaration rdf:resource="http://tinybluepla.net/common#2b9a516f-5200-4f1d-a30a-80386b5f12b8"/>
+	<rdfs:subClassOf rdf:resource="http://tinybluepla.net/common#Personificatable"/>
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+	<aras:hasMediaDescription>http://www.iconarchive.com/icons/deleket/scrap/User-256x256.png</aras:hasMediaDescription>
+	<aras:hasPropertyDeclaration rdf:resource="http://tinybluepla.net/common#d8e5e29d-25cc-418c-8a19-ec3007a35a23"/>
+	<aras:hasPropertyDeclaration rdf:resource="http://tinybluepla.net/common#fda943ab-b81e-4b2a-b91e-1fd5c6169eec"/>
+	<rdfs:label>http://tinybluepla.net/terminology/DE_standard#Person</rdfs:label>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/common#Car">
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+	<rdfs:subClassOf rdf:resource="http://tinybluepla.net/common#Vehicle"/>
+	<rdfs:label>http://tinybluepla.net/terminology/DE_standard#Auto</rdfs:label>
+	<rdfs:label>http://tinybluepla.net/terminology/EN_standard#car</rdfs:label>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/common#MilitaryConflict">
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+	<rdfs:subClassOf rdf:resource="http://tinybluepla.net/common#Conflict"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/common#Capital">
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+	<rdfs:subClassOf rdf:resource="http://arastreju.org/kernel#RelationClassfier"/>
+	<rdfs:label>http://tinybluepla.net/terminology/DE_standard#Hauptstadt</rdfs:label>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/common#Contact">
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+	<rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+	<rdfs:label>http://tinybluepla.net/terminology/DE_standard#Kontakt</rdfs:label>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/common#NonAlcoholic">
+	<rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/common#Office">
+	<rdfs:label>http://tinybluepla.net/terminology/DE_standard#Amt</rdfs:label>
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+	<rdfs:subClassOf rdf:resource="http://arastreju.org/kernel#RelationClassfier"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/common#July">
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+	<rdfs:label>http://tinybluepla.net/terminology/DE_standard#Juli</rdfs:label>
+	<rdfs:subClassOf rdf:resource="http://tinybluepla.net/common#Month"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/common#bridge">
+	<rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/common#hasIsoAlpha2Code">
+	<rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/common#Location">
+	<rdfs:label>http://tinybluepla.net/terminology/DE_standard#Ort</rdfs:label>
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+	<rdfs:subClassOf rdf:resource="http://arastreju.org/kernel#Locatable"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/common#Matter">
+	<rdfs:label>http://tinybluepla.net/terminology/DE_standard#Sache</rdfs:label>
+	<rdfs:label>http://tinybluepla.net/terminology/DE_standard#Thema</rdfs:label>
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+	<rdfs:label>http://tinybluepla.net/terminology/DE_standard#Frage</rdfs:label>
+	<rdfs:subClassOf rdf:resource="http://tinybluepla.net/common#subject"/>
+	<rdfs:label>http://tinybluepla.net/terminology/DE_standard#Angelegenheit</rdfs:label>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/common#Insect">
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+	<rdfs:subClassOf rdf:resource="http://tinybluepla.net/common#Animal"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/common#Track">
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+	<rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/common#CapitalAndSeatOfGovernment">
+	<rdfs:subClassOf rdf:resource="http://tinybluepla.net/common#Capital"/>
+	<rdfs:subClassOf rdf:resource="http://tinybluepla.net/common#SeatOfGovernment"/>
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/common#Brother">
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+	<rdfs:subClassOf rdf:resource="http://arastreju.org/kernel#RelationClassfier"/>
+	<rdfs:label>http://tinybluepla.net/terminology/DE_standard#Bruder</rdfs:label>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/common#hasBirthdate">
+	<rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/common#hasBirthplace">
+	<rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/common#January">
+	<rdfs:subClassOf rdf:resource="http://tinybluepla.net/common#Month"/>
+	<rdfs:label>http://tinybluepla.net/terminology/DE_standard#Januar</rdfs:label>
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/common#PhysicalObject">
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+	<rdfs:subClassOf rdf:resource="http://arastreju.org/kernel#Locatable"/>
+	<rdfs:subClassOf rdf:resource="http://arastreju.org/kernel#Countable"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/common#War">
+	<rdfs:subClassOf rdf:resource="http://tinybluepla.net/common#MilitaryConflict"/>
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/common#Animal">
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+	<rdfs:subClassOf rdf:resource="http://tinybluepla.net/common#LivingOrganism"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/common#Weekday">
+	<rdfs:label>http://tinybluepla.net/terminology/DE_standard#Wochentag</rdfs:label>
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+	<rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/common#December">
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+	<rdfs:subClassOf rdf:resource="http://tinybluepla.net/common#Month"/>
+	<rdfs:label>http://tinybluepla.net/terminology/DE_standard#Dezember</rdfs:label>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/common#Subject">
+	<rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/common#Apple">
+	<rdfs:label>http://tinybluepla.net/terminology/DE_standard#Apfel</rdfs:label>
+	<rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/common#Corporation">
+	<rdfs:label>http://tinybluepla.net/terminology/DE_standard#Körperschaft</rdfs:label>
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+	<rdfs:subClassOf rdf:resource="http://tinybluepla.net/common#Organization"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/common#ParkingLot">
+	<rdfs:label>http://tinybluepla.net/terminology/DE_standard#Parkplatz</rdfs:label>
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+	<rdfs:subClassOf rdf:resource="http://tinybluepla.net/common#Building"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/common#Coffee">
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+	<rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/common#Woman">
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+	<rdfs:subClassOf rdf:resource="http://tinybluepla.net/common#Human"/>
+	<rdfs:label>http://tinybluepla.net/terminology/DE_standard#Frau</rdfs:label>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/common#subject">
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+	<rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/common#november">
+	<rdfs:subClassOf rdf:resource="http://tinybluepla.net/common#Month"/>
+	<rdfs:label>http://tinybluepla.net/terminology/DE_standard#November</rdfs:label>
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/common#Concern">
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+	<rdfs:subClassOf rdf:resource="http://tinybluepla.net/common#Subject"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/common#Physical">
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+	<rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/common#Nationality">
+	<rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/common#Wednesday">
+	<rdfs:label>http://tinybluepla.net/terminology/DE_standard#Mittwoch</rdfs:label>
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+	<rdfs:subClassOf rdf:resource="http://tinybluepla.net/common#Weekday"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/common#Food">
+	<rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/common#Street">
+	<rdfs:subClassOf rdf:resource="http://tinybluepla.net/common#Building"/>
+	<rdfs:subClassOf rdf:resource="http://tinybluepla.net/common#Road"/>
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/common#Price">
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+	<rdfs:label>http://tinybluepla.net/terminology/DE_standard#Preis</rdfs:label>
+	<rdfs:subClassOf rdf:resource="http://tinybluepla.net/common#Virtual"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/common#Saturday">
+	<rdfs:subClassOf rdf:resource="http://tinybluepla.net/common#Weekday"/>
+	<rdfs:label>http://tinybluepla.net/terminology/DE_standard#Samstag</rdfs:label>
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/common#belongsTo">
+	<rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+	<rdfs:subPropertyOf rdf:resource="http://arastreju.org/kernel#RelationClassfier"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/common#Liquid">
+	<rdfs:subClassOf rdf:resource="http://tinybluepla.net/common#Physical"/>
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/common#Fruit">
+	<rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/common#Astronautics">
+	<rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+	<rdfs:label>http://tinybluepla.net/terminology/DE_standard#Raumfahrt</rdfs:label>
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/common#Virtual">
+	<rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/common#Month">
+	<rdfs:label>http://tinybluepla.net/terminology/DE_standard#Monat</rdfs:label>
+	<rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/common#August">
+	<rdfs:subClassOf rdf:resource="http://tinybluepla.net/common#Month"/>
+	<rdfs:label>http://tinybluepla.net/terminology/DE_standard#August</rdfs:label>
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/common#Country">
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+	<rdfs:subClassOf rdf:resource="http://tinybluepla.net/common#Locality"/>
+	<rdfs:label>http://tinybluepla.net/terminology/DE_standard#Land</rdfs:label>
+	<aras:hasPropertyDeclaration rdf:resource="http://tinybluepla.net/common#21c89cf9-54f9-41b5-84de-f7a923384f3c"/>
+	<aras:hasPropertyDeclaration rdf:resource="http://tinybluepla.net/common#bb9ae6db-a1c8-479e-bc98-35b8ec12e3c2"/>
+	<aras:hasPropertyDeclaration rdf:resource="http://tinybluepla.net/common#9739241a-0ca3-42ca-81ee-06f2a467ab0c"/>
+	<aras:hasPropertyDeclaration rdf:resource="http://tinybluepla.net/common#3ee81037-256e-400c-a0c7-2184de693214"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/common#9739241a-0ca3-42ca-81ee-06f2a467ab0c">
+	<aras:declaresProperty rdf:resource="http://tinybluepla.net/common#hasPopulationSize"/>
+	<rdf:type rdf:resource="http://arastreju.org/kernel#PropertyDeclaration"/>
+	<aras:hasTypeConstraint rdf:resource="http://arastreju.org/kernel#Integer"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/common#Female">
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+	<rdfs:label>http://tinybluepla.net/terminology/DE_standard#weiblich</rdfs:label>
+	<rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/common#Wife">
+	<rdfs:label>http://tinybluepla.net/terminology/DE_standard#Ehefrau</rdfs:label>
+	<rdfs:subClassOf rdf:resource="http://arastreju.org/kernel#RelationClassfier"/>
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/common#3ee81037-256e-400c-a0c7-2184de693214">
+	<aras:declaresProperty rdf:resource="http://tinybluepla.net/common#hasSeatOfGovernment"/>
+	<aras:hasTypeConstraint rdf:resource="http://tinybluepla.net/common#City"/>
+	<rdf:type rdf:resource="http://arastreju.org/kernel#PropertyDeclaration"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/common#Human">
+	<rdfs:subClassOf rdf:resource="http://tinybluepla.net/common#Person"/>
+	<rdfs:label>http://tinybluepla.net/terminology/DE_standard#Mensch</rdfs:label>
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+	<rdfs:subClassOf rdf:resource="http://tinybluepla.net/common#Mammal"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/common#Tuesday">
+	<rdfs:subClassOf rdf:resource="http://tinybluepla.net/common#Weekday"/>
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+	<rdfs:label>http://tinybluepla.net/terminology/DE_standard#Dienstag</rdfs:label>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/common#Garage">
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+	<rdfs:label>http://tinybluepla.net/terminology/DE_standard#Garage</rdfs:label>
+	<rdfs:subClassOf rdf:resource="http://tinybluepla.net/common#Building"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/common#Item">
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+	<rdfs:subClassOf rdf:resource="http://tinybluepla.net/common#PhysicalObject"/>
+	<rdfs:label>http://tinybluepla.net/terminology/DE_standard#Gegenstand</rdfs:label>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/common#October">
+	<rdfs:label>http://tinybluepla.net/terminology/DE_standard#Oktober</rdfs:label>
+	<rdfs:subClassOf rdf:resource="http://tinybluepla.net/common#Month"/>
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/common#Sunday">
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+	<rdfs:label>http://tinybluepla.net/terminology/DE_standard#Sonntag</rdfs:label>
+	<rdfs:subClassOf rdf:resource="http://tinybluepla.net/common#Weekday"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/common#Region">
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+	<rdfs:label>http://tinybluepla.net/terminology/DE_standard#Region</rdfs:label>
+	<rdfs:subClassOf rdf:resource="http://arastreju.org/kernel#Locatable"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/common#Predecessor">
+	<rdfs:subClassOf rdf:resource="http://arastreju.org/kernel#RelationClassfier"/>
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+	<rdfs:label>http://tinybluepla.net/terminology/DE_standard#Vorgänger</rdfs:label>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/common#SeatOfGovernment">
+	<rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/common#2b9a516f-5200-4f1d-a30a-80386b5f12b8">
+	<aras:hasTypeConstraint rdf:resource="http://tinybluepla.net/common#Occupation"/>
+	<rdf:type rdf:resource="http://arastreju.org/kernel#PropertyDeclaration"/>
+	<aras:declaresProperty rdf:resource="http://tinybluepla.net/common#hasOccupation"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/common#64a826f0-85df-4877-b238-edc6351eb643">
+	<rdf:type rdf:resource="http://arastreju.org/kernel#PropertyDeclaration"/>
+	<aras:hasTypeConstraint rdf:resource="http://arastreju.org/kernel#Integer"/>
+	<aras:declaresProperty rdf:resource="http://tinybluepla.net/common#hasPopulationSize"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/common#house">
+	<rdfs:subClassOf rdf:resource="http://tinybluepla.net/common#Building"/>
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/common#May">
+	<rdfs:label>http://tinybluepla.net/terminology/DE_standard#Mai</rdfs:label>
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+	<rdfs:subClassOf rdf:resource="http://tinybluepla.net/common#Month"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/common#Mammal">
+	<rdfs:label>http://tinybluepla.net/terminology/DE_standard#Säugetier</rdfs:label>
+	<rdfs:subClassOf rdf:resource="http://tinybluepla.net/common#Animal"/>
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/common#Thursday">
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+	<rdfs:label>http://tinybluepla.net/terminology/DE_standard#Donnerstag</rdfs:label>
+	<rdfs:subClassOf rdf:resource="http://tinybluepla.net/common#Weekday"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/common#Personificatable">
+	<rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/common#d8e5e29d-25cc-418c-8a19-ec3007a35a23">
+	<aras:declaresProperty rdf:resource="http://tinybluepla.net/common#hasBirthdate"/>
+	<rdf:type rdf:resource="http://arastreju.org/kernel#PropertyDeclaration"/>
+	<aras:hasTypeConstraint rdf:resource="http://arastreju.org/kernel#Date"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/common#Harmony">
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+	<rdfs:subClassOf rdf:resource="http://tinybluepla.net/common#Relationship"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/common#2d440106-2c3b-4859-9ca9-50d1b149622f">
+	<rdf:type rdf:resource="http://arastreju.org/kernel#PropertyDeclaration"/>
+	<aras:declaresProperty rdf:resource="http://tinybluepla.net/common#hasHabitation"/>
+	<aras:hasTypeConstraint rdf:resource="http://tinybluepla.net/common#Locality"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/common#Costs">
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+	<rdfs:subClassOf rdf:resource="http://tinybluepla.net/common#Virtual"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/common#Monday">
+	<rdfs:subClassOf rdf:resource="http://tinybluepla.net/common#Weekday"/>
+	<rdfs:label>http://tinybluepla.net/terminology/DE_standard#Montag</rdfs:label>
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/common#fda943ab-b81e-4b2a-b91e-1fd5c6169eec">
+	<aras:hasTypeConstraint rdf:resource="http://tinybluepla.net/common#Locality"/>
+	<rdf:type rdf:resource="http://arastreju.org/kernel#PropertyDeclaration"/>
+	<aras:declaresProperty rdf:resource="http://tinybluepla.net/common#hasBirthplace"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/common#friday">
+	<rdfs:subClassOf rdf:resource="http://tinybluepla.net/common#Weekday"/>
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+	<rdfs:label>http://tinybluepla.net/terminology/DE_standard#Freitag</rdfs:label>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/common#Joy">
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+	<rdfs:subClassOf rdf:resource="http://tinybluepla.net/common#Feeling"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/common#Man">
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+	<rdfs:subClassOf rdf:resource="http://tinybluepla.net/common#Human"/>
+	<rdfs:label>http://tinybluepla.net/terminology/DE_standard#Mann</rdfs:label>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/common#Occupation">
+	<rdfs:label>http://tinybluepla.net/terminology/DE_standard#Beruf</rdfs:label>
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+	<rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/common#February">
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+	<rdfs:subClassOf rdf:resource="http://tinybluepla.net/common#Month"/>
+	<rdfs:label>http://tinybluepla.net/terminology/DE_standard#Februar</rdfs:label>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/common#April">
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+	<rdfs:subClassOf rdf:resource="http://tinybluepla.net/common#Month"/>
+	<rdfs:label>http://tinybluepla.net/terminology/DE_standard#April</rdfs:label>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/common#June">
+	<rdfs:label>http://tinybluepla.net/terminology/DE_standard#Juni</rdfs:label>
+	<rdfs:subClassOf rdf:resource="http://tinybluepla.net/common#Month"/>
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/common#hasOccupation">
+	<rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/common#Plant">
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+	<rdfs:label>http://tinybluepla.net/terminology/DE_standard#Pflanze</rdfs:label>
+	<rdfs:subClassOf rdf:resource="http://tinybluepla.net/common#LivingOrganism"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/common#Alcoholic">
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+	<rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/common#Building">
+	<rdfs:subClassOf rdf:resource="http://tinybluepla.net/common#PhysicalObject"/>
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+	<rdfs:label>http://tinybluepla.net/terminology/DE_standard#Gebäude</rdfs:label>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/common#bb9ae6db-a1c8-479e-bc98-35b8ec12e3c2">
+	<rdf:type rdf:resource="http://arastreju.org/kernel#PropertyDeclaration"/>
+	<aras:hasTypeConstraint rdf:resource="http://tinybluepla.net/common#City"/>
+	<aras:declaresProperty rdf:resource="http://tinybluepla.net/common#hasCapital"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/common#Government">
+	<rdfs:label>http://tinybluepla.net/terminology/DE_standard#Regierung</rdfs:label>
+	<rdfs:subClassOf rdf:resource="http://tinybluepla.net/common#Organization"/>
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/common#State">
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+	<rdfs:label>http://tinybluepla.net/terminology/DE_standard#Staat</rdfs:label>
+	<rdfs:subClassOf rdf:resource="http://tinybluepla.net/common#Country"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/common#Chief">
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+	<rdfs:subClassOf rdf:resource="http://arastreju.org/kernel#RelationClassfier"/>
+	<rdfs:label>http://tinybluepla.net/terminology/DE_standard#Chef</rdfs:label>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/common#President">
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+	<rdfs:label>http://tinybluepla.net/terminology/DE_standard#Präsident</rdfs:label>
+	<rdfs:subClassOf rdf:resource="http://tinybluepla.net/common#Office"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/common#Sex">
+	<rdfs:label>http://tinybluepla.net/terminology/DE_standard#Sex</rdfs:label>
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+	<rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/common#contact">
+	<rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/common#Directive">
+	<rdfs:label>http://tinybluepla.net/terminology/DE_standard#Norm</rdfs:label>
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+	<rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/common#March">
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+	<rdfs:subClassOf rdf:resource="http://tinybluepla.net/common#Month"/>
+	<rdfs:label>http://tinybluepla.net/terminology/DE_standard#März</rdfs:label>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/common#hasBrother">
+	<rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/common#Bundeskanzler">
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+	<rdfs:label>http://tinybluepla.net/terminology/DE_standard#Bundeskanzler</rdfs:label>
+	<rdfs:subClassOf rdf:resource="http://tinybluepla.net/common#Office"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/common#Beer">
+	<rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+	<rdfs:label>http://tinybluepla.net/terminology/DE_standard#Bier</rdfs:label>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/common#hasPopulationSize">
+	<rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/common#Husband">
+	<rdfs:subClassOf rdf:resource="http://arastreju.org/kernel#RelationClassfier"/>
+	<rdfs:label>http://tinybluepla.net/terminology/DE_standard#Ehemann</rdfs:label>
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/common#LivingOrganism">
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+	<rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/common#Beverage">
+	<rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+	<rdfs:label>http://tinybluepla.net/terminology/DE_standard#Getränk</rdfs:label>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/common#Conflict">
+	<rdfs:label>http://tinybluepla.net/terminology/DE_standard#Auseinandersetzung</rdfs:label>
+	<rdfs:subClassOf rdf:resource="http://tinybluepla.net/common#Relationship"/>
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+	<rdfs:label>http://tinybluepla.net/terminology/DE_standard#Konflikt</rdfs:label>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/common#Sea">
+	<rdfs:subClassOf rdf:resource="http://tinybluepla.net/common#Water"/>
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/common#Successor">
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+	<rdfs:subClassOf rdf:resource="http://arastreju.org/kernel#RelationClassfier"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/common#Bridge">
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+	<rdfs:subClassOf rdf:resource="http://tinybluepla.net/common#Building"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/common#item">
+	<rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/common#Locality">
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+	<rdfs:subClassOf rdf:resource="http://tinybluepla.net/common#Location"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/common#Relationship">
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+	<rdfs:subClassOf rdf:resource="http://tinybluepla.net/common#Virtual"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/common#Organization">
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+	<rdfs:subClassOf rdf:resource="http://tinybluepla.net/common#Personificatable"/>
+	<rdfs:label>http://tinybluepla.net/terminology/DE_standard#Organisation</rdfs:label>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/common#hasFavoriteDrink">
+	<rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/common#Mayor">
+	<rdfs:label>http://tinybluepla.net/terminology/DE_standard#Bürgermeister</rdfs:label>
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+	<rdfs:subClassOf rdf:resource="http://tinybluepla.net/common#Office"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/common#Sister">
+	<rdfs:label>http://tinybluepla.net/terminology/DE_standard#Schwester</rdfs:label>
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+	<rdfs:subClassOf rdf:resource="http://arastreju.org/kernel#RelationClassfier"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/common#isIn">
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#TransitiveProperty"/>
+	<rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+</rdf:Description>
+
+</rdf:RDF>

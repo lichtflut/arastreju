@@ -1,0 +1,451 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rdf:RDF
+	xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+	xmlns:aras="http://arastreju.org/kernel#"
+	xmlns:owl="http://www.w3.org/2002/07/owl#"
+	xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+
+<rdf:Description rdf:about="http://arastreju.org/kernel#ActellonRole">
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+	<rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://arastreju.org/kernel#ActellonRoleAdverbial">
+	<rdfs:subClassOf rdf:resource="http://arastreju.org/kernel#ActellonRole"/>
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://arastreju.org/kernel#ActellonRoleCause">
+	<rdfs:subClassOf rdf:resource="http://arastreju.org/kernel#ActellonRole"/>
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://arastreju.org/kernel#ActellonRoleDirection">
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+	<rdfs:subClassOf rdf:resource="http://arastreju.org/kernel#ActellonRole"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://arastreju.org/kernel#ActellonRoleDirective">
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+	<rdfs:subClassOf rdf:resource="http://arastreju.org/kernel#ActellonRole"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://arastreju.org/kernel#ActellonRoleEnvironment">
+	<rdfs:subClassOf rdf:resource="http://arastreju.org/kernel#ActellonRole"/>
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://arastreju.org/kernel#ActellonRoleEquivalent">
+	<rdfs:subClassOf rdf:resource="http://arastreju.org/kernel#ActellonRole"/>
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://arastreju.org/kernel#ActellonRoleIntention">
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+	<rdfs:subClassOf rdf:resource="http://arastreju.org/kernel#ActellonRole"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://arastreju.org/kernel#ActellonRoleTimespec">
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+	<rdfs:subClassOf rdf:resource="http://arastreju.org/kernel#ActellonRole"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://arastreju.org/kernel#ActellonSchema">
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+	<rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://arastreju.org/kernel#ActivityClass">
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+	<rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://arastreju.org/kernel#ActivitySchema">
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+	<rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://arastreju.org/kernel#Actor">
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+	<rdfs:subClassOf rdf:resource="http://arastreju.org/kernel#ActellonRole"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://arastreju.org/kernel#Anything">
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+	<rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://arastreju.org/kernel#AssociateImplication">
+	<rdfs:subClassOf rdf:resource="http://arastreju.org/kernel#Implication"/>
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://arastreju.org/kernel#Boolean">
+	<rdfs:subClassOf rdf:resource="http://arastreju.org/kernel#ElementaryDataType"/>
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://arastreju.org/kernel#BrandName">
+	<rdfs:subClassOf rdf:resource="http://arastreju.org/kernel#ProperName"/>
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://arastreju.org/kernel#Context">
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+	<rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://arastreju.org/kernel#Countable">
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+	<rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://arastreju.org/kernel#Date">
+	<rdfs:subClassOf rdf:resource="http://arastreju.org/kernel#ElementaryDataType"/>
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://arastreju.org/kernel#Decimal">
+	<rdfs:subClassOf rdf:resource="http://arastreju.org/kernel#ElementaryDataType"/>
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://arastreju.org/kernel#Diagram">
+	<rdfs:subClassOf rdf:resource="http://arastreju.org/kernel#ModelSelection"/>
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://arastreju.org/kernel#ElementaryDataType">
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+	<rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://arastreju.org/kernel#EqualizeImplication">
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+	<rdfs:subClassOf rdf:resource="http://arastreju.org/kernel#Implication"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://arastreju.org/kernel#FancyName">
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+	<rdfs:subClassOf rdf:resource="http://arastreju.org/kernel#ProperName"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://arastreju.org/kernel#Forename">
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+	<rdfs:subClassOf rdf:resource="http://arastreju.org/kernel#ProperName"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://arastreju.org/kernel#Fullname">
+	<rdfs:subClassOf rdf:resource="http://arastreju.org/kernel#ProperName"/>
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://arastreju.org/kernel#Implication">
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+	<rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://arastreju.org/kernel#Integer">
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+	<rdfs:subClassOf rdf:resource="http://arastreju.org/kernel#ElementaryDataType"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://arastreju.org/kernel#Locatable">
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+	<rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://arastreju.org/kernel#LocationName">
+	<rdfs:subClassOf rdf:resource="http://arastreju.org/kernel#ProperName"/>
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://arastreju.org/kernel#Middlename">
+	<rdfs:subClassOf rdf:resource="http://arastreju.org/kernel#ProperName"/>
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://arastreju.org/kernel#ModelSelection">
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+	<rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://arastreju.org/kernel#Patient">
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+	<rdfs:subClassOf rdf:resource="http://arastreju.org/kernel#ActellonRole"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://arastreju.org/kernel#ProperName">
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+	<rdfs:subClassOf rdf:resource="http://arastreju.org/kernel#WordDefintion"/>
+	<rdfs:subClassOf rdf:resource="http://arastreju.org/kernel#ElementaryDataType"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://arastreju.org/kernel#Term">
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+	<rdfs:subClassOf rdf:resource="http://arastreju.org/kernel#WordDefintion"/>
+	<rdfs:subClassOf rdf:resource="http://arastreju.org/kernel#ElementaryDataType"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://arastreju.org/kernel#PropertyDeclaration">
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+	<rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://arastreju.org/kernel#Quantity">
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+	<rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://arastreju.org/kernel#Register">
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+	<rdfs:subClassOf rdf:resource="http://arastreju.org/kernel#ModelSelection"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://arastreju.org/kernel#RelationClassfier">
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+	<rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://arastreju.org/kernel#RelationDirect">
+	<rdfs:subClassOf rdf:resource="http://arastreju.org/kernel#RelationLinkType"/>
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://arastreju.org/kernel#RelationLinkType">
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+	<rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://arastreju.org/kernel#RelationPrepositional">
+	<rdfs:subClassOf rdf:resource="http://arastreju.org/kernel#RelationLinkType"/>
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://arastreju.org/kernel#RelationSchema">
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+	<rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://arastreju.org/kernel#ScenarioContext">
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+	<rdfs:subClassOf rdf:resource="http://arastreju.org/kernel#ModelSelection"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://arastreju.org/kernel#String">
+	<rdfs:subClassOf rdf:resource="http://arastreju.org/kernel#ElementaryDataType"/>
+	<rdfs:label>http://tinybluepla.net/terminology/DE_standard#Zeichenkette</rdfs:label>
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://arastreju.org/kernel#Surname">
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+	<rdfs:subClassOf rdf:resource="http://arastreju.org/kernel#ProperName"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://arastreju.org/kernel#TimeOfDay">
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+	<rdfs:subClassOf rdf:resource="http://arastreju.org/kernel#ElementaryDataType"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://arastreju.org/kernel#Resource">
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+	<rdfs:subClassOf rdf:resource="http://arastreju.org/kernel#ElementaryDataType"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://arastreju.org/kernel#URI">
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+	<rdfs:subClassOf rdf:resource="http://arastreju.org/kernel#ElementaryDataType"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://arastreju.org/kernel#Timestamp">
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+	<rdfs:subClassOf rdf:resource="http://arastreju.org/kernel#ElementaryDataType"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://arastreju.org/kernel#WordDefintion">
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+	<rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://arastreju.org/kernel#contains">
+	<rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+	<rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://arastreju.org/kernel#containsChoiceElements">
+	<rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+	<rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://arastreju.org/kernel#declaresProperty">
+	<rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+	<rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://arastreju.org/kernel#describes">
+	<rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+	<rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://arastreju.org/kernel#hasActellonSchema">
+	<rdfs:subPropertyOf rdf:resource="http://arastreju.org/kernel#hasSchema"/>
+	<rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://arastreju.org/kernel#hasAttributeSchema">
+	<rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+	<rdfs:subPropertyOf rdf:resource="http://arastreju.org/kernel#hasSchema"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://arastreju.org/kernel#hasBrandname">
+	<rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+	<rdfs:subPropertyOf rdf:resource="http://arastreju.org/kernel#hasProperName"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://arastreju.org/kernel#hasCardinality">
+	<rdfs:subPropertyOf rdf:resource="http://arastreju.org/kernel#hasConstraint"/>
+	<rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://arastreju.org/kernel#hasCasusConstraint">
+	<rdfs:subPropertyOf rdf:resource="http://arastreju.org/kernel#hasConstraint"/>
+	<rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://arastreju.org/kernel#hasConstraint">
+	<rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+	<rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://arastreju.org/kernel#hasDefaultNamespace">
+	<rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+	<rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://arastreju.org/kernel#hasForename">
+	<rdfs:subPropertyOf rdf:resource="http://arastreju.org/kernel#hasProperName"/>
+	<rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://arastreju.org/kernel#hasBrandName">
+	<rdfs:subPropertyOf rdf:resource="http://arastreju.org/kernel#hasProperName"/>
+	<rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://arastreju.org/kernel#hasImplication">
+	<rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+	<rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://arastreju.org/kernel#hasMediaDescription">
+	<rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+	<rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://arastreju.org/kernel#hasMiddleName">
+	<rdfs:subPropertyOf rdf:resource="http://arastreju.org/kernel#hasProperName"/>
+	<rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://arastreju.org/kernel#hasNamePart">
+	<rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+	<rdfs:subPropertyOf rdf:resource="http://arastreju.org/kernel#hasProperName"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://arastreju.org/kernel#hasNickname">
+	<rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+	<rdfs:subPropertyOf rdf:resource="http://arastreju.org/kernel#hasProperName"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://arastreju.org/kernel#hasPrepositionConstraint">
+	<rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+	<rdfs:subPropertyOf rdf:resource="http://arastreju.org/kernel#hasConstraint"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://arastreju.org/kernel#hasPronounConstraint">
+	<rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+	<rdfs:subPropertyOf rdf:resource="http://arastreju.org/kernel#hasConstraint"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://arastreju.org/kernel#hasProperName">
+	<rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+	<rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://arastreju.org/kernel#hasPropertyDeclaration">
+	<rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+	<rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://arastreju.org/kernel#hasRelationObjectTypeConstraint">
+	<rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+	<rdfs:subPropertyOf rdf:resource="http://arastreju.org/kernel#hasConstraint"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://arastreju.org/kernel#hasRelationSchema">
+	<rdfs:subPropertyOf rdf:resource="http://arastreju.org/kernel#hasSchema"/>
+	<rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://arastreju.org/kernel#hasRelationSubjectTypeConstraint">
+	<rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+	<rdfs:subPropertyOf rdf:resource="http://arastreju.org/kernel#hasConstraint"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://arastreju.org/kernel#hasRoleConstraint">
+	<rdfs:subPropertyOf rdf:resource="http://arastreju.org/kernel#hasConstraint"/>
+	<rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://arastreju.org/kernel#hasSchema">
+	<rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+	<rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://arastreju.org/kernel#hasSemantic">
+	<rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+	<rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://arastreju.org/kernel#hasStatementSchema">
+	<rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+	<rdfs:subPropertyOf rdf:resource="http://arastreju.org/kernel#hasSchema"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://arastreju.org/kernel#hasSurname">
+	<rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+	<rdfs:subPropertyOf rdf:resource="http://arastreju.org/kernel#hasProperName"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://arastreju.org/kernel#hasTypeConstraint">
+	<rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+	<rdfs:subPropertyOf rdf:resource="http://arastreju.org/kernel#hasConstraint"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://arastreju.org/kernel#isInContext">
+	<rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+	<rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://arastreju.org/kernel#isReferencedByTerm">
+	<rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+	<rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://arastreju.org/kernel#selectsByNamespace">
+	<rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+	<rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://arastreju.org/kernel#selectsByQuery">
+	<rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+	<rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://arastreju.org/kernel#subSchemaOf">
+	<rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+	<rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+</rdf:Description>
+
+</rdf:RDF>

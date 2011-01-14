@@ -1,0 +1,2169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rdf:RDF
+	xmlns:geo="http://tinybluepla.net/geo#"
+	xmlns:common="http://tinybluepla.net/common#"
+	xmlns:aras="http://arastreju.org/kernel#"
+	xmlns:countries="http://tinybluepla.net/geo/countries#"
+	xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Tonga">
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Australia"/>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Tonga</aras:LocationName>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<common:hasPopulationSize>118000</common:hasPopulationSize>
+	<common:hasIsoAlpha2Code>TO</common:hasIsoAlpha2Code>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Brunei">
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Brunei</aras:LocationName>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Asia"/>
+	<common:hasIsoAlpha2Code>BN</common:hasIsoAlpha2Code>
+	<common:hasPopulationSize>381000</common:hasPopulationSize>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Albania">
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Europe"/>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Albania</aras:LocationName>
+	<common:hasPopulationSize>3619000</common:hasPopulationSize>
+	<common:hasIsoAlpha2Code>AL</common:hasIsoAlpha2Code>
+	<aras:LocationName>http://tinybluepla.net/terminology/DE_names#Albanien</aras:LocationName>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Jordan">
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Jordan</aras:LocationName>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Asia"/>
+	<aras:LocationName>http://tinybluepla.net/terminology/DE_names#Jordanien</aras:LocationName>
+	<common:hasIsoAlpha2Code>JO</common:hasIsoAlpha2Code>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<common:hasPopulationSize>6198000</common:hasPopulationSize>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Iceland">
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Europe"/>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Iceland</aras:LocationName>
+	<common:hasPopulationSize>304000</common:hasPopulationSize>
+	<aras:LocationName>http://tinybluepla.net/terminology/DE_standard#Island</aras:LocationName>
+	<common:hasIsoAlpha2Code>IS</common:hasIsoAlpha2Code>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Montenegro">
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Montenegro</aras:LocationName>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Europe"/>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<common:hasPopulationSize>678000</common:hasPopulationSize>
+	<common:hasIsoAlpha2Code>ME</common:hasIsoAlpha2Code>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Lesotho">
+	<common:hasIsoAlpha2Code>LS</common:hasIsoAlpha2Code>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Africa"/>
+	<common:hasPopulationSize>2128000</common:hasPopulationSize>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Lesotho</aras:LocationName>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#NorfolkIsland">
+	<common:hasPopulationSize>1828</common:hasPopulationSize>
+	<common:hasIsoAlpha2Code>NF</common:hasIsoAlpha2Code>
+	<aras:LocationName>http://tinybluepla.net/terminology/DE_names#Norfolk-Insel</aras:LocationName>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Australia"/>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Norfolk Island</aras:LocationName>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Montserrat">
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<common:hasPopulationSize>9341</common:hasPopulationSize>
+	<common:hasIsoAlpha2Code>MS</common:hasIsoAlpha2Code>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Montserrat</aras:LocationName>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#NorthAmerica"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Namibia">
+	<common:hasIsoAlpha2Code>NA</common:hasIsoAlpha2Code>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<common:hasPopulationSize>2063000</common:hasPopulationSize>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Africa"/>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Namibia</aras:LocationName>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Palau">
+	<common:hasPopulationSize>20303</common:hasPopulationSize>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Australia"/>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Palau</aras:LocationName>
+	<common:hasIsoAlpha2Code>PW</common:hasIsoAlpha2Code>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Latvia">
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Latvia</aras:LocationName>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Europe"/>
+	<aras:LocationName>http://tinybluepla.net/terminology/DE_names#Lettland</aras:LocationName>
+	<common:hasIsoAlpha2Code>LV</common:hasIsoAlpha2Code>
+	<common:hasPopulationSize>2245000</common:hasPopulationSize>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Niue">
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Australia"/>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Niue</aras:LocationName>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<common:hasIsoAlpha2Code>NU</common:hasIsoAlpha2Code>
+	<common:hasPopulationSize>2166</common:hasPopulationSize>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Croatia">
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Croatia</aras:LocationName>
+	<common:hasPopulationSize>4491000</common:hasPopulationSize>
+	<common:hasIsoAlpha2Code>HR</common:hasIsoAlpha2Code>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Europe"/>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<aras:LocationName>http://tinybluepla.net/terminology/DE_names#Kroatien</aras:LocationName>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Laos">
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Asia"/>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Laos</aras:LocationName>
+	<common:hasIsoAlpha2Code>LA</common:hasIsoAlpha2Code>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<common:hasPopulationSize>6677000</common:hasPopulationSize>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#CzechRepublic">
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Czech Republic</aras:LocationName>
+	<common:hasPopulationSize>10220000</common:hasPopulationSize>
+	<aras:LocationName>http://tinybluepla.net/terminology/DE_names#Tschechien</aras:LocationName>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Europe"/>
+	<common:hasIsoAlpha2Code>CZ</common:hasIsoAlpha2Code>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Egypt">
+	<common:hasPopulationSize>81713000</common:hasPopulationSize>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Africa"/>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Egypt</aras:LocationName>
+	<aras:LocationName>http://tinybluepla.net/terminology/DE_names#Ägypten</aras:LocationName>
+	<common:hasIsoAlpha2Code>EG</common:hasIsoAlpha2Code>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Hungary">
+	<aras:LocationName>http://tinybluepla.net/terminology/DE_names#Ungarn</aras:LocationName>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Europe"/>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<common:hasIsoAlpha2Code>HU</common:hasIsoAlpha2Code>
+	<common:hasPopulationSize>9930000</common:hasPopulationSize>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Hungary</aras:LocationName>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#SaintMartin">
+	<common:hasPopulationSize>33100</common:hasPopulationSize>
+	<aras:LocationName>http://tinybluepla.net/terminology/DE_names#Saint-Martin</aras:LocationName>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Saint Martin</aras:LocationName>
+	<common:hasIsoAlpha2Code>MF</common:hasIsoAlpha2Code>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#NorthAmerica"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Tanzania">
+	<common:hasIsoAlpha2Code>TZ</common:hasIsoAlpha2Code>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Tanzania</aras:LocationName>
+	<aras:LocationName>http://tinybluepla.net/terminology/DE_names#Tansania</aras:LocationName>
+	<common:hasPopulationSize>40213000</common:hasPopulationSize>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Africa"/>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#PapuaNewGuinea">
+	<aras:LocationName>http://tinybluepla.net/terminology/DE_names#Papua-Neuguinea</aras:LocationName>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Papua New Guinea</aras:LocationName>
+	<common:hasIsoAlpha2Code>PG</common:hasIsoAlpha2Code>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Australia"/>
+	<common:hasPopulationSize>5921000</common:hasPopulationSize>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Vatican">
+	<aras:LocationName>http://tinybluepla.net/terminology/DE_names#Staat der Vatikanstadt</aras:LocationName>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Europe"/>
+	<common:hasIsoAlpha2Code>VA</common:hasIsoAlpha2Code>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Vatican</aras:LocationName>
+	<aras:LocationName>local:EN_namesVatican Hill</aras:LocationName>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<common:hasPopulationSize>921</common:hasPopulationSize>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Greenland">
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#NorthAmerica"/>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Greenland</aras:LocationName>
+	<common:hasPopulationSize>56375</common:hasPopulationSize>
+	<common:hasIsoAlpha2Code>GL</common:hasIsoAlpha2Code>
+	<aras:LocationName>http://tinybluepla.net/terminology/DE_names#Grönland</aras:LocationName>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Kenya">
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Kenya</aras:LocationName>
+	<common:hasPopulationSize>37953000</common:hasPopulationSize>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Africa"/>
+	<aras:LocationName>http://tinybluepla.net/terminology/DE_names#Kenia</aras:LocationName>
+	<common:hasIsoAlpha2Code>KE</common:hasIsoAlpha2Code>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Suriname">
+	<common:hasIsoAlpha2Code>SR</common:hasIsoAlpha2Code>
+	<common:hasPopulationSize>475000</common:hasPopulationSize>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Suriname</aras:LocationName>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#SouthAmerica"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Guadeloupe">
+	<common:hasPopulationSize>443000</common:hasPopulationSize>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<common:hasIsoAlpha2Code>GP</common:hasIsoAlpha2Code>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#NorthAmerica"/>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Guadeloupe</aras:LocationName>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Yemen">
+	<common:hasPopulationSize>23013000</common:hasPopulationSize>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<aras:LocationName>http://tinybluepla.net/terminology/DE_names#Jemen</aras:LocationName>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Yemen</aras:LocationName>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Asia"/>
+	<common:hasIsoAlpha2Code>YE</common:hasIsoAlpha2Code>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Uganda">
+	<aras:LocationName>local:EN_namesUganda Protectorate (historical)</aras:LocationName>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Africa"/>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Uganda</aras:LocationName>
+	<common:hasIsoAlpha2Code>UG</common:hasIsoAlpha2Code>
+	<common:hasPopulationSize>31367000</common:hasPopulationSize>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Barbados">
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Barbados</aras:LocationName>
+	<common:hasIsoAlpha2Code>BB</common:hasIsoAlpha2Code>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#NorthAmerica"/>
+	<common:hasPopulationSize>281000</common:hasPopulationSize>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#UnitedArabEmirates">
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<aras:LocationName>http://tinybluepla.net/terminology/DE_names#Vereinigte Arabische Emirate</aras:LocationName>
+	<common:hasPopulationSize>4621000</common:hasPopulationSize>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#United Arab Emirates</aras:LocationName>
+	<common:hasIsoAlpha2Code>AE</common:hasIsoAlpha2Code>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Asia"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Slovenia">
+	<common:hasIsoAlpha2Code>SI</common:hasIsoAlpha2Code>
+	<aras:LocationName>http://tinybluepla.net/terminology/DE_names#Slowenien</aras:LocationName>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Slovenia</aras:LocationName>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Europe"/>
+	<common:hasPopulationSize>2007000</common:hasPopulationSize>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Maldives">
+	<common:hasIsoAlpha2Code>MV</common:hasIsoAlpha2Code>
+	<common:hasPopulationSize>379000</common:hasPopulationSize>
+	<aras:LocationName>http://tinybluepla.net/terminology/DE_names#Malediven</aras:LocationName>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Asia"/>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Maldives</aras:LocationName>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#HeardIslandAndMcDonaldIslands">
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Antarctica"/>
+	<common:hasIsoAlpha2Code>HM</common:hasIsoAlpha2Code>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Heard Island and McDonald Islands</aras:LocationName>
+	<aras:LocationName>http://tinybluepla.net/terminology/DE_names#Heard und McDonaldinseln</aras:LocationName>
+	<common:hasPopulationSize>0</common:hasPopulationSize>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Jersey">
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Jersey</aras:LocationName>
+	<common:hasIsoAlpha2Code>JE</common:hasIsoAlpha2Code>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Europe"/>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<common:hasPopulationSize>90812</common:hasPopulationSize>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#NorthernMarianaIslands">
+	<common:hasIsoAlpha2Code>MP</common:hasIsoAlpha2Code>
+	<aras:LocationName>http://tinybluepla.net/terminology/DE_names#Nördliche Marianen</aras:LocationName>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Australia"/>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Northern Mariana Islands</aras:LocationName>
+	<common:hasPopulationSize>80362</common:hasPopulationSize>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Uruguay">
+	<common:hasPopulationSize>3477000</common:hasPopulationSize>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Uruguay</aras:LocationName>
+	<common:hasIsoAlpha2Code>UY</common:hasIsoAlpha2Code>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#SouthAmerica"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#UnitedKingdom">
+	<common:hasPopulationSize>60943000</common:hasPopulationSize>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<common:hasIsoAlpha2Code>GB</common:hasIsoAlpha2Code>
+	<aras:LocationName>local:EN_namesUK</aras:LocationName>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Europe"/>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#United Kingdom</aras:LocationName>
+	<aras:LocationName>http://tinybluepla.net/terminology/DE_names#Großbritannien und Nordirland</aras:LocationName>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#France">
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Europe"/>
+	<aras:LocationName>http://tinybluepla.net/terminology/DE_names#Frankreich</aras:LocationName>
+	<common:hasIsoAlpha2Code>FR</common:hasIsoAlpha2Code>
+	<common:hasPopulationSize>64094000</common:hasPopulationSize>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#France</aras:LocationName>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Argentina">
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#SouthAmerica"/>
+	<aras:LocationName>http://tinybluepla.net/terminology/DE_names#Argentinien</aras:LocationName>
+	<common:hasPopulationSize>40677000</common:hasPopulationSize>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Argentina</aras:LocationName>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<common:hasIsoAlpha2Code>AR</common:hasIsoAlpha2Code>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#SaintPierreAndMiquelon">
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#NorthAmerica"/>
+	<common:hasPopulationSize>7012</common:hasPopulationSize>
+	<aras:LocationName>http://tinybluepla.net/terminology/DE_names#St. Pierre und Miquelon</aras:LocationName>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Saint Pierre and Miquelon</aras:LocationName>
+	<common:hasIsoAlpha2Code>PM</common:hasIsoAlpha2Code>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Guernsey">
+	<common:hasIsoAlpha2Code>GG</common:hasIsoAlpha2Code>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Guernsey</aras:LocationName>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Europe"/>
+	<common:hasPopulationSize>65228</common:hasPopulationSize>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#BouvetIsland">
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<aras:LocationName>http://tinybluepla.net/terminology/DE_names#Bouvet-Insel</aras:LocationName>
+	<common:hasIsoAlpha2Code>BV</common:hasIsoAlpha2Code>
+	<common:hasPopulationSize>0</common:hasPopulationSize>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Antarctica"/>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Bouvet Island</aras:LocationName>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#DemocraticRepublicOfTheCongo">
+	<aras:LocationName>http://tinybluepla.net/terminology/DE_names#Zaire</aras:LocationName>
+	<common:hasIsoAlpha2Code>CD</common:hasIsoAlpha2Code>
+	<common:hasPopulationSize>60085004</common:hasPopulationSize>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Africa"/>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Democratic Republic of the Congo</aras:LocationName>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#EquatorialGuinea">
+	<common:hasPopulationSize>562000</common:hasPopulationSize>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Africa"/>
+	<aras:LocationName>http://tinybluepla.net/terminology/DE_names#Äquatorialguinea</aras:LocationName>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Equatorial Guinea</aras:LocationName>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<common:hasIsoAlpha2Code>GQ</common:hasIsoAlpha2Code>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Malawi">
+	<common:hasPopulationSize>13931000</common:hasPopulationSize>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Malawi</aras:LocationName>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Africa"/>
+	<common:hasIsoAlpha2Code>MW</common:hasIsoAlpha2Code>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#SaintKittsAndNevis">
+	<aras:LocationName>http://tinybluepla.net/terminology/DE_names#Saint Kitts und Nevis</aras:LocationName>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Saint Kitts and Nevis</aras:LocationName>
+	<common:hasPopulationSize>39000</common:hasPopulationSize>
+	<common:hasIsoAlpha2Code>KN</common:hasIsoAlpha2Code>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#NorthAmerica"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Nicaragua">
+	<common:hasPopulationSize>5780000</common:hasPopulationSize>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#NorthAmerica"/>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Nicaragua</aras:LocationName>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<common:hasIsoAlpha2Code>NI</common:hasIsoAlpha2Code>
+	<aras:LocationName>http://tinybluepla.net/terminology/DE_names#Nikaragua</aras:LocationName>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#SierraLeone">
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Sierra Leone</aras:LocationName>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Africa"/>
+	<common:hasPopulationSize>6286000</common:hasPopulationSize>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<common:hasIsoAlpha2Code>SL</common:hasIsoAlpha2Code>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Andorra">
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Andorra</aras:LocationName>
+	<common:hasPopulationSize>72000</common:hasPopulationSize>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<common:hasIsoAlpha2Code>AD</common:hasIsoAlpha2Code>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Europe"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#India">
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#India</aras:LocationName>
+	<aras:LocationName>http://tinybluepla.net/terminology/DE_names#Indien</aras:LocationName>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Asia"/>
+	<common:hasIsoAlpha2Code>IN</common:hasIsoAlpha2Code>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<common:hasPopulationSize>1147995000</common:hasPopulationSize>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Eritrea">
+	<common:hasIsoAlpha2Code>ER</common:hasIsoAlpha2Code>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Africa"/>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Eritrea</aras:LocationName>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<common:hasPopulationSize>5028000</common:hasPopulationSize>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Belgium">
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<aras:LocationName>http://tinybluepla.net/terminology/DE_names#Belgien</aras:LocationName>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Belgium</aras:LocationName>
+	<common:hasIsoAlpha2Code>BE</common:hasIsoAlpha2Code>
+	<common:hasPopulationSize>10403000</common:hasPopulationSize>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Europe"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Guam">
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<common:hasPopulationSize>168564</common:hasPopulationSize>
+	<common:hasIsoAlpha2Code>GU</common:hasIsoAlpha2Code>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Guam</aras:LocationName>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Australia"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Tajikistan">
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Asia"/>
+	<aras:LocationName>http://tinybluepla.net/terminology/DE_names#Tadschikistan</aras:LocationName>
+	<common:hasPopulationSize>7211000</common:hasPopulationSize>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Tajikistan</aras:LocationName>
+	<common:hasIsoAlpha2Code>TJ</common:hasIsoAlpha2Code>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Cyprus">
+	<aras:LocationName>http://tinybluepla.net/terminology/DE_names#Zypern</aras:LocationName>
+	<common:hasPopulationSize>792000</common:hasPopulationSize>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Cyprus</aras:LocationName>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<common:hasIsoAlpha2Code>CY</common:hasIsoAlpha2Code>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Europe"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Kazakhstan">
+	<aras:LocationName>http://tinybluepla.net/terminology/DE_names#Kasachstan</aras:LocationName>
+	<common:hasPopulationSize>15340000</common:hasPopulationSize>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Kazakhstan</aras:LocationName>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<common:hasIsoAlpha2Code>KZ</common:hasIsoAlpha2Code>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Asia"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Belize">
+	<common:hasIsoAlpha2Code>BZ</common:hasIsoAlpha2Code>
+	<common:hasPopulationSize>301000</common:hasPopulationSize>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Belize</aras:LocationName>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#NorthAmerica"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Mozambique">
+	<common:hasPopulationSize>21284000</common:hasPopulationSize>
+	<common:hasIsoAlpha2Code>MZ</common:hasIsoAlpha2Code>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Mozambique</aras:LocationName>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Africa"/>
+	<aras:LocationName>http://tinybluepla.net/terminology/DE_names#Mosambik</aras:LocationName>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#SaoTomeAndPrincipe">
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Sao Tome and Principe</aras:LocationName>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Africa"/>
+	<common:hasPopulationSize>205000</common:hasPopulationSize>
+	<common:hasIsoAlpha2Code>ST</common:hasIsoAlpha2Code>
+	<aras:LocationName>http://tinybluepla.net/terminology/DE_names#Sao Tomé und Principe</aras:LocationName>
+	<aras:LocationName>local:EN_namesDemocratic Republic of Sao Tome and Principe</aras:LocationName>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Japan">
+	<common:hasIsoAlpha2Code>JP</common:hasIsoAlpha2Code>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Japan</aras:LocationName>
+	<common:hasPopulationSize>127288000</common:hasPopulationSize>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Asia"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Niger">
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<common:hasIsoAlpha2Code>NE</common:hasIsoAlpha2Code>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Niger</aras:LocationName>
+	<common:hasPopulationSize>13272000</common:hasPopulationSize>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Africa"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#FaroeIslands">
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Europe"/>
+	<aras:LocationName>http://tinybluepla.net/terminology/DE_names#Färöer-Inseln</aras:LocationName>
+	<common:hasPopulationSize>48228</common:hasPopulationSize>
+	<common:hasIsoAlpha2Code>FO</common:hasIsoAlpha2Code>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Faroe Islands</aras:LocationName>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#CocosIslands">
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Cocos Islands</aras:LocationName>
+	<aras:LocationName>http://tinybluepla.net/terminology/DE_names#Kokosinseln</aras:LocationName>
+	<common:hasPopulationSize>628</common:hasPopulationSize>
+	<common:hasIsoAlpha2Code>CC</common:hasIsoAlpha2Code>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Asia"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Turkmenistan">
+	<common:hasPopulationSize>5179000</common:hasPopulationSize>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Turkmenistan</aras:LocationName>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Asia"/>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<common:hasIsoAlpha2Code>TM</common:hasIsoAlpha2Code>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Togo">
+	<common:hasIsoAlpha2Code>TG</common:hasIsoAlpha2Code>
+	<common:hasPopulationSize>5858000</common:hasPopulationSize>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Togo</aras:LocationName>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Africa"/>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Norway">
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Norway</aras:LocationName>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Europe"/>
+	<aras:LocationName>http://tinybluepla.net/terminology/DE_names#Norwegen</aras:LocationName>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<common:hasIsoAlpha2Code>NO</common:hasIsoAlpha2Code>
+	<common:hasPopulationSize>4644000</common:hasPopulationSize>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Nepal">
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Asia"/>
+	<common:hasPopulationSize>29519000</common:hasPopulationSize>
+	<common:hasIsoAlpha2Code>NP</common:hasIsoAlpha2Code>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Nepal</aras:LocationName>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Dominica">
+	<common:hasPopulationSize>72000</common:hasPopulationSize>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Dominica</aras:LocationName>
+	<aras:LocationName>local:EN_namesCommonwealth of Dominica</aras:LocationName>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#NorthAmerica"/>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<common:hasIsoAlpha2Code>DM</common:hasIsoAlpha2Code>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Gibraltar">
+	<common:hasIsoAlpha2Code>GI</common:hasIsoAlpha2Code>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Europe"/>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Gibraltar</aras:LocationName>
+	<common:hasPopulationSize>27884</common:hasPopulationSize>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Mauritania">
+	<common:hasPopulationSize>3364000</common:hasPopulationSize>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Africa"/>
+	<aras:LocationName>http://tinybluepla.net/terminology/DE_names#Mauretanien</aras:LocationName>
+	<common:hasIsoAlpha2Code>MR</common:hasIsoAlpha2Code>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Mauritania</aras:LocationName>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#ElSalvador">
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#El Salvador</aras:LocationName>
+	<common:hasIsoAlpha2Code>SV</common:hasIsoAlpha2Code>
+	<common:hasPopulationSize>7066000</common:hasPopulationSize>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#NorthAmerica"/>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Australia">
+	<aras:LocationName>http://tinybluepla.net/terminology/DE_standard#Australien</aras:LocationName>
+	<common:hasIsoAlpha2Code>AU</common:hasIsoAlpha2Code>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Australia"/>
+	<common:hasPopulationSize>20600000</common:hasPopulationSize>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Australia</aras:LocationName>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Singapore">
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Asia"/>
+	<common:hasIsoAlpha2Code>SG</common:hasIsoAlpha2Code>
+	<aras:LocationName>http://tinybluepla.net/terminology/DE_names#Singapur</aras:LocationName>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Singapore</aras:LocationName>
+	<common:hasPopulationSize>4608000</common:hasPopulationSize>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#SriLanka">
+	<common:hasPopulationSize>21128000</common:hasPopulationSize>
+	<aras:LocationName>local:EN_namesDominion of Ceylon (historical)</aras:LocationName>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Asia"/>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Sri Lanka</aras:LocationName>
+	<common:hasIsoAlpha2Code>LK</common:hasIsoAlpha2Code>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#CookIslands">
+	<common:hasPopulationSize>21388</common:hasPopulationSize>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<common:hasIsoAlpha2Code>CK</common:hasIsoAlpha2Code>
+	<aras:LocationName>http://tinybluepla.net/terminology/DE_names#Cook-Inseln</aras:LocationName>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Australia"/>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Cook Islands</aras:LocationName>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Oman">
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Oman</aras:LocationName>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Asia"/>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<common:hasPopulationSize>3309000</common:hasPopulationSize>
+	<common:hasIsoAlpha2Code>OM</common:hasIsoAlpha2Code>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Afghanistan">
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<common:hasIsoAlpha2Code>AF</common:hasIsoAlpha2Code>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Asia"/>
+	<common:hasPopulationSize>32738000</common:hasPopulationSize>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Afghanistan</aras:LocationName>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Guinea-Bissau">
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Africa"/>
+	<common:hasIsoAlpha2Code>GW</common:hasIsoAlpha2Code>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Guinea-Bissau</aras:LocationName>
+	<common:hasPopulationSize>1503000</common:hasPopulationSize>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Djibouti">
+	<common:hasIsoAlpha2Code>DJ</common:hasIsoAlpha2Code>
+	<common:hasPopulationSize>506000</common:hasPopulationSize>
+	<aras:LocationName>http://tinybluepla.net/terminology/DE_names#Dschibuti</aras:LocationName>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Africa"/>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Djibouti</aras:LocationName>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Azerbaijan">
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Azerbaijan</aras:LocationName>
+	<aras:LocationName>http://tinybluepla.net/terminology/DE_names#Aserbaidschan</aras:LocationName>
+	<common:hasIsoAlpha2Code>AZ</common:hasIsoAlpha2Code>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Asia"/>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<common:hasPopulationSize>8177000</common:hasPopulationSize>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Bhutan">
+	<common:hasPopulationSize>2376000</common:hasPopulationSize>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Bhutan</aras:LocationName>
+	<common:hasIsoAlpha2Code>BT</common:hasIsoAlpha2Code>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Asia"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Belarus">
+	<aras:LocationName>http://tinybluepla.net/terminology/DE_names#Weißrussland</aras:LocationName>
+	<common:hasIsoAlpha2Code>BY</common:hasIsoAlpha2Code>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Europe"/>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Belarus</aras:LocationName>
+	<common:hasPopulationSize>9685000</common:hasPopulationSize>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Grenada">
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#NorthAmerica"/>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Grenada</aras:LocationName>
+	<common:hasPopulationSize>90000</common:hasPopulationSize>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<common:hasIsoAlpha2Code>GD</common:hasIsoAlpha2Code>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Mexico">
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#NorthAmerica"/>
+	<common:hasIsoAlpha2Code>MX</common:hasIsoAlpha2Code>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<common:hasPopulationSize>109955000</common:hasPopulationSize>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Mexico</aras:LocationName>
+	<aras:LocationName>http://tinybluepla.net/terminology/DE_names#Mexiko</aras:LocationName>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#PuertoRico">
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Puerto Rico</aras:LocationName>
+	<common:hasPopulationSize>3916632</common:hasPopulationSize>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#NorthAmerica"/>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<common:hasIsoAlpha2Code>PR</common:hasIsoAlpha2Code>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Samoa">
+	<common:hasPopulationSize>217000</common:hasPopulationSize>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Samoa</aras:LocationName>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Australia"/>
+	<common:hasIsoAlpha2Code>WS</common:hasIsoAlpha2Code>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#UnitedStatesMinorOutlyingIslands">
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Australia"/>
+	<common:hasIsoAlpha2Code>UM</common:hasIsoAlpha2Code>
+	<common:hasPopulationSize>0</common:hasPopulationSize>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#United States Minor Outlying Islands</aras:LocationName>
+	<aras:LocationName>http://tinybluepla.net/terminology/DE_names#USA, kleinere ausgelagerte Inseln</aras:LocationName>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Luxembourg">
+	<aras:LocationName>http://tinybluepla.net/terminology/DE_names#Luxemburg</aras:LocationName>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Europe"/>
+	<common:hasPopulationSize>486000</common:hasPopulationSize>
+	<common:hasIsoAlpha2Code>LU</common:hasIsoAlpha2Code>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Luxembourg</aras:LocationName>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Portugal">
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Portugal</aras:LocationName>
+	<common:hasIsoAlpha2Code>PT</common:hasIsoAlpha2Code>
+	<common:hasPopulationSize>10676000</common:hasPopulationSize>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Europe"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Gambia">
+	<common:hasPopulationSize>1593256</common:hasPopulationSize>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<common:hasIsoAlpha2Code>GM</common:hasIsoAlpha2Code>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Gambia</aras:LocationName>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Africa"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Vietnam">
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Asia"/>
+	<common:hasIsoAlpha2Code>VN</common:hasIsoAlpha2Code>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Vietnam</aras:LocationName>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<common:hasPopulationSize>86116000</common:hasPopulationSize>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Angola">
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Africa"/>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Angola</aras:LocationName>
+	<common:hasIsoAlpha2Code>AO</common:hasIsoAlpha2Code>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<common:hasPopulationSize>12531000</common:hasPopulationSize>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Tokelau">
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Australia"/>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Tokelau</aras:LocationName>
+	<common:hasPopulationSize>1405</common:hasPopulationSize>
+	<common:hasIsoAlpha2Code>TK</common:hasIsoAlpha2Code>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Panama">
+	<common:hasIsoAlpha2Code>PA</common:hasIsoAlpha2Code>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#NorthAmerica"/>
+	<common:hasPopulationSize>3292000</common:hasPopulationSize>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Panama</aras:LocationName>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Greece">
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Europe"/>
+	<common:hasPopulationSize>10722000</common:hasPopulationSize>
+	<common:hasIsoAlpha2Code>GR</common:hasIsoAlpha2Code>
+	<aras:LocationName>http://tinybluepla.net/terminology/DE_names#Griechenland</aras:LocationName>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Greece</aras:LocationName>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#CentralAfricanRepublic">
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Central African Republic</aras:LocationName>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<common:hasPopulationSize>4434000</common:hasPopulationSize>
+	<common:hasIsoAlpha2Code>CF</common:hasIsoAlpha2Code>
+	<aras:LocationName>http://tinybluepla.net/terminology/DE_names#Zentralafrikanische Republik</aras:LocationName>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Africa"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#CaymanIslands">
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<common:hasPopulationSize>44270</common:hasPopulationSize>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#NorthAmerica"/>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Cayman Islands</aras:LocationName>
+	<aras:LocationName>http://tinybluepla.net/terminology/DE_names#Cayman-Inseln</aras:LocationName>
+	<common:hasIsoAlpha2Code>KY</common:hasIsoAlpha2Code>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Cambodia">
+	<aras:LocationName>local:EN_namesDemocratic Kampuchea</aras:LocationName>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Asia"/>
+	<common:hasPopulationSize>14241000</common:hasPopulationSize>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Cambodia</aras:LocationName>
+	<common:hasIsoAlpha2Code>KH</common:hasIsoAlpha2Code>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<aras:LocationName>http://tinybluepla.net/terminology/DE_names#Kambodscha</aras:LocationName>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Kyrgyzstan">
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Asia"/>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<common:hasIsoAlpha2Code>KG</common:hasIsoAlpha2Code>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Kyrgyzstan</aras:LocationName>
+	<common:hasPopulationSize>5356000</common:hasPopulationSize>
+	<aras:LocationName>http://tinybluepla.net/terminology/DE_names#Kirgistan</aras:LocationName>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Lebanon">
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<common:hasPopulationSize>3971000</common:hasPopulationSize>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Lebanon</aras:LocationName>
+	<common:hasIsoAlpha2Code>LB</common:hasIsoAlpha2Code>
+	<aras:LocationName>http://tinybluepla.net/terminology/DE_standard#Libanon</aras:LocationName>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Asia"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Syria">
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Asia"/>
+	<common:hasIsoAlpha2Code>SY</common:hasIsoAlpha2Code>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Syria</aras:LocationName>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<common:hasPopulationSize>19747000</common:hasPopulationSize>
+	<aras:LocationName>http://tinybluepla.net/terminology/DE_names#Syrien</aras:LocationName>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Indonesia">
+	<common:hasPopulationSize>237512000</common:hasPopulationSize>
+	<aras:LocationName>http://tinybluepla.net/terminology/DE_names#Indonesien</aras:LocationName>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Indonesia</aras:LocationName>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Asia"/>
+	<common:hasIsoAlpha2Code>ID</common:hasIsoAlpha2Code>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Comoros">
+	<aras:LocationName>http://tinybluepla.net/terminology/DE_standard#Komoren</aras:LocationName>
+	<common:hasPopulationSize>731000</common:hasPopulationSize>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Africa"/>
+	<common:hasIsoAlpha2Code>KM</common:hasIsoAlpha2Code>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Comoros</aras:LocationName>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#TrinidadAndTobago">
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Trinidad and Tobago</aras:LocationName>
+	<common:hasIsoAlpha2Code>TT</common:hasIsoAlpha2Code>
+	<aras:LocationName>http://tinybluepla.net/terminology/DE_names#Trinidad und Tobago</aras:LocationName>
+	<common:hasPopulationSize>1047000</common:hasPopulationSize>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#NorthAmerica"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Malaysia">
+	<common:hasPopulationSize>25259000</common:hasPopulationSize>
+	<common:hasIsoAlpha2Code>MY</common:hasIsoAlpha2Code>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Malaysia</aras:LocationName>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Asia"/>
+	<aras:LocationName>http://tinybluepla.net/terminology/DE_names#Malaysien</aras:LocationName>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Philippines">
+	<common:hasPopulationSize>92681000</common:hasPopulationSize>
+	<common:hasIsoAlpha2Code>PH</common:hasIsoAlpha2Code>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Asia"/>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Philippines</aras:LocationName>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<aras:LocationName>http://tinybluepla.net/terminology/DE_names#Philippinen</aras:LocationName>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Bahamas">
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#NorthAmerica"/>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Bahamas</aras:LocationName>
+	<common:hasPopulationSize>301790</common:hasPopulationSize>
+	<common:hasIsoAlpha2Code>BS</common:hasIsoAlpha2Code>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<aras:LocationName>local:EN_namesThe Bahamas</aras:LocationName>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#TurksAndCaicosIslands">
+	<aras:LocationName>http://tinybluepla.net/terminology/DE_names#Turks- und Caicos-Inseln</aras:LocationName>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Turks and Caicos Islands</aras:LocationName>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#NorthAmerica"/>
+	<common:hasIsoAlpha2Code>TC</common:hasIsoAlpha2Code>
+	<common:hasPopulationSize>20556</common:hasPopulationSize>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#BurkinaFaso">
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Burkina Faso</aras:LocationName>
+	<common:hasIsoAlpha2Code>BF</common:hasIsoAlpha2Code>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Africa"/>
+	<common:hasPopulationSize>14761000</common:hasPopulationSize>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Turkey">
+	<common:hasIsoAlpha2Code>TR</common:hasIsoAlpha2Code>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Asia"/>
+	<aras:LocationName>http://tinybluepla.net/terminology/DE_names#Türkei</aras:LocationName>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Turkey</aras:LocationName>
+	<common:hasPopulationSize>71892000</common:hasPopulationSize>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Switzerland">
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Switzerland</aras:LocationName>
+	<common:hasPopulationSize>7581000</common:hasPopulationSize>
+	<aras:LocationName>http://tinybluepla.net/terminology/DE_standard#Schweiz</aras:LocationName>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Europe"/>
+	<aras:hasMediaDescription>http://upload.wikimedia.org/wikipedia/commons/thumb/f/f3/Flag_of_Switzerland.svg/125px-Flag_of_Switzerland.svg.png</aras:hasMediaDescription>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<common:hasIsoAlpha2Code>CH</common:hasIsoAlpha2Code>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Anguilla">
+	<common:hasPopulationSize>13254</common:hasPopulationSize>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Anguilla</aras:LocationName>
+	<common:hasIsoAlpha2Code>AI</common:hasIsoAlpha2Code>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#NorthAmerica"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Morocco">
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<common:hasPopulationSize>34272000</common:hasPopulationSize>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Africa"/>
+	<aras:LocationName>http://tinybluepla.net/terminology/DE_names#Marokko</aras:LocationName>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Morocco</aras:LocationName>
+	<common:hasIsoAlpha2Code>MA</common:hasIsoAlpha2Code>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Haiti">
+	<common:hasPopulationSize>8924000</common:hasPopulationSize>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#NorthAmerica"/>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Haiti</aras:LocationName>
+	<common:hasIsoAlpha2Code>HT</common:hasIsoAlpha2Code>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#CostaRica">
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#NorthAmerica"/>
+	<common:hasIsoAlpha2Code>CR</common:hasIsoAlpha2Code>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Costa Rica</aras:LocationName>
+	<common:hasPopulationSize>4191000</common:hasPopulationSize>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Denmark">
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Denmark</aras:LocationName>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<common:hasIsoAlpha2Code>DK</common:hasIsoAlpha2Code>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Europe"/>
+	<aras:LocationName>http://tinybluepla.net/terminology/DE_names#Dänemark</aras:LocationName>
+	<common:hasPopulationSize>5484000</common:hasPopulationSize>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Chad">
+	<aras:LocationName>http://tinybluepla.net/terminology/DE_standard#Tschad</aras:LocationName>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Africa"/>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Chad</aras:LocationName>
+	<common:hasIsoAlpha2Code>TD</common:hasIsoAlpha2Code>
+	<common:hasPopulationSize>10111000</common:hasPopulationSize>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Colombia">
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Colombia</aras:LocationName>
+	<aras:LocationName>http://tinybluepla.net/terminology/DE_names#Kolumbien</aras:LocationName>
+	<common:hasIsoAlpha2Code>CO</common:hasIsoAlpha2Code>
+	<common:hasPopulationSize>45013000</common:hasPopulationSize>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#SouthAmerica"/>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Botswana">
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<common:hasIsoAlpha2Code>BW</common:hasIsoAlpha2Code>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Botswana</aras:LocationName>
+	<aras:LocationName>http://tinybluepla.net/terminology/DE_names#Botsuana</aras:LocationName>
+	<common:hasPopulationSize>1842000</common:hasPopulationSize>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Africa"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Guatemala">
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Guatemala</aras:LocationName>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#NorthAmerica"/>
+	<common:hasPopulationSize>13002000</common:hasPopulationSize>
+	<common:hasIsoAlpha2Code>GT</common:hasIsoAlpha2Code>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Libya">
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Libya</aras:LocationName>
+	<common:hasPopulationSize>6173000</common:hasPopulationSize>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Africa"/>
+	<common:hasIsoAlpha2Code>LY</common:hasIsoAlpha2Code>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<aras:LocationName>http://tinybluepla.net/terminology/DE_names#Libysch-Arabische Dschamahirija</aras:LocationName>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Cuba">
+	<aras:LocationName>http://tinybluepla.net/terminology/DE_names#Kuba</aras:LocationName>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<common:hasPopulationSize>11423000</common:hasPopulationSize>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#NorthAmerica"/>
+	<common:hasIsoAlpha2Code>CU</common:hasIsoAlpha2Code>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Cuba</aras:LocationName>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Bolivia">
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#SouthAmerica"/>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<common:hasIsoAlpha2Code>BO</common:hasIsoAlpha2Code>
+	<aras:LocationName>http://tinybluepla.net/terminology/DE_names#Bolivien</aras:LocationName>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Bolivia</aras:LocationName>
+	<common:hasPopulationSize>9247000</common:hasPopulationSize>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Lithuania">
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Europe"/>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Lithuania</aras:LocationName>
+	<common:hasPopulationSize>3565000</common:hasPopulationSize>
+	<aras:LocationName>http://tinybluepla.net/terminology/DE_names#Litauen</aras:LocationName>
+	<common:hasIsoAlpha2Code>LT</common:hasIsoAlpha2Code>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Kiribati">
+	<common:hasPopulationSize>110000</common:hasPopulationSize>
+	<common:hasIsoAlpha2Code>KI</common:hasIsoAlpha2Code>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Australia"/>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Kiribati</aras:LocationName>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#SolomonIslands">
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<common:hasPopulationSize>581000</common:hasPopulationSize>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Australia"/>
+	<common:hasIsoAlpha2Code>SB</common:hasIsoAlpha2Code>
+	<aras:LocationName>http://tinybluepla.net/terminology/DE_names#Solomon-Inseln</aras:LocationName>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Solomon Islands</aras:LocationName>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#UnitedStates">
+	<aras:LocationName>http://tinybluepla.net/terminology/DE_names#USA</aras:LocationName>
+	<common:hasIsoAlpha2Code>US</common:hasIsoAlpha2Code>
+	<aras:hasMediaDescription>http://upload.wikimedia.org/wikipedia/commons/thumb/a/a4/Flag_of_the_United_States.svg/125px-Flag_of_the_United_States.svg.png</aras:hasMediaDescription>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#United States</aras:LocationName>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#NorthAmerica"/>
+	<common:hasPopulationSize>303824000</common:hasPopulationSize>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Canada">
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<common:hasIsoAlpha2Code>CA</common:hasIsoAlpha2Code>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Canada</aras:LocationName>
+	<common:hasPopulationSize>33679000</common:hasPopulationSize>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#NorthAmerica"/>
+	<aras:LocationName>http://tinybluepla.net/terminology/DE_names#Kanada</aras:LocationName>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#WallisAndFutuna">
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<common:hasIsoAlpha2Code>WF</common:hasIsoAlpha2Code>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Australia"/>
+	<common:hasPopulationSize>16025</common:hasPopulationSize>
+	<aras:LocationName>http://tinybluepla.net/terminology/DE_names#Wallis und Futuna</aras:LocationName>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Wallis and Futuna</aras:LocationName>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Tuvalu">
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Tuvalu</aras:LocationName>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Australia"/>
+	<common:hasPopulationSize>12000</common:hasPopulationSize>
+	<aras:LocationName>http://tinybluepla.net/terminology/DE_names#Tuwalu</aras:LocationName>
+	<common:hasIsoAlpha2Code>TV</common:hasIsoAlpha2Code>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#SvalbardAndJanMayen">
+	<common:hasIsoAlpha2Code>SJ</common:hasIsoAlpha2Code>
+	<aras:LocationName>http://tinybluepla.net/terminology/DE_names#Svalbard und Jan-Mayen</aras:LocationName>
+	<common:hasPopulationSize>2265</common:hasPopulationSize>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Europe"/>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Svalbard and Jan Mayen</aras:LocationName>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#RepublicOfTheCongo">
+	<common:hasIsoAlpha2Code>CG</common:hasIsoAlpha2Code>
+	<common:hasPopulationSize>3039126</common:hasPopulationSize>
+	<aras:LocationName>local:EN_namesCongo-Brazzaville</aras:LocationName>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Africa"/>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Republic of the Congo</aras:LocationName>
+	<aras:LocationName>http://tinybluepla.net/terminology/DE_names#Kongo (Republik Kongo)</aras:LocationName>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#IsleOfMan">
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Isle of Man</aras:LocationName>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<common:hasPopulationSize>75049</common:hasPopulationSize>
+	<aras:LocationName>http://tinybluepla.net/terminology/DE_names#Insel Man</aras:LocationName>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Europe"/>
+	<common:hasIsoAlpha2Code>IM</common:hasIsoAlpha2Code>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Netherlands">
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Netherlands</aras:LocationName>
+	<aras:LocationName>http://tinybluepla.net/terminology/DE_names#Niederlande</aras:LocationName>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Europe"/>
+	<aras:hasMediaDescription>http://upload.wikimedia.org/wikipedia/commons/thumb/2/20/Flag_of_the_Netherlands.svg/125px-Flag_of_the_Netherlands.svg.png</aras:hasMediaDescription>
+	<common:hasPopulationSize>16645000</common:hasPopulationSize>
+	<common:hasIsoAlpha2Code>NL</common:hasIsoAlpha2Code>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Aruba">
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<common:hasIsoAlpha2Code>AW</common:hasIsoAlpha2Code>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Aruba</aras:LocationName>
+	<common:hasPopulationSize>71566</common:hasPopulationSize>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#NorthAmerica"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Pakistan">
+	<common:hasIsoAlpha2Code>PK</common:hasIsoAlpha2Code>
+	<common:hasPopulationSize>167762000</common:hasPopulationSize>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Pakistan</aras:LocationName>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Asia"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Bulgaria">
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Bulgaria</aras:LocationName>
+	<common:hasIsoAlpha2Code>BG</common:hasIsoAlpha2Code>
+	<common:hasPopulationSize>7262000</common:hasPopulationSize>
+	<aras:LocationName>http://tinybluepla.net/terminology/DE_names#Bulgarien</aras:LocationName>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Europe"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Brazil">
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#SouthAmerica"/>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Brazil</aras:LocationName>
+	<common:hasPopulationSize>191908000</common:hasPopulationSize>
+	<aras:LocationName>http://tinybluepla.net/terminology/DE_names#Brasilien</aras:LocationName>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<common:hasIsoAlpha2Code>BR</common:hasIsoAlpha2Code>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#WesternSahara">
+	<aras:LocationName>http://tinybluepla.net/terminology/DE_names#West-Sahara</aras:LocationName>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Western Sahara</aras:LocationName>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Africa"/>
+	<common:hasPopulationSize>273008</common:hasPopulationSize>
+	<common:hasIsoAlpha2Code>EH</common:hasIsoAlpha2Code>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Peru">
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#SouthAmerica"/>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Peru</aras:LocationName>
+	<common:hasPopulationSize>29041000</common:hasPopulationSize>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<common:hasIsoAlpha2Code>PE</common:hasIsoAlpha2Code>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Qatar">
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Asia"/>
+	<common:hasPopulationSize>928000</common:hasPopulationSize>
+	<common:hasIsoAlpha2Code>QA</common:hasIsoAlpha2Code>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<aras:LocationName>http://tinybluepla.net/terminology/DE_names#Katar</aras:LocationName>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Qatar</aras:LocationName>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Micronesia">
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<common:hasIsoAlpha2Code>FM</common:hasIsoAlpha2Code>
+	<common:hasPopulationSize>108105</common:hasPopulationSize>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Australia"/>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Micronesia</aras:LocationName>
+	<aras:LocationName>http://tinybluepla.net/terminology/DE_names#Micronesien, Föderierte Staaten von</aras:LocationName>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Ukraine">
+	<common:hasIsoAlpha2Code>UA</common:hasIsoAlpha2Code>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<common:hasPopulationSize>45994000</common:hasPopulationSize>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Ukraine</aras:LocationName>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Europe"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Monaco">
+	<common:hasPopulationSize>32000</common:hasPopulationSize>
+	<common:hasIsoAlpha2Code>MC</common:hasIsoAlpha2Code>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Monaco</aras:LocationName>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Europe"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#DominicanRepublic">
+	<aras:LocationName>http://tinybluepla.net/terminology/DE_names#Dominikanische Republik</aras:LocationName>
+	<aras:LocationName>local:EN_namesSpanish Haiti (historical)</aras:LocationName>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Dominican Republic</aras:LocationName>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#NorthAmerica"/>
+	<common:hasPopulationSize>9507000</common:hasPopulationSize>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<common:hasIsoAlpha2Code>DO</common:hasIsoAlpha2Code>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Russia">
+	<common:hasIsoAlpha2Code>RU</common:hasIsoAlpha2Code>
+	<common:hasPopulationSize>140702000</common:hasPopulationSize>
+	<aras:LocationName>http://tinybluepla.net/terminology/DE_names#Russland</aras:LocationName>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<aras:LocationName>local:EN_namesRussian Soviet Federative Socialist Republic</aras:LocationName>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Russia</aras:LocationName>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Europe"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#SaintBarthélemy">
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Saint Barthélemy</aras:LocationName>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#NorthAmerica"/>
+	<common:hasPopulationSize>8450</common:hasPopulationSize>
+	<aras:LocationName>http://tinybluepla.net/terminology/DE_names#Sankt Bartholomäus</aras:LocationName>
+	<common:hasIsoAlpha2Code>BL</common:hasIsoAlpha2Code>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Ghana">
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Ghana</aras:LocationName>
+	<common:hasPopulationSize>23382000</common:hasPopulationSize>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Africa"/>
+	<common:hasIsoAlpha2Code>GH</common:hasIsoAlpha2Code>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#BosniaAndHerzegovina">
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Bosnia and Herzegovina</aras:LocationName>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<aras:LocationName>http://tinybluepla.net/terminology/DE_names#Bosnien und Herzegowina</aras:LocationName>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Europe"/>
+	<common:hasPopulationSize>4590000</common:hasPopulationSize>
+	<common:hasIsoAlpha2Code>BA</common:hasIsoAlpha2Code>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Rwanda">
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Rwanda</aras:LocationName>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Africa"/>
+	<aras:LocationName>http://tinybluepla.net/terminology/DE_names#Ruanda</aras:LocationName>
+	<common:hasPopulationSize>10186000</common:hasPopulationSize>
+	<common:hasIsoAlpha2Code>RW</common:hasIsoAlpha2Code>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Moldova">
+	<common:hasPopulationSize>4324000</common:hasPopulationSize>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Europe"/>
+	<common:hasIsoAlpha2Code>MD</common:hasIsoAlpha2Code>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Moldova</aras:LocationName>
+	<aras:LocationName>http://tinybluepla.net/terminology/DE_names#Moldau (Republik Moldau)</aras:LocationName>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Cameroon">
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Cameroon</aras:LocationName>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<aras:LocationName>http://tinybluepla.net/terminology/DE_names#Kamerun</aras:LocationName>
+	<common:hasIsoAlpha2Code>CM</common:hasIsoAlpha2Code>
+	<common:hasPopulationSize>18467000</common:hasPopulationSize>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Africa"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Macao">
+	<common:hasIsoAlpha2Code>MO</common:hasIsoAlpha2Code>
+	<aras:LocationName>http://tinybluepla.net/terminology/DE_names#Macau</aras:LocationName>
+	<common:hasPopulationSize>449198</common:hasPopulationSize>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Asia"/>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Macao</aras:LocationName>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#SaintVincentAndTheGrenadines">
+	<common:hasIsoAlpha2Code>VC</common:hasIsoAlpha2Code>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Saint Vincent and the Grenadines</aras:LocationName>
+	<aras:LocationName>http://tinybluepla.net/terminology/DE_names#St. Vincent und die Grenadinen</aras:LocationName>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#NorthAmerica"/>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<common:hasPopulationSize>117534</common:hasPopulationSize>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#SaudiArabia">
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Saudi Arabia</aras:LocationName>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Asia"/>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<aras:LocationName>http://tinybluepla.net/terminology/DE_names#Saudi-Arabien</aras:LocationName>
+	<common:hasPopulationSize>28161000</common:hasPopulationSize>
+	<common:hasIsoAlpha2Code>SA</common:hasIsoAlpha2Code>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Vanuatu">
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Australia"/>
+	<common:hasIsoAlpha2Code>VU</common:hasIsoAlpha2Code>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Vanuatu</aras:LocationName>
+	<common:hasPopulationSize>215000</common:hasPopulationSize>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#NewZealand">
+	<common:hasPopulationSize>4154000</common:hasPopulationSize>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<common:hasIsoAlpha2Code>NZ</common:hasIsoAlpha2Code>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Australia"/>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#New Zealand</aras:LocationName>
+	<aras:LocationName>http://tinybluepla.net/terminology/DE_names#Neuseeland</aras:LocationName>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#SouthGeorgiaAndTheSouthSandwichIslands">
+	<common:hasPopulationSize>100</common:hasPopulationSize>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#South Georgia and the South Sandwich Islands</aras:LocationName>
+	<common:hasIsoAlpha2Code>GS</common:hasIsoAlpha2Code>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Antarctica"/>
+	<aras:LocationName>http://tinybluepla.net/terminology/DE_names#Süd-Georgien und Südliche Sandwich-Inseln</aras:LocationName>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#AntiguaAndBarbuda">
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#NorthAmerica"/>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<common:hasPopulationSize>69000</common:hasPopulationSize>
+	<aras:LocationName>http://tinybluepla.net/terminology/DE_names#Antigua und Barbuda</aras:LocationName>
+	<common:hasIsoAlpha2Code>AG</common:hasIsoAlpha2Code>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Antigua and Barbuda</aras:LocationName>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#PalestinianTerritory">
+	<aras:LocationName>http://tinybluepla.net/terminology/DE_names#Palästina</aras:LocationName>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Palestinian Territory</aras:LocationName>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Asia"/>
+	<common:hasIsoAlpha2Code>PS</common:hasIsoAlpha2Code>
+	<aras:LocationName>local:EN_namesPalestine</aras:LocationName>
+	<common:hasPopulationSize>3800000</common:hasPopulationSize>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Venezuela">
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Venezuela</aras:LocationName>
+	<common:hasIsoAlpha2Code>VE</common:hasIsoAlpha2Code>
+	<common:hasPopulationSize>26414000</common:hasPopulationSize>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#SouthAmerica"/>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<aras:LocationName>local:EN_namesUnited States of Venezuela</aras:LocationName>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Iran">
+	<common:hasPopulationSize>65875000</common:hasPopulationSize>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Iran</aras:LocationName>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Asia"/>
+	<aras:LocationName>http://tinybluepla.net/terminology/DE_names#Iran (Islamische Republik)</aras:LocationName>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<common:hasIsoAlpha2Code>IR</common:hasIsoAlpha2Code>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Macedonia">
+	<common:hasPopulationSize>2061000</common:hasPopulationSize>
+	<aras:LocationName>local:EN_namesRepublic of Macedonia</aras:LocationName>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Macedonia</aras:LocationName>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Europe"/>
+	<common:hasIsoAlpha2Code>MK</common:hasIsoAlpha2Code>
+	<aras:LocationName>http://tinybluepla.net/terminology/DE_names#Ehemalige jugoslawische Republik Mazedonien</aras:LocationName>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Zambia">
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Africa"/>
+	<aras:LocationName>http://tinybluepla.net/terminology/DE_names#Nordrhodesien</aras:LocationName>
+	<common:hasIsoAlpha2Code>ZM</common:hasIsoAlpha2Code>
+	<common:hasPopulationSize>11669000</common:hasPopulationSize>
+	<aras:LocationName>local:EN_namesNorthern Rhodesia</aras:LocationName>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Zambia</aras:LocationName>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Italy">
+	<common:hasPopulationSize>58145000</common:hasPopulationSize>
+	<aras:LocationName>http://tinybluepla.net/terminology/DE_names#Italien</aras:LocationName>
+	<common:hasIsoAlpha2Code>IT</common:hasIsoAlpha2Code>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Italy</aras:LocationName>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Europe"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Kuwait">
+	<common:hasIsoAlpha2Code>KW</common:hasIsoAlpha2Code>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Asia"/>
+	<common:hasPopulationSize>2596000</common:hasPopulationSize>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Kuwait</aras:LocationName>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Iraq">
+	<common:hasIsoAlpha2Code>IQ</common:hasIsoAlpha2Code>
+	<aras:LocationName>http://tinybluepla.net/terminology/DE_names#Irak</aras:LocationName>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Iraq</aras:LocationName>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<common:hasPopulationSize>28221000</common:hasPopulationSize>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Asia"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#AlandIslands">
+	<aras:LocationName>http://tinybluepla.net/terminology/DE_names#Åland</aras:LocationName>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Europe"/>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Aland Islands</aras:LocationName>
+	<common:hasIsoAlpha2Code>AX</common:hasIsoAlpha2Code>
+	<aras:LocationName>local:EN_namesÅland</aras:LocationName>
+	<common:hasPopulationSize>26711</common:hasPopulationSize>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Germany">
+	<common:hasIsoAlpha2Code>DE</common:hasIsoAlpha2Code>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Europe"/>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Germany</aras:LocationName>
+	<aras:LocationName>http://tinybluepla.net/terminology/DE_names#Deutschland</aras:LocationName>
+	<common:hasPopulationSize>82369000</common:hasPopulationSize>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<aras:hasMediaDescription>http://upload.wikimedia.org/wikipedia/commons/thumb/b/ba/Flag_of_Germany.svg/125px-Flag_of_Germany.svg.png</aras:hasMediaDescription>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#U.S.VirginIslands">
+	<common:hasPopulationSize>108708</common:hasPopulationSize>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#NorthAmerica"/>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#U.S. Virgin Islands</aras:LocationName>
+	<aras:LocationName>http://tinybluepla.net/terminology/DE_names#Jungfern-Inseln (USA)</aras:LocationName>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<common:hasIsoAlpha2Code>VI</common:hasIsoAlpha2Code>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Mayotte">
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Africa"/>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<common:hasIsoAlpha2Code>YT</common:hasIsoAlpha2Code>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Mayotte</aras:LocationName>
+	<common:hasPopulationSize>159042</common:hasPopulationSize>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Georgia">
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Georgia</aras:LocationName>
+	<aras:LocationName>http://tinybluepla.net/terminology/DE_names#Georgien</aras:LocationName>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Asia"/>
+	<common:hasIsoAlpha2Code>GE</common:hasIsoAlpha2Code>
+	<aras:LocationName>local:EN_namesGeorgian Soviet Socialist Republic</aras:LocationName>
+	<common:hasPopulationSize>4630000</common:hasPopulationSize>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#China">
+	<common:hasPopulationSize>1330044000</common:hasPopulationSize>
+	<aras:LocationName>http://tinybluepla.net/terminology/DE_names#Volksrepublik China</aras:LocationName>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Asia"/>
+	<common:hasIsoAlpha2Code>CN</common:hasIsoAlpha2Code>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#China</aras:LocationName>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Slovakia">
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Europe"/>
+	<common:hasPopulationSize>5455000</common:hasPopulationSize>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Slovakia</aras:LocationName>
+	<aras:LocationName>http://tinybluepla.net/terminology/DE_names#Slowakei (Slowakische Republik)</aras:LocationName>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<common:hasIsoAlpha2Code>SK</common:hasIsoAlpha2Code>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#CapeVerde">
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<aras:LocationName>http://tinybluepla.net/terminology/DE_names#Kap Verde</aras:LocationName>
+	<common:hasIsoAlpha2Code>CV</common:hasIsoAlpha2Code>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Africa"/>
+	<common:hasPopulationSize>426000</common:hasPopulationSize>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Cape Verde</aras:LocationName>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Fiji">
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Australia"/>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Fiji</aras:LocationName>
+	<common:hasIsoAlpha2Code>FJ</common:hasIsoAlpha2Code>
+	<common:hasPopulationSize>931000</common:hasPopulationSize>
+	<aras:LocationName>http://tinybluepla.net/terminology/DE_names#Fidschi</aras:LocationName>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Pitcairn">
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Pitcairn</aras:LocationName>
+	<common:hasIsoAlpha2Code>PN</common:hasIsoAlpha2Code>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Australia"/>
+	<common:hasPopulationSize>46</common:hasPopulationSize>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Algeria">
+	<aras:LocationName>http://tinybluepla.net/terminology/DE_names#Algerien</aras:LocationName>
+	<common:hasPopulationSize>33739000</common:hasPopulationSize>
+	<common:hasIsoAlpha2Code>DZ</common:hasIsoAlpha2Code>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Africa"/>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Algeria</aras:LocationName>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Guyana">
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#SouthAmerica"/>
+	<common:hasIsoAlpha2Code>GY</common:hasIsoAlpha2Code>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Guyana</aras:LocationName>
+	<common:hasPopulationSize>770000</common:hasPopulationSize>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Austria">
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Austria</aras:LocationName>
+	<aras:LocationName>http://tinybluepla.net/terminology/DE_names#Österreich</aras:LocationName>
+	<common:hasIsoAlpha2Code>AT</common:hasIsoAlpha2Code>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Europe"/>
+	<aras:hasMediaDescription>http://upload.wikimedia.org/wikipedia/commons/thumb/4/41/Flag_of_Austria.svg/125px-Flag_of_Austria.svg.png</aras:hasMediaDescription>
+	<common:hasPopulationSize>8205000</common:hasPopulationSize>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Somalia">
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Africa"/>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<common:hasPopulationSize>9379000</common:hasPopulationSize>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Somalia</aras:LocationName>
+	<common:hasIsoAlpha2Code>SO</common:hasIsoAlpha2Code>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Armenia">
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Armenia</aras:LocationName>
+	<aras:LocationName>http://tinybluepla.net/terminology/DE_names#Armenien</aras:LocationName>
+	<common:hasPopulationSize>2968000</common:hasPopulationSize>
+	<common:hasIsoAlpha2Code>AM</common:hasIsoAlpha2Code>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Asia"/>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Sweden">
+	<common:hasIsoAlpha2Code>SE</common:hasIsoAlpha2Code>
+	<common:hasPopulationSize>9045000</common:hasPopulationSize>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Europe"/>
+	<aras:LocationName>http://tinybluepla.net/terminology/DE_names#Schweden</aras:LocationName>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Sweden</aras:LocationName>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#SouthAfrica">
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#South Africa</aras:LocationName>
+	<aras:LocationName>http://tinybluepla.net/terminology/DE_names#Republik Südafrika</aras:LocationName>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<common:hasPopulationSize>43786000</common:hasPopulationSize>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Africa"/>
+	<common:hasIsoAlpha2Code>ZA</common:hasIsoAlpha2Code>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#SanMarino">
+	<common:hasIsoAlpha2Code>SM</common:hasIsoAlpha2Code>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#San Marino</aras:LocationName>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Europe"/>
+	<common:hasPopulationSize>29000</common:hasPopulationSize>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Estonia">
+	<common:hasIsoAlpha2Code>EE</common:hasIsoAlpha2Code>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Estonia</aras:LocationName>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<common:hasPopulationSize>1307000</common:hasPopulationSize>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Europe"/>
+	<aras:LocationName>http://tinybluepla.net/terminology/DE_names#Estland</aras:LocationName>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#IvoryCoast">
+	<common:hasPopulationSize>18373000</common:hasPopulationSize>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Ivory Coast</aras:LocationName>
+	<common:hasIsoAlpha2Code>CI</common:hasIsoAlpha2Code>
+	<aras:LocationName>http://tinybluepla.net/terminology/DE_names#Côte d’Ivoire</aras:LocationName>
+	<aras:LocationName>local:EN_namesCôte d'Ivoire</aras:LocationName>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Africa"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Bermuda">
+	<common:hasPopulationSize>65365</common:hasPopulationSize>
+	<common:hasIsoAlpha2Code>BM</common:hasIsoAlpha2Code>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Bermuda</aras:LocationName>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#NorthAmerica"/>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Jamaica">
+	<common:hasPopulationSize>2801000</common:hasPopulationSize>
+	<aras:LocationName>http://tinybluepla.net/terminology/DE_names#Jamaika</aras:LocationName>
+	<common:hasIsoAlpha2Code>JM</common:hasIsoAlpha2Code>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Jamaica</aras:LocationName>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#NorthAmerica"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Nigeria">
+	<common:hasPopulationSize>138283000</common:hasPopulationSize>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Nigeria</aras:LocationName>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Africa"/>
+	<common:hasIsoAlpha2Code>NG</common:hasIsoAlpha2Code>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Bangladesh">
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Asia"/>
+	<common:hasIsoAlpha2Code>BD</common:hasIsoAlpha2Code>
+	<common:hasPopulationSize>153546000</common:hasPopulationSize>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Bangladesh</aras:LocationName>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<aras:LocationName>http://tinybluepla.net/terminology/DE_names#Bangladesch</aras:LocationName>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Burundi">
+	<common:hasPopulationSize>8691000</common:hasPopulationSize>
+	<common:hasIsoAlpha2Code>BI</common:hasIsoAlpha2Code>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Africa"/>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Burundi</aras:LocationName>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#SouthKorea">
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<common:hasPopulationSize>48422644</common:hasPopulationSize>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#South Korea</aras:LocationName>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Asia"/>
+	<aras:LocationName>http://tinybluepla.net/terminology/DE_names#Südkorea</aras:LocationName>
+	<common:hasIsoAlpha2Code>KR</common:hasIsoAlpha2Code>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Mongolia">
+	<aras:LocationName>http://tinybluepla.net/terminology/DE_names#Mongolei</aras:LocationName>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<aras:LocationName>local:EN_namesMongolian People's Republic (historical)</aras:LocationName>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Mongolia</aras:LocationName>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Asia"/>
+	<common:hasPopulationSize>2996000</common:hasPopulationSize>
+	<common:hasIsoAlpha2Code>MN</common:hasIsoAlpha2Code>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Uzbekistan">
+	<aras:LocationName>http://tinybluepla.net/terminology/DE_names#Usbekistan</aras:LocationName>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Uzbekistan</aras:LocationName>
+	<common:hasIsoAlpha2Code>UZ</common:hasIsoAlpha2Code>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Asia"/>
+	<common:hasPopulationSize>28268000</common:hasPopulationSize>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Tunisia">
+	<common:hasPopulationSize>10378000</common:hasPopulationSize>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Africa"/>
+	<common:hasIsoAlpha2Code>TN</common:hasIsoAlpha2Code>
+	<aras:LocationName>http://tinybluepla.net/terminology/DE_names#Tunesien</aras:LocationName>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Tunisia</aras:LocationName>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#FrenchGuiana">
+	<common:hasIsoAlpha2Code>GF</common:hasIsoAlpha2Code>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#SouthAmerica"/>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#French Guiana</aras:LocationName>
+	<aras:LocationName>http://tinybluepla.net/terminology/DE_names#Französisch Guyana</aras:LocationName>
+	<common:hasPopulationSize>195506</common:hasPopulationSize>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#MarshallIslands">
+	<common:hasPopulationSize>11628</common:hasPopulationSize>
+	<common:hasIsoAlpha2Code>MH</common:hasIsoAlpha2Code>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Marshall Islands</aras:LocationName>
+	<aras:LocationName>http://tinybluepla.net/terminology/DE_names#Marshall-Inseln</aras:LocationName>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Australia"/>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Romania">
+	<common:hasPopulationSize>22246000</common:hasPopulationSize>
+	<aras:LocationName>http://tinybluepla.net/terminology/DE_names#Rumänien</aras:LocationName>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<common:hasIsoAlpha2Code>RO</common:hasIsoAlpha2Code>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Romania</aras:LocationName>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Europe"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#NetherlandsAntilles">
+	<common:hasIsoAlpha2Code>AN</common:hasIsoAlpha2Code>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Netherlands Antilles</aras:LocationName>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<aras:LocationName>http://tinybluepla.net/terminology/DE_names#Niederländische Antillen</aras:LocationName>
+	<common:hasPopulationSize>136197</common:hasPopulationSize>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#NorthAmerica"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#AmericanSamoa">
+	<common:hasIsoAlpha2Code>AS</common:hasIsoAlpha2Code>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#American Samoa</aras:LocationName>
+	<aras:LocationName>http://tinybluepla.net/terminology/DE_names#Amerikanisch-Samoa</aras:LocationName>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<common:hasPopulationSize>57881</common:hasPopulationSize>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Australia"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Martinique">
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<common:hasPopulationSize>432900</common:hasPopulationSize>
+	<common:hasIsoAlpha2Code>MQ</common:hasIsoAlpha2Code>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Martinique</aras:LocationName>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#NorthAmerica"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Reunion">
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Africa"/>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<common:hasIsoAlpha2Code>RE</common:hasIsoAlpha2Code>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Reunion</aras:LocationName>
+	<common:hasPopulationSize>776948</common:hasPopulationSize>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Chile">
+	<common:hasPopulationSize>16432000</common:hasPopulationSize>
+	<common:hasIsoAlpha2Code>CL</common:hasIsoAlpha2Code>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Chile</aras:LocationName>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#SouthAmerica"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#FrenchPolynesia">
+	<aras:LocationName>http://tinybluepla.net/terminology/DE_names#Französisch-Polynesien</aras:LocationName>
+	<common:hasPopulationSize>270485</common:hasPopulationSize>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#French Polynesia</aras:LocationName>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Australia"/>
+	<common:hasIsoAlpha2Code>PF</common:hasIsoAlpha2Code>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#EastTimor">
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#East Timor</aras:LocationName>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<aras:LocationName>http://tinybluepla.net/terminology/DE_names#Timor-Leste</aras:LocationName>
+	<common:hasPopulationSize>1107000</common:hasPopulationSize>
+	<common:hasIsoAlpha2Code>TL</common:hasIsoAlpha2Code>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Australia"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Ecuador">
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#SouthAmerica"/>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<common:hasPopulationSize>13927000</common:hasPopulationSize>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Ecuador</aras:LocationName>
+	<common:hasIsoAlpha2Code>EC</common:hasIsoAlpha2Code>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Seychelles">
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Seychelles</aras:LocationName>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<common:hasPopulationSize>82000</common:hasPopulationSize>
+	<aras:LocationName>http://tinybluepla.net/terminology/DE_names#Seychellen</aras:LocationName>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Africa"/>
+	<common:hasIsoAlpha2Code>SC</common:hasIsoAlpha2Code>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Taiwan">
+	<common:hasIsoAlpha2Code>TW</common:hasIsoAlpha2Code>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Asia"/>
+	<common:hasPopulationSize>22894384</common:hasPopulationSize>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Taiwan</aras:LocationName>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Serbia">
+	<aras:LocationName>http://tinybluepla.net/terminology/DE_names#Serbien</aras:LocationName>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Europe"/>
+	<common:hasIsoAlpha2Code>RS</common:hasIsoAlpha2Code>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Serbia</aras:LocationName>
+	<common:hasPopulationSize>10159000</common:hasPopulationSize>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Gabon">
+	<aras:LocationName>http://tinybluepla.net/terminology/DE_names#Gabun</aras:LocationName>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Africa"/>
+	<common:hasPopulationSize>1484000</common:hasPopulationSize>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Gabon</aras:LocationName>
+	<common:hasIsoAlpha2Code>GA</common:hasIsoAlpha2Code>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Bahrain">
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Bahrain</aras:LocationName>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Asia"/>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<common:hasPopulationSize>718000</common:hasPopulationSize>
+	<common:hasIsoAlpha2Code>BH</common:hasIsoAlpha2Code>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#FrenchSouthernTerritories">
+	<common:hasIsoAlpha2Code>TF</common:hasIsoAlpha2Code>
+	<common:hasPopulationSize>0</common:hasPopulationSize>
+	<aras:LocationName>http://tinybluepla.net/terminology/DE_names#Französische Südgebiete</aras:LocationName>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#French Southern Territories</aras:LocationName>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Antarctica"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Zimbabwe">
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Zimbabwe</aras:LocationName>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Africa"/>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<aras:LocationName>http://tinybluepla.net/terminology/DE_names#Südrhodesien</aras:LocationName>
+	<common:hasPopulationSize>12382000</common:hasPopulationSize>
+	<common:hasIsoAlpha2Code>ZW</common:hasIsoAlpha2Code>
+	<aras:LocationName>local:EN_namesSouthern Rhodesia</aras:LocationName>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Sudan">
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Sudan</aras:LocationName>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<common:hasIsoAlpha2Code>SD</common:hasIsoAlpha2Code>
+	<common:hasPopulationSize>40218000</common:hasPopulationSize>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Africa"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Finland">
+	<common:hasIsoAlpha2Code>FI</common:hasIsoAlpha2Code>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Finland</aras:LocationName>
+	<common:hasPopulationSize>5244000</common:hasPopulationSize>
+	<aras:LocationName>http://tinybluepla.net/terminology/DE_names#Finnland</aras:LocationName>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Europe"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#ChristmasIsland">
+	<common:hasIsoAlpha2Code>CX</common:hasIsoAlpha2Code>
+	<aras:LocationName>http://tinybluepla.net/terminology/DE_names#Weihnachtsinsel</aras:LocationName>
+	<common:hasPopulationSize>361</common:hasPopulationSize>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Christmas Island</aras:LocationName>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Asia"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Paraguay">
+	<common:hasPopulationSize>6831000</common:hasPopulationSize>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<common:hasIsoAlpha2Code>PY</common:hasIsoAlpha2Code>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Paraguay</aras:LocationName>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#SouthAmerica"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Ireland">
+	<aras:LocationName>local:EN_namesRepublic of Ireland</aras:LocationName>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Europe"/>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<common:hasPopulationSize>4156000</common:hasPopulationSize>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Ireland</aras:LocationName>
+	<aras:LocationName>http://tinybluepla.net/terminology/DE_names#Irland</aras:LocationName>
+	<common:hasIsoAlpha2Code>IE</common:hasIsoAlpha2Code>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Poland">
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Europe"/>
+	<aras:LocationName>http://tinybluepla.net/terminology/DE_names#Polen</aras:LocationName>
+	<common:hasPopulationSize>38500000</common:hasPopulationSize>
+	<common:hasIsoAlpha2Code>PL</common:hasIsoAlpha2Code>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Poland</aras:LocationName>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Israel">
+	<common:hasPopulationSize>6500000</common:hasPopulationSize>
+	<common:hasIsoAlpha2Code>IL</common:hasIsoAlpha2Code>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Israel</aras:LocationName>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Asia"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Spain">
+	<common:hasIsoAlpha2Code>ES</common:hasIsoAlpha2Code>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Europe"/>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Spain</aras:LocationName>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<common:hasPopulationSize>40491000</common:hasPopulationSize>
+	<aras:LocationName>http://tinybluepla.net/terminology/DE_names#Spanien</aras:LocationName>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#NewCaledonia">
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Australia"/>
+	<common:hasPopulationSize>216494</common:hasPopulationSize>
+	<aras:LocationName>http://tinybluepla.net/terminology/DE_names#Neukaledonien</aras:LocationName>
+	<common:hasIsoAlpha2Code>NC</common:hasIsoAlpha2Code>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#New Caledonia</aras:LocationName>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Benin">
+	<common:hasPopulationSize>8294000</common:hasPopulationSize>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Benin</aras:LocationName>
+	<common:hasIsoAlpha2Code>BJ</common:hasIsoAlpha2Code>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Africa"/>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Mauritius">
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Africa"/>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Mauritius</aras:LocationName>
+	<common:hasIsoAlpha2Code>MU</common:hasIsoAlpha2Code>
+	<common:hasPopulationSize>1260000</common:hasPopulationSize>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Honduras">
+	<common:hasIsoAlpha2Code>HN</common:hasIsoAlpha2Code>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Honduras</aras:LocationName>
+	<common:hasPopulationSize>7639000</common:hasPopulationSize>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#NorthAmerica"/>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#BritishVirginIslands">
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#British Virgin Islands</aras:LocationName>
+	<common:hasIsoAlpha2Code>VG</common:hasIsoAlpha2Code>
+	<aras:LocationName>http://tinybluepla.net/terminology/DE_names#Jungfern-Inseln (Britisch)</aras:LocationName>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<common:hasPopulationSize>21730</common:hasPopulationSize>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#NorthAmerica"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Mali">
+	<common:hasPopulationSize>12324000</common:hasPopulationSize>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Africa"/>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Mali</aras:LocationName>
+	<common:hasIsoAlpha2Code>ML</common:hasIsoAlpha2Code>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Myanmar">
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Asia"/>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Myanmar</aras:LocationName>
+	<common:hasPopulationSize>47758000</common:hasPopulationSize>
+	<common:hasIsoAlpha2Code>MM</common:hasIsoAlpha2Code>
+	<aras:LocationName>http://tinybluepla.net/terminology/DE_names#Birma (Myanmar)</aras:LocationName>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Liberia">
+	<common:hasIsoAlpha2Code>LR</common:hasIsoAlpha2Code>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Liberia</aras:LocationName>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Africa"/>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<common:hasPopulationSize>3334000</common:hasPopulationSize>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#HongKong">
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Hong Kong</aras:LocationName>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<common:hasIsoAlpha2Code>HK</common:hasIsoAlpha2Code>
+	<common:hasPopulationSize>6898686</common:hasPopulationSize>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Asia"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Malta">
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Europe"/>
+	<common:hasIsoAlpha2Code>MT</common:hasIsoAlpha2Code>
+	<common:hasPopulationSize>403000</common:hasPopulationSize>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Malta</aras:LocationName>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Thailand">
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Asia"/>
+	<common:hasPopulationSize>65493000</common:hasPopulationSize>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Thailand</aras:LocationName>
+	<common:hasIsoAlpha2Code>TH</common:hasIsoAlpha2Code>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Madagascar">
+	<common:hasIsoAlpha2Code>MG</common:hasIsoAlpha2Code>
+	<common:hasPopulationSize>20042000</common:hasPopulationSize>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Madagascar</aras:LocationName>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Africa"/>
+	<aras:LocationName>http://tinybluepla.net/terminology/DE_names#Madagaskar</aras:LocationName>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Nauru">
+	<common:hasIsoAlpha2Code>NR</common:hasIsoAlpha2Code>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Nauru</aras:LocationName>
+	<common:hasPopulationSize>13000</common:hasPopulationSize>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Australia"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Guinea">
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Guinea</aras:LocationName>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Africa"/>
+	<common:hasIsoAlpha2Code>GN</common:hasIsoAlpha2Code>
+	<common:hasPopulationSize>10211000</common:hasPopulationSize>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Liechtenstein">
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Europe"/>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<common:hasIsoAlpha2Code>LI</common:hasIsoAlpha2Code>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Liechtenstein</aras:LocationName>
+	<common:hasPopulationSize>34000</common:hasPopulationSize>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Senegal">
+	<common:hasPopulationSize>12853000</common:hasPopulationSize>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Senegal</aras:LocationName>
+	<common:hasIsoAlpha2Code>SN</common:hasIsoAlpha2Code>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Africa"/>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#SerbiaAndMontenegro">
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Europe"/>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Serbia and Montenegro</aras:LocationName>
+	<common:hasPopulationSize>10829175</common:hasPopulationSize>
+	<common:hasIsoAlpha2Code>CS</common:hasIsoAlpha2Code>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#NorthKorea">
+	<common:hasIsoAlpha2Code>KP</common:hasIsoAlpha2Code>
+	<common:hasPopulationSize>22912177</common:hasPopulationSize>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<aras:LocationName>http://tinybluepla.net/terminology/DE_names#Nordkorea</aras:LocationName>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#North Korea</aras:LocationName>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Asia"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Swaziland">
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Swaziland</aras:LocationName>
+	<common:hasPopulationSize>1128000</common:hasPopulationSize>
+	<common:hasIsoAlpha2Code>SZ</common:hasIsoAlpha2Code>
+	<aras:LocationName>http://tinybluepla.net/terminology/DE_names#Swasiland</aras:LocationName>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Africa"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#FalklandIslands">
+	<aras:LocationName>http://tinybluepla.net/terminology/DE_names#Falkland-Inseln</aras:LocationName>
+	<common:hasIsoAlpha2Code>FK</common:hasIsoAlpha2Code>
+	<common:hasPopulationSize>2638</common:hasPopulationSize>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#SouthAmerica"/>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<aras:LocationName>local:EN_namesColony of the Falkland Islands</aras:LocationName>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Falkland Islands</aras:LocationName>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Ethiopia">
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Africa"/>
+	<aras:LocationName>http://tinybluepla.net/terminology/DE_names#Äthiopien</aras:LocationName>
+	<common:hasPopulationSize>78254000</common:hasPopulationSize>
+	<common:hasIsoAlpha2Code>ET</common:hasIsoAlpha2Code>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Ethiopia</aras:LocationName>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#SaintLucia">
+	<common:hasIsoAlpha2Code>LC</common:hasIsoAlpha2Code>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Saint Lucia</aras:LocationName>
+	<common:hasPopulationSize>172000</common:hasPopulationSize>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#NorthAmerica"/>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<aras:LocationName>http://tinybluepla.net/terminology/DE_names#St. Lucia</aras:LocationName>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#SaintHelena">
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<aras:LocationName>http://tinybluepla.net/terminology/DE_names#Sankt Helena</aras:LocationName>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Saint Helena</aras:LocationName>
+	<common:hasIsoAlpha2Code>SH</common:hasIsoAlpha2Code>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Africa"/>
+	<common:hasPopulationSize>7460</common:hasPopulationSize>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#Antarctica">
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#Antarctica</aras:LocationName>
+	<aras:LocationName>http://tinybluepla.net/terminology/DE_standard#Antarktis</aras:LocationName>
+	<common:hasIsoAlpha2Code>AQ</common:hasIsoAlpha2Code>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Antarctica"/>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<common:hasPopulationSize>0</common:hasPopulationSize>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo/countries#BritishIndianOceanTerritory">
+	<common:hasIsoAlpha2Code>IO</common:hasIsoAlpha2Code>
+	<common:hasPopulationSize>0</common:hasPopulationSize>
+	<aras:LocationName>http://tinybluepla.net/terminology/ANY_names#British Indian Ocean Territory</aras:LocationName>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Country"/>
+	<common:isIn rdf:resource="http://tinybluepla.net/geo#Asia"/>
+	<aras:LocationName>http://tinybluepla.net/terminology/DE_names#Britisches Territorium im Indischen Ozean</aras:LocationName>
+</rdf:Description>
+
+</rdf:RDF>

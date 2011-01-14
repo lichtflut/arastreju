@@ -1,0 +1,290 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rdf:RDF
+	xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+	xmlns:aras="http://arastreju.org/kernel#"
+	xmlns:it="http://tinybluepla.net/it#"
+	xmlns:owl="http://www.w3.org/2002/07/owl#"
+	xmlns:companies="http://tinybluepla.net/companies#"
+	xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+	xmlns:org="http://tinybluepla.net/org#">
+
+<rdf:Description rdf:about="http://tinybluepla.net/it#Unix">
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+	<rdfs:subClassOf rdf:resource="http://tinybluepla.net/it#OperatingSystem"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/it#MySQLDatabase">
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+	<rdfs:subClassOf rdf:resource="http://tinybluepla.net/it#RelationalDatabase"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/it#hasProgrammingLanguage">
+	<rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/it#isManagedBy">
+	<rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/it#MACAddress">
+	<rdfs:subClassOf rdf:resource="http://tinybluepla.net/it#Address"/>
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/it#c01a19ad-972b-4fe0-ab9f-add5e171ce50">
+	<rdf:type rdf:resource="http://arastreju.org/kernel#PropertyDeclaration"/>
+	<aras:declaresProperty rdf:resource="http://tinybluepla.net/it#hasOperatingSystem"/>
+	<aras:hasTypeConstraint rdf:resource="http://tinybluepla.net/it#OperatingSystem"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/it#PosixOS">
+	<rdfs:subClassOf rdf:resource="http://tinybluepla.net/it#OperatingSystem"/>
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/it#RelationalDatabase">
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+	<rdfs:subClassOf rdf:resource="http://tinybluepla.net/it#Database"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/it#hasHostName">
+	<rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/it#Administrator">
+	<rdfs:subClassOf rdf:resource="http://tinybluepla.net/org#Employee"/>
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/it#Software">
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+	<rdfs:label>http://tinybluepla.net/terminology/DE_standard#Software</rdfs:label>
+	<rdfs:label>http://tinybluepla.net/terminology/DE_standard#Software</rdfs:label>
+	<rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/it#ZOS">
+	<rdfs:subClassOf rdf:resource="http://tinybluepla.net/it#OperatingSystem"/>
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/it#JavaProgrammingLanguage">
+	<rdf:type rdf:resource="http://tinybluepla.net/it#ProgrammingLanguage"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/it#OperatingSystem">
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+	<rdfs:subClassOf rdf:resource="http://tinybluepla.net/it#Software"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/it#supports">
+	<rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/it#Windows">
+	<rdfs:subClassOf rdf:resource="http://tinybluepla.net/it#PosixOS"/>
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/it#uses">
+	<rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/it#hasVersion">
+	<rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/it#JavaApplication">
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+	<rdfs:subClassOf rdf:resource="http://tinybluepla.net/it#Application"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/it#Guardian">
+	<rdfs:subClassOf rdf:resource="http://tinybluepla.net/it#OperatingSystem"/>
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/it#ApplicationServer">
+	<rdfs:subClassOf rdf:resource="http://tinybluepla.net/it#InfrastructureComponent"/>
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/it#HardwareComponent">
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+	<rdfs:subClassOf rdf:resource="http://tinybluepla.net/it#InfrastructureComponent"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/it#Database">
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+	<rdfs:subClassOf rdf:resource="http://tinybluepla.net/it#InfrastructureComponent"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/bpm#BusinessProcess">
+	<rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+	<aras:hasMediaDescription>http://www.btquarterly.com/files/btq/img/embedded2.jpg</aras:hasMediaDescription>
+	<aras:hasMediaDescription>http://www.btquarterly.com/files/btq/img/embedded2.jpg</aras:hasMediaDescription>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/it#isBuildOf">
+	<rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/it#SoftwareComponent">
+	<rdfs:subClassOf rdf:resource="http://tinybluepla.net/it#Software"/>
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/it#Solaris">
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+	<rdfs:subClassOf rdf:resource="http://tinybluepla.net/it#Unix"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/it#81142625-1524-4ab8-90c4-fa6d76176536">
+	<aras:declaresProperty rdf:resource="http://tinybluepla.net/it#supports"/>
+	<aras:hasTypeConstraint rdf:resource="http://tinybluepla.net/bpm#BusinessProcess"/>
+	<rdf:type rdf:resource="http://arastreju.org/kernel#PropertyDeclaration"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/it#JavaEnterpriseApplication">
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+	<rdfs:subClassOf rdf:resource="http://tinybluepla.net/it#JavaApplication"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/it#DotNetApplication">
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+	<rdfs:subClassOf rdf:resource="http://tinybluepla.net/it#Application"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/it#DesignPattern">
+	<rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/it#cce11a89-f41e-4b1d-b844-d3da1854c5e7">
+	<aras:declaresProperty rdf:resource="http://tinybluepla.net/it#runsOn"/>
+	<rdf:type rdf:resource="http://arastreju.org/kernel#PropertyDeclaration"/>
+	<aras:hasTypeConstraint rdf:resource="http://tinybluepla.net/it#InfrastructureComponent"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/it#hasIpAddress">
+	<rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/it#DataWarehouse">
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+	<rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/it#runsOn">
+	<rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/it#CobolProgrammingLanguage">
+	<rdf:type rdf:resource="http://tinybluepla.net/it#ProgrammingLanguage"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/it#Address">
+	<rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/it#InfrastructureSystem">
+	<rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+	<aras:hasPropertyDeclaration rdf:resource="http://tinybluepla.net/it#c01a19ad-972b-4fe0-ab9f-add5e171ce50"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/it#hasOperatingSystem">
+	<rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/it#Aix">
+	<rdfs:subClassOf rdf:resource="http://tinybluepla.net/it#Unix"/>
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/it#InfrastructureComponent">
+	<aras:hasMediaDescription>http://www.systechnology.de/images/stories/server/server.png</aras:hasMediaDescription>
+	<rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+	<aras:hasMediaDescription>http://www.systechnology.de/images/stories/server/server.png</aras:hasMediaDescription>
+	<aras:hasPropertyDeclaration rdf:resource="http://tinybluepla.net/it#67b9040d-9bfc-4ceb-890e-69562ae56b70"/>
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/it#a7860b72-da2f-4939-8c49-fc66a22633e5">
+	<aras:declaresProperty rdf:resource="http://tinybluepla.net/it#hasProgrammingLanguage"/>
+	<aras:hasTypeConstraint rdf:resource="http://tinybluepla.net/it#ProgrammingLanguage"/>
+	<rdf:type rdf:resource="http://arastreju.org/kernel#PropertyDeclaration"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/it#MacOsX">
+	<rdfs:label>http://tinybluepla.net/terminology/ANY_complex#Mac OS X</rdfs:label>
+	<rdfs:subClassOf rdf:resource="http://tinybluepla.net/it#UnixOS"/>
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+	<rdfs:label>http://tinybluepla.net/terminology/ANY_complex#Mac OS X</rdfs:label>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/it#ProgrammingLanguage">
+	<rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/it#UnixOS">
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+	<rdfs:subClassOf rdf:resource="http://tinybluepla.net/it#PosixOS"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/it#Glasnost">
+	<aras:hasMediaDescription>http://glasnost.lichtflut.de/resources/images/glasnost_logo.png</aras:hasMediaDescription>
+	<it:runsOn rdf:resource="http://tinybluepla.net/it#MacOsX"/>
+	<it:isManagedBy rdf:resource="http://tinybluepla.net/companies#LichtflutFEGmbH"/>
+	<it:hasProgrammingLanguage rdf:resource="http://tinybluepla.net/it#JavaApplication"/>
+	<it:runsOn rdf:resource="http://tinybluepla.net/it#Linux"/>
+	<rdf:type rdf:resource="http://tinybluepla.net/it#Application"/>
+	<it:runsOn rdf:resource="http://tinybluepla.net/it#Windows"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/it#Application">
+	<aras:hasMediaDescription>http://www.mysql.com/common/images/products/jasper-screenshot.png</aras:hasMediaDescription>
+	<aras:hasPropertyDeclaration rdf:resource="http://tinybluepla.net/it#767d9398-8f4d-4f35-8568-5da0035013e3"/>
+	<rdfs:subClassOf rdf:resource="http://tinybluepla.net/it#Software"/>
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+	<aras:hasMediaDescription>http://www.mysql.com/common/images/products/jasper-screenshot.png</aras:hasMediaDescription>
+	<aras:hasPropertyDeclaration rdf:resource="http://tinybluepla.net/it#81142625-1524-4ab8-90c4-fa6d76176536"/>
+	<aras:hasPropertyDeclaration rdf:resource="http://tinybluepla.net/it#cce11a89-f41e-4b1d-b844-d3da1854c5e7"/>
+	<aras:hasPropertyDeclaration rdf:resource="http://tinybluepla.net/it#a7860b72-da2f-4939-8c49-fc66a22633e5"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/it#isOwnedBy">
+	<rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/bpm#BusinessProcessOwner">
+	<rdfs:subClassOf rdf:resource="http://tinybluepla.net/org#Employee"/>
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/it#767d9398-8f4d-4f35-8568-5da0035013e3">
+	<aras:hasTypeConstraint rdf:resource="http://tinybluepla.net/it#Administrator"/>
+	<aras:declaresProperty rdf:resource="http://tinybluepla.net/it#isManagedBy"/>
+	<rdf:type rdf:resource="http://arastreju.org/kernel#PropertyDeclaration"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/it#IpAddress">
+	<rdfs:subClassOf rdf:resource="http://tinybluepla.net/it#Address"/>
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/it#Linux">
+	<rdfs:subClassOf rdf:resource="http://tinybluepla.net/it#UnixOS"/>
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/it#67b9040d-9bfc-4ceb-890e-69562ae56b70">
+	<aras:hasTypeConstraint rdf:resource="http://tinybluepla.net/it#Administrator"/>
+	<rdf:type rdf:resource="http://arastreju.org/kernel#PropertyDeclaration"/>
+	<aras:declaresProperty rdf:resource="http://tinybluepla.net/it#isManagedBy"/>
+</rdf:Description>
+
+</rdf:RDF>

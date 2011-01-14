@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rdf:RDF
+	xmlns:it="http://tinybluepla.net/it#"
+	xmlns:aras="http://arastreju.org/kernel#"
+	xmlns:companies="http://tinybluepla.net/companies#"
+	xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+	xmlns:krl="http://ontologies.kr-leben.de/content#"
+	xmlns:biz="http://tinybluepla.net/org#">
+
+<rdf:Description rdf:about="http://ontologies.kr-leben.de/content#67b9040d-9bfc-4ceb-890e-69562ae56b70">
+	<aras:hasTypeConstraint rdf:resource="http://tinybluepla.net/it#Administrator"/>
+	<aras:declaresProperty rdf:resource="http://tinybluepla.net/it#isManagedBy"/>
+	<rdf:type rdf:resource="http://arastreju.org/kernel#PropertyDeclaration"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://ontologies.kr-leben.de/content#BerechnungRueckkaufswert">
+	<rdf:type rdf:resource="http://tinybluepla.net/bpm#BusinessProcess"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://ontologies.kr-leben.de/content#Bonitaetspruefung">
+	<rdf:type rdf:resource="http://tinybluepla.net/bpm#BusinessProcess"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://ontologies.kr-leben.de/content#FortschreibungVertrag">
+	<rdf:type rdf:resource="http://tinybluepla.net/bpm#BusinessProcess"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://ontologies.kr-leben.de/content#HeinzSchlau">
+	<aras:hasSurname>http://tinybluepla.net/terminology/EN_standard#Schlau</aras:hasSurname>
+	<biz:isEmloyedBy rdf:resource="http://tinybluepla.net/companies#KleinRefratherLebenVvaG"/>
+	<rdf:type rdf:resource="http://tinybluepla.net/it#Administrator"/>
+	<aras:hasMediaDescription>http://www.creamcannon.com/gallery/niall/DynamicTechnicalExpert.jpg</aras:hasMediaDescription>
+	<aras:hasForename>http://tinybluepla.net/terminology/ANY_names#Heinz</aras:hasForename>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://ontologies.kr-leben.de/content#InformationsManagement">
+	<rdf:type rdf:resource="http://tinybluepla.net/bpm#BusinessProcess"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://ontologies.kr-leben.de/content#KundenRating">
+	<it:runsOn rdf:resource="http://ontologies.kr-leben.de/content#UnixServer"/>
+	<it:hasProgrammingLanguage rdf:resource="http://tinybluepla.net/it#JavaProgrammingLanguage"/>
+	<rdf:type rdf:resource="http://tinybluepla.net/it#Application"/>
+	<it:supports rdf:resource="http://ontologies.kr-leben.de/content#Bonitaetspruefung"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://ontologies.kr-leben.de/content#Mainframe">
+	<rdf:type rdf:resource="http://tinybluepla.net/it#InfrastructureComponent"/>
+	<aras:hasMediaDescription>http://www.iol.ie/~webfoto/images/features/00_mainframe.jpg</aras:hasMediaDescription>
+	<it:isManagedBy rdf:resource="http://ontologies.kr-leben.de/content#HeinzSchlau"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://ontologies.kr-leben.de/content#NeuzugangVertrag">
+	<rdf:type rdf:resource="http://tinybluepla.net/bpm#BusinessProcess"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://ontologies.kr-leben.de/content#UnixServer">
+	<it:isManagedBy rdf:resource="http://ontologies.kr-leben.de/content#HeinzSchlau"/>
+	<rdf:type rdf:resource="http://tinybluepla.net/it#InfrastructureComponent"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://ontologies.kr-leben.de/content#Vertragsverwaltung">
+	<it:runsOn rdf:resource="http://ontologies.kr-leben.de/content#Mainframe"/>
+	<it:supports rdf:resource="http://ontologies.kr-leben.de/content#NeuzugangVertrag"/>
+	<rdf:type rdf:resource="http://tinybluepla.net/it#Application"/>
+	<it:hasProgrammingLanguage rdf:resource="http://tinybluepla.net/it#CobolProgrammingLanguage"/>
+	<it:supports rdf:resource="http://ontologies.kr-leben.de/content#BerechnungRueckkaufswert"/>
+	<it:supports rdf:resource="http://ontologies.kr-leben.de/content#FortschreibungVertrag"/>
+</rdf:Description>
+
+</rdf:RDF>

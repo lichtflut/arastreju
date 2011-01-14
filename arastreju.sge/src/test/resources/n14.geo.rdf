@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rdf:RDF
+	xmlns:aras="http://arastreju.org/kernel#"
+	xmlns:common="http://tinybluepla.net/common#"
+	xmlns:geo="http://tinybluepla.net/geo#"
+	xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo#Antarctica">
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Continent"/>
+	<aras:hasMediaDescription>http://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Location_Antarctica.svg/230px-Location_Antarctica.svg.png</aras:hasMediaDescription>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo#Europe">
+	<aras:hasMediaDescription>http://upload.wikimedia.org/wikipedia/commons/thumb/c/c6/Europe_%28orthographic_projection%29.svg/200px-Europe_%28orthographic_projection%29.svg.png</aras:hasMediaDescription>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Continent"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo#Australia">
+	<aras:hasMediaDescription>http://upload.wikimedia.org/wikipedia/commons/thumb/e/e8/Australia-New_Guinea_%28orthographic_projection%29.svg/200px-Australia-New_Guinea_%28orthographic_projection%29.svg.png</aras:hasMediaDescription>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Continent"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo#NorthAmerica">
+	<aras:hasMediaDescription>http://upload.wikimedia.org/wikipedia/commons/thumb/4/43/Location_North_America.svg/200px-Location_North_America.svg.png</aras:hasMediaDescription>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Continent"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo#SouthAmerica">
+	<aras:hasMediaDescription>http://upload.wikimedia.org/wikipedia/commons/thumb/0/0f/South_America_%28orthographic_projection%29.svg/200px-South_America_%28orthographic_projection%29.svg.png</aras:hasMediaDescription>
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Continent"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo#Africa">
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Continent"/>
+	<aras:hasMediaDescription>http://upload.wikimedia.org/wikipedia/commons/thumb/8/86/Africa_%28orthographic_projection%29.svg/200px-Africa_%28orthographic_projection%29.svg.png</aras:hasMediaDescription>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://tinybluepla.net/geo#Asia">
+	<rdf:type rdf:resource="http://tinybluepla.net/common#Continent"/>
+	<aras:hasMediaDescription>http://upload.wikimedia.org/wikipedia/commons/thumb/8/86/Africa_%28orthographic_projection%29.svg/200px-Africa_%28orthographic_projection%29.svg.png</aras:hasMediaDescription>
+</rdf:Description>
+
+</rdf:RDF>

@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rdf:RDF
+	xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+	xmlns:aras="http://arastreju.org/kernel#"
+	xmlns:owl="http://www.w3.org/2002/07/owl#"
+	xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+	xmlns:grammar="http://arastreju.org/grammar#">
+
+<rdf:Description rdf:about="http://arastreju.org/grammar#Akkusativ">
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+	<rdfs:subClassOf rdf:resource="http://arastreju.org/grammar#Casus"/>
+	<rdfs:label>http://tinybluepla.net/terminology/DE_standard#Akkusativ</rdfs:label>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://arastreju.org/grammar#Casus">
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+	<rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://arastreju.org/grammar#ClassifiedEntity">
+	<rdfs:subClassOf rdf:resource="http://arastreju.org/grammar#EntityType"/>
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://arastreju.org/grammar#Dativ">
+	<rdfs:label>http://tinybluepla.net/terminology/DE_standard#Dativ</rdfs:label>
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+	<rdfs:subClassOf rdf:resource="http://arastreju.org/grammar#Casus"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://arastreju.org/grammar#ObjectSentence">
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://arastreju.org/grammar#EntityType">
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+	<rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://arastreju.org/grammar#FormalPronoun">
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+	<rdfs:subClassOf rdf:resource="http://arastreju.org/grammar#Pronoun"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://arastreju.org/grammar#Genitiv">
+	<rdfs:subClassOf rdf:resource="http://arastreju.org/grammar#Casus"/>
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+	<rdfs:label>http://tinybluepla.net/terminology/DE_standard#Genitiv</rdfs:label>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://arastreju.org/grammar#GrammaticalConstraint">
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+	<rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://arastreju.org/grammar#NamedEntity">
+	<rdfs:subClassOf rdf:resource="http://arastreju.org/grammar#EntityType"/>
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://arastreju.org/grammar#Nominativ">
+	<rdfs:label>http://tinybluepla.net/terminology/DE_standard#Nominativ</rdfs:label>
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+	<rdfs:subClassOf rdf:resource="http://arastreju.org/grammar#Casus"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://arastreju.org/grammar#PersonalPronoun">
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+	<rdfs:subClassOf rdf:resource="http://arastreju.org/grammar#Pronoun"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://arastreju.org/grammar#PossesivePronoun">
+	<rdfs:subClassOf rdf:resource="http://arastreju.org/grammar#Pronoun"/>
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://arastreju.org/grammar#Preposition">
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+	<rdfs:label>http://tinybluepla.net/terminology/DE_standard#Präposition</rdfs:label>
+	<rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://arastreju.org/grammar#Pronoun">
+	<rdfs:subClassOf rdf:resource="http://arastreju.org/grammar#EntityType"/>
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://arastreju.org/grammar#ReflexivePronoun">
+	<rdfs:subClassOf rdf:resource="http://arastreju.org/grammar#Pronoun"/>
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://arastreju.org/grammar#WordClass">
+	<rdfs:label>http://tinybluepla.net/terminology/DE_standard#Wortart</rdfs:label>
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+	<rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://arastreju.org/grammar#hasCasus">
+	<rdfs:subPropertyOf rdf:resource="http://arastreju.org/grammar#hasGrammaticalConstraint"/>
+	<rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://arastreju.org/grammar#hasEntityType">
+	<rdfs:subPropertyOf rdf:resource="http://arastreju.org/grammar#hasGrammaticalConstraint"/>
+	<rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://arastreju.org/grammar#hasGrammaticalConstraint">
+	<rdfs:subPropertyOf rdf:resource="http://arastreju.org/kernel#hasConstraint"/>
+	<rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://arastreju.org/grammar#hasPreposition">
+	<rdfs:subPropertyOf rdf:resource="http://arastreju.org/grammar#hasGrammaticalConstraint"/>
+	<rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://arastreju.org/grammar#hasPronounType">
+	<rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+	<rdfs:subPropertyOf rdf:resource="http://arastreju.org/grammar#hasGrammaticalConstraint"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://arastreju.org/grammar#hasWordClass">
+	<rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+	<rdfs:subPropertyOf rdf:resource="http://arastreju.org/grammar#hasGrammaticalConstraint"/>
+</rdf:Description>
+
+</rdf:RDF>
