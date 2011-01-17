@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2010 lichtflut Forschungs- und Entwicklungsgesellschaft mbH
+ * Copyright (C) 2011 lichtflut Forschungs- und Entwicklungsgesellschaft mbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,8 @@ package org.arastreju.sge.query;
 
 import java.util.List;
 
+import org.arastreju.sge.model.ResourceID;
+import org.arastreju.sge.model.associations.Association;
 import org.arastreju.sge.model.nodes.ResourceNode;
 
 /**
@@ -38,5 +40,7 @@ public abstract class QueryManager {
 	 * @return The corresponding result list.
 	 */
 	public abstract List<ResourceNode> findByTag(String tag);
+	
+	public abstract List<Association> findIncomingAssociations(ResourceID resource);
 	
 }

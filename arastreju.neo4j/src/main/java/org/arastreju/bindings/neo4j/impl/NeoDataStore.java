@@ -23,6 +23,7 @@ import org.arastreju.bindings.neo4j.ArasRelTypes;
 import org.arastreju.bindings.neo4j.NeoConstants;
 import org.arastreju.bindings.neo4j.extensions.NeoAssociationKeeper;
 import org.arastreju.bindings.neo4j.mapping.NodeMapper;
+import org.arastreju.sge.context.Context;
 import org.arastreju.sge.model.ResourceID;
 import org.arastreju.sge.model.SemanticGraph;
 import org.arastreju.sge.model.associations.Association;
@@ -32,6 +33,7 @@ import org.arastreju.sge.model.nodes.ResourceNode;
 import org.arastreju.sge.model.nodes.SNResource;
 import org.arastreju.sge.model.nodes.SemanticNode;
 import org.arastreju.sge.model.nodes.ValueNode;
+import org.arastreju.sge.model.nodes.views.SNContext;
 import org.arastreju.sge.naming.QualifiedName;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Node;
@@ -61,7 +63,7 @@ import de.lichtflut.infra.exceptions.NotYetImplementedException;
  *
  * @author Oliver Tigges
  */
-public class NeoDataStore implements NeoConstants {
+public class NeoDataStore implements NeoConstants, ResourceResolver {
 	
 	private final GraphDatabaseService gdbService;
 	
@@ -91,6 +93,9 @@ public class NeoDataStore implements NeoConstants {
 	/* (non-Javadoc)
 	 * @see org.arastreju.sge.ModellingConversation#findResource(com.sun.xml.internal.fastinfoset.QualifiedName)
 	 */
+	/* (non-Javadoc)
+	 * @see org.arastreju.bindings.neo4j.impl.ResourceResolver#findResource(org.arastreju.sge.naming.QualifiedName)
+	 */
 	public ResourceNode findResource(final QualifiedName qn) {
 		if (registry.contains(qn)){
 			return registry.get(qn);
@@ -99,13 +104,8 @@ public class NeoDataStore implements NeoConstants {
 		return doTransacted(new TxResultAction<ResourceNode>() {
 			public ResourceNode execute(NeoDataStore store) {
 				final Node neoNode = indexService.getSingleNode(INDEX_KEY_RESOURCE_URI, qn.toURI());
-				logger.info("IndexLookup: " + qn + " --> " + neoNode); 
+				logger.debug("IndexLookup: " + qn + " --> " + neoNode); 
 				if (neoNode != null){
-					if (neoNode.getRelationships().iterator().hasNext()){
-						logger.info(" -- relationships--> " + neoNode.getRelationships().iterator().next());
-					} else {
-						logger.info(" -- no relationships");
-					}
 					final SNResource arasNode = mapper.toArasNode(neoNode);
 					registry.register(arasNode);
 					return arasNode;
@@ -116,6 +116,9 @@ public class NeoDataStore implements NeoConstants {
 		});
 	}
 	
+	/* (non-Javadoc)
+	 * @see org.arastreju.bindings.neo4j.impl.ResourceResolver#findResource(org.neo4j.graphdb.Node)
+	 */
 	public ResourceNode findResource(final Node neoNode) {
 		final QualifiedName qn = new QualifiedName(neoNode.getProperty(PROPERTY_URI).toString());
 		if (registry.contains(qn)){
@@ -128,6 +131,9 @@ public class NeoDataStore implements NeoConstants {
 	
 	/* (non-Javadoc)
 	 * @see org.arastreju.sge.ModellingConversation#resolve(org.arastreju.sge.model.ResourceID)
+	 */
+	/* (non-Javadoc)
+	 * @see org.arastreju.bindings.neo4j.impl.ResourceResolver#resolve(org.arastreju.sge.model.ResourceID)
 	 */
 	public ResourceNode resolve(final ResourceID resource) {
 		if (resource.isAttached()){
@@ -216,23 +222,39 @@ public class NeoDataStore implements NeoConstants {
 				final SemanticNode client = assoc.getClient();
 				final ResourceNode predicate = resolve(assoc.getPredicate());
 				
+				Context ctx = assoc.getContext();
+				if (ctx != null){
+					ctx = new SNContext(resolve(ctx));
+				}
+				
 				if (client.isResourceNode()){
+					// Resource node
 					final ResourceNode arasClient = resolve(client.asResource());
 					final Node neoClient = AssocKeeperAccess.getNeoNode(arasClient);
 					
 					final Relationship relationship = subject.createRelationshipTo(neoClient, ArasRelTypes.REFERENCE);
 					relationship.setProperty(PROPERTY_URI, predicate.getQualifiedName().toURI());
+					if (ctx != null){
+						relationship.setProperty(PROPERTY_CONTEXT_URI, ctx.asResource().getQualifiedName().toURI());	
+					}
 					logger.info("added relationship--> " + relationship + " to node " + subject);
 				} else {
+					// Value node
 					final Node neoClient = gdbService.createNode();
 					final ValueNode value = client.asValue();
 					neoClient.setProperty(PROPERTY_VALUE, client.asValue().getValue());
 					neoClient.setProperty(PROPERTY_DATATYPE, client.asValue().getDataType().name());
-					indexService.index(subject, INDEX_KEY_RESOURCE_VALUE, value.getStringValue());
-					logger.debug("Indexed: " + value.getStringValue() + " --> " + subject);
+					
 					final Relationship relationship = subject.createRelationshipTo(neoClient, ArasRelTypes.VALUE);
 					relationship.setProperty(PROPERTY_URI, predicate.getQualifiedName().toURI());
+					if (ctx != null){
+						relationship.setProperty(PROPERTY_CONTEXT_URI, ctx.asResource().getQualifiedName().toURI());	
+					}
+					
 					logger.info("added value --> " + relationship + " to node " + subject);
+
+					indexService.index(subject, INDEX_KEY_RESOURCE_VALUE, value.getStringValue());
+					logger.debug("Indexed: " + value.getStringValue() + " --> " + subject);
 				}
 			}
 		});

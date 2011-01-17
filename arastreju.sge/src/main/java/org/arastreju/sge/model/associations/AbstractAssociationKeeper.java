@@ -67,9 +67,7 @@ public abstract class AbstractAssociationKeeper implements AssociationKeeper {
 	}
 
 	public boolean revoke(final Association assoc) {
-		if (assoc.isPersistent()){
-			revokedAssociations.add(assoc);
-		}
+		revokedAssociations.add(assoc);
 		return getAssociations().remove(assoc);
 	}
 

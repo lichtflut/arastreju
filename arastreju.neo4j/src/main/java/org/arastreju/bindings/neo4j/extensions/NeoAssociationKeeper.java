@@ -18,11 +18,13 @@ package org.arastreju.bindings.neo4j.extensions;
 import org.arastreju.bindings.neo4j.ArasRelTypes;
 import org.arastreju.bindings.neo4j.NeoConstants;
 import org.arastreju.bindings.neo4j.impl.NeoDataStore;
+import org.arastreju.sge.context.Context;
 import org.arastreju.sge.model.associations.AbstractAssociationKeeper;
 import org.arastreju.sge.model.associations.Association;
 import org.arastreju.sge.model.associations.AssociationKeeper;
 import org.arastreju.sge.model.nodes.ResourceNode;
 import org.arastreju.sge.model.nodes.SemanticNode;
+import org.arastreju.sge.model.nodes.views.SNContext;
 import org.arastreju.sge.naming.QualifiedName;
 import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
@@ -96,6 +98,7 @@ public class NeoAssociationKeeper extends AbstractAssociationKeeper implements N
 	protected void resolveAssociations() {
 		for(Relationship rel : neoNode.getRelationships(Direction.OUTGOING)){
 			SemanticNode object = null;
+			Context ctx = null;
 			if (rel.isType(ArasRelTypes.REFERENCE)){
 				object = store.findResource(rel.getEndNode());	
 			} else if (rel.isType(ArasRelTypes.VALUE)){
@@ -104,8 +107,17 @@ public class NeoAssociationKeeper extends AbstractAssociationKeeper implements N
 			
 			final ResourceNode predicate = store.findResource(new QualifiedName(rel.getProperty(PROPERTY_URI).toString()));
 			
+			if (rel.hasProperty(PROPERTY_CONTEXT_URI)){
+				ResourceNode node = store.findResource(new QualifiedName(rel.getProperty(PROPERTY_CONTEXT_URI).toString()));
+				if (node instanceof Context){
+					ctx = (Context) node;
+				} else {
+					ctx = new SNContext(node);
+				}
+			}
+			
 			// just create the association, it will be implicitly added to the subject by the create method.
-			Association.create(arasNode, predicate, object, null);
+			Association.create(arasNode, predicate, object, ctx);
 		}
 	}
 

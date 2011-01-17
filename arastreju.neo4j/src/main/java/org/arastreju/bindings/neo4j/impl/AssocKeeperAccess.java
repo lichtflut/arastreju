@@ -24,7 +24,13 @@ import org.arastreju.sge.model.nodes.SNResource;
 import org.neo4j.graphdb.Node;
 
 /**
- * [Description]
+ * <p>
+ *  Accessor for {@link AssociationKeeper} of a Resource Node. 
+ * </p>
+ *
+ * <p>
+ * 	Created Jan 14, 2011
+ * </p>
  *
  * @author Oliver Tigges
  */

@@ -15,7 +15,8 @@
  */
 package org.arastreju.sge.model.nodes.views;
 
-import org.arastreju.sge.model.nodes.SNResource;
+import org.arastreju.sge.context.Context;
+import org.arastreju.sge.model.nodes.ResourceNode;
 import org.arastreju.sge.naming.Namespace;
 
 /**
@@ -30,7 +31,7 @@ import org.arastreju.sge.naming.Namespace;
  * @author Oliver Tigges
  *
  */
-public class SNContext extends ResourceView {
+public class SNContext extends ResourceView implements Context {
 
 	/**
 	 * Create a new context resource.
@@ -47,7 +48,7 @@ public class SNContext extends ResourceView {
 	 * Create a new context view for given resource.
 	 * @param resource The context resource to be wrapped.
 	 */
-	public SNContext(final SNResource resource) {
+	public SNContext(final ResourceNode resource) {
 		super(resource);
 	}
 	

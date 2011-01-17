@@ -18,6 +18,7 @@ package org.arastreju.bindings.neo4j;
 import java.io.IOException;
 
 import org.arastreju.bindings.neo4j.impl.NeoDataStore;
+import org.arastreju.bindings.neo4j.impl.NeoTypeSystem;
 import org.arastreju.sge.ArastrejuGate;
 import org.arastreju.sge.ContextManager;
 import org.arastreju.sge.IdentityManagement;
@@ -72,7 +73,7 @@ public class Neo4jGate implements ArastrejuGate {
 	 * @see org.arastreju.sge.ArastrejuGate#getTypeSystem()
 	 */
 	public TypeSystem getTypeSystem() {
-		throw new NotYetImplementedException();
+		return new NeoTypeSystem(neo4jDataStore);
 	}
 
 	/*

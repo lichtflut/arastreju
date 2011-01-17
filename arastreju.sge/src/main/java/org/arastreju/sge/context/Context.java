@@ -15,6 +15,8 @@
  */
 package org.arastreju.sge.context;
 
+import org.arastreju.sge.model.ResourceID;
+
 /**
  * <p>
  *  [DESCRIPTION]
@@ -26,6 +28,6 @@ package org.arastreju.sge.context;
  *
  * @author Oliver Tigges
  */
-public interface Context {
+public interface Context extends ResourceID {
 
 }

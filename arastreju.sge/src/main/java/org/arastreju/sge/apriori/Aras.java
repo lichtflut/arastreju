@@ -79,6 +79,13 @@ public interface Aras {
 	public static final ResourceID HAS_DEFAULT_NAMESPACE = new SimpleResourceID(NAMESPACE_URI, "hasDefaultNamespace");
 	public static final ResourceID IS_IN_CONTEXT = new SimpleResourceID(NAMESPACE_URI, "isInContext");
 	
+	// -- IDENTITY MANAGEMENT -----------------------------
+	
+	public static final ResourceID IDENTITY = new SimpleResourceID(NAMESPACE_URI, "Identity");
+	public static final ResourceID USER = new SimpleResourceID(NAMESPACE_URI, "User");
+	public static final ResourceID GROUP = new SimpleResourceID(NAMESPACE_URI, "Group");
+	public static final ResourceID CREDENTIAL = new SimpleResourceID(NAMESPACE_URI, "Credential");
+	
 	// -- SCHEMAS -----------------------------------------
 	
 	public static final ResourceID ACTIVITY_SCHEMA = new SimpleResourceID(NAMESPACE_URI, "ActivitySchema");

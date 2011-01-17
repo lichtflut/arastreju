@@ -70,7 +70,7 @@ public class Association {
 	 * @param client The client.
 	 * @param context The context.
 	 */
-	private Association(SemanticNode supplier, ResourceID predicate, SemanticNode client, Context context) {
+	private Association(final SemanticNode supplier, final ResourceID predicate, final SemanticNode client, final Context context) {
 		if (supplier == null || client == null || predicate == null){
 			throw new IllegalArgumentException("none of the three triple elements may be null:" +
 					" supplier = " + supplier + "; client = " + client + "; predicate = " + predicate);
@@ -79,23 +79,6 @@ public class Association {
 		this.supplier = supplier.asResource();
 		this.client = client;
 		this.predicate = predicate;
-	}
-	
-	//-----------------------------------------------------
-
-	/**
-	 * Detach this association from its client and its supplier.
-	 */
-	public void detach() {
-		supplier.remove(this);
-	}
-	
-	/**
-	 * @return
-	 */
-	public boolean isPersistent() {
-		// TODO Auto-generated method stub
-		return false;
 	}
 	
 	//-----------------------------------------------------
@@ -137,6 +120,9 @@ public class Association {
 				return false;
 			}
 			if (!Infra.equals(predicate, other.getPredicate())){
+				return false;
+			}
+			if (!Infra.equals(context, other.getContext())){
 				return false;
 			}
 			return true;
