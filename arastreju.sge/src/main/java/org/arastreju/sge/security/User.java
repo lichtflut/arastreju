@@ -17,7 +17,7 @@ package org.arastreju.sge.security;
 
 /**
  * <p>
- *  [DESCRIPTION]
+ *  User of Arastreju.
  * </p>
  *
  * <p>

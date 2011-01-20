@@ -18,6 +18,8 @@ package org.arastreju.sge.io;
 import java.io.IOException;
 import java.util.Arrays;
 
+import junit.framework.Assert;
+
 import org.arastreju.sge.apriori.RDFS;
 import org.arastreju.sge.model.DefaultSemanticGraph;
 import org.arastreju.sge.model.SemanticGraph;
@@ -66,16 +68,17 @@ public class RdfXmlBindingTest {
 	public void testXmlReader() throws RDFHandlerException, IOException, OntologyIOException{
 		final SemanticGraphIO io = new RdfXmlBinding();
 		
-		SemanticGraph graph = io.read(getClass().getClassLoader().getResourceAsStream("n4.aras.rdf"));
+		final SemanticGraph graph = io.read(getClass().getClassLoader().getResourceAsStream("n04.aras.rdf"));
 		
-		System.out.println(graph);
+		Assert.assertNotNull(graph);
+		
 	}
 	
 	@Test
 	public void testReoundtrip() throws IOException, OntologyIOException {
 		final SemanticGraphIO io = new RdfXmlBinding();
 		
-		final SemanticGraph graph = io.read(getClass().getClassLoader().getResourceAsStream("n4.aras.rdf"));
+		final SemanticGraph graph = io.read(getClass().getClassLoader().getResourceAsStream("n04.aras.rdf"));
 		io.write(graph, System.out);
 		
 	}

@@ -231,7 +231,7 @@ public class NeoDataStoreTest {
 	@Test
 	public void testGraphImport() throws IOException, OntologyIOException{
 		final SemanticGraphIO io = new RdfXmlBinding();
-		final SemanticGraph graph = io.read(getClass().getClassLoader().getResourceAsStream("n4.aras.rdf"));
+		final SemanticGraph graph = io.read(getClass().getClassLoader().getResourceAsStream("n04.aras.rdf"));
 		
 		store.attach(graph);
 		
@@ -239,9 +239,6 @@ public class NeoDataStoreTest {
 		
 		final ResourceNode node = store.findResource(qn);
 		assertNotNull(node);
-		
-		System.out.println(node.getAssociations());
-		
 	}
 
 }

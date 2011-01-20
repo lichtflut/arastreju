@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2010 lichtflut Forschungs- und Entwicklungsgesellschaft mbH
+ * Copyright (C) 2011 lichtflut Forschungs- und Entwicklungsgesellschaft mbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,7 +29,7 @@ import org.arastreju.sge.naming.QualifiedName;
 
 /**
  * <p>
- *  [DESCRIPTION]
+ *  Just a show case.
  * </p>
  *
  * <p>
@@ -40,10 +40,15 @@ import org.arastreju.sge.naming.QualifiedName;
  */
 public class RapvhiShow {
 
+	private RapvhiShow() {}
+	
+	// -----------------------------------------------------
+	
 	/**
-	 * @param args
+	 * Main method.
+	 * @param args Arguments.
 	 */
-	public static void main(String[] args) {
+	public static void main(final String[] args) {
 		ArastrejuGate gate = Arastreju.getInstance().rootContext();
 		
 		ModelingConversation mc = gate.startConversation();
@@ -65,7 +70,7 @@ public class RapvhiShow {
 		ResourceNode r2 = mc.findResource(new QualifiedName("http://lf.de/peaople#Raphi"));
 		
 		if (r2.asEntity().isInstanceOf(personClass)){
-			System.out.println("Der ist eine Person: " + r2.getAssociations() );
+			System.out.println("Der ist eine Person: " + r2.getAssociations());
 		}
 		
 		Association.create(ravi, Aras.HAS_SURNAME, new SNText("Ravi"), null);
@@ -73,7 +78,6 @@ public class RapvhiShow {
 		mc.attach(ravi);
 		
 		System.out.println("Alle Resourcen mit name 'Ravi': " + mc.createQueryManager().findByTag("Ravi"));
-		
 
 	}
 

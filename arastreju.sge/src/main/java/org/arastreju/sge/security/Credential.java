@@ -15,32 +15,19 @@
  */
 package org.arastreju.sge.security;
 
-import java.util.Set;
-
-import org.arastreju.sge.model.nodes.ResourceNode;
-
 /**
  * <p>
- *  Base of all identifiable objects with granted permissions.
+ *  [DESCRIPTION]
  * </p>
  *
  * <p>
- * 	Created Jan 5, 2011
+ * 	Created Jan 20, 2011
  * </p>
  *
  * @author Oliver Tigges
  */
-public interface Identity {
+public interface Credential {
 
-	ResourceNode getAssociatedResource();
+	String stringRepesentation();
 	
-	String getName();
-	
-	Set<Role> getRoles();
-	
-	Set<Permission> getPermissions();
-	
-	boolean isInRole(Role role);
-	
-	boolean hasPermission(Permission permission);
 }

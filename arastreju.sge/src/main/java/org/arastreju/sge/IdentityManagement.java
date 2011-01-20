@@ -15,6 +15,14 @@
  */
 package org.arastreju.sge;
 
+import java.util.Set;
+
+import org.arastreju.sge.model.nodes.ResourceNode;
+import org.arastreju.sge.security.Credential;
+import org.arastreju.sge.security.Permission;
+import org.arastreju.sge.security.Role;
+import org.arastreju.sge.security.User;
+
 /**
  * <p>
  *  Identity Management in Arastreju is based on data in a semantic graph.
@@ -28,6 +36,39 @@ package org.arastreju.sge;
  *
  * @author Oliver Tigges
  */
-public class IdentityManagement {
+public interface IdentityManagement {
+	
+	/**
+	 * Register a new user.
+	 * @param uniqueName The unique name.
+	 * @param credential The credential.
+	 * @return The user.
+	 */
+	User register(String uniqueName, Credential credential);
+	
+	/**
+	 * Register a user for an existing Resource.
+	 * @param uniqueName The unique name.
+	 * @param credential The credential.
+	 * @param corresponding The corresponding Resource.
+	 * @return The user.
+	 */
+	User register(String uniqueName, Credential credential, ResourceNode corresponding);
+	
+	User login(String uniqueName, Credential credential);
+	
+	void addUserToRoles(User user, Role... roles);
+	
+	// -- ROLE MANAGEMENT ---------------------------------
+	
+	Role createRole(String name);
+	
+	Set<Role> getRoles();
+	
+	// -- PERMISSION MANAGEMENT ---------------------------
+	
+	Permission createPermission(String name);
+	
+	Set<Permission> getPermissions();
 
 }

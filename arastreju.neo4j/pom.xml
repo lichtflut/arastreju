@@ -19,6 +19,7 @@
 	
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<neo4j.version>1.1</neo4j.version>
 	</properties>
 
 	<dependencies>
@@ -31,12 +32,12 @@
 		<dependency>
 			<groupId>org.neo4j</groupId>
 			<artifactId>neo4j-kernel</artifactId>
-			<version>1.0</version>
+			<version>${neo4j.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.neo4j</groupId>
 			<artifactId>neo4j-index</artifactId>
-			<version>1.0</version>
+			<version>${neo4j.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>de.lichtflut</groupId>
@@ -46,7 +47,7 @@
 		<dependency>
 			<groupId>org.arastreju</groupId>
 			<artifactId>arastreju.sge</artifactId>
-			<version>0.5.0-SNAPSHOT</version>
+			<version>${project.version}</version>
 		</dependency>
 	</dependencies>
 
@@ -93,7 +94,7 @@
 		</repository>
 		<repository>
 			<id>neo4j-public-repository</id>
-			<url>http://m2.neo4j.org </url>
+			<url>http://m2.neo4j.org</url>
 		</repository>
 	</repositories>
 

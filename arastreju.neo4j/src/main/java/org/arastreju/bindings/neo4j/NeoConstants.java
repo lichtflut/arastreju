@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 lichtflut Forschungs- und Entwicklungsgesellschaft mbH
+ * Copyright (C) 2010 lichtflut Forschungs- und Entwicklungsgesellschaft mbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 package org.arastreju.bindings.neo4j;
+
+import org.neo4j.graphdb.Relationship;
 
 /**
  * <p>
@@ -30,8 +32,6 @@ public interface NeoConstants {
 	
 	String PROPERTY_URI = "resource-uri";
 	
-	String PROPERTY_CONTEXT_URI = "context-uri";
-	
 	String PROPERTY_VALUE = "value";
 	
 	String PROPERTY_DATATYPE = "datatype";
@@ -39,6 +39,16 @@ public interface NeoConstants {
 	String INDEX_KEY_RESOURCE_URI = "resource-uri";
 	
 	String INDEX_KEY_RESOURCE_VALUE = "resource-value";
+	
+	/**
+	 * Attribute of a {@link Relationship}.
+	 */
+	String CONTEXT_URI = "context-uri";
+	
+	/**
+	 * Attribute of a {@link Relationship}.
+	 */
+	String PREDICATE_URI = "predicate-uri";
 	
 
 }

@@ -77,10 +77,17 @@ public class NeoDataStore implements NeoConstants, ResourceResolver {
 
 	// -----------------------------------------------------
 
+	/**
+	 * Default constructor. Will use a <b>temporary</b> datastore!.
+	 */
 	public NeoDataStore() throws IOException {
 		this(prepareTempStore());
 	}
 	
+	/**
+	 * Constructor. Creates a store using given directory.
+	 * @param dir The directory for the store.
+	 */
 	public NeoDataStore(final String dir) {
 		logger.info("Neo4jDataStore created in " + dir);
 		gdbService = new EmbeddedGraphDatabase(dir); 
@@ -90,11 +97,8 @@ public class NeoDataStore implements NeoConstants, ResourceResolver {
 
 	// -----------------------------------------------------
 	
-	/* (non-Javadoc)
-	 * @see org.arastreju.sge.ModellingConversation#findResource(com.sun.xml.internal.fastinfoset.QualifiedName)
-	 */
-	/* (non-Javadoc)
-	 * @see org.arastreju.bindings.neo4j.impl.ResourceResolver#findResource(org.arastreju.sge.naming.QualifiedName)
+	/**
+	 * {@inheritDoc}
 	 */
 	public ResourceNode findResource(final QualifiedName qn) {
 		if (registry.contains(qn)){
@@ -116,8 +120,9 @@ public class NeoDataStore implements NeoConstants, ResourceResolver {
 		});
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.arastreju.bindings.neo4j.impl.ResourceResolver#findResource(org.neo4j.graphdb.Node)
+	
+	/**
+	 * {@inheritDoc}
 	 */
 	public ResourceNode findResource(final Node neoNode) {
 		final QualifiedName qn = new QualifiedName(neoNode.getProperty(PROPERTY_URI).toString());
@@ -129,11 +134,9 @@ public class NeoDataStore implements NeoConstants, ResourceResolver {
 		return arasNode;
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.arastreju.sge.ModellingConversation#resolve(org.arastreju.sge.model.ResourceID)
-	 */
-	/* (non-Javadoc)
-	 * @see org.arastreju.bindings.neo4j.impl.ResourceResolver#resolve(org.arastreju.sge.model.ResourceID)
+	
+	/**
+	 * {@inheritDoc}
 	 */
 	public ResourceNode resolve(final ResourceID resource) {
 		if (resource.isAttached()){
@@ -182,7 +185,11 @@ public class NeoDataStore implements NeoConstants, ResourceResolver {
 	}
 	
 	// -----------------------------------------------------
+
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	public SemanticGraph attach(final SemanticGraph graph){
 		return doTransacted(new TxResultAction<SemanticGraph>() {
 			public SemanticGraph execute(NeoDataStore store) {
@@ -194,6 +201,10 @@ public class NeoDataStore implements NeoConstants, ResourceResolver {
 		});
 	}
 	
+	
+	/**
+	 * {@inheritDoc}
+	 */
 	public void detach(final SemanticGraph graph){
 		for(SemanticNode node : graph.getNodes()){
 			if (node.isAttached() && node.isResourceNode()){
@@ -233,9 +244,9 @@ public class NeoDataStore implements NeoConstants, ResourceResolver {
 					final Node neoClient = AssocKeeperAccess.getNeoNode(arasClient);
 					
 					final Relationship relationship = subject.createRelationshipTo(neoClient, ArasRelTypes.REFERENCE);
-					relationship.setProperty(PROPERTY_URI, predicate.getQualifiedName().toURI());
+					relationship.setProperty(PREDICATE_URI, predicate.getQualifiedName().toURI());
 					if (ctx != null){
-						relationship.setProperty(PROPERTY_CONTEXT_URI, ctx.asResource().getQualifiedName().toURI());	
+						relationship.setProperty(CONTEXT_URI, ctx.asResource().getQualifiedName().toURI());	
 					}
 					logger.info("added relationship--> " + relationship + " to node " + subject);
 				} else {
@@ -246,9 +257,9 @@ public class NeoDataStore implements NeoConstants, ResourceResolver {
 					neoClient.setProperty(PROPERTY_DATATYPE, client.asValue().getDataType().name());
 					
 					final Relationship relationship = subject.createRelationshipTo(neoClient, ArasRelTypes.VALUE);
-					relationship.setProperty(PROPERTY_URI, predicate.getQualifiedName().toURI());
+					relationship.setProperty(PREDICATE_URI, predicate.getQualifiedName().toURI());
 					if (ctx != null){
-						relationship.setProperty(PROPERTY_CONTEXT_URI, ctx.asResource().getQualifiedName().toURI());	
+						relationship.setProperty(CONTEXT_URI, ctx.asResource().getQualifiedName().toURI());	
 					}
 					
 					logger.info("added value --> " + relationship + " to node " + subject);

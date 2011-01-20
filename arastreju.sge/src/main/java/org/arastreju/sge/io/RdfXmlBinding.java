@@ -33,72 +33,72 @@ import org.slf4j.LoggerFactory;
 
 /**
  * <p>
- * 	I/O binding for RDF XML. Based on Sesame RIO.
+ *     I/O binding for RDF XML. Based on Sesame RIO.
  * </p>
  * 
  * <p>
- *	Created: 09.06.2009
+ *    Created: 09.06.2009
  * </p>
  *
  * @author Oliver Tigges 
  */
 public class RdfXmlBinding implements SemanticGraphIO {
-	
-	private final Logger logger = LoggerFactory.getLogger(RdfXmlBinding.class);
-	
-	// -----------------------------------------------------
-	
-	/**
-	 * Creates a new RDF binding instance.
-	 */
-	public RdfXmlBinding() {
-	}
-	
-	// ------------------------------------------------------
-	
-	/* (non-Javadoc)
-	 * @see org.arastreju.sge.io.SemanticGraphIO#read(java.io.InputStream)
-	 */
-	public SemanticGraph read(final InputStream in) throws IOException, OntologyIOException {
-		final AssociationCollector collector = new AssociationCollector();
-		RDFParser parser = new RDFXMLParserFactory().getParser();
-		try {
-			RdfReadHandler handler = new RdfReadHandler(collector);
-			parser.setRDFHandler(handler);
-			parser.parse(in, "void");
-			return collector.toSemanticGraph();
-		} catch (RDFParseException e) {
-			throw new OntologyIOException("error while reading RDF", e);
-		} catch (RDFHandlerException e) {
-			throw new OntologyIOException("error while reading RDF", e);
-		}
-	}
-	
-	/* (non-Javadoc)
-	 * @see org.arastreju.sge.io.SemanticGraphIO#write(org.arastreju.sge.model.SemanticGraph, java.io.OutputStream)
-	 */
-	public void write(final SemanticGraph graph, final OutputStream out)
-			throws IOException, OntologyIOException {
-		try {
-			final RDFWriter writer = new RDFXMLWriterFactory().getWriter(out);
-			
-			final NamespaceMap nsMap = new NamespaceMap(graph.getNamespaces());
-			logger.debug("PrefixMap: \n" + nsMap);
-			for(String prefix : nsMap.getPrefixes()){
-				writer.handleNamespace(prefix, nsMap.getNamespace(prefix).getUri());
-			}
-			
-			writer.startRDF();
-			for (Association assoc : graph.getAssociations()) {
-				writer.handleStatement(new RioStatement(assoc));
-			}
-			writer.endRDF();
-			
-		} catch(IllegalArgumentException e){
-			throw new OntologyIOException("associations couldn't be written", e);
-		} catch(RDFHandlerException e){
-			throw new OntologyIOException("associations couldn't be written", e);
-		}
-	}
-	
+    
+    private final Logger logger = LoggerFactory.getLogger(RdfXmlBinding.class);
+    
+    // -----------------------------------------------------
+    
+    /**
+     * Creates a new RDF binding instance.
+     */
+    public RdfXmlBinding() {
+    }
+    
+    // ------------------------------------------------------
+    
+    /* (non-Javadoc)
+     * @see org.arastreju.sge.io.SemanticGraphIO#read(java.io.InputStream)
+     */
+    public SemanticGraph read(final InputStream in) throws IOException, OntologyIOException {
+        final AssociationCollector collector = new AssociationCollector();
+        RDFParser parser = new RDFXMLParserFactory().getParser();
+        try {
+            RdfReadHandler handler = new RdfReadHandler(collector);
+            parser.setRDFHandler(handler);
+            parser.parse(in, "void");
+            return collector.toSemanticGraph();
+        } catch (RDFParseException e) {
+            throw new OntologyIOException("error while reading RDF", e);
+        } catch (RDFHandlerException e) {
+            throw new OntologyIOException("error while reading RDF", e);
+        }
+    }
+    
+    /* (non-Javadoc)
+     * @see org.arastreju.sge.io.SemanticGraphIO#write(org.arastreju.sge.model.SemanticGraph, java.io.OutputStream)
+     */
+    public void write(final SemanticGraph graph, final OutputStream out)
+            throws IOException, OntologyIOException {
+        try {
+            final RDFWriter writer = new RDFXMLWriterFactory().getWriter(out);
+            
+            final NamespaceMap nsMap = new NamespaceMap(graph.getNamespaces());
+            logger.debug("PrefixMap: \n" + nsMap);
+            for(String prefix : nsMap.getPrefixes()){
+                writer.handleNamespace(prefix, nsMap.getNamespace(prefix).getUri());
+            }
+            
+            writer.startRDF();
+            for (Association assoc : graph.getAssociations()) {
+                writer.handleStatement(new RioStatement(assoc));
+            }
+            writer.endRDF();
+            
+        } catch(IllegalArgumentException e){
+            throw new OntologyIOException("associations couldn't be written", e);
+        } catch(RDFHandlerException e){
+            throw new OntologyIOException("associations couldn't be written", e);
+        }
+    }
+    
 }

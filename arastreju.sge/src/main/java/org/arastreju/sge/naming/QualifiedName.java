@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2010 lichtflut Forschungs- und Entwicklungsgesellschaft mbH
+ * Copyright (C) 2011 lichtflut Forschungs- und Entwicklungsgesellschaft mbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -46,19 +46,11 @@ public class QualifiedName implements Comparable<QualifiedName>, Serializable {
 	//------------------------------------------------------
 	
 	public static boolean isUri(final String name){
-		if (name.indexOf(SLASH) > -1){
-			return true;
-		} else {
-			return false;
-		}
+		return name.indexOf(SLASH) > -1;
 	}
 	
 	public static boolean isQname(final String name){
-		if (!isUri(name) && name.indexOf(PREFIX_DELIM) > -1){
-			return true;
-		} else {
-			return false;
-		}
+		return !isUri(name) && name.indexOf(PREFIX_DELIM) > -1;
 	}
 	
 	public static String retrieveNamePart(final String name) {
@@ -67,9 +59,9 @@ public class QualifiedName implements Comparable<QualifiedName>, Serializable {
 	}
 	
 	/**
-	 * Get the namespace part of a full qalified name. The # is assumend to be part of namespace.
-	 * @param name
-	 * @return
+	 * Get the Namespace part of a full qualified name. The # is assumend to be part of namespace.
+	 * @param name A qualified or unqualified name.
+	 * @return The Namespace part.
 	 */
 	public static String retrieveNamespaceUri(final String name) {
 		int pos = getSeperatorIndex(name);

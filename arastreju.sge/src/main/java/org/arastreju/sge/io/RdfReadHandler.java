@@ -92,10 +92,13 @@ public class RdfReadHandler implements RDFHandler {
 		Resource subject = stmt.getSubject();
 		URI predicate = stmt.getPredicate();
 		Value object = stmt.getObject();
-			
-		Association assoc = Association.create(toResourceNode(subject), toResourceRef(predicate), toNode(object), null);
-		listener.onNewAssociation(assoc);
-			
+		
+		if (!subject.equals(object)) {
+			Association assoc = Association.create(toResourceNode(subject), toResourceRef(predicate), toNode(object), null);
+			listener.onNewAssociation(assoc);	
+		} else {
+			logger.warn("Start and end node are equat. Can't be imported!");
+		}
 	}
 	
 	// -----------------------------------------------------

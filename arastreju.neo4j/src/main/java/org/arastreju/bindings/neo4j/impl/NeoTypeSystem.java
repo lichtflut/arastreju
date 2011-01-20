@@ -1,14 +1,32 @@
 /*
- * Copyright (C) 2011 lichtflut Forschungs- und Entwicklungsgesellschaft mbH
+ * Copyright (C) 2010 lichtflut Forschungs- und Entwicklungsgesellschaft mbH
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package org.arastreju.bindings.neo4j.impl;
 
+import java.util.HashSet;
 import java.util.Set;
 
+import org.arastreju.bindings.neo4j.ArasRelTypes;
+import org.arastreju.bindings.neo4j.NeoConstants;
 import org.arastreju.sge.TypeSystem;
+import org.arastreju.sge.apriori.RDF;
 import org.arastreju.sge.apriori.RDFS;
-import org.arastreju.sge.model.nodes.ResourceNode;
 import org.arastreju.sge.model.nodes.views.SNClass;
+import org.neo4j.graphdb.Direction;
+import org.neo4j.graphdb.Node;
+import org.neo4j.graphdb.Relationship;
 
 /**
  * <p>
@@ -21,16 +39,19 @@ import org.arastreju.sge.model.nodes.views.SNClass;
  *
  * @author Oliver Tigges
  */
-public class NeoTypeSystem implements TypeSystem {
+public class NeoTypeSystem implements TypeSystem, NeoConstants {
 	
-	private final ResourceResolver store;
+	private final String RDFS_CLASS_URI = RDFS.CLASS.getQualifiedName().toURI();
+	private final String RDF_TYPE_URI = RDF.TYPE.getQualifiedName().toString();
+	
+	private final NeoDataStore store;
 
 	// -----------------------------------------------------
 	
 	/**
 	 * @param neo4jDataStore
 	 */
-	public NeoTypeSystem(final ResourceResolver store) {
+	public NeoTypeSystem(final NeoDataStore store) {
 		this.store = store;
 	}
 	
@@ -40,8 +61,18 @@ public class NeoTypeSystem implements TypeSystem {
 	 * @see org.arastreju.sge.TypeSystem#getAllClasses()
 	 */
 	public Set<SNClass> getAllClasses() {
-		ResourceNode clazz = store.resolve(RDFS.CLASS);
-		return null;
+		final Set<SNClass> result = new HashSet<SNClass>();
+		final Node neoNode = store.getIndexService().getSingleNode(INDEX_KEY_RESOURCE_URI, RDFS_CLASS_URI);
+		if (neoNode == null){
+			throw new IllegalStateException("Node for rdfs:Class does not exist.");
+		}
+		Iterable<Relationship> relationships = neoNode.getRelationships(ArasRelTypes.REFERENCE, Direction.INCOMING);
+		for(Relationship rel: relationships){
+			if (rel.getProperty(PREDICATE_URI).equals(RDF_TYPE_URI)){
+				result.add(store.findResource(rel.getStartNode()).asClass());
+			}
+		}
+		return result;
 	}
 
 }

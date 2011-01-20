@@ -31,21 +31,39 @@ import org.neo4j.graphdb.Relationship;
  */
 public class Dumper {
 	
+	/**
+	 * Dumps just the given Neo node.
+	 * @param neoNode The node to be dumped. 
+	 * @return The corresponding string.
+	 */
 	public static String dump(final Node neoNode){
-		final StringBuilder sb = new StringBuilder("node[" + neoNode.getId() + "|" + System.identityHashCode(neoNode) + "]");
+		final StringBuilder sb = new StringBuilder("node[" + neoNode.getId() + "|" + 
+				System.identityHashCode(neoNode) + "]");
 		return sb.toString();
 	}
 	
+	/**
+	 * Dumps the given Neo node with all relations.
+	 * @param neoNode The node to be dumped. 
+	 * @return The corresponding string.
+	 */
 	public static String dumpDeep(final Node neoNode){
-		final StringBuilder sb = new StringBuilder("node[" + neoNode.getId() + "|" + System.identityHashCode(neoNode) + "]");
+		final StringBuilder sb = new StringBuilder("node[" + neoNode.getId() + "|" + 
+				System.identityHashCode(neoNode) + "]");
 		for (Relationship rel : neoNode.getRelationships()) {
 			sb.append("\n * " + dump(rel));
 		}
 		return sb.toString();
 	}
 	
+	/**
+	 * Dumps the relation.
+	 * @param rel The relation.
+	 * @return The corresponding string.
+	 */
 	public static String dump(final Relationship rel){
-		final StringBuilder sb = new StringBuilder("rel[" + rel.getId() + "|" + System.identityHashCode(rel) + "] ");
+		final StringBuilder sb = new StringBuilder("rel[" + rel.getId() + "|" + 
+				System.identityHashCode(rel) + "] ");
 		sb.append(dump(rel.getStartNode()) + " --> " + dump(rel.getEndNode()));
 		return sb.toString();
 	}

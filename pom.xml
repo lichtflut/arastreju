@@ -70,11 +70,24 @@
 				<artifactId>maven-surefire-plugin</artifactId>
 				<version>2.4.2</version>
 				<configuration>
-					<skipTests>true</skipTests>
+					<skipTests>false</skipTests>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-checkstyle-plugin</artifactId>
+				<version>2.6</version>
+				<configuration>
+					<configLocation>checkstyle.xml</configLocation>
+					<enableRulesSummary>true</enableRulesSummary>
+					<encoding>UTF-8</encoding>
+					<failOnViolation>false</failOnViolation>
+					<consoleOutput>true</consoleOutput>
 				</configuration>
 			</plugin>
 		</plugins>
 	</build>
+	
 	<dependencies>
 		<dependency>
 			<groupId>org.slf4j</groupId>

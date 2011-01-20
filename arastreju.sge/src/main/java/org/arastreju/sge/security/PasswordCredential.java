@@ -15,32 +15,30 @@
  */
 package org.arastreju.sge.security;
 
-import java.util.Set;
-
-import org.arastreju.sge.model.nodes.ResourceNode;
-
 /**
  * <p>
- *  Base of all identifiable objects with granted permissions.
+ *  [DESCRIPTION]
  * </p>
  *
  * <p>
- * 	Created Jan 5, 2011
+ * 	Created Jan 20, 2011
  * </p>
  *
  * @author Oliver Tigges
  */
-public interface Identity {
+public class PasswordCredential implements Credential {
+	
+	private String password;
+	
+	public PasswordCredential(final String password) {
+		this.password = password;
+	}
 
-	ResourceNode getAssociatedResource();
-	
-	String getName();
-	
-	Set<Role> getRoles();
-	
-	Set<Permission> getPermissions();
-	
-	boolean isInRole(Role role);
-	
-	boolean hasPermission(Permission permission);
+	/* (non-Javadoc)
+	 * @see org.arastreju.sge.security.Credential#stringRepesentation()
+	 */
+	public String stringRepesentation() {
+		return password;
+	}
+
 }

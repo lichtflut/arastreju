@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 lichtflut Forschungs- und Entwicklungsgesellschaft mbH
+ * Copyright (C) 2010 lichtflut Forschungs- und Entwicklungsgesellschaft mbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.

@@ -105,10 +105,10 @@ public class NeoAssociationKeeper extends AbstractAssociationKeeper implements N
 				object = new SNValueNeo(rel.getEndNode());
 			}
 			
-			final ResourceNode predicate = store.findResource(new QualifiedName(rel.getProperty(PROPERTY_URI).toString()));
+			final ResourceNode predicate = store.findResource(new QualifiedName(rel.getProperty(PREDICATE_URI).toString()));
 			
-			if (rel.hasProperty(PROPERTY_CONTEXT_URI)){
-				ResourceNode node = store.findResource(new QualifiedName(rel.getProperty(PROPERTY_CONTEXT_URI).toString()));
+			if (rel.hasProperty(CONTEXT_URI)){
+				ResourceNode node = store.findResource(new QualifiedName(rel.getProperty(CONTEXT_URI).toString()));
 				if (node instanceof Context){
 					ctx = (Context) node;
 				} else {

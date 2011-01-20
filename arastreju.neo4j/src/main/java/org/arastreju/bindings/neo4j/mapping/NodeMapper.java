@@ -75,12 +75,12 @@ public class NodeMapper implements NeoConstants {
 			if (neoClient.hasProperty(PROPERTY_URI)){
 				// Resource Relation
 				ResourceNode object = store.findResource(rel.getEndNode());
-				ResourceNode predicate = store.findResource(new QualifiedName(rel.getProperty(PROPERTY_URI).toString()));
+				ResourceNode predicate = store.findResource(new QualifiedName(rel.getProperty(PREDICATE_URI).toString()));
 				Association.create(arasNode, predicate, object, null);
 			} else if (neoClient.hasProperty(PROPERTY_VALUE)){
 				// Value assignment
 				final SNValue value = new SNValueNeo(neoClient);
-				ResourceNode predicate = store.findResource(new QualifiedName(rel.getProperty(PROPERTY_URI).toString()));
+				ResourceNode predicate = store.findResource(new QualifiedName(rel.getProperty(PREDICATE_URI).toString()));
 				Association.create(arasNode, predicate, value, null);
 			} else {
 				throw new IllegalStateException("Relation end has neither URI nor Value");
