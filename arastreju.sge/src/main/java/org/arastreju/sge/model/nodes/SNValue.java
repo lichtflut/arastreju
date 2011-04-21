@@ -130,6 +130,9 @@ public class SNValue implements ValueNode {
 	 * @see org.arastreju.sge.model.nodes.ValueNode#getDecimalValue()
 	 */
 	public BigDecimal getDecimalValue() {
+		if (value instanceof String){
+			return new BigDecimal((String) value);
+		}
 		return (BigDecimal) value;
 	}
 
@@ -137,6 +140,9 @@ public class SNValue implements ValueNode {
 	 * @see org.arastreju.sge.model.nodes.ValueNode#getIntegerValue()
 	 */
 	public BigInteger getIntegerValue() {
+		if (value instanceof String){
+			return new BigInteger((String) value);
+		}
 		return (BigInteger) value;
 	}
 

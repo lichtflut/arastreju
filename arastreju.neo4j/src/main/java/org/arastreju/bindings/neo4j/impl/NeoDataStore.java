@@ -253,7 +253,7 @@ public class NeoDataStore implements NeoConstants, ResourceResolver {
 					// Value node
 					final Node neoClient = gdbService.createNode();
 					final ValueNode value = client.asValue();
-					neoClient.setProperty(PROPERTY_VALUE, client.asValue().getValue());
+					neoClient.setProperty(PROPERTY_VALUE, value.getValue().toString());
 					neoClient.setProperty(PROPERTY_DATATYPE, client.asValue().getDataType().name());
 					
 					final Relationship relationship = subject.createRelationshipTo(neoClient, ArasRelTypes.VALUE);
