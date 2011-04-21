@@ -26,7 +26,6 @@ import org.arastreju.sge.model.associations.DetachedAssociationKeeper;
 import org.arastreju.sge.model.nodes.views.SNClass;
 import org.arastreju.sge.model.nodes.views.SNEntity;
 import org.arastreju.sge.model.nodes.views.SNProperty;
-import org.arastreju.sge.model.nodes.views.SNPropertyDeclaration;
 import org.arastreju.sge.naming.Namespace;
 import org.arastreju.sge.naming.QualifiedName;
 import org.arastreju.sge.naming.VoidNamespace;
@@ -328,13 +327,6 @@ public class SNResource implements ResourceNode {
 		return new SNProperty(this);
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.arastreju.api.ontology.model.sn.ResourceNode#asPropertyDeclaration()
-	 */
-	public SNPropertyDeclaration asPropertyDeclaration(){
-		return new SNPropertyDeclaration(this);
-	}
-
 	// ------------------------------------------------------
 	
 	@Override

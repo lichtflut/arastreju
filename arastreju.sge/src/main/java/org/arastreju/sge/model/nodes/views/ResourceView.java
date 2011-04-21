@@ -234,13 +234,6 @@ public abstract class ResourceView implements ResourceNode {
 	}
 
 	/* (non-Javadoc)
-	 * @see org.arastreju.api.ontology.model.sn.ResourceNode#asPropertyDeclaration()
-	 */
-	public SNPropertyDeclaration asPropertyDeclaration() {
-		return resource.asPropertyDeclaration();
-	}
-
-	/* (non-Javadoc)
 	 * @see org.arastreju.api.ontology.model.SemanticNode#asResource()
 	 */
 	public ResourceNode asResource() {

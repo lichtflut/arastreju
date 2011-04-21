@@ -22,7 +22,6 @@ import org.arastreju.sge.model.associations.Association;
 import org.arastreju.sge.model.nodes.views.SNClass;
 import org.arastreju.sge.model.nodes.views.SNEntity;
 import org.arastreju.sge.model.nodes.views.SNProperty;
-import org.arastreju.sge.model.nodes.views.SNPropertyDeclaration;
 import org.arastreju.sge.naming.Namespace;
 import org.arastreju.sge.naming.QualifiedName;
 
@@ -123,7 +122,5 @@ public interface ResourceNode extends SemanticNode, ResourceID {
 	SNClass asClass();
 
 	SNProperty asProperty();
-
-	SNPropertyDeclaration asPropertyDeclaration();
 
 }

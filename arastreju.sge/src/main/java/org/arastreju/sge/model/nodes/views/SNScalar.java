@@ -42,6 +42,14 @@ public class SNScalar extends ValueView {
 	}
 	
 	/**
+	 * Creates a new scalar integer value.
+	 * @param integerValue
+	 */
+	public SNScalar(final Integer integerValue){
+		this(BigInteger.valueOf(integerValue));
+	}
+	
+	/**
 	 * Creates a new scalar decimal value.
 	 * @param decimalValue
 	 */

@@ -20,9 +20,13 @@ import org.arastreju.sge.apriori.Aras;
 import de.lichtflut.infra.exceptions.NotYetSupportedException;
 
 /**
- * Type of value nodes.
+ * <p>
+ * Enumeration of types of literal value nodes.
+ * </p>
  * 
- * Created: 16.01.2009
+ * <p>
+ * 	Created: 16.01.2009
+ * </p>
  *
  * @author Oliver Tigges
  */

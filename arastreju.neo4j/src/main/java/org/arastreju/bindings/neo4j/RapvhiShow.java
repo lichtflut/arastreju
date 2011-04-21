@@ -57,17 +57,19 @@ public class RapvhiShow {
 		
 		SNClass personClass = new SNResource(qn).asClass();
 		
-		SNEntity raphi = personClass.createInstance(null, new QualifiedName("http://lf.de/peaople#Raphi"));
+		SNEntity raphi = personClass.createInstance(null, new QualifiedName("http://lf.de/people#Raphi"));
+		SNEntity raphi2 = personClass.createInstance(null, new QualifiedName("http://lf.de/people#Raphi"));
 		
 		SNEntity ravi = personClass.createInstance(null, new QualifiedName("http://lf.de/people#Ravi"));
 		
 		mc.attach(raphi);
+		mc.attach(raphi2);
 		mc.attach(ravi);
 		
 		mc.detach(raphi);
 		mc.detach(ravi);
 		
-		ResourceNode r2 = mc.findResource(new QualifiedName("http://lf.de/peaople#Raphi"));
+		ResourceNode r2 = mc.findResource(new QualifiedName("http://lf.de/people#Raphi"));
 		
 		if (r2.asEntity().isInstanceOf(personClass)){
 			System.out.println("Der ist eine Person: " + r2.getAssociations());

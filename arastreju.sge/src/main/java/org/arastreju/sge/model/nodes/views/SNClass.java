@@ -16,12 +16,10 @@
 package org.arastreju.sge.model.nodes.views;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.arastreju.sge.apriori.Aras;
 import org.arastreju.sge.apriori.RDF;
 import org.arastreju.sge.apriori.RDFS;
 import org.arastreju.sge.context.Context;
@@ -113,61 +111,6 @@ public class SNClass extends ResourceView {
 			terms.add(assoc.getClient().asValue().asTerm());
 		}
 		return terms;
-	}
-	
-	// -- PROPRTIES ---------------------------------------
-	
-	/**
-	 * Adds the given property declaration to this class.
-	 * Assures that property declaration will be in same namespace as this classifier.
-	 */
-	public void addPropertyDeclaration(SNPropertyDeclaration decl, Context ctx){
-		decl.setNamespace(getNamespace());
-		Association.create(this, Aras.HAS_PROPERTY_DECL, decl, ctx);
-	}
-	
-	/**
-	 * Collects all property declarations defined by this classifier and it's super classifiers.
-	 * @return The list of all property declarations.
-	 */
-	public List<SNPropertyDeclaration> getPropertyDeclarations(){
-		Set<SNPropertyDeclaration> result = new HashSet<SNPropertyDeclaration>();
-		for (SNClass superCl : getSuperClasses()) {
-			result.addAll(superCl.getDeclaredPropertyDeclarations());
-		}
-		result.addAll(getDeclaredPropertyDeclarations());
-		List<SNPropertyDeclaration> list = new ArrayList<SNPropertyDeclaration>(result);
-		Collections.sort(list);
-		return list;
-	}
-	
-	/**
-	 * Returns only the property declarations declared for this classifier, not the inherited.
-	 * @return The list of property declarations.
-	 */
-	public List<SNPropertyDeclaration> getDeclaredPropertyDeclarations(){
-		List<SNPropertyDeclaration> result = new ArrayList<SNPropertyDeclaration>();
-		Set<Association> assocs = getAssociations(Aras.HAS_PROPERTY_DECL);
-		for (Association current : assocs) {
-			result.add(current.getClient().asResource().asPropertyDeclaration());
-		}
-		Collections.sort(result);
-		return result;
-	}
-
-	/* (non-Javadoc)
-	 * @see org.arastreju.api.model.semantic.ResourceClassifier#removePropertyDeclaration(org.arastreju.api.model.semantic.SNPropertyDeclaration)
-	 */
-	public void removePropertyDeclaration(SNPropertyDeclaration decl) {
-		Set<Association> assocs = getAssociations(Aras.HAS_PROPERTY_DECL);
-		Association toBeRemoved = null;
-		for (Association current : assocs) {
-			if (decl.equals(current.getClient())){
-				toBeRemoved = current;
-				break;
-			}
-		}
-		revoke(toBeRemoved);
 	}
 	
 }
