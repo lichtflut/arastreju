@@ -17,6 +17,7 @@ package org.arastreju.sge.model.nodes;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
 import org.arastreju.sge.apriori.RDFS;
 import org.arastreju.sge.model.ResourceID;
@@ -57,7 +58,7 @@ public class SNResource implements ResourceNode {
 	 * Default constructor for new unattached resource.
 	 */
 	public SNResource() {
-		this.associationKeeper = new DetachedAssociationKeeper();
+		this(VoidNamespace.getInstance(), UUID.randomUUID().toString());
 	}
 	
 	/**
