@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2010 lichtflut Forschungs- und Entwicklungsgesellschaft mbH
+ * Copyright (C) 2011 lichtflut Forschungs- und Entwicklungsgesellschaft mbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,7 +21,30 @@ import de.lichtflut.infra.exceptions.NotYetSupportedException;
 
 /**
  * <p>
- * Enumeration of types of literal value nodes.
+ * 	Enumeration of types of literal value nodes.
+ * </p>
+ * 
+ * <p>
+ * These Value Nodes are defined:
+ * <ul>
+ * 	<li>Boolean: Logical value (true | false)</li>
+ * 	<li>Integer: Integer Number</li>
+ * 	<li>Decimal: Real Number</li>
+ * 	<li>String: Character String</li>
+ * 	<li>URI: Non-Resource-URI, always a leaf in the graph</li>
+ * 	<li>Timestamp: Point in time</li>
+ * 	<li>Date: Specification of a day</li>
+ * 	<li>Time-of-Day: Time of day (clock)</li>
+ * 	<li>Term: Unique reference of a term in a dictionary</li>
+ *  <li>Proper-Name: Unique reference of a proper name in a dictionary</li>
+ * </ul>
+ * </p>
+ * 
+ * <p>
+ * 	Additionally there is exactly one non literal value:
+ *  <ul>
+ * 	   <li>Resource: Representation of a Resource</li>
+ *  </ul>
  * </p>
  * 
  * <p>

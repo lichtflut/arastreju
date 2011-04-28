@@ -19,9 +19,13 @@ import org.arastreju.sge.model.ResourceID;
 import org.arastreju.sge.model.SimpleResourceID;
 
 /**
- * A priori known URIs for Arastreju.
+ * <p>
+ * 	A priori known URIs for Arastreju.
+ * </p>
  * 
- * Created: 09.11.2009
+ * <p>
+ * 	Created: 09.11.2009
+ * </p>
  *
  * @author Oliver Tigges 
  */
@@ -31,15 +35,6 @@ public interface Aras {
 	
 	public static final String NAMESPACE_URI = "http://arastreju.org/kernel#";
 	public static final ResourceID ACTIVITY_CLASS = new SimpleResourceID(NAMESPACE_URI, "ActivityClass");
-	public static final ResourceID PROPERTY_DECL = new SimpleResourceID(NAMESPACE_URI, "PropertyDeclaration");
-
-	public static final ResourceID RELATION_CLASSIFIER = new SimpleResourceID(NAMESPACE_URI, "RelationClassifier");
-	public static final ResourceID RELATION_LINK_TYPE = new SimpleResourceID(NAMESPACE_URI, "RelationLinkType");
-	public static final ResourceID RELATION_PREPOSITIONAL = new SimpleResourceID(NAMESPACE_URI, "RelationPrepositional");
-	public static final ResourceID RELATION_DIRECT = new SimpleResourceID(NAMESPACE_URI, "RelationDirect");
-	public static final ResourceID IMPLICATION = new SimpleResourceID(NAMESPACE_URI, "Implication");
-	public static final ResourceID EQUALIZE_IMPLICATION = new SimpleResourceID(NAMESPACE_URI, "EqualizeImplication");
-	public static final ResourceID ASSOC_IMPLICATION = new SimpleResourceID(NAMESPACE_URI, "AssociateImplication");
 
 	public static final ResourceID COUNTABLE = new SimpleResourceID(NAMESPACE_URI, "Countable");
 	
@@ -102,22 +97,10 @@ public interface Aras {
 	
 	// -- CONSTRAINTS -------------------------------------
 	
-	public static final ResourceID HAS_CONSTRAINT = new SimpleResourceID(NAMESPACE_URI, "hasConstraint");
-	public static final ResourceID HAS_TYPE_CONSTRAINT = new SimpleResourceID(NAMESPACE_URI, "hasTypeConstraint");
-	public static final ResourceID HAS_ROLE_CONSTRAINT = new SimpleResourceID(NAMESPACE_URI, "hasRoleConstraint");
-	public static final ResourceID HAS_CASUS_CONSTRAINT = new SimpleResourceID(NAMESPACE_URI, "hasCasusConstraint");
-	public static final ResourceID HAS_PRONOUN_CONSTRAINT = new SimpleResourceID(NAMESPACE_URI, "hasPronounConstraint");
-	public static final ResourceID HAS_PREPOSITION_CONSTRAINT = new SimpleResourceID(NAMESPACE_URI, "hasPrepositionConstraint");
-	public static final ResourceID HAS_REL_SUBJECT_TYPE_CONSTRAINT = new SimpleResourceID(NAMESPACE_URI, "hasRelationSubjectTypeConstraint");
-	public static final ResourceID HAS_REL_OBJECT_TYPE_CONSTRAINT = new SimpleResourceID(NAMESPACE_URI, "hasRelationObjectTypeConstraint");
-	
 	public static final ResourceID HAS_IMPLICATION = new SimpleResourceID(NAMESPACE_URI, "hasImplication");
 	public static final ResourceID DESCRIBES = new SimpleResourceID(NAMESPACE_URI, "describes");
 	public static final ResourceID HAS_MEDIA_DESC = new SimpleResourceID(NAMESPACE_URI, "hasMediaDescription");
 	public static final ResourceID HAS_TERM = new SimpleResourceID(NAMESPACE_URI, "isReferencedByTerm");
-	
-	public static final ResourceID HAS_PROPERTY_DECL = new SimpleResourceID(NAMESPACE_URI, "hasPropertyDeclaration");
-	public static final ResourceID DECLARES_PROPERTY = new SimpleResourceID(NAMESPACE_URI, "declaresProperty");
 	
 	public static final ResourceID HAS_PROPER_NAME = new SimpleResourceID(NAMESPACE_URI, "hasProperName");
 	public static final ResourceID HAS_FORENAME = new SimpleResourceID(NAMESPACE_URI, "hasForename");
