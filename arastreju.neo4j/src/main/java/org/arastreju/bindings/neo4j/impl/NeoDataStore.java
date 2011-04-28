@@ -265,6 +265,7 @@ public class NeoDataStore implements NeoConstants, ResourceResolver {
 					logger.info("added value --> " + relationship + " to node " + subject);
 
 					indexService.index(subject, INDEX_KEY_RESOURCE_VALUE, value.getStringValue());
+					indexService.index(subject, predicate.getQualifiedName().toURI(), value.getStringValue());
 					logger.debug("Indexed: " + value.getStringValue() + " --> " + subject);
 				}
 			}

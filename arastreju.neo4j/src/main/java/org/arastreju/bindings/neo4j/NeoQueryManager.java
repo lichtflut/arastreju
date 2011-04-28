@@ -97,5 +97,25 @@ public class NeoQueryManager extends QueryManager implements NeoConstants {
 		logger.debug("found for tag '" + tag + "': " + result);
 		return result;
 	}
+	
+	/* (non-Javadoc)
+	 * @see org.arastreju.sge.query.QueryManager#findByTag(org.arastreju.sge.model.ResourceID, java.lang.String)
+	 */
+	@Override
+	public List<ResourceNode> findByTag(final ResourceID predicate, final String tag) {
+		final String property = predicate.getQualifiedName().toURI();
+		final List<ResourceNode> result = new ArrayList<ResourceNode>();
+		store.doTransacted(new TxAction() {
+			public void execute(final NeoDataStore store) {
+				final IndexService index = store.getIndexService();
+				final IndexHits<Node> nodes = index.getNodes(property, tag);
+				for (Node node : nodes) {
+					result.add(store.findResource(node));
+				}
+			}
+		});
+		logger.debug("found for predicate '" + property + "'and tag '" + tag + "': " + result);
+		return result;
+	}
 
 }

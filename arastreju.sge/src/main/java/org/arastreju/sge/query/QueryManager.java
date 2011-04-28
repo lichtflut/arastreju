@@ -41,6 +41,15 @@ public abstract class QueryManager {
 	 */
 	public abstract List<ResourceNode> findByTag(String tag);
 	
+	/**
+	 * Find resources with a given tag on a special predicate.
+	 * The result list will contain all resource nodes with a relation with this predicate and tag. 
+	 * @param predicate The predicate.
+	 * @param tag The tag.
+	 * @return The corresponding result list.
+	 */
+	public abstract List<ResourceNode> findByTag(ResourceID predicate, String tag);
+	
 	public abstract List<Association> findIncomingAssociations(ResourceID resource);
 	
 }

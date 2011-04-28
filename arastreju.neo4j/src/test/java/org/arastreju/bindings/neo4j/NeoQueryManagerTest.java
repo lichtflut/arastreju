@@ -22,6 +22,7 @@ import junit.framework.Assert;
 
 import org.arastreju.bindings.neo4j.impl.NeoDataStore;
 import org.arastreju.sge.apriori.Aras;
+import org.arastreju.sge.apriori.RDFS;
 import org.arastreju.sge.model.associations.Association;
 import org.arastreju.sge.model.nodes.ResourceNode;
 import org.arastreju.sge.model.nodes.SNResource;
@@ -74,12 +75,28 @@ public class NeoQueryManagerTest {
 	public void testFindByTag(){
 		final ResourceNode car = new SNResource(qnCar);
 		Association.create(car, Aras.HAS_PROPER_NAME, new SNText("BMW"), null);
+		Association.create(car, RDFS.LABEL, new SNText("Automobil"), null);
 		store.attach(car);
 		
 		final List<ResourceNode> result = qm.findByTag("BMW");
 		
 		Assert.assertEquals(1, result.size());
 		Assert.assertTrue(result.contains(car));
+		
+	}
+	
+	@Test
+	public void testFindByPredicateAndTag(){
+		final ResourceNode car = new SNResource(qnCar);
+		Association.create(car, Aras.HAS_PROPER_NAME, new SNText("BMW"), null);
+		Association.create(car, RDFS.LABEL, new SNText("Automobil"), null);
+		store.attach(car);
+		
+		final List<ResourceNode> result = qm.findByTag(RDFS.LABEL, "Automobil");
+		
+		Assert.assertEquals(1, result.size());
+		Assert.assertTrue(result.contains(car));
+		
 	}
 
 }
