@@ -50,6 +50,18 @@ public abstract class QueryManager {
 	 */
 	public abstract List<ResourceNode> findByTag(ResourceID predicate, String tag);
 	
+	/**
+	 * Find resources with the given rdf:type.
+	 * @param type The resource ID of the type.
+	 * @return A list with all resources having given resource type as rdf:type.
+	 */
+	public abstract List<ResourceNode> findByType(ResourceID type);
+	
+	/**
+	 * Find all incoming associations for the given resource.
+	 * @param resource The resource.
+	 * @return A list with all associations where the resource is the client/object.
+	 */
 	public abstract List<Association> findIncomingAssociations(ResourceID resource);
 	
 }

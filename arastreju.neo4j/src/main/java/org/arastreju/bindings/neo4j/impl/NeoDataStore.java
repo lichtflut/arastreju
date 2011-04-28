@@ -248,7 +248,8 @@ public class NeoDataStore implements NeoConstants, ResourceResolver {
 					if (ctx != null){
 						relationship.setProperty(CONTEXT_URI, ctx.asResource().getQualifiedName().toURI());	
 					}
-					logger.info("added relationship--> " + relationship + " to node " + subject);
+					indexService.index(subject, predicate.getQualifiedName().toURI(), arasClient.getQualifiedName().toURI());
+					logger.debug("added relationship--> " + relationship + " to node " + subject);
 				} else {
 					// Value node
 					final Node neoClient = gdbService.createNode();
@@ -262,7 +263,7 @@ public class NeoDataStore implements NeoConstants, ResourceResolver {
 						relationship.setProperty(CONTEXT_URI, ctx.asResource().getQualifiedName().toURI());	
 					}
 					
-					logger.info("added value --> " + relationship + " to node " + subject);
+					logger.debug("added value --> " + relationship + " to node " + subject);
 
 					indexService.index(subject, INDEX_KEY_RESOURCE_VALUE, value.getStringValue());
 					indexService.index(subject, predicate.getQualifiedName().toURI(), value.getStringValue());

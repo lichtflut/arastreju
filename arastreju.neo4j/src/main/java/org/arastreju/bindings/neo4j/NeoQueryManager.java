@@ -21,6 +21,7 @@ import java.util.List;
 import org.arastreju.bindings.neo4j.impl.NeoDataStore;
 import org.arastreju.bindings.neo4j.impl.TxAction;
 import org.arastreju.bindings.neo4j.mapping.RelationMapper;
+import org.arastreju.sge.apriori.RDF;
 import org.arastreju.sge.model.ResourceID;
 import org.arastreju.sge.model.associations.Association;
 import org.arastreju.sge.model.nodes.ResourceNode;
@@ -63,6 +64,27 @@ public class NeoQueryManager extends QueryManager implements NeoConstants {
 	// -----------------------------------------------------
 	
 	/* (non-Javadoc)
+	 * @see org.arastreju.sge.query.QueryManager#findByTag()
+	 */
+	@Override
+	public List<ResourceNode> findByTag(final String tag) {
+		final List<ResourceNode> result = findByKeyValue(INDEX_KEY_RESOURCE_VALUE, tag);
+		logger.debug("found for tag '" + tag + "': " + result);
+		return result;
+	}
+	
+	/* (non-Javadoc)
+	 * @see org.arastreju.sge.query.QueryManager#findByTag(org.arastreju.sge.model.ResourceID, java.lang.String)
+	 */
+	@Override
+	public List<ResourceNode> findByTag(final ResourceID predicate, final String tag) {
+		final String property = predicate.getQualifiedName().toURI();
+		final List<ResourceNode> result = findByKeyValue(property, tag);
+		logger.debug("found for predicate '" + property + "'and tag '" + tag + "': " + result);
+		return result;
+	}
+	
+	/* (non-Javadoc)
 	 * @see org.arastreju.sge.query.QueryManager#findIncomingAssociations(org.arastreju.sge.model.ResourceID)
 	 */
 	@Override
@@ -77,44 +99,35 @@ public class NeoQueryManager extends QueryManager implements NeoConstants {
 		
 		return result;
 	}
-
 	
 	/* (non-Javadoc)
-	 * @see org.arastreju.sge.query.QueryManager#findByTag()
+	 * @see org.arastreju.sge.query.QueryManager#findByType(org.arastreju.sge.model.ResourceID)
 	 */
 	@Override
-	public List<ResourceNode> findByTag(final String tag) {
-		final List<ResourceNode> result = new ArrayList<ResourceNode>();
-		store.doTransacted(new TxAction() {
-			public void execute(final NeoDataStore store) {
-				final IndexService index = store.getIndexService();
-				final IndexHits<Node> nodes = index.getNodes(INDEX_KEY_RESOURCE_VALUE, tag);
-				for (Node node : nodes) {
-					result.add(store.findResource(node));
-				}
-			}
-		});
-		logger.debug("found for tag '" + tag + "': " + result);
+	public List<ResourceNode> findByType(final ResourceID type) {
+		final String predicate = RDF.TYPE.getQualifiedName().toURI();
+		final String typeURI = type.getQualifiedName().toURI();
+		final List<ResourceNode> result = findByKeyValue(predicate, typeURI);
+		logger.debug("found with rdf:type '" + typeURI + "': " + result);
 		return result;
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.arastreju.sge.query.QueryManager#findByTag(org.arastreju.sge.model.ResourceID, java.lang.String)
+	// -----------------------------------------------------
+	
+	/**
+	 * Find in Index by key and value.
 	 */
-	@Override
-	public List<ResourceNode> findByTag(final ResourceID predicate, final String tag) {
-		final String property = predicate.getQualifiedName().toURI();
+	protected List<ResourceNode> findByKeyValue(final String key, final String value) {
 		final List<ResourceNode> result = new ArrayList<ResourceNode>();
 		store.doTransacted(new TxAction() {
 			public void execute(final NeoDataStore store) {
 				final IndexService index = store.getIndexService();
-				final IndexHits<Node> nodes = index.getNodes(property, tag);
+				final IndexHits<Node> nodes = index.getNodes(key, value);
 				for (Node node : nodes) {
 					result.add(store.findResource(node));
 				}
 			}
 		});
-		logger.debug("found for predicate '" + property + "'and tag '" + tag + "': " + result);
 		return result;
 	}
 

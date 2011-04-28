@@ -22,10 +22,14 @@ import junit.framework.Assert;
 
 import org.arastreju.bindings.neo4j.impl.NeoDataStore;
 import org.arastreju.sge.apriori.Aras;
+import org.arastreju.sge.apriori.RDF;
 import org.arastreju.sge.apriori.RDFS;
+import org.arastreju.sge.context.Context;
+import org.arastreju.sge.model.SimpleResourceID;
 import org.arastreju.sge.model.associations.Association;
 import org.arastreju.sge.model.nodes.ResourceNode;
 import org.arastreju.sge.model.nodes.SNResource;
+import org.arastreju.sge.model.nodes.views.SNEntity;
 import org.arastreju.sge.model.nodes.views.SNText;
 import org.arastreju.sge.naming.QualifiedName;
 import org.junit.After;
@@ -46,6 +50,7 @@ import org.junit.Test;
 public class NeoQueryManagerTest {
 	
 	private final QualifiedName qnCar = new QualifiedName("http://q#", "Car");
+	private final QualifiedName qnBike = new QualifiedName("http://q#", "Bike");
 	
 	private NeoDataStore store;
 	private NeoQueryManager qm;
@@ -96,7 +101,38 @@ public class NeoQueryManagerTest {
 		
 		Assert.assertEquals(1, result.size());
 		Assert.assertTrue(result.contains(car));
-		
 	}
+	
+	@Test
+	public void testFindByType(){
+		final Context ctx = null;
+		final ResourceNode car = new SNResource(qnCar);
+		Association.create(car, RDF.TYPE, RDFS.CLASS, ctx);
+		store.attach(car);
+		
+		final ResourceNode bike = new SNResource(qnBike);
+		Association.create(bike, RDF.TYPE, RDFS.CLASS, ctx);
+		store.attach(bike);
+		
+		final SNEntity aCar = car.asClass().createInstance(ctx);
+		store.attach(aCar);
+		
+		final SNEntity aBike = bike.asClass().createInstance(ctx);
+		store.attach(aBike);
+		
+		final List<ResourceNode> result = qm.findByType(new SimpleResourceID(qnCar));
+		Assert.assertEquals(1, result.size());
+		Assert.assertTrue(result.contains(aCar));
+		
+		final List<ResourceNode> result2 = qm.findByType(new SimpleResourceID(qnBike));
+		Assert.assertEquals(1, result2.size());
+		Assert.assertTrue("Expected aBike to be a Bike", result2.contains(aBike));
+		
+		final List<ResourceNode> result3 = qm.findByType(RDFS.CLASS);
+		Assert.assertEquals(2, result3.size());
+		Assert.assertTrue("Expected Bike to be a Class", result3.contains(bike));
+		Assert.assertTrue("Expected Car to be a Class", result3.contains(car));
+	}
+	
 
 }
