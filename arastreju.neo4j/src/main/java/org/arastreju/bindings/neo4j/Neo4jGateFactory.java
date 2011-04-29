@@ -38,7 +38,7 @@ public class Neo4jGateFactory extends ArastrejuGateFactory {
 	 */
 	@Override
 	public ArastrejuGate create(final GateContext ctx) throws GateInitializationException {
-		return new Neo4jGate();
+		return new Neo4jGate(ctx);
 	}
 
 }

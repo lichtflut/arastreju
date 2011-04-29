@@ -16,6 +16,9 @@
 package org.arastreju.sge.spi;
 
 import org.arastreju.sge.ArastrejuGate;
+import org.arastreju.sge.security.Credential;
+import org.arastreju.sge.security.Identity;
+import org.arastreju.sge.security.PasswordCredential;
 
 /**
  * <p>
@@ -29,5 +32,63 @@ import org.arastreju.sge.ArastrejuGate;
  * @author Oliver Tigges
  */
 public class GateContext {
+	
+	private String username;
+	
+	private Credential credential;
+	
+	// -----------------------------------------------------
+	
+	/**
+	 * Constructor for username/credential.
+	 */
+	public GateContext(final String username, final String credential) {
+		this.username = username;
+		this.credential = new PasswordCredential(credential);
+	}
+	
+	/**
+	 * Constructor for username/credential.
+	 */
+	public GateContext(final String username, final Credential credential) {
+		this.username = username;
+		this.credential = credential;
+	}
+	
+	// -----------------------------------------------------
 
+	/**
+	 * @return the username
+	 */
+	public String getUsername() {
+		return username;
+	}
+
+	/**
+	 * @param username the username to set
+	 */
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+	/**
+	 * @return the credential
+	 */
+	public Credential getCredential() {
+		return credential;
+	}
+
+	/**
+	 * @param credentials the credentials to set
+	 */
+	public void setCredentials(final String credentials) {
+		this.credential = new PasswordCredential(credentials);
+	}
+	
+	// -----------------------------------------------------
+	
+	public boolean isRootContext() {
+		return Identity.ROOT.equals(username);
+	}
+	
 }

@@ -15,9 +15,13 @@
  */
 package org.arastreju.sge.security;
 
+import org.arastreju.sge.model.nodes.SemanticNode;
+
+import de.lichtflut.infra.Infra;
+
 /**
  * <p>
- *  [DESCRIPTION]
+ *  The standard credential, just a string.
  * </p>
  *
  * <p>
@@ -30,15 +34,34 @@ public class PasswordCredential implements Credential {
 	
 	private String password;
 	
+	// -----------------------------------------------------
+	
 	public PasswordCredential(final String password) {
 		this.password = password;
 	}
+	
+	/* (non-Javadoc)
+	 * @see org.arastreju.sge.security.Credential#applies(org.arastreju.sge.model.nodes.SemanticNode)
+	 */
+	public boolean applies(final SemanticNode node) {
+		return node != null && node.isValueNode() && 
+			Infra.equals(node.asValue().getStringValue(), password);
+	}
+	
+	// -----------------------------------------------------
 
 	/* (non-Javadoc)
 	 * @see org.arastreju.sge.security.Credential#stringRepesentation()
 	 */
 	public String stringRepesentation() {
 		return password;
+	}
+	
+	/* (non-Javadoc)
+	 * @see org.arastreju.sge.security.Credential#isEmpty()
+	 */
+	public boolean isEmpty() {
+		return password == null || password.length() == 0;
 	}
 
 }

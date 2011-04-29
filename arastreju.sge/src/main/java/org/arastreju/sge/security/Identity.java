@@ -31,6 +31,10 @@ import org.arastreju.sge.model.nodes.ResourceNode;
  * @author Oliver Tigges
  */
 public interface Identity {
+	
+	public static final String ROOT = "root";
+	
+	// -----------------------------------------------------
 
 	ResourceNode getAssociatedResource();
 	

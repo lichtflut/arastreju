@@ -15,9 +15,11 @@
  */
 package org.arastreju.sge.security;
 
+import org.arastreju.sge.model.nodes.SemanticNode;
+
 /**
  * <p>
- *  [DESCRIPTION]
+ *  Representation of a credential
  * </p>
  *
  * <p>
@@ -28,6 +30,23 @@ package org.arastreju.sge.security;
  */
 public interface Credential {
 
+	/**
+	 * Check if the credential applies to this credential node.
+	 * @param node The node representing an credential. 
+	 * @return true if this credential applies to the node.
+	 */
+	boolean applies(SemanticNode node);
+	
+	/**
+	 * Get the string representation of the credential.
+	 * @return The string representation.
+	 */
 	String stringRepesentation();
+	
+	/**
+	 * Check if this credential is empty, i.e. there is no credential.
+	 * @return true if the credential is empty.
+	 */
+	boolean isEmpty();
 	
 }

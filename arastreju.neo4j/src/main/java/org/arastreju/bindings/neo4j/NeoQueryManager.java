@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.arastreju.bindings.neo4j.impl.NeoDataStore;
-import org.arastreju.bindings.neo4j.impl.TxAction;
+import org.arastreju.bindings.neo4j.index.ResourceIndex;
 import org.arastreju.bindings.neo4j.mapping.RelationMapper;
 import org.arastreju.sge.apriori.RDF;
 import org.arastreju.sge.model.ResourceID;
@@ -29,10 +29,9 @@ import org.arastreju.sge.query.QueryManager;
 import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
-import org.neo4j.index.IndexHits;
-import org.neo4j.index.IndexService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import static org.arastreju.sge.SNOPS.*;
 
 /**
  * <p>
@@ -47,7 +46,7 @@ import org.slf4j.LoggerFactory;
  */
 public class NeoQueryManager extends QueryManager implements NeoConstants {
 
-	private final NeoDataStore store;
+	private final ResourceIndex index;
 	
 	private final Logger logger = LoggerFactory.getLogger(NeoQueryManager.class);
 
@@ -57,8 +56,7 @@ public class NeoQueryManager extends QueryManager implements NeoConstants {
 	 * Constructor.
 	 */
 	public NeoQueryManager(final NeoDataStore store) {
-		this.store = store;
-		
+		this.index = new ResourceIndex(store);
 	}
 	
 	// -----------------------------------------------------
@@ -68,7 +66,7 @@ public class NeoQueryManager extends QueryManager implements NeoConstants {
 	 */
 	@Override
 	public List<ResourceNode> findByTag(final String tag) {
-		final List<ResourceNode> result = findByKeyValue(INDEX_KEY_RESOURCE_VALUE, tag);
+		final List<ResourceNode> result = index.lookup(INDEX_KEY_RESOURCE_VALUE, tag);
 		logger.debug("found for tag '" + tag + "': " + result);
 		return result;
 	}
@@ -78,8 +76,8 @@ public class NeoQueryManager extends QueryManager implements NeoConstants {
 	 */
 	@Override
 	public List<ResourceNode> findByTag(final ResourceID predicate, final String tag) {
-		final String property = predicate.getQualifiedName().toURI();
-		final List<ResourceNode> result = findByKeyValue(property, tag);
+		final String property = uri(predicate);
+		final List<ResourceNode> result = index.lookup(property, tag);
 		logger.debug("found for predicate '" + property + "'and tag '" + tag + "': " + result);
 		return result;
 	}
@@ -90,9 +88,9 @@ public class NeoQueryManager extends QueryManager implements NeoConstants {
 	@Override
 	public List<Association> findIncomingAssociations(final ResourceID resource) {
 		final List<Association> result = new ArrayList<Association>();
-		final RelationMapper mapper = new RelationMapper(store);
+		final RelationMapper mapper = new RelationMapper(index.getStore());
 
-		final Node node = store.getIndexService().getSingleNode(INDEX_KEY_RESOURCE_URI, resource.getQualifiedName().toURI());
+		final Node node = index.getIndexService().getSingleNode(INDEX_KEY_RESOURCE_URI, uri(resource));
 		for (Relationship rel : node.getRelationships(Direction.INCOMING)) {
 			result.add(mapper.toArasAssociation(rel));
 		}
@@ -105,30 +103,14 @@ public class NeoQueryManager extends QueryManager implements NeoConstants {
 	 */
 	@Override
 	public List<ResourceNode> findByType(final ResourceID type) {
-		final String predicate = RDF.TYPE.getQualifiedName().toURI();
-		final String typeURI = type.getQualifiedName().toURI();
-		final List<ResourceNode> result = findByKeyValue(predicate, typeURI);
+		final String predicate = uri(RDF.TYPE);
+		final String typeURI = uri(type);
+		final List<ResourceNode> result = index.lookup(predicate, typeURI);
 		logger.debug("found with rdf:type '" + typeURI + "': " + result);
 		return result;
 	}
 	
 	// -----------------------------------------------------
 	
-	/**
-	 * Find in Index by key and value.
-	 */
-	protected List<ResourceNode> findByKeyValue(final String key, final String value) {
-		final List<ResourceNode> result = new ArrayList<ResourceNode>();
-		store.doTransacted(new TxAction() {
-			public void execute(final NeoDataStore store) {
-				final IndexService index = store.getIndexService();
-				final IndexHits<Node> nodes = index.getNodes(key, value);
-				for (Node node : nodes) {
-					result.add(store.findResource(node));
-				}
-			}
-		});
-		return result;
-	}
 
 }

@@ -15,7 +15,9 @@
  */
 package org.arastreju.sge;
 
+import org.arastreju.sge.security.Identity;
 import org.arastreju.sge.spi.ArastrejuGateFactory;
+import org.arastreju.sge.spi.GateContext;
 
 /**
  * <p>
@@ -34,8 +36,8 @@ public final class Arastreju {
 
 	// -----------------------------------------------------
 
-	private final String defaultFactoryClass;
-	private final ArastrejuGateFactory defaultFactory;
+	private final String factoryClass;
+	private final ArastrejuGateFactory factory;
 
 	// -----------------------------------------------------
 
@@ -49,8 +51,9 @@ public final class Arastreju {
 	
 	/**
 	 * Get a Arastreju instance for a given profile.
+	 * A profile describes the binding to the graph store (e.g. Neo4j).
 	 * For future use!
-	 * @param profile The name of the Arastreju profile.
+	 * @param profile The name/path of the Arastreju profile.
 	 * @return the instance
 	 */
 	public static Arastreju getInstance(final String profile) {
@@ -59,20 +62,42 @@ public final class Arastreju {
 
 	// -----------------------------------------------------
 
-	public ArastrejuGate login(final String username, final String credential) {
-		return defaultFactory.create(null);
+	/**
+	 * Login into the Gate using given username and credentials.
+	 * @param username The unique username.
+	 * @param credentials The users credentials.
+	 * @return The corresponding {@link ArastrejuGate}.
+	 */
+	public ArastrejuGate login(final String username, final String credentials) {
+		return factory.create(new GateContext(username, credentials));
 	}
 
 	/**
 	 * Obtain the root context. Use Carefully! No login will be performed but
 	 * the ArastrejuGate will be used in root context.
 	 * 
-	 * Could be unsupported by specific provider.
+	 * <p>
+	 *  Specific providers can deny root access. Or allow root access only as long
+	 *  as user 'root' has no credential set. 
+	 * </p>
 	 * 
 	 * @return The ArastrejuGate for the root context.
 	 */
 	public ArastrejuGate rootContext() {
-		return defaultFactory.create(null);
+		return rootContext(null);
+	}
+	
+	/**
+	 * Obtain the root context. Use Carefully! ArastrejuGate will be used in root context.
+	 * 
+	 * <p>
+	 *  Specific providers can deny root access. 
+	 * </p>
+	 * 
+	 * @return The ArastrejuGate for the root context.
+	 */
+	public ArastrejuGate rootContext(final String credentials) {
+		return factory.create(new GateContext(Identity.ROOT, credentials));
 	}
 
 	// -----------------------------------------------------
@@ -81,11 +106,19 @@ public final class Arastreju {
 	 * Private constructor.
 	 */
 	private Arastreju() {
-		// TODO: read initialization from file META-INF/arastreju.profile
-		this.defaultFactoryClass = "org.arastreju.bindings.neo4j.Neo4jGateFactory";
+		this("META-INF/arastreju.profile");
+	}
+	
+	/**
+	 * Private constructor.
+	 * @param profile path to the profile file.
+	 */
+	private Arastreju(final String profile) {
+		// TODO: read initialization from profile
+		this.factoryClass = "org.arastreju.bindings.neo4j.Neo4jGateFactory";
 		try {
-			this.defaultFactory = (ArastrejuGateFactory) Class.forName(
-					defaultFactoryClass).newInstance();
+			this.factory = (ArastrejuGateFactory) Class.forName(
+					factoryClass).newInstance();
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}

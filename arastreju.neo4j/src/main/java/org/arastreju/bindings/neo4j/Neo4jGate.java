@@ -24,34 +24,43 @@ import org.arastreju.sge.ContextManager;
 import org.arastreju.sge.IdentityManagement;
 import org.arastreju.sge.ModelingConversation;
 import org.arastreju.sge.TypeSystem;
+import org.arastreju.sge.security.LoginException;
+import org.arastreju.sge.spi.GateContext;
 import org.arastreju.sge.spi.GateInitializationException;
 
 import de.lichtflut.infra.exceptions.NotYetImplementedException;
 
 /**
  * <p>
- * Neo4j specific implementation of {@link ArastrejuGate}.
+ * 	Neo4j specific implementation of {@link ArastrejuGate}.
  * </p>
  * 
  * <p>
- * Created Jan 4, 2011
+ * 	Created Jan 4, 2011
  * </p>
  * 
  * @author Oliver Tigges
  */
 public class Neo4jGate implements ArastrejuGate {
 
-	private NeoDataStore neo4jDataStore;
+	private final NeoDataStore neo4jDataStore;
+	@SuppressWarnings("unused")
+	private final GateContext gateContext;
 
 	// -----------------------------------------------------
 
 	/**
 	 * Initialize default gate.
+	 * @param ctx The gate context.
 	 */
-	public Neo4jGate() throws GateInitializationException {
+	public Neo4jGate(final GateContext ctx) throws GateInitializationException {
+		this.gateContext = ctx;
 		try {
 			this.neo4jDataStore = new NeoDataStore();
+			getIdentityManagement().login(ctx.getUsername(), ctx.getCredential());
 		} catch (IOException e) {
+			throw new GateInitializationException(e);
+		} catch (LoginException e) {
 			throw new GateInitializationException(e);
 		}
 	}
@@ -91,7 +100,7 @@ public class Neo4jGate implements ArastrejuGate {
 	 * @see org.arastreju.sge.ArastrejuGate#getIdentityManagement()
 	 */
 	public IdentityManagement getIdentityManagement() {
-		throw new NotYetImplementedException();
+		return new NeoIdentityManagement(neo4jDataStore);
 	}
 
 }

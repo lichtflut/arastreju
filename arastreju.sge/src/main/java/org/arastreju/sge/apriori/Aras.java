@@ -81,6 +81,10 @@ public interface Aras {
 	public static final ResourceID GROUP = new SimpleResourceID(NAMESPACE_URI, "Group");
 	public static final ResourceID CREDENTIAL = new SimpleResourceID(NAMESPACE_URI, "Credential");
 	
+	public static final ResourceID IDENTIFIED_BY = new SimpleResourceID(NAMESPACE_URI, "isIdentifiedBy");
+	public static final ResourceID HAS_CREDENTIAL = new SimpleResourceID(NAMESPACE_URI, "hasCredential");
+	public static final ResourceID HAS_EMAIL = new SimpleResourceID(NAMESPACE_URI, "hasEmail");
+	
 	// -- SCHEMAS -----------------------------------------
 	
 	public static final ResourceID ACTIVITY_SCHEMA = new SimpleResourceID(NAMESPACE_URI, "ActivitySchema");

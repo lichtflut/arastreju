@@ -144,7 +144,11 @@ public class NeoDataStore implements NeoConstants, ResourceResolver {
 		} else {
 			ResourceNode node = findResource(resource.getQualifiedName());
 			if (node == null){
-				node = persist(resource.asResource());
+				return doTransacted(new TxResultAction<ResourceNode>() {
+					public ResourceNode execute(NeoDataStore store) {
+						return persist(resource.asResource());
+					}
+				});
 			}
 			return node;
 		}

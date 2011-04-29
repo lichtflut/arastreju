@@ -19,6 +19,7 @@ import java.util.Set;
 
 import org.arastreju.sge.model.nodes.ResourceNode;
 import org.arastreju.sge.security.Credential;
+import org.arastreju.sge.security.LoginException;
 import org.arastreju.sge.security.Permission;
 import org.arastreju.sge.security.Role;
 import org.arastreju.sge.security.User;
@@ -38,6 +39,15 @@ import org.arastreju.sge.security.User;
  */
 public interface IdentityManagement {
 	
+	// -- LOGIN -------------------------------------------
+	
+	/**
+	 * Login the user specified by name and credential.
+	 */
+	User login(String uniqueName, Credential credential) throws LoginException;
+	
+	// -- REGISTRATION ------------------------------------
+	
 	/**
 	 * Register a new user.
 	 * @param uniqueName The unique name.
@@ -55,15 +65,13 @@ public interface IdentityManagement {
 	 */
 	User register(String uniqueName, Credential credential, ResourceNode corresponding);
 	
-	User login(String uniqueName, Credential credential);
-	
-	void addUserToRoles(User user, Role... roles);
-	
 	// -- ROLE MANAGEMENT ---------------------------------
 	
 	Role createRole(String name);
 	
 	Set<Role> getRoles();
+	
+	void addUserToRoles(User user, Role... roles);
 	
 	// -- PERMISSION MANAGEMENT ---------------------------
 	
