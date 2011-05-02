@@ -57,7 +57,7 @@ public class Association {
 			subject.addToAssociations(assoc);
 			return assoc;
 		} else {
-			return null;
+			return assoc;
 		}
 	}
 	

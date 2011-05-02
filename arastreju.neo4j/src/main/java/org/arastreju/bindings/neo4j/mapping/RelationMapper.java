@@ -27,8 +27,6 @@ import org.arastreju.sge.model.nodes.views.SNContext;
 import org.arastreju.sge.naming.QualifiedName;
 import org.neo4j.graphdb.Relationship;
 
-import de.lichtflut.infra.exceptions.NotYetImplementedException;
-
 /**
  * <p>
  *  [DESCRIPTION]
@@ -75,9 +73,7 @@ public class RelationMapper implements NeoConstants {
 		}
 		
 		// just create the association, it will be implicitly added to the subject by the create method.
-		Association.create(subject, predicate, object, ctx);
-		
-		throw new NotYetImplementedException();
+		return Association.create(subject, predicate, object, ctx);
 	}
 
 }

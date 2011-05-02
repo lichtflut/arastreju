@@ -89,8 +89,8 @@ public class NeoQueryManager extends QueryManager implements NeoConstants {
 	public List<Association> findIncomingAssociations(final ResourceID resource) {
 		final List<Association> result = new ArrayList<Association>();
 		final RelationMapper mapper = new RelationMapper(index.getStore());
-
 		final Node node = index.getIndexService().getSingleNode(INDEX_KEY_RESOURCE_URI, uri(resource));
+		if((node==null) || (node.getRelationships(Direction.INCOMING)==null)) return result;
 		for (Relationship rel : node.getRelationships(Direction.INCOMING)) {
 			result.add(mapper.toArasAssociation(rel));
 		}
