@@ -96,8 +96,8 @@ public class NeoQueryManagerTest {
 	@Test
 	public void testFindByPredicateAndTag(){
 		final ResourceNode car = new SNResource(qnCar);
-		Association.create(car, Aras.HAS_PROPER_NAME, new SNText("BMW"), null);
-		Association.create(car, RDFS.LABEL, new SNText("Automobil"), null);
+		Association.create(car, Aras.HAS_PROPER_NAME, new SNText("BMW"));
+		Association.create(car, RDFS.LABEL, new SNText("Automobil"));
 		store.attach(car);
 		
 		final List<ResourceNode> result = qm.findByTag(RDFS.LABEL, "Automobil");

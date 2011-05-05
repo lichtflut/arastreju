@@ -42,6 +42,10 @@ public class SNOPS {
 	
 	// -- ASSOCIATION -------------------------------------
 	
+	public static Association associate(final ResourceNode subject, final ResourceID predicate, final SemanticNode object, final Context... contexts){
+		return Association.create(subject, predicate, object, contexts);
+	}
+	
 	public static List<SemanticNode> objects(final Collection<Association> assocs){
 		final List<SemanticNode> result = new ArrayList<SemanticNode>(assocs.size());
 		for (Association assoc : assocs) {

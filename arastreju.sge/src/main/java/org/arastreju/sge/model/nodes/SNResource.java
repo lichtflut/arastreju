@@ -224,7 +224,7 @@ public class SNResource implements ResourceNode {
 	public SemanticNode getSingleAssociationClient(final ResourceID predicate) {
 		final Association assoc = getSingleAssociation(predicate);
 		if (assoc != null){
-			return assoc.getClient();
+			return assoc.getObject();
 		} else {
 			return null;
 		}
@@ -256,10 +256,10 @@ public class SNResource implements ResourceNode {
 			if (assocPred instanceof SNProperty){
 				final SNProperty property = (SNProperty) assocPred;
 				if (property.isSubPropertyOf(predicate)){
-					result.add(assoc.getClient());
+					result.add(assoc.getObject());
 				}
 			} else if (predicate.references(assoc.getPredicate())) {
-				result.add(assoc.getClient());
+				result.add(assoc.getObject());
 			}
 		}
 		return result;

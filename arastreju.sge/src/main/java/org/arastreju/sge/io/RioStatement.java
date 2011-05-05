@@ -63,7 +63,7 @@ public class RioStatement implements Statement {
 	 * @see org.openrdf.model.Statement#getObject()
 	 */
 	public Value getObject() {
-		final SemanticNode object = assoc.getClient();
+		final SemanticNode object = assoc.getObject();
 		if (object.isResourceNode()){
 			return new URIImpl(object.asResource().getQualifiedName().toURI());
 		} else {
@@ -82,7 +82,7 @@ public class RioStatement implements Statement {
 	 * @see org.openrdf.model.Statement#getSubject()
 	 */
 	public Resource getSubject() {
-		final ResourceNode subject = assoc.getSupplier();
+		final ResourceNode subject = assoc.getSubject();
 		if (subject.isBlankNode()){
 			return new BNodeImpl(subject.getName());
 		}

@@ -63,15 +63,15 @@ public class JsonBinding implements SemanticGraphIO {
 	protected void renderEdges(final StringBuilder sb, final Set<Association> assocs) {
 		boolean first = true;
 		for (Association assoc : assocs) {
-			if (assoc.getClient().isResourceNode()){
+			if (assoc.getObject().isResourceNode()){
 				if (first){
 					first = false;
 				} else {
 					sb.append(",");
 				}
 				sb.append("{\n");
-				sb.append("  nodeFrom: '" + assoc.getSupplier().getQualifiedName().toURI() + "', ");
-				sb.append("  nodeTo: '" + assoc.getClient().asResource().getQualifiedName().toURI() + "', ");
+				sb.append("  nodeFrom: '" + assoc.getSubject().getQualifiedName().toURI() + "', ");
+				sb.append("  nodeTo: '" + assoc.getObject().asResource().getQualifiedName().toURI() + "', ");
 				sb.append("}\n");
 			}
 		}
