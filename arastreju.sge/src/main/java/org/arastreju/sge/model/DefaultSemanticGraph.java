@@ -70,7 +70,7 @@ public class DefaultSemanticGraph implements SemanticGraph {
 	public Set<ResourceNode> getSubjects() {
 		final Set<ResourceNode> subjects = new HashSet<ResourceNode>();
 		for(Association assoc : associations){
-			subjects.add(assoc.getSupplier());
+			subjects.add(assoc.getSubject());
 		}
 		return subjects;
 	}
@@ -81,9 +81,9 @@ public class DefaultSemanticGraph implements SemanticGraph {
 	public Collection<Namespace> getNamespaces() {
 		final Set<Namespace> namespaces = new HashSet<Namespace>();
 		for (Association assoc : associations) {
-			addNamespace(assoc.getSupplier(), namespaces);
+			addNamespace(assoc.getSubject(), namespaces);
 			addNamespace(assoc.getPredicate(), namespaces);
-			addNamespace(assoc.getClient(), namespaces);
+			addNamespace(assoc.getObject(), namespaces);
 		}
 		return namespaces;
 	}

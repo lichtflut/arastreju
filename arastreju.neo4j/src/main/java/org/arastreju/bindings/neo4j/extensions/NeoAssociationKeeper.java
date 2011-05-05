@@ -116,8 +116,7 @@ public class NeoAssociationKeeper extends AbstractAssociationKeeper implements N
 				}
 			}
 			
-			// just create the association, it will be implicitly added to the subject by the create method.
-			Association.create(arasNode, predicate, object, ctx);
+			addResolvedAssociation(arasNode, predicate, object, ctx);
 		}
 	}
 

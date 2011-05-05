@@ -234,7 +234,7 @@ public class NeoDataStore implements NeoConstants, ResourceResolver {
 	public void addAssociation(final Node subject, final Association assoc) {
 		doTransacted(new TxAction() {
 			public void execute(NeoDataStore store) {
-				final SemanticNode client = assoc.getClient();
+				final SemanticNode client = assoc.getObject();
 				final ResourceNode predicate = resolve(assoc.getPredicate());
 				
 				Context ctx = assoc.getContext();
@@ -316,7 +316,7 @@ public class NeoDataStore implements NeoConstants, ResourceResolver {
 		final Set<Association> currentAssocs = attached.getAssociations();
 		for(Association assoc : ak.getAssociations()){
 			if (!currentAssocs.contains(assoc)){
-				Association.create(attached, assoc.getPredicate(), assoc.getClient(), assoc.getContext());
+				Association.create(attached, assoc.getPredicate(), assoc.getObject(), assoc.getContexts());
 			}
 		}
 		return attached;

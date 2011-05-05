@@ -61,7 +61,7 @@ public class SNClass extends ResourceView {
 		final Set<SNClass> allSuperClasses = new HashSet<SNClass>();
 		Set<Association> extensions = getAssociations(RDFS.SUB_CLASS_OF);
 		for (Association current : extensions) {
-			SNClass directSuperClass = current.getClient().asResource().asClass();
+			SNClass directSuperClass = current.getObject().asResource().asClass();
 			allSuperClasses.add(directSuperClass);
 			allSuperClasses.addAll(directSuperClass.getSuperClasses());
 		}
@@ -71,7 +71,7 @@ public class SNClass extends ResourceView {
 	public Set<SNClass> getDirectSuperClasses() {
 		final Set<SNClass> superClasses = new HashSet<SNClass>();
 		for (Association current : getAssociations(RDFS.SUB_CLASS_OF)) {
-			final SNClass directImplementedClass = current.getClient().asResource().asClass();
+			final SNClass directImplementedClass = current.getObject().asResource().asClass();
 			superClasses.add(directImplementedClass);
 		}
 		return superClasses;
@@ -84,8 +84,7 @@ public class SNClass extends ResourceView {
 	//-- INSTANCES ----------------------------------------
 	
 	public SNEntity createInstance(Context context){
-		SNEntity instance = new SNEntity();
-		instance.setName("New" + getName());
+		final SNEntity instance = new SNEntity();
 		Association.create(instance, RDF.TYPE, this, context);
 		return instance;
 	}
@@ -108,7 +107,7 @@ public class SNClass extends ResourceView {
 		Set<Association> intensions = getAssociations(RDFS.LABEL);
 		List<SNTerm> terms = new ArrayList<SNTerm>(intensions.size());
 		for (Association assoc : intensions) {
-			terms.add(assoc.getClient().asValue().asTerm());
+			terms.add(assoc.getObject().asValue().asTerm());
 		}
 		return terms;
 	}

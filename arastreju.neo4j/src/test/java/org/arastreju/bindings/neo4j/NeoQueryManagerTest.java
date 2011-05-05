@@ -17,6 +17,7 @@ package org.arastreju.bindings.neo4j;
 
 
 import java.util.List;
+import java.util.Set;
 
 import junit.framework.Assert;
 
@@ -25,7 +26,9 @@ import org.arastreju.sge.apriori.Aras;
 import org.arastreju.sge.apriori.RDF;
 import org.arastreju.sge.apriori.RDFS;
 import org.arastreju.sge.context.Context;
+import org.arastreju.sge.model.DetachedStatement;
 import org.arastreju.sge.model.SimpleResourceID;
+import org.arastreju.sge.model.Statement;
 import org.arastreju.sge.model.associations.Association;
 import org.arastreju.sge.model.nodes.ResourceNode;
 import org.arastreju.sge.model.nodes.SNResource;
@@ -79,8 +82,8 @@ public class NeoQueryManagerTest {
 	@Test
 	public void testFindByTag(){
 		final ResourceNode car = new SNResource(qnCar);
-		Association.create(car, Aras.HAS_PROPER_NAME, new SNText("BMW"), null);
-		Association.create(car, RDFS.LABEL, new SNText("Automobil"), null);
+		Association.create(car, Aras.HAS_PROPER_NAME, new SNText("BMW"));
+		Association.create(car, RDFS.LABEL, new SNText("Automobil"));
 		store.attach(car);
 		
 		final List<ResourceNode> result = qm.findByTag("BMW");
@@ -93,8 +96,8 @@ public class NeoQueryManagerTest {
 	@Test
 	public void testFindByPredicateAndTag(){
 		final ResourceNode car = new SNResource(qnCar);
-		Association.create(car, Aras.HAS_PROPER_NAME, new SNText("BMW"), null);
-		Association.create(car, RDFS.LABEL, new SNText("Automobil"), null);
+		Association.create(car, Aras.HAS_PROPER_NAME, new SNText("BMW"));
+		Association.create(car, RDFS.LABEL, new SNText("Automobil"));
 		store.attach(car);
 		
 		final List<ResourceNode> result = qm.findByTag(RDFS.LABEL, "Automobil");
@@ -132,6 +135,47 @@ public class NeoQueryManagerTest {
 		Assert.assertEquals(2, result3.size());
 		Assert.assertTrue("Expected Bike to be a Class", result3.contains(bike));
 		Assert.assertTrue("Expected Car to be a Class", result3.contains(car));
+	}
+	
+	@Test
+	public void testFindIncomingAssociations() {
+		final Context ctx = null;
+		final ResourceNode car = new SNResource(qnCar);
+		Association.create(car, RDF.TYPE, RDFS.CLASS);
+		store.attach(car);
+		
+		final ResourceNode bike = new SNResource(qnBike);
+		Association.create(bike, RDF.TYPE, RDFS.CLASS);
+		store.attach(bike);
+
+		final SNEntity car1 = car.asClass().createInstance(ctx);
+		store.attach(car1);
+
+		final SNEntity car2 = car.asClass().createInstance(ctx);
+		store.attach(car2);
+		
+		store.detach(car1);
+		store.detach(car2);
+		store.detach(car);
+		store.detach(bike);
+
+		final Set<Statement> result = qm.findIncomingStatements(RDFS.CLASS);
+		Assert.assertNotNull(result);
+		Assert.assertEquals(2, result.size());
+		Assert.assertTrue(result.contains(new DetachedStatement(car, RDF.TYPE, RDFS.CLASS)));
+		Assert.assertTrue(result.contains(new DetachedStatement(bike, RDF.TYPE, RDFS.CLASS)));
+		
+		final Set<Statement> result2 = qm.findIncomingStatements(bike);
+		Assert.assertNotNull(result2);
+		Assert.assertEquals(0, result2.size());
+		
+		final Set<Statement> result3 = qm.findIncomingStatements(car);
+		Assert.assertNotNull(result3);
+		Assert.assertEquals(2, result3.size());
+		Assert.assertTrue(result3.contains(new DetachedStatement(car1, RDF.TYPE, car)));
+		Assert.assertTrue(result3.contains(new DetachedStatement(car2, RDF.TYPE, car)));
+		
+		
 	}
 	
 

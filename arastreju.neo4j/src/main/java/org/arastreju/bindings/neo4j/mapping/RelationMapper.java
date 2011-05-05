@@ -20,7 +20,8 @@ import org.arastreju.bindings.neo4j.NeoConstants;
 import org.arastreju.bindings.neo4j.extensions.SNValueNeo;
 import org.arastreju.bindings.neo4j.impl.ResourceResolver;
 import org.arastreju.sge.context.Context;
-import org.arastreju.sge.model.associations.Association;
+import org.arastreju.sge.model.DetachedStatement;
+import org.arastreju.sge.model.Statement;
 import org.arastreju.sge.model.nodes.ResourceNode;
 import org.arastreju.sge.model.nodes.SemanticNode;
 import org.arastreju.sge.model.nodes.views.SNContext;
@@ -29,7 +30,7 @@ import org.neo4j.graphdb.Relationship;
 
 /**
  * <p>
- *  [DESCRIPTION]
+ *  Simple mapper for Neo4j Relations and Arastreju Statments.
  * </p>
  *
  * <p>
@@ -50,7 +51,7 @@ public class RelationMapper implements NeoConstants {
 	
 	// -----------------------------------------------------
 	
-	public Association toArasAssociation(final Relationship rel){
+	public Statement toArasStatement(final Relationship rel){
 		SemanticNode object = null;
 		Context ctx = null;
 		if (rel.isType(ArasRelTypes.REFERENCE)){
@@ -72,8 +73,8 @@ public class RelationMapper implements NeoConstants {
 			}
 		}
 		
-		// just create the association, it will be implicitly added to the subject by the create method.
-		return Association.create(subject, predicate, object, ctx);
+
+		return new DetachedStatement(subject, predicate, object, ctx);
 	}
 
 }

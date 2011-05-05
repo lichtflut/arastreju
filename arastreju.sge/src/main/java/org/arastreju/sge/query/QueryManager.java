@@ -16,8 +16,10 @@
 package org.arastreju.sge.query;
 
 import java.util.List;
+import java.util.Set;
 
 import org.arastreju.sge.model.ResourceID;
+import org.arastreju.sge.model.Statement;
 import org.arastreju.sge.model.associations.Association;
 import org.arastreju.sge.model.nodes.ResourceNode;
 
@@ -32,14 +34,14 @@ import org.arastreju.sge.model.nodes.ResourceNode;
  *
  * @author Oliver Tigges
  */
-public abstract class QueryManager {
+public interface QueryManager {
 
 	/**
 	 * Find resources with a given tag. 
 	 * @param tag The tag.
 	 * @return The corresponding result list.
 	 */
-	public abstract List<ResourceNode> findByTag(String tag);
+	List<ResourceNode> findByTag(String tag);
 	
 	/**
 	 * Find resources with a given tag on a special predicate.
@@ -48,20 +50,29 @@ public abstract class QueryManager {
 	 * @param tag The tag.
 	 * @return The corresponding result list.
 	 */
-	public abstract List<ResourceNode> findByTag(ResourceID predicate, String tag);
+	List<ResourceNode> findByTag(ResourceID predicate, String tag);
 	
 	/**
 	 * Find resources with the given rdf:type.
 	 * @param type The resource ID of the type.
 	 * @return A list with all resources having given resource type as rdf:type.
 	 */
-	public abstract List<ResourceNode> findByType(ResourceID type);
+	List<ResourceNode> findByType(ResourceID type);
 	
 	/**
 	 * Find all incoming associations for the given resource.
 	 * @param resource The resource.
 	 * @return A list with all associations where the resource is the client/object.
 	 */
-	public abstract List<Association> findIncomingAssociations(ResourceID resource);
+	@Deprecated
+	List<Association> findIncomingAssociations(ResourceID resource);
+
+	/**
+	 * Find all incoming statements for the given resource. These are the statements where
+	 * <code>resource</code> is the object.
+	 * @param resource The resource.
+	 * @return A list with all statements where the resource is the client/object.
+	 */
+	Set<Statement> findIncomingStatements(ResourceID resource);
 	
 }

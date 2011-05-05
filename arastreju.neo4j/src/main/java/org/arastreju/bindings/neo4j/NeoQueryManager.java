@@ -15,14 +15,18 @@
  */
 package org.arastreju.bindings.neo4j;
 
-import java.util.ArrayList;
+import static org.arastreju.sge.SNOPS.uri;
+
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.arastreju.bindings.neo4j.impl.NeoDataStore;
 import org.arastreju.bindings.neo4j.index.ResourceIndex;
 import org.arastreju.bindings.neo4j.mapping.RelationMapper;
 import org.arastreju.sge.apriori.RDF;
 import org.arastreju.sge.model.ResourceID;
+import org.arastreju.sge.model.Statement;
 import org.arastreju.sge.model.associations.Association;
 import org.arastreju.sge.model.nodes.ResourceNode;
 import org.arastreju.sge.query.QueryManager;
@@ -31,7 +35,8 @@ import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import static org.arastreju.sge.SNOPS.*;
+
+import de.lichtflut.infra.exceptions.NoLongerSupportedException;
 
 /**
  * <p>
@@ -44,7 +49,7 @@ import static org.arastreju.sge.SNOPS.*;
  *
  * @author Oliver Tigges
  */
-public class NeoQueryManager extends QueryManager implements NeoConstants {
+public class NeoQueryManager implements QueryManager, NeoConstants {
 
 	private final ResourceIndex index;
 	
@@ -61,20 +66,19 @@ public class NeoQueryManager extends QueryManager implements NeoConstants {
 	
 	// -----------------------------------------------------
 	
-	/* (non-Javadoc)
-	 * @see org.arastreju.sge.query.QueryManager#findByTag()
+	/**
+	 * {@inheritDoc}
 	 */
-	@Override
 	public List<ResourceNode> findByTag(final String tag) {
 		final List<ResourceNode> result = index.lookup(INDEX_KEY_RESOURCE_VALUE, tag);
 		logger.debug("found for tag '" + tag + "': " + result);
 		return result;
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.arastreju.sge.query.QueryManager#findByTag(org.arastreju.sge.model.ResourceID, java.lang.String)
+	/**
+	 * {@inheritDoc}
 	 */
-	@Override
+	
 	public List<ResourceNode> findByTag(final ResourceID predicate, final String tag) {
 		final String property = uri(predicate);
 		final List<ResourceNode> result = index.lookup(property, tag);
@@ -82,26 +86,31 @@ public class NeoQueryManager extends QueryManager implements NeoConstants {
 		return result;
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.arastreju.sge.query.QueryManager#findIncomingAssociations(org.arastreju.sge.model.ResourceID)
+	/**
+	 * {@inheritDoc}
 	 */
-	@Override
 	public List<Association> findIncomingAssociations(final ResourceID resource) {
-		final List<Association> result = new ArrayList<Association>();
+		throw new NoLongerSupportedException();
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	public Set<Statement> findIncomingStatements(final ResourceID resource) {
+		final Set<Statement> result = new HashSet<Statement>();
 		final RelationMapper mapper = new RelationMapper(index.getStore());
 		final Node node = index.getIndexService().getSingleNode(INDEX_KEY_RESOURCE_URI, uri(resource));
 		if((node==null) || (node.getRelationships(Direction.INCOMING)==null)) return result;
 		for (Relationship rel : node.getRelationships(Direction.INCOMING)) {
-			result.add(mapper.toArasAssociation(rel));
+			result.add(mapper.toArasStatement(rel));
 		}
 		
 		return result;
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.arastreju.sge.query.QueryManager#findByType(org.arastreju.sge.model.ResourceID)
+	/**
+	 * {@inheritDoc}
 	 */
-	@Override
 	public List<ResourceNode> findByType(final ResourceID type) {
 		final String predicate = uri(RDF.TYPE);
 		final String typeURI = uri(type);

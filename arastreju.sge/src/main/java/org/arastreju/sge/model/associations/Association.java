@@ -16,11 +16,11 @@
 package org.arastreju.sge.model.associations;
 
 import org.arastreju.sge.context.Context;
+import org.arastreju.sge.model.AbstractStatement;
 import org.arastreju.sge.model.ResourceID;
+import org.arastreju.sge.model.Statement;
 import org.arastreju.sge.model.nodes.ResourceNode;
 import org.arastreju.sge.model.nodes.SemanticNode;
-
-import de.lichtflut.infra.Infra;
 
 /**
  * <p>
@@ -30,29 +30,25 @@ import de.lichtflut.infra.Infra;
  * </p>
  * 
  * <p>
+ * 	An Association is a {@link Statement} that can be attached to a semantic graph.
+ * </p>
+ * 
+ * <p>
  * 	Created: 04.11.2007
  * </p>
  *
  * @author Oliver Tigges
  * 
  */
-public class Association {
-	
-	private final Context context;
-	
-	private final ResourceNode supplier;
-	
-	private final SemanticNode client;
-	
-	private final ResourceID predicate;
+public class Association extends AbstractStatement {
 	
 	// -- STATIC METHODS ----------------------------------
 	
 	/**
 	 * Creates a new Association based on given data.
 	 */
-	public static Association create(final ResourceNode subject, final ResourceID predicate, final SemanticNode object, final Context context){
-		Association assoc =  new Association(subject, predicate, object, context);
+	public static Association create(final ResourceNode subject, final ResourceID predicate, final SemanticNode object, final Context... contexts){
+		Association assoc =  new Association(subject, predicate, object, contexts);
 		if (!subject.hasAssociation(assoc)){
 			subject.addToAssociations(assoc);
 			return assoc;
@@ -64,39 +60,30 @@ public class Association {
 	//-- CONSTRUCTORS -------------------------------------
 	
 	/**
-	 * Private constructor for new Associations. Use the static create() methods.
-	 * @param supplier The supplier of the association.
+	 * Package protected constructor for new Associations. Use the static create() methods.
+	 * @param subject The supplier of the association.
 	 * @param predicate The predicate.
-	 * @param client The client.
+	 * @param object The client.
 	 * @param context The context.
 	 */
-	private Association(final SemanticNode supplier, final ResourceID predicate, final SemanticNode client, final Context context) {
-		if (supplier == null || client == null || predicate == null){
+	Association(final ResourceNode subject, final ResourceID predicate, final SemanticNode object, final Context... contexts) {
+		if (subject == null || object == null || predicate == null){
 			throw new IllegalArgumentException("none of the three triple elements may be null:" +
-					" supplier = " + supplier + "; client = " + client + "; predicate = " + predicate);
+					" supplier = " + subject + "; client = " + object + "; predicate = " + predicate);
 		}
-		this.context = context;
-		this.supplier = supplier.asResource();
-		this.client = client;
+		this.subject = subject;
+		this.object = object;
 		this.predicate = predicate;
+		setContexts(contexts);
 	}
 	
 	//-----------------------------------------------------
 	
-	public ResourceNode getSupplier() {
-		return supplier;
-	}
-
-	public SemanticNode getClient() {
-		return client;
-	}
-
-	public ResourceID getPredicate() {
-		return predicate;
-	}
-	
-	public Context getContext() {
-		return context;
+	/* (non-Javadoc)
+	 * @see org.arastreju.sge.model.associations.Statement#getSubject()
+	 */
+	public ResourceNode getSubject() {
+		return (ResourceNode) subject;
 	}
 	
 	/**
@@ -104,43 +91,47 @@ public class Association {
 	 * @return true if attached.
 	 */
 	public boolean isAttached(){
-		return supplier.isAttached() && client.isAttached() && predicate.isAttached();
+		return subject.isAttached() && object.isAttached() && predicate.isAttached();
 	}
 	
 	// -----------------------------------------------------
 	
 	@Override
-	public boolean equals(Object obj) {
-		if (obj instanceof Association){
-			Association other = (Association) obj;
-			if (!Infra.equals(client, other.getClient())){
-				return false;
-			}
-			if (!Infra.equals(supplier, other.getSupplier())){
-				return false;
-			}
-			if (!Infra.equals(predicate, other.getPredicate())){
-				return false;
-			}
-			if (!Infra.equals(context, other.getContext())){
-				return false;
-			}
-			return true;
-		}
-		return false;
-	}
-
-	@Override
-	public int hashCode() {
-		return supplier.hashCode() + client.hashCode(); 
+	public String toString() {
+		StringBuffer sb = new StringBuffer(subject.toString());
+		sb.append(" " + predicate + " ");
+		sb.append(object);
+		return sb.toString();
 	}
 	
-	@Override
-	public String toString() {
-		StringBuffer sb = new StringBuffer(supplier.toString());
-		sb.append(" " + predicate + " ");
-		sb.append(client);
-		return sb.toString();
+	// -----------------------------------------------------
+	
+	/**
+	 * @deprecated Use getSubject() instead.
+	 */
+	public ResourceNode getSupplier() {
+		return getSubject();
+	}
+	
+	/**
+	 * @deprecated Use getObject() instead.
+	 */
+	public SemanticNode getClient() {
+		return object;
+	}
+	
+	/**
+	 * @deprecated Use getContexts() instead.
+	 */
+	public Context getContext() {
+		final Context[] contexts = super.getContexts();
+		if (contexts == null || contexts.length == 0) {
+			return null;
+		} else if (contexts.length == 1) {
+			return contexts[0];
+		} else {
+			throw new IllegalStateException("Called getContext() when there where " + contexts.length + " contexts.");
+		}
 	}
 
 }
