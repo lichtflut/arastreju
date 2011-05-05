@@ -276,7 +276,7 @@ public class SNResource implements ResourceNode {
 	 * @see org.arastreju.api.ontology.model.sn.ResourceNode#addToAssociations(org.arastreju.api.ontology.model.Association)
 	 */
 	public void addToAssociations(final Association assoc) {
-		if (!assoc.getSupplier().equals(this)){
+		if (!assoc.getSubject().equals(this)){
 			throw new IllegalArgumentException();
 		}
 		associationKeeper.add(assoc);
