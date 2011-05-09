@@ -3,7 +3,7 @@
  */
 package org.arastreju.sge.security;
 
-import eh.ArastrejuException;
+import org.arastreju.sge.eh.ArastrejuException;
 
 /**
  * <p>

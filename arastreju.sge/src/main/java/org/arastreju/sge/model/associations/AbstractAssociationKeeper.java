@@ -73,22 +73,15 @@ public abstract class AbstractAssociationKeeper implements AssociationKeeper {
 
 	public boolean revoke(final Association assoc) {
 		revokedAssociations.add(assoc);
-		return getAssociations().remove(assoc);
+		return getAssociationsInternal().remove(assoc);
 	}
 
 	public void remove(final Association assoc) {
-		getAssociations().remove(assoc);
+		getAssociationsInternal().remove(assoc);
 	}
 
 	public synchronized Set<Association> getAssociations() {
-		if (!resolved){
-			if (!associations.isEmpty()){
-				throw new IllegalArgumentException("node has already an association attached: " + associations);
-			}
-			resolved = true;
-			resolveAssociations();
-		}
-		return Collections.unmodifiableSet(associations);
+		return Collections.unmodifiableSet(getAssociationsInternal());
 	}
 	
 	/**
@@ -116,6 +109,17 @@ public abstract class AbstractAssociationKeeper implements AssociationKeeper {
 	 */
 	protected void addResolvedAssociation(final ResourceNode subject, final ResourceID predicate, final SemanticNode object, final Context... contexts) {
 		associations.add(new Association(subject, predicate, object, contexts));
+	}
+	
+	private synchronized Set<Association> getAssociationsInternal() {
+		if (!resolved){
+			if (!associations.isEmpty()){
+				throw new IllegalArgumentException("node has already an association attached: " + associations);
+			}
+			resolved = true;
+			resolveAssociations();
+		}
+		return associations;
 	}
 
 }

@@ -8,6 +8,7 @@ import junit.framework.Assert;
 import org.arastreju.bindings.neo4j.impl.NeoDataStore;
 import org.arastreju.sge.apriori.Aras;
 import org.arastreju.sge.context.Context;
+import org.arastreju.sge.eh.ErrorCodes;
 import org.arastreju.sge.model.associations.Association;
 import org.arastreju.sge.model.nodes.views.SNClass;
 import org.arastreju.sge.model.nodes.views.SNEntity;
@@ -19,7 +20,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import eh.ErrorCodes;
 
 /**
  * <p>
