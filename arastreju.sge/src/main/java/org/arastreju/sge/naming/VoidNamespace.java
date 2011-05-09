@@ -17,8 +17,6 @@ package org.arastreju.sge.naming;
 
 import org.arastreju.sge.model.ResourceID;
 
-
-
 /**
  * <p>
  * 	Pseudo namespace for names that are not in a namespace. E.g. local names.
@@ -35,7 +33,7 @@ public class VoidNamespace implements Namespace {
 	/**
 	 * Constant for void namespace URI.
 	 */
-	private static final String VOID = "void#";
+	private static final String VOID = "http://void.arasteju.org#";
 	
 	private static final Namespace INSTANCE = new VoidNamespace();
 

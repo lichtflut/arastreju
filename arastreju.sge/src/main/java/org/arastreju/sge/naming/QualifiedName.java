@@ -46,6 +46,7 @@ public class QualifiedName implements Comparable<QualifiedName>, Serializable {
 	//------------------------------------------------------
 	
 	public static boolean isUri(final String name){
+		// TODO: Better URI check
 		return name.indexOf(SLASH) > -1;
 	}
 	
