@@ -10,6 +10,7 @@ import org.arastreju.bindings.neo4j.impl.NeoDataStore;
 import org.arastreju.bindings.neo4j.index.ResourceIndex;
 import org.arastreju.sge.IdentityManagement;
 import org.arastreju.sge.apriori.Aras;
+import org.arastreju.sge.eh.ErrorCodes;
 import org.arastreju.sge.model.nodes.ResourceNode;
 import org.arastreju.sge.model.nodes.views.SNEntity;
 import org.arastreju.sge.security.Credential;
@@ -24,7 +25,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import de.lichtflut.infra.exceptions.NotYetImplementedException;
-import eh.ErrorCodes;
 
 /**
  * <p>

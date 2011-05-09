@@ -15,17 +15,24 @@
  */
 package org.arastreju.sge;
 
+import java.util.Properties;
+
 import org.arastreju.sge.security.Identity;
 import org.arastreju.sge.spi.ArastrejuGateFactory;
 import org.arastreju.sge.spi.GateContext;
 
 /**
  * <p>
- * Central API class for obtaining an {@link ArastrejuGate}.
+ *  Central API class for obtaining an {@link ArastrejuGate}.
  * </p>
  * 
  * <p>
- * Created Jan 4, 2011
+ *  You obtain an Arastreju instance by one of the <code>getInstance(...)</code> methods, where you
+ *  can pass the profile to be used (see {@link ArastrejuProfile}).
+ * </p>
+ * 
+ * <p>
+ *  Created Jan 4, 2011
  * </p>
  * 
  * @author Oliver Tigges
@@ -52,11 +59,31 @@ public final class Arastreju {
 	/**
 	 * Get a Arastreju instance for a given profile.
 	 * A profile describes the binding to the graph store (e.g. Neo4j).
-	 * For future use!
 	 * @param profile The name/path of the Arastreju profile.
 	 * @return the instance
 	 */
 	public static Arastreju getInstance(final String profile) {
+		return DEFAULT_INSTANCE;
+	}
+	
+	/**
+	 * Get a Arastreju instance for a given profile.
+	 * A profile describes the binding to the graph store (e.g. Neo4j).
+	 * @param profile The name/path of the Arastreju profile.
+	 * @param properties Additional properties.
+	 * @return the instance
+	 */
+	public static Arastreju getInstance(final String profile, final Properties properties) {
+		return DEFAULT_INSTANCE;
+	}
+	
+	/**
+	 * Get a Arastreju instance for a given profile.
+	 * A profile describes the binding to the graph store (e.g. Neo4j).
+	 * @param profile An initialized ArastrejuProfile.
+	 * @return the instance
+	 */
+	public static Arastreju getInstance(final ArastrejuProfile profile) {
 		return DEFAULT_INSTANCE;
 	}
 
@@ -94,10 +121,11 @@ public final class Arastreju {
 	 *  Specific providers can deny root access. 
 	 * </p>
 	 * 
+	 * @param credential The credential of user 'root'.
 	 * @return The ArastrejuGate for the root context.
 	 */
-	public ArastrejuGate rootContext(final String credentials) {
-		return factory.create(new GateContext(Identity.ROOT, credentials));
+	public ArastrejuGate rootContext(final String credential) {
+		return factory.create(new GateContext(Identity.ROOT, credential));
 	}
 
 	// -----------------------------------------------------
@@ -106,7 +134,7 @@ public final class Arastreju {
 	 * Private constructor.
 	 */
 	private Arastreju() {
-		this("META-INF/arastreju.profile");
+		this(ArastrejuProfile.read());
 	}
 	
 	/**
@@ -114,8 +142,15 @@ public final class Arastreju {
 	 * @param profile path to the profile file.
 	 */
 	private Arastreju(final String profile) {
-		// TODO: read initialization from profile
-		this.factoryClass = "org.arastreju.bindings.neo4j.Neo4jGateFactory";
+		this(ArastrejuProfile.read(profile));
+	}
+	
+	/**
+	 * Private constructor.
+	 * @param profile path to the profile file.
+	 */
+	private Arastreju(final ArastrejuProfile profile) {
+		this.factoryClass = profile.getProperty(ArastrejuProfile.GATE_FACTORY);
 		try {
 			this.factory = (ArastrejuGateFactory) Class.forName(
 					factoryClass).newInstance();

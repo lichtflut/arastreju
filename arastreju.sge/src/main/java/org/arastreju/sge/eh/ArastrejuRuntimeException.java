@@ -1,7 +1,7 @@
 /*
  * Copyright (C) 2011 lichtflut Forschungs- und Entwicklungsgesellschaft mbH
  */
-package eh;
+package org.arastreju.sge.eh;
 
 /**
  * <p>
@@ -14,7 +14,7 @@ package eh;
  *
  * @author Oliver Tigges
  */
-public class ArastrejuException extends Exception {
+public class ArastrejuRuntimeException extends RuntimeException {
 
 	private final Long errCode;
 
@@ -23,14 +23,14 @@ public class ArastrejuException extends Exception {
 	/**
 	 * Constructor;
 	 */
-	public ArastrejuException(final Long errCode) {
+	public ArastrejuRuntimeException(final Long errCode) {
 		this.errCode = errCode;
 	}
 	
 	/**
 	 * Constructor;
 	 */
-	public ArastrejuException(final Long errCode, final String msg) {
+	public ArastrejuRuntimeException(final Long errCode, final String msg) {
 		super(msg);
 		this.errCode = errCode;
 	}
@@ -38,7 +38,7 @@ public class ArastrejuException extends Exception {
 	/**
 	 * Constructor;
 	 */
-	public ArastrejuException(final Long errCode, final String msg, final Throwable cause) {
+	public ArastrejuRuntimeException(final Long errCode, final String msg, final Throwable cause) {
 		super(msg, cause);
 		this.errCode = errCode;
 	}
