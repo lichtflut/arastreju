@@ -111,7 +111,11 @@ public abstract class AbstractAssociationKeeper implements AssociationKeeper {
 		associations.add(new Association(subject, predicate, object, contexts));
 	}
 	
-	private synchronized Set<Association> getAssociationsInternal() {
+	protected Set<Association> getAssociationsDirectly() {
+		return associations;
+	}
+	
+	protected synchronized Set<Association> getAssociationsInternal() {
 		if (!resolved){
 			if (!associations.isEmpty()){
 				throw new IllegalArgumentException("node has already an association attached: " + associations);
@@ -121,5 +125,7 @@ public abstract class AbstractAssociationKeeper implements AssociationKeeper {
 		}
 		return associations;
 	}
+	
+	
 
 }

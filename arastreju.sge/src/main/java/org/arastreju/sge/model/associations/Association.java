@@ -15,6 +15,8 @@
  */
 package org.arastreju.sge.model.associations;
 
+import java.io.Serializable;
+
 import org.arastreju.sge.context.Context;
 import org.arastreju.sge.model.AbstractStatement;
 import org.arastreju.sge.model.ResourceID;
@@ -40,7 +42,7 @@ import org.arastreju.sge.model.nodes.SemanticNode;
  * @author Oliver Tigges
  * 
  */
-public class Association extends AbstractStatement {
+public class Association extends AbstractStatement implements Serializable {
 	
 	// -- STATIC METHODS ----------------------------------
 	

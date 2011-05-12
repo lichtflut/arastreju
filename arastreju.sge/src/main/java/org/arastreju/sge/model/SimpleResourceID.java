@@ -15,6 +15,8 @@
  */
 package org.arastreju.sge.model;
 
+import java.io.Serializable;
+
 import org.arastreju.sge.model.nodes.ResourceNode;
 import org.arastreju.sge.model.nodes.SNResource;
 import org.arastreju.sge.model.nodes.ValueNode;
@@ -23,13 +25,17 @@ import org.arastreju.sge.naming.QualifiedName;
 import org.arastreju.sge.naming.SimpleNamespace;
 
 /**
- * Simple implementation of transient {@link ResourceID}.
+ * <p>
+ * 	Simple implementation of transient {@link ResourceID}.
+ * </p>
  * 
- * Created: 02.02.2009
+ * <p>
+ * 	Created: 02.02.2009
+ * </p>
  *
  * @author Oliver Tigges
  */
-public class SimpleResourceID implements ResourceID {
+public class SimpleResourceID implements ResourceID, Serializable {
 	
 	private final QualifiedName qualifiedName;
 	

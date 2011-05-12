@@ -16,6 +16,7 @@
 package org.arastreju.sge.model.associations;
 
 
+import java.io.Serializable;
 import java.util.Set;
 
 /**
@@ -29,7 +30,7 @@ import java.util.Set;
  *
  * @author Oliver Tigges
  */
-public class DetachedAssociationKeeper extends AbstractAssociationKeeper implements AssociationKeeper {
+public class DetachedAssociationKeeper extends AbstractAssociationKeeper implements Serializable {
 
 	/**
 	 * Default constructor.

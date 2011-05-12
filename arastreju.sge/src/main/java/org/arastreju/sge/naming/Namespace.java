@@ -26,7 +26,7 @@ package org.arastreju.sge.naming;
  *
  * @author Oliver Tigges 
  */
-public interface Namespace extends Comparable<Namespace>{
+public interface Namespace extends Comparable<Namespace> {
 
 	/**
 	 * The URI of this namespace.

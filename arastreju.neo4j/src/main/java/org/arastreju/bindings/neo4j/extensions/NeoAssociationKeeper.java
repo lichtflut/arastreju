@@ -15,6 +15,8 @@
  */
 package org.arastreju.bindings.neo4j.extensions;
 
+import java.io.Serializable;
+
 import org.arastreju.bindings.neo4j.ArasRelTypes;
 import org.arastreju.bindings.neo4j.NeoConstants;
 import org.arastreju.bindings.neo4j.impl.NeoDataStore;
@@ -22,6 +24,7 @@ import org.arastreju.sge.context.Context;
 import org.arastreju.sge.model.associations.AbstractAssociationKeeper;
 import org.arastreju.sge.model.associations.Association;
 import org.arastreju.sge.model.associations.AssociationKeeper;
+import org.arastreju.sge.model.associations.DetachedAssociationKeeper;
 import org.arastreju.sge.model.nodes.ResourceNode;
 import org.arastreju.sge.model.nodes.SemanticNode;
 import org.arastreju.sge.model.nodes.views.SNContext;
@@ -43,7 +46,7 @@ import org.slf4j.LoggerFactory;
  *
  * @author Oliver Tigges
  */
-public class NeoAssociationKeeper extends AbstractAssociationKeeper implements NeoConstants{
+public class NeoAssociationKeeper extends AbstractAssociationKeeper implements NeoConstants, Serializable {
 	
 	private final ResourceNode arasNode;
 	private final Node neoNode;
@@ -118,6 +121,15 @@ public class NeoAssociationKeeper extends AbstractAssociationKeeper implements N
 			
 			addResolvedAssociation(arasNode, predicate, object, ctx);
 		}
+	}
+	
+	/**
+	 * Called when beeing serialized --> Replace by detached assoc keeper
+	 * @return A Detached Association Keeper.
+	 */
+	private Object writeReplace() {
+		logger.info("Serializing NeoAssociationKeeper --> Detaching");
+		return new DetachedAssociationKeeper(getAssociationsDirectly());
 	}
 
 }

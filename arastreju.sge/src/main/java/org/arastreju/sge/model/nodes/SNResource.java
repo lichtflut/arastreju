@@ -15,6 +15,7 @@
  */
 package org.arastreju.sge.model.nodes;
 
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
@@ -44,7 +45,7 @@ import org.arastreju.sge.naming.VoidNamespace;
  *
  * @author Oliver Tigges
  */
-public class SNResource implements ResourceNode {
+public class SNResource implements ResourceNode, Serializable {
 	
 	private String name;
 	

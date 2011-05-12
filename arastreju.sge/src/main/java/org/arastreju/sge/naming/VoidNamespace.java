@@ -15,6 +15,8 @@
  */
 package org.arastreju.sge.naming;
 
+import java.io.Serializable;
+
 import org.arastreju.sge.model.ResourceID;
 
 /**
@@ -28,7 +30,7 @@ import org.arastreju.sge.model.ResourceID;
  *
  * @author Oliver Tigges 
  */
-public class VoidNamespace implements Namespace {
+public class VoidNamespace implements Namespace, Serializable {
 	
 	/**
 	 * Constant for void namespace URI.

@@ -22,7 +22,13 @@ import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+
+import junit.framework.Assert;
 
 import org.arastreju.bindings.neo4j.ArasRelTypes;
 import org.arastreju.bindings.neo4j.NeoConstants;
@@ -127,7 +133,7 @@ public class NeoDataStoreTest {
 		final IndexService index = store.getIndexService();
 		
 		final ResourceNode car = new SNResource(qnCar);
-		Association.create(car, Aras.HAS_PROPER_NAME, new SNText("BMW"), null);
+		Association.create(car, Aras.HAS_PROPER_NAME, new SNText("BMW"));
 		
 		store.attach(car);
 		
@@ -162,7 +168,7 @@ public class NeoDataStoreTest {
 		
 		store.attach(car);
 		
-		Association.create(car, Aras.HAS_PROPER_NAME, new SNText("BMW"), null);
+		Association.create(car, Aras.HAS_PROPER_NAME, new SNText("BMW"));
 		store.detach(car);
 		
 		final ResourceNode car2 = store.findResource(qnCar);
@@ -177,8 +183,8 @@ public class NeoDataStoreTest {
 		final ResourceNode vehicle = new SNResource(qnVehicle);
 		final ResourceNode car = new SNResource(qnCar);
 		
-		Association.create(car, RDFS.SUB_CLASS_OF, vehicle, null);
-		Association.create(car, Aras.HAS_PROPER_NAME, new SNText("BMW"), null);
+		Association.create(car, RDFS.SUB_CLASS_OF, vehicle);
+		Association.create(car, Aras.HAS_PROPER_NAME, new SNText("BMW"));
 		
 		store.attach(car);
 		
@@ -201,14 +207,14 @@ public class NeoDataStoreTest {
 		
 		store.attach(car1);
 		
-		Association.create(car1, Aras.HAS_BRAND_NAME, new SNText("BMW"), null);
+		Association.create(car1, Aras.HAS_BRAND_NAME, new SNText("BMW"));
 		
 		// detach 
 		store.detach(car1);
 		store.detach(vehicle);
 		
-		Association.create(car1, RDFS.SUB_CLASS_OF, vehicle, null);
-		Association.create(car1, Aras.HAS_PROPER_NAME, new SNText("Knut"), null);
+		Association.create(car1, RDFS.SUB_CLASS_OF, vehicle);
+		Association.create(car1, Aras.HAS_PROPER_NAME, new SNText("Knut"));
 
 		// attach again
 		store.attach(car1);
@@ -239,6 +245,28 @@ public class NeoDataStoreTest {
 		
 		final ResourceNode node = store.findResource(qn);
 		assertNotNull(node);
+	}
+	
+	@Test
+	public void testSerialization() throws IOException, OntologyIOException, ClassNotFoundException {
+		final SemanticGraphIO io = new RdfXmlBinding();
+		final SemanticGraph graph = io.read(getClass().getClassLoader().getResourceAsStream("n04.aras.rdf"));
+		store.attach(graph);
+		final QualifiedName qn = new QualifiedName("http://arastreju.org/kernel#BrandName");
+		final ResourceNode node = store.findResource(qn);
+		
+		Assert.assertTrue(node.isAttached());
+		
+		final ByteArrayOutputStream out = new ByteArrayOutputStream();
+		new ObjectOutputStream(out).writeObject(node);
+		
+		byte[] bytes = out.toByteArray();
+		out.close();
+		
+		final ObjectInputStream in = new ObjectInputStream(new ByteArrayInputStream(bytes));
+		
+		final ResourceNode read = (ResourceNode) in.readObject();
+		Assert.assertFalse(read.isAttached());
 	}
 
 }

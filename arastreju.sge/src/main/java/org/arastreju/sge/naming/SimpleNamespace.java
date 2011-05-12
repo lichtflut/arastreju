@@ -16,6 +16,8 @@
 package org.arastreju.sge.naming;
 
 
+import java.io.Serializable;
+
 import de.lichtflut.infra.Infra;
 
 /**
@@ -29,7 +31,7 @@ import de.lichtflut.infra.Infra;
  *
  * @author Oliver Tigges
  */
-public class SimpleNamespace implements Namespace, Comparable<Namespace> {
+public class SimpleNamespace implements Namespace, Comparable<Namespace>, Serializable {
 	
 	private String uri;
 	

@@ -164,12 +164,15 @@ public class QualifiedName implements Comparable<QualifiedName>, Serializable {
 	
 	@Override
 	public boolean equals(Object obj) {
-		QualifiedName other = (QualifiedName) obj;
-		boolean eq = Infra.equals(name, other.name) && Infra.equals(namespace, other.namespace);
-		if (!eq && toURI().equals(other.toURI())){
-			throw new IllegalStateException("Same URI but different namespace/name");
+		if (obj instanceof QualifiedName) {
+			QualifiedName other = (QualifiedName) obj;
+			boolean eq = Infra.equals(name, other.name) && Infra.equals(namespace, other.namespace);
+			if (!eq && toURI().equals(other.toURI())){
+				throw new IllegalStateException("Same URI but different namespace/name");
+			}
+			return eq;
 		}
-		return eq;
+		return false;
 	}
 	
 	// -----------------------------------------------------

@@ -15,6 +15,7 @@
  */
 package org.arastreju.sge.model.nodes;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Date;
@@ -39,12 +40,17 @@ import org.arastreju.sge.model.nodes.views.SNUri;
  *
  * @author Oliver Tigges
  */
-public class SNValue implements ValueNode {
+public class SNValue implements ValueNode, Serializable {
 	
 	private final ElementaryDataType datatype;
 	
 	private final Object value;
 
+	/**
+	 * Constructor.
+	 * @param datatype The datatype.
+	 * @param value The value.
+	 */
 	public SNValue(final ElementaryDataType datatype, final Object value) {
 		this.datatype = datatype;
 		this.value = value;

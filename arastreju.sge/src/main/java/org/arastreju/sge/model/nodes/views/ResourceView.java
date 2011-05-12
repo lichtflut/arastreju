@@ -15,6 +15,7 @@
  */
 package org.arastreju.sge.model.nodes.views;
 
+import java.io.Serializable;
 import java.util.Set;
 
 import org.arastreju.sge.model.ResourceID;
@@ -37,7 +38,7 @@ import org.arastreju.sge.naming.QualifiedName;
  *
  * @author Oliver Tigges
  */
-public abstract class ResourceView implements ResourceNode {
+public abstract class ResourceView implements ResourceNode, Serializable {
 
 	private final ResourceNode resource;
 	
