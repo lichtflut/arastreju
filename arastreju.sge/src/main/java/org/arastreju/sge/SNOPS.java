@@ -6,6 +6,7 @@ package org.arastreju.sge;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 import org.arastreju.sge.context.Context;
 import org.arastreju.sge.model.ResourceID;
@@ -43,6 +44,16 @@ public class SNOPS {
 	// -- ASSOCIATION -------------------------------------
 	
 	public static Association associate(final ResourceNode subject, final ResourceID predicate, final SemanticNode object, final Context... contexts){
+		return Association.create(subject, predicate, object, contexts);
+	}
+	
+	public static Association replace(final ResourceNode subject, final ResourceID predicate, final SemanticNode object, final Context... contexts){
+		final Set<Association> existing = subject.getAssociations(predicate);
+		if (existing.size() == 1) {
+			subject.remove(existing.iterator().next());
+		} else if (existing.size() > 1) {
+			throw new IllegalStateException("replace not possible if more than one associations exists: " + existing);
+		}
 		return Association.create(subject, predicate, object, contexts);
 	}
 	

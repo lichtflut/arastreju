@@ -57,10 +57,10 @@ public class RapvhiShow {
 		
 		SNClass personClass = new SNResource(qn).asClass();
 		
-		SNEntity raphi = personClass.createInstance(null, new QualifiedName("http://lf.de/people#Raphi"));
-		SNEntity raphi2 = personClass.createInstance(null, new QualifiedName("http://lf.de/people#Raphi"));
+		SNEntity raphi = personClass.createInstance(new QualifiedName("http://lf.de/people#Raphi"), null);
+		SNEntity raphi2 = personClass.createInstance(new QualifiedName("http://lf.de/people#Raphi"), null);
 		
-		SNEntity ravi = personClass.createInstance(null, new QualifiedName("http://lf.de/people#Ravi"));
+		SNEntity ravi = personClass.createInstance(new QualifiedName("http://lf.de/people#Ravi"), null);
 		
 		mc.attach(raphi);
 		mc.attach(raphi2);
