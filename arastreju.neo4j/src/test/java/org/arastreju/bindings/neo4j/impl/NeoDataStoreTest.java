@@ -282,14 +282,17 @@ public class NeoDataStoreTest {
 		
 		SNOPS.associate(vehicle, pred1, car);
 		SNOPS.associate(car, pred2, vehicle);
-		store.attach(car);
 		store.attach(vehicle);
 		
 		final ResourceNode vehicleLoaded = store.findResource(qnVehicle);
 		final ResourceNode carLoaded = store.findResource(qnCar);
 		
-		System.out.println(vehicleLoaded.getAssociations());
-		System.out.println(carLoaded.getAssociations());
+		Assert.assertFalse(vehicleLoaded.getAssociations().isEmpty());
+		Assert.assertFalse(carLoaded.getAssociations().isEmpty());
+		
+		Assert.assertFalse(vehicleLoaded.getAssociations(pred1).isEmpty());
+		Assert.assertFalse(carLoaded.getAssociations(pred2).isEmpty());
+		
 	}
 
 }
