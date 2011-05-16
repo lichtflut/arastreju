@@ -92,6 +92,16 @@ public abstract class AbstractAssociationKeeper implements AssociationKeeper {
 	}
 	
 	// -----------------------------------------------------
+	
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return getClass().getSimpleName() + " " + getAssociationsDirectly();
+	}
+	
+	// -----------------------------------------------------
 
 	/**
 	 * To be overridden by sub classes.

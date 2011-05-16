@@ -32,12 +32,15 @@ import junit.framework.Assert;
 
 import org.arastreju.bindings.neo4j.ArasRelTypes;
 import org.arastreju.bindings.neo4j.NeoConstants;
+import org.arastreju.sge.SNOPS;
 import org.arastreju.sge.apriori.Aras;
 import org.arastreju.sge.apriori.RDFS;
 import org.arastreju.sge.io.OntologyIOException;
 import org.arastreju.sge.io.RdfXmlBinding;
 import org.arastreju.sge.io.SemanticGraphIO;
+import org.arastreju.sge.model.ResourceID;
 import org.arastreju.sge.model.SemanticGraph;
+import org.arastreju.sge.model.SimpleResourceID;
 import org.arastreju.sge.model.associations.Association;
 import org.arastreju.sge.model.nodes.ResourceNode;
 import org.arastreju.sge.model.nodes.SNResource;
@@ -267,6 +270,26 @@ public class NeoDataStoreTest {
 		
 		final ResourceNode read = (ResourceNode) in.readObject();
 		Assert.assertFalse(read.isAttached());
+	}
+	
+	@Test
+	public void testBidirectionalAssociations() {
+		final ResourceNode vehicle = new SNResource(qnVehicle);
+		final ResourceNode car = new SNResource(qnCar);
+		
+		final ResourceID pred1 = new SimpleResourceID("http://arastreju.org/stuff#", "P1");
+		final ResourceID pred2 = new SimpleResourceID("http://arastreju.org/stuff#", "P2");
+		
+		SNOPS.associate(vehicle, pred1, car);
+		SNOPS.associate(car, pred2, vehicle);
+		store.attach(car);
+		store.attach(vehicle);
+		
+		final ResourceNode vehicleLoaded = store.findResource(qnVehicle);
+		final ResourceNode carLoaded = store.findResource(qnCar);
+		
+		System.out.println(vehicleLoaded.getAssociations());
+		System.out.println(carLoaded.getAssociations());
 	}
 
 }

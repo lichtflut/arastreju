@@ -351,16 +351,17 @@ public class NeoDataStore implements NeoConstants, ResourceResolver {
 		indexService.index(neoNode, INDEX_KEY_RESOURCE_URI, qn.toURI());
 		logger.debug("Indexed: " + qn + " --> " + neoNode);
 		
-		// 3rd: register resource.
+		// 3rd: attach the Resource with this store.
+		final Set<Association> copy = node.getAssociations();
+		AssocKeeperAccess.setAssociationKeeper(node, new NeoAssociationKeeper(node, neoNode, this));
+		
+		// 4th: register resource.
 		registry.register(node);
 		
-		// 4th: store all associations.
-		for (Association assoc : node.getAssociations()) {
+		// 5th: store all associations.
+		for (Association assoc : copy) {
 			addAssociation(neoNode, assoc);
 		}
-		
-		// 5th: attach the Resource with this store.
-		AssocKeeperAccess.setAssociationKeeper(node, new NeoAssociationKeeper(node, neoNode, this));
 		
 		return node;
 	}
