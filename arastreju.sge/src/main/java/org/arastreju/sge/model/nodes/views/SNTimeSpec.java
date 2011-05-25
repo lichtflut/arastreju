@@ -18,11 +18,14 @@
  */
 package org.arastreju.sge.model.nodes.views;
 
+import java.text.DateFormat;
 import java.util.Date;
 
 import org.arastreju.sge.model.ElementaryDataType;
 import org.arastreju.sge.model.TimeMask;
 import org.arastreju.sge.model.nodes.SNValue;
+
+import de.lichtflut.infra.exceptions.NotYetSupportedException;
 
 /**
  * Semantic node representing a time specification.
@@ -32,11 +35,22 @@ import org.arastreju.sge.model.nodes.SNValue;
  * @author Oliver Tigges
  */
 public class SNTimeSpec extends ValueView {
+	
+	// -----------------------------------------------------
+	
+	/**
+	 * Creates a new transient time specification, without 'mask'. The default TimeMask.TIMESTAMP
+	 * will be used.
+	 * @param time The time.
+	 */
+	public SNTimeSpec(final Date time){
+		this(time, TimeMask.TIMESTAMP);
+	}
 
 	/**
 	 * Creates a new transient time specification.
-	 * @param time
-	 * @param mask
+	 * @param time The time.
+	 * @param mask The mask.
 	 */
 	public SNTimeSpec(final Date time, final TimeMask mask){
 		super(ElementaryDataType.getCorresponding(mask), time);
@@ -51,5 +65,31 @@ public class SNTimeSpec extends ValueView {
 	}
 	
 	// -----------------------------------------------------
+	
+	/**
+	 * Get the time mask.
+	 */
+	public TimeMask getTimeMask() {
+		return TimeMask.getCorresponding(getDataType());
+	}
+	
+	// -----------------------------------------------------
+	
+	/* (non-Javadoc)
+	 * @see org.arastreju.sge.model.nodes.views.ValueView#toString()
+	 */
+	@Override
+	public String toString() {
+		switch(getTimeMask()) {
+		case DATE:
+			return DateFormat.getDateInstance().format(getTimeValue());
+		case TIME_OF_DAY:
+			return DateFormat.getTimeInstance().format(getTimeValue());
+		case TIMESTAMP:
+			return DateFormat.getDateTimeInstance().format(getTimeValue());
+		default:
+			throw new NotYetSupportedException(getTimeMask());
+		}
+	}
 
 }

@@ -110,8 +110,9 @@ public abstract class AbstractAssociationKeeper implements AssociationKeeper {
 	
 	// -----------------------------------------------------
 	
-	protected void markResolved(){
+	protected AbstractAssociationKeeper markResolved(){
 		resolved = true;
+		return this;
 	}
 	
 	/**

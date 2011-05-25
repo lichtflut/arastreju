@@ -174,8 +174,6 @@ public class NeoQueryManagerTest {
 		Assert.assertEquals(2, result3.size());
 		Assert.assertTrue(result3.contains(new DetachedStatement(car1, RDF.TYPE, car)));
 		Assert.assertTrue(result3.contains(new DetachedStatement(car2, RDF.TYPE, car)));
-		
-		
 	}
 	
 

@@ -42,6 +42,7 @@ public class DetachedAssociationKeeper extends AbstractAssociationKeeper impleme
 	
 	public DetachedAssociationKeeper(final Set<Association> associations){
 		super(associations);
+		markResolved();
 	}
 
 	/* (non-Javadoc)
