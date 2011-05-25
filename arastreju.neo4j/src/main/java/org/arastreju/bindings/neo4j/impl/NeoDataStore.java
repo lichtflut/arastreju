@@ -19,9 +19,11 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Set;
 
+import org.apache.lucene.search.Query;
 import org.arastreju.bindings.neo4j.ArasRelTypes;
 import org.arastreju.bindings.neo4j.NeoConstants;
 import org.arastreju.bindings.neo4j.extensions.NeoAssociationKeeper;
+import org.arastreju.bindings.neo4j.index.ResourceIndexDumper;
 import org.arastreju.bindings.neo4j.mapping.NodeMapper;
 import org.arastreju.sge.context.Context;
 import org.arastreju.sge.model.ResourceID;
@@ -40,7 +42,9 @@ import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.Transaction;
 import org.neo4j.index.IndexService;
-import org.neo4j.index.lucene.LuceneIndexService;
+import org.neo4j.index.lucene.LuceneFulltextDataSource;
+import org.neo4j.index.lucene.LuceneFulltextIndexService;
+import org.neo4j.index.lucene.LuceneFulltextQueryIndexService;
 import org.neo4j.kernel.EmbeddedGraphDatabase;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -67,7 +71,7 @@ public class NeoDataStore implements NeoConstants, ResourceResolver {
 	
 	private final GraphDatabaseService gdbService;
 	
-	private final LuceneIndexService indexService;
+	private final LuceneFulltextIndexService indexService;
 	
 	private final NodeMapper mapper;
 	
@@ -75,6 +79,10 @@ public class NeoDataStore implements NeoConstants, ResourceResolver {
 	
 	private final Logger logger = LoggerFactory.getLogger(NeoDataStore.class);
 
+	private final int CACHE_SIZE = 10000;
+	
+	private final ResourceIndexDumper iDumper;
+	
 	// -----------------------------------------------------
 
 	/**
@@ -90,8 +98,21 @@ public class NeoDataStore implements NeoConstants, ResourceResolver {
 	 */
 	public NeoDataStore(final String dir) {
 		logger.info("Neo4jDataStore created in " + dir);
+		iDumper = new ResourceIndexDumper(dir + "/index" );
 		gdbService = new EmbeddedGraphDatabase(dir); 
-		indexService = new LuceneIndexService(gdbService);
+		indexService = new LuceneFulltextQueryIndexService(gdbService){
+			protected Query formQuery(String key, Object value, Object matching){
+				String val = value.toString();
+				String[] SPECIAL_CHARACTERS = new String[]{
+						"+","-","&&","||","!","(",")","{","}","[","]","^","~","?",":"	
+				};
+				for (int i = 0; i < SPECIAL_CHARACTERS.length; i++) {
+				  val = val.replace(SPECIAL_CHARACTERS[i], "\\" + SPECIAL_CHARACTERS[i]);
+				}
+				return super.formQuery(key, val, matching);
+			}
+		};
+		//indexService.enableCache(INDEX_KEY_RESOURCE_URI, CACHE_SIZE);
 		mapper = new NodeMapper(this);
 	}
 
@@ -190,6 +211,14 @@ public class NeoDataStore implements NeoConstants, ResourceResolver {
 	
 	// -----------------------------------------------------
 
+	/**
+	 * Returns a {@link ResourceIndexDumper} to dump out the current index of this store
+	 */
+	public ResourceIndexDumper getIndexDumper(){
+		return iDumper;
+	}
+	
+	// -----------------------------------------------------
 	
 	/**
 	 * {@inheritDoc}
@@ -378,7 +407,7 @@ public class NeoDataStore implements NeoConstants, ResourceResolver {
 			throw new IOException("Could not create temp directory: "
 					+ temp.getAbsolutePath());
 		}
-
+		
 		return temp.getAbsolutePath();
 	}
 
