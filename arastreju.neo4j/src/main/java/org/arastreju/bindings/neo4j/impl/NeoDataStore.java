@@ -23,6 +23,7 @@ import org.apache.lucene.search.Query;
 import org.arastreju.bindings.neo4j.ArasRelTypes;
 import org.arastreju.bindings.neo4j.NeoConstants;
 import org.arastreju.bindings.neo4j.extensions.NeoAssociationKeeper;
+import org.arastreju.bindings.neo4j.extensions.SNResourceNeo;
 import org.arastreju.bindings.neo4j.index.ResourceIndexDumper;
 import org.arastreju.bindings.neo4j.mapping.NodeMapper;
 import org.arastreju.sge.context.Context;
@@ -32,7 +33,6 @@ import org.arastreju.sge.model.associations.Association;
 import org.arastreju.sge.model.associations.AssociationKeeper;
 import org.arastreju.sge.model.associations.DetachedAssociationKeeper;
 import org.arastreju.sge.model.nodes.ResourceNode;
-import org.arastreju.sge.model.nodes.SNResource;
 import org.arastreju.sge.model.nodes.SemanticNode;
 import org.arastreju.sge.model.nodes.ValueNode;
 import org.arastreju.sge.model.nodes.views.SNContext;
@@ -42,7 +42,6 @@ import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.Transaction;
 import org.neo4j.index.IndexService;
-import org.neo4j.index.lucene.LuceneFulltextDataSource;
 import org.neo4j.index.lucene.LuceneFulltextIndexService;
 import org.neo4j.index.lucene.LuceneFulltextQueryIndexService;
 import org.neo4j.kernel.EmbeddedGraphDatabase;
@@ -79,8 +78,6 @@ public class NeoDataStore implements NeoConstants, ResourceResolver {
 	
 	private final Logger logger = LoggerFactory.getLogger(NeoDataStore.class);
 
-	private final int CACHE_SIZE = 10000;
-	
 	private final ResourceIndexDumper iDumper;
 	
 	// -----------------------------------------------------
@@ -131,8 +128,9 @@ public class NeoDataStore implements NeoConstants, ResourceResolver {
 				final Node neoNode = indexService.getSingleNode(INDEX_KEY_RESOURCE_URI, qn.toURI());
 				logger.debug("IndexLookup: " + qn + " --> " + neoNode); 
 				if (neoNode != null){
-					final SNResource arasNode = mapper.toArasNode(neoNode);
+					final SNResourceNeo arasNode = new SNResourceNeo(qn);
 					registry.register(arasNode);
+					mapper.toArasNode(neoNode, arasNode);
 					return arasNode;
 				} else {
 					return null;
@@ -150,8 +148,9 @@ public class NeoDataStore implements NeoConstants, ResourceResolver {
 		if (registry.contains(qn)){
 			return registry.get(qn);
 		}
-		final SNResource arasNode = mapper.toArasNode(neoNode);
+		final SNResourceNeo arasNode = new SNResourceNeo(qn);
 		registry.register(arasNode);
+		mapper.toArasNode(neoNode, arasNode);
 		return arasNode;
 	}
 	

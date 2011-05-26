@@ -16,6 +16,7 @@
 package org.arastreju.sge.spi;
 
 import org.arastreju.sge.ArastrejuGate;
+import org.arastreju.sge.ArastrejuProfile;
 
 /**
  * <p>
@@ -29,7 +30,29 @@ import org.arastreju.sge.ArastrejuGate;
  * @author Oliver Tigges
  */
 public abstract class ArastrejuGateFactory {
+	
+	private final ArastrejuProfile profile;
+
+	// -----------------------------------------------------
+	
+	/**
+	 * Constructor.
+	 */
+	public ArastrejuGateFactory(final ArastrejuProfile profile) {
+		this.profile = profile;
+	}
+	
+	// -----------------------------------------------------
 
 	public abstract ArastrejuGate create(final GateContext ctx) throws GateInitializationException;
+	
+	// -----------------------------------------------------+
+	
+	/**
+	 * @return the profile
+	 */
+	protected ArastrejuProfile getProfile() {
+		return profile;
+	}
 	
 }

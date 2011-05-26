@@ -20,6 +20,7 @@ import java.io.IOException;
 import org.arastreju.bindings.neo4j.impl.NeoDataStore;
 import org.arastreju.bindings.neo4j.impl.NeoTypeSystem;
 import org.arastreju.sge.ArastrejuGate;
+import org.arastreju.sge.ArastrejuProfile;
 import org.arastreju.sge.ContextManager;
 import org.arastreju.sge.IdentityManagement;
 import org.arastreju.sge.ModelingConversation;
@@ -51,12 +52,17 @@ public class Neo4jGate implements ArastrejuGate {
 
 	/**
 	 * Initialize default gate.
+	 * @param profile The Arastreju profile.
 	 * @param ctx The gate context.
 	 */
-	public Neo4jGate(final GateContext ctx) throws GateInitializationException {
+	public Neo4jGate(final ArastrejuProfile profile, final GateContext ctx) throws GateInitializationException {
 		this.gateContext = ctx;
 		try {
-			this.neo4jDataStore = new NeoDataStore();
+			if (profile.isDefined(ArastrejuProfile.ARAS_STORE_DIRECTORY)){
+				this.neo4jDataStore = new NeoDataStore(profile.getProperty(ArastrejuProfile.ARAS_STORE_DIRECTORY));
+			} else {
+				this.neo4jDataStore = new NeoDataStore();
+			}
 			getIdentityManagement().login(ctx.getUsername(), ctx.getCredential());
 		} catch (IOException e) {
 			throw new GateInitializationException(e);

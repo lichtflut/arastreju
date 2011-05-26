@@ -30,6 +30,8 @@ public class ArastrejuProfile {
 	
 	public static final String GATE_FACTORY = "org.arastreju.gate-factory";
 	
+	public static final String ARAS_STORE_DIRECTORY = "org.arastreju.store.directory";
+	
 	public static final String FILE_SUFFIX = ".profile";
 	
 	public static final String STANDARD_DIR = "META-INF";
@@ -121,6 +123,15 @@ public class ArastrejuProfile {
 	}
 	
 	/**
+	 * Checks if a key is defined in the profile.
+	 * @param key The key.
+	 * @return true if a value for the key is defined.
+	 */
+	public boolean isDefined(final String key) {
+		return properties.containsKey(key);
+	}
+	
+	/**
 	 * Get a single property.
  	 * @param key The key.
 	 * @return The value.
@@ -148,6 +159,16 @@ public class ArastrejuProfile {
 	public ArastrejuProfile setProperty(final String key, final String value) {
 		properties.setProperty(key, value);
 		return this;
+	}
+	
+	// -----------------------------------------------------
+	
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return properties.toString();
 	}
 
 }

@@ -16,6 +16,7 @@
 package org.arastreju.bindings.neo4j;
 
 import org.arastreju.sge.ArastrejuGate;
+import org.arastreju.sge.ArastrejuProfile;
 import org.arastreju.sge.spi.ArastrejuGateFactory;
 import org.arastreju.sge.spi.GateContext;
 import org.arastreju.sge.spi.GateInitializationException;
@@ -33,12 +34,21 @@ import org.arastreju.sge.spi.GateInitializationException;
  */
 public class Neo4jGateFactory extends ArastrejuGateFactory {
 
+	/**
+	 * Constructor.
+	 */
+	public Neo4jGateFactory(final ArastrejuProfile profile) {
+		super(profile);
+	}
+	
+	// -----------------------------------------------------
+	
 	/* (non-Javadoc)
 	 * @see org.arastreju.sge.spi.AbstractSpiGateFactory#create()
 	 */
 	@Override
 	public ArastrejuGate create(final GateContext ctx) throws GateInitializationException {
-		return new Neo4jGate(ctx);
+		return new Neo4jGate(getProfile(), ctx);
 	}
 
 }

@@ -21,7 +21,6 @@ import org.arastreju.bindings.neo4j.extensions.SNResourceNeo;
 import org.arastreju.bindings.neo4j.extensions.SNValueNeo;
 import org.arastreju.bindings.neo4j.impl.AssocKeeperAccess;
 import org.arastreju.bindings.neo4j.impl.NeoDataStore;
-import org.arastreju.sge.model.associations.Association;
 import org.arastreju.sge.model.nodes.ResourceNode;
 import org.arastreju.sge.model.nodes.SNResource;
 import org.arastreju.sge.model.nodes.SNValue;
@@ -59,13 +58,7 @@ public class NodeMapper implements NeoConstants {
 		neoNode.setProperty(PROPERTY_URI, arasNode.getQualifiedName().toURI());
 	}
 	
-	public SNResource toArasNode(final Node neoNode){
-		final String uri = (String) neoNode.getProperty(NeoConstants.PROPERTY_URI);
-		final QualifiedName qn = new QualifiedName(uri);
-		
-		final SNResourceNeo arasNode = 
-			new SNResourceNeo(qn);
-		
+	public void toArasNode(final Node neoNode, final SNResource arasNode){
 		final NeoAssociationKeeper assocKeeper = new NeoAssociationKeeper(arasNode, neoNode, store);
 		
 		AssocKeeperAccess.setAssociationKeeper(arasNode, assocKeeper);
@@ -76,18 +69,18 @@ public class NodeMapper implements NeoConstants {
 				// Resource Relation
 				ResourceNode object = store.findResource(rel.getEndNode());
 				ResourceNode predicate = store.findResource(new QualifiedName(rel.getProperty(PREDICATE_URI).toString()));
-				Association.create(arasNode, predicate, object, null);
+				assocKeeper.addResolvedAssociation(arasNode, predicate, object);
 			} else if (neoClient.hasProperty(PROPERTY_VALUE)){
 				// Value assignment
 				final SNValue value = new SNValueNeo(neoClient);
 				ResourceNode predicate = store.findResource(new QualifiedName(rel.getProperty(PREDICATE_URI).toString()));
-				Association.create(arasNode, predicate, value, null);
+				assocKeeper.addResolvedAssociation(arasNode, predicate, value);
 			} else {
 				throw new IllegalStateException("Relation end has neither URI nor Value");
 			}
 		}
 		
-		return arasNode;
+		assocKeeper.markResolved();
 	}
-
+	
 }

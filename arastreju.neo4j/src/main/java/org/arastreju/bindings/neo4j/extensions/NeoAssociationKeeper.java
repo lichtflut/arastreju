@@ -21,6 +21,7 @@ import org.arastreju.bindings.neo4j.ArasRelTypes;
 import org.arastreju.bindings.neo4j.NeoConstants;
 import org.arastreju.bindings.neo4j.impl.NeoDataStore;
 import org.arastreju.sge.context.Context;
+import org.arastreju.sge.model.ResourceID;
 import org.arastreju.sge.model.associations.AbstractAssociationKeeper;
 import org.arastreju.sge.model.associations.Association;
 import org.arastreju.sge.model.associations.AssociationKeeper;
@@ -93,6 +94,23 @@ public class NeoAssociationKeeper extends AbstractAssociationKeeper implements N
 	}
 	
 	// -----------------------------------------------------
+	
+	/* (non-Javadoc)
+	 * @see org.arastreju.sge.model.associations.AbstractAssociationKeeper#addResolvedAssociation(org.arastreju.sge.model.nodes.ResourceNode, org.arastreju.sge.model.ResourceID, org.arastreju.sge.model.nodes.SemanticNode, org.arastreju.sge.context.Context[])
+	 */
+	@Override
+	public void addResolvedAssociation(ResourceNode subject,
+			ResourceID predicate, SemanticNode object, Context... contexts) {
+		super.addResolvedAssociation(subject, predicate, object, contexts);
+	}
+	
+	/* (non-Javadoc)
+	 * @see org.arastreju.sge.model.associations.AbstractAssociationKeeper#markResolved()
+	 */
+	@Override
+	public AbstractAssociationKeeper markResolved() {
+		return super.markResolved();
+	}
 	
 	/* (non-Javadoc)
 	 * @see org.arastreju.sge.model.associations.AbstractAssociationKeeper#resolveAssociations()

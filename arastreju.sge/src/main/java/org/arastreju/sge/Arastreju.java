@@ -15,6 +15,7 @@
  */
 package org.arastreju.sge;
 
+import java.lang.reflect.Constructor;
 import java.util.Properties;
 
 import org.arastreju.sge.security.Identity;
@@ -63,7 +64,7 @@ public final class Arastreju {
 	 * @return the instance
 	 */
 	public static Arastreju getInstance(final String profile) {
-		return DEFAULT_INSTANCE;
+		return new Arastreju(profile);
 	}
 	
 	/**
@@ -74,7 +75,7 @@ public final class Arastreju {
 	 * @return the instance
 	 */
 	public static Arastreju getInstance(final String profile, final Properties properties) {
-		return DEFAULT_INSTANCE;
+		return getInstance(ArastrejuProfile.read(profile).addProperties(properties));
 	}
 	
 	/**
@@ -84,7 +85,7 @@ public final class Arastreju {
 	 * @return the instance
 	 */
 	public static Arastreju getInstance(final ArastrejuProfile profile) {
-		return DEFAULT_INSTANCE;
+		return new Arastreju(profile);
 	}
 
 	// -----------------------------------------------------
@@ -149,11 +150,13 @@ public final class Arastreju {
 	 * Private constructor.
 	 * @param profile path to the profile file.
 	 */
+	@SuppressWarnings("rawtypes")
 	private Arastreju(final ArastrejuProfile profile) {
 		this.factoryClass = profile.getProperty(ArastrejuProfile.GATE_FACTORY);
 		try {
-			this.factory = (ArastrejuGateFactory) Class.forName(
-					factoryClass).newInstance();
+			final Constructor constructor = 
+					Class.forName(factoryClass).getConstructor(ArastrejuProfile.class);
+			this.factory = (ArastrejuGateFactory) constructor.newInstance(profile);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
