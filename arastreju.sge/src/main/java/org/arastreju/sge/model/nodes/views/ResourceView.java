@@ -177,8 +177,8 @@ public abstract class ResourceView implements ResourceNode, Serializable {
 	/* (non-Javadoc)
 	 * @see org.arastreju.api.ontology.model.sn.ResourceNode#removeDirectly(org.arastreju.api.ontology.model.Association)
 	 */
-	public void remove(final Association assoc) {
-		resource.remove(assoc);
+	public boolean remove(final Association assoc) {
+		return resource.remove(assoc);
 	}
 	
 	/* (non-Javadoc)

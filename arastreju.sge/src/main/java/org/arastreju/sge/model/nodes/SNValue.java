@@ -28,6 +28,8 @@ import org.arastreju.sge.model.nodes.views.SNText;
 import org.arastreju.sge.model.nodes.views.SNTimeSpec;
 import org.arastreju.sge.model.nodes.views.SNUri;
 
+import de.lichtflut.infra.Infra;
+
 /**
  * <p>
  * 	Base for data nodes. Data nodes may have no outgoing associations 
@@ -209,5 +211,38 @@ public class SNValue implements ValueNode, Serializable {
 	public String toString() {
 		return getStringValue();
 	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result
+				+ ((datatype == null) ? 0 : datatype.hashCode());
+		result = prime * result + ((value == null) ? 0 : value.hashCode());
+		return result;
+	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(final Object obj) {
+		if (obj instanceof ValueNode) {
+			ValueNode other = (ValueNode) obj;
+			if (!Infra.equals(value, other.getValue())) {
+				return false;
+			}
+			if (!Infra.equals(datatype, other.getDataType())) {
+				return false;
+			}
+			return true;
+		}
+		return super.equals(obj);
+	}
+	
+	
 	
 }

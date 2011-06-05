@@ -17,6 +17,7 @@ package org.arastreju.sge.model.associations;
 
 
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -31,6 +32,10 @@ import java.util.Set;
  * @author Oliver Tigges
  */
 public class DetachedAssociationKeeper extends AbstractAssociationKeeper implements Serializable {
+	
+	private final Set<Association> removedAssociations = new HashSet<Association>();
+	
+	// -----------------------------------------------------
 
 	/**
 	 * Default constructor.
@@ -44,12 +49,39 @@ public class DetachedAssociationKeeper extends AbstractAssociationKeeper impleme
 		super(associations);
 		markResolved();
 	}
+	
+	// -----------------------------------------------------
+	
+	/* (non-Javadoc)
+	 * @see org.arastreju.sge.model.associations.AbstractAssociationKeeper#remove(org.arastreju.sge.model.associations.Association)
+	 */
+	@Override
+	public boolean remove(Association assoc) {
+		removedAssociations.add(assoc);
+		return super.remove(assoc);
+	}
+	
+	/* (non-Javadoc)
+	 * @see org.arastreju.sge.model.associations.AbstractAssociationKeeper#reset()
+	 */
+	@Override
+	public void reset() {
+		super.reset();
+		removedAssociations.clear();
+	}
 
 	/* (non-Javadoc)
 	 * @see org.arastreju.sge.model.associations.AssociationKeeper#isAttached()
 	 */
 	public boolean isAttached() {
 		return false;
+	}
+	
+	/* (non-Javadoc)
+	 * @see org.arastreju.sge.model.associations.AssociationKeeper#getAssociationsForRemoval()
+	 */
+	public Set<Association> getAssociationsForRemoval() {
+		return removedAssociations;
 	}
 	
 	/* (non-Javadoc)

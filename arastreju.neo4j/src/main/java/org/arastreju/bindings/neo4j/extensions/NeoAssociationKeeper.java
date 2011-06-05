@@ -16,6 +16,8 @@
 package org.arastreju.bindings.neo4j.extensions;
 
 import java.io.Serializable;
+import java.util.Collections;
+import java.util.Set;
 
 import org.arastreju.bindings.neo4j.ArasRelTypes;
 import org.arastreju.bindings.neo4j.NeoConstants;
@@ -96,20 +98,27 @@ public class NeoAssociationKeeper extends AbstractAssociationKeeper implements N
 	// -----------------------------------------------------
 	
 	/* (non-Javadoc)
+	 * @see org.arastreju.sge.model.associations.AbstractAssociationKeeper#markResolved()
+	 */
+	@Override
+	public AbstractAssociationKeeper markResolved() {
+		return super.markResolved();
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	public Set<Association> getAssociationsForRemoval() {
+		return Collections.emptySet();
+	}
+	
+	/* (non-Javadoc)
 	 * @see org.arastreju.sge.model.associations.AbstractAssociationKeeper#addResolvedAssociation(org.arastreju.sge.model.nodes.ResourceNode, org.arastreju.sge.model.ResourceID, org.arastreju.sge.model.nodes.SemanticNode, org.arastreju.sge.context.Context[])
 	 */
 	@Override
 	public void addResolvedAssociation(ResourceNode subject,
 			ResourceID predicate, SemanticNode object, Context... contexts) {
 		super.addResolvedAssociation(subject, predicate, object, contexts);
-	}
-	
-	/* (non-Javadoc)
-	 * @see org.arastreju.sge.model.associations.AbstractAssociationKeeper#markResolved()
-	 */
-	@Override
-	public AbstractAssociationKeeper markResolved() {
-		return super.markResolved();
 	}
 	
 	/* (non-Javadoc)

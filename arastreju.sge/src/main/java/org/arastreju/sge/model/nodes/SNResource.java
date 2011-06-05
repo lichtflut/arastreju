@@ -295,8 +295,8 @@ public class SNResource implements ResourceNode, Serializable {
 	/* (non-Javadoc)
 	 * @see org.arastreju.api.ontology.model.sn.ResourceNode#remove(org.arastreju.api.ontology.model.Association)
 	 */
-	public void remove(final Association assoc){
-		associationKeeper.remove(assoc);
+	public boolean remove(final Association assoc){
+		return associationKeeper.remove(assoc);
 	}
 	
 	/* (non-Javadoc)

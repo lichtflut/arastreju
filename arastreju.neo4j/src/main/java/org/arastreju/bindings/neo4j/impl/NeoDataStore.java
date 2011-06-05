@@ -338,7 +338,10 @@ public class NeoDataStore implements NeoConstants, ResourceResolver {
 	 */
 	public ResourceNode merge(final ResourceNode attached, final ResourceNode changed) {
 		final AssociationKeeper ak = AssocKeeperAccess.getAssociationKeeper(changed);
-		if (!ak.getRevokedAssociations().isEmpty()){
+		for (Association toBeRemoved : ak.getAssociationsForRemoval()) {
+			attached.remove(toBeRemoved);
+		}
+		if (!ak.getAssociationsForRevocation().isEmpty()){
 			throw new NotYetImplementedException("Revoked Assocs cannot be merged yet.");
 		}
 		final Set<Association> currentAssocs = attached.getAssociations();

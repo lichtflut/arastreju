@@ -17,7 +17,6 @@ package org.arastreju.bindings.neo4j.mapping;
 
 import org.arastreju.bindings.neo4j.NeoConstants;
 import org.arastreju.bindings.neo4j.extensions.NeoAssociationKeeper;
-import org.arastreju.bindings.neo4j.extensions.SNResourceNeo;
 import org.arastreju.bindings.neo4j.extensions.SNValueNeo;
 import org.arastreju.bindings.neo4j.impl.AssocKeeperAccess;
 import org.arastreju.bindings.neo4j.impl.NeoDataStore;

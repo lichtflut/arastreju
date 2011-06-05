@@ -76,8 +76,8 @@ public abstract class AbstractAssociationKeeper implements AssociationKeeper {
 		return getAssociationsInternal().remove(assoc);
 	}
 
-	public void remove(final Association assoc) {
-		getAssociationsInternal().remove(assoc);
+	public boolean remove(final Association assoc) {
+		return getAssociationsInternal().remove(assoc);
 	}
 
 	public synchronized Set<Association> getAssociations() {
@@ -87,7 +87,7 @@ public abstract class AbstractAssociationKeeper implements AssociationKeeper {
 	/**
 	 * @return the revokedAssociations
 	 */
-	public Set<Association> getRevokedAssociations() {
+	public Set<Association> getAssociationsForRevocation() {
 		return revokedAssociations;
 	}
 	

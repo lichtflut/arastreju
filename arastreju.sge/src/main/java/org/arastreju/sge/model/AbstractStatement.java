@@ -29,7 +29,7 @@ public class AbstractStatement implements Statement {
 	protected ResourceID predicate;
 	protected SemanticNode object;
 	
-	private Context[] contexts;
+	private Context[] contexts = NO_CTX;
 	
 	// -----------------------------------------------------
 
@@ -84,8 +84,8 @@ public class AbstractStatement implements Statement {
 					throw new IllegalArgumentException("Null context not allowed!");
 				}
 			}
-			// TODO: Copy and Sort!
-			this.contexts = contexts;
+			this.contexts = Arrays.copyOf(contexts, contexts.length);
+			Arrays.sort(this.contexts);
 		}
 	}
 

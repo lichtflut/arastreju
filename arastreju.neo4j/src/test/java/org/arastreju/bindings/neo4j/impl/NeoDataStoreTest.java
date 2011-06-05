@@ -294,5 +294,62 @@ public class NeoDataStoreTest {
 		Assert.assertFalse(carLoaded.getAssociations(pred2).isEmpty());
 		
 	}
+	
+	@Test
+	public void testDirectRemoval() {
+		final ResourceNode vehicle = new SNResource(qnVehicle);
+		final ResourceNode car1 = new SNResource(qnCar);
+		
+		final Association association = Association.create(car1, Aras.HAS_BRAND_NAME, new SNText("BMW"));
+		Association.create(car1, RDFS.SUB_CLASS_OF, vehicle);
+		Association.create(car1, Aras.HAS_PROPER_NAME, new SNText("Knut"));
+		
+		store.attach(car1);
+		
+		final Association stored = car1.getSingleAssociation(Aras.HAS_BRAND_NAME);
+		Assert.assertEquals(association.hashCode(), stored.hashCode());
+		
+		Assert.assertEquals(3, car1.getAssociations().size());
+		Assert.assertFalse(car1.getAssociations(Aras.HAS_BRAND_NAME).isEmpty());
+		Assert.assertTrue("Association not present", car1.getAssociations().contains(association));
+		
+		final boolean removedFlag = car1.remove(association);
+		Assert.assertTrue(removedFlag);
+		
+		Assert.assertEquals(2, car1.getAssociations().size());
+		Assert.assertTrue(car1.getAssociations( Aras.HAS_BRAND_NAME).isEmpty());
+		
+	}
+	
+	@Test
+	public void testAttachingRemoval() {
+		final ResourceNode vehicle = new SNResource(qnVehicle);
+		final ResourceNode car1 = new SNResource(qnCar);
+		
+		store.attach(car1);
+		
+		final Association association = Association.create(car1, Aras.HAS_BRAND_NAME, new SNText("BMW"));
+		Association.create(car1, RDFS.SUB_CLASS_OF, vehicle);
+		Association.create(car1, Aras.HAS_PROPER_NAME, new SNText("Knut"));
+		
+		// detach 
+		store.detach(car1);
+		
+		Assert.assertEquals(3, car1.getAssociations().size());
+		Assert.assertFalse(car1.getAssociations(Aras.HAS_BRAND_NAME).isEmpty());
+		Assert.assertTrue("Association not present", car1.getAssociations().contains(association));
+		
+		final boolean removedFlag = car1.remove(association);
+		Assert.assertTrue(removedFlag);
+		
+		store.attach(car1);
+		
+		final ResourceNode car2 = store.findResource(qnCar);
+		assertNotSame(car1, car2);
+		
+		Assert.assertEquals(2, car2.getAssociations().size());
+		Assert.assertTrue(car2.getAssociations( Aras.HAS_BRAND_NAME).isEmpty());
+		
+	}
 
 }

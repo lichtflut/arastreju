@@ -40,13 +40,21 @@ public interface AssociationKeeper {
 
 	boolean revoke(Association assoc);
 
-	void remove(final Association assoc);
-
-	Set<Association> getAssociations();
+	boolean remove(Association assoc);
 
 	/**
-	 * @return The revoked Associations.
+	 * @return The active Associations.
 	 */
-	Set<Association> getRevokedAssociations();
+	Set<Association> getAssociations();
+	
+	/**
+	 * @return The Associations to be revoked on attachment.
+	 */
+	Set<Association> getAssociationsForRevocation();
+	
+	/**
+	 * @return The Associations to be removed on attachment.
+	 */
+	Set<Association> getAssociationsForRemoval();
 
 }
