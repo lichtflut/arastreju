@@ -21,7 +21,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.arastreju.bindings.neo4j.impl.NeoDataStore;
+import org.arastreju.bindings.neo4j.impl.SemanticNetworkAccess;
 import org.arastreju.bindings.neo4j.index.ResourceIndex;
 import org.arastreju.bindings.neo4j.mapping.RelationMapper;
 import org.arastreju.sge.apriori.RDF;
@@ -60,7 +60,7 @@ public class NeoQueryManager implements QueryManager, NeoConstants {
 	/**
 	 * Constructor.
 	 */
-	public NeoQueryManager(final NeoDataStore store) {
+	public NeoQueryManager(final SemanticNetworkAccess store) {
 		this.index = new ResourceIndex(store);
 	}
 	

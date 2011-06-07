@@ -21,7 +21,7 @@ import java.util.Set;
 
 import org.arastreju.bindings.neo4j.ArasRelTypes;
 import org.arastreju.bindings.neo4j.NeoConstants;
-import org.arastreju.bindings.neo4j.impl.NeoDataStore;
+import org.arastreju.bindings.neo4j.impl.SemanticNetworkAccess;
 import org.arastreju.sge.context.Context;
 import org.arastreju.sge.model.ResourceID;
 import org.arastreju.sge.model.associations.AbstractAssociationKeeper;
@@ -53,7 +53,7 @@ public class NeoAssociationKeeper extends AbstractAssociationKeeper implements N
 	
 	private final ResourceNode arasNode;
 	private final Node neoNode;
-	private final NeoDataStore store;
+	private final SemanticNetworkAccess store;
 	
 	private final Logger logger = LoggerFactory.getLogger(NeoAssociationKeeper.class);
 	
@@ -64,7 +64,7 @@ public class NeoAssociationKeeper extends AbstractAssociationKeeper implements N
 	 * @param arasNode The aras node
 	 * @param neoNode The neo node.
 	 */
-	public NeoAssociationKeeper(final ResourceNode arasNode, final Node neoNode, final NeoDataStore store) {
+	public NeoAssociationKeeper(final ResourceNode arasNode, final Node neoNode, final SemanticNetworkAccess store) {
 		this.arasNode = arasNode;
 		this.neoNode = neoNode;
 		this.store = store;

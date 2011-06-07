@@ -5,6 +5,8 @@ package org.arastreju.sge;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 
 import org.arastreju.sge.eh.ArastrejuRuntimeException;
@@ -41,6 +43,8 @@ public class ArastrejuProfile {
 	public static final String DEFAULT_PROFILE = "arastreju.default.profile";
 	
 	private final Properties properties = new Properties();
+	
+	private final Map<String, Object> profileObjects = new HashMap<String, Object>();
 	
 	// -----------------------------------------------------
 	
@@ -113,7 +117,7 @@ public class ArastrejuProfile {
 		return in;
 	}
 	
-	// -----------------------------------------------------
+	// -- PROPERTIES --------------------------------------
 	
 	/**
 	 * @return the properties
@@ -127,7 +131,7 @@ public class ArastrejuProfile {
 	 * @param key The key.
 	 * @return true if a value for the key is defined.
 	 */
-	public boolean isDefined(final String key) {
+	public boolean isPropertyDefined(final String key) {
 		return properties.containsKey(key);
 	}
 	
@@ -158,6 +162,26 @@ public class ArastrejuProfile {
 	 */
 	public ArastrejuProfile setProperty(final String key, final String value) {
 		properties.setProperty(key, value);
+		return this;
+	}
+	
+	// -- PROFILE OBJECTS ----------------------------------
+	
+	/**
+	 * @return the properties
+	 */
+	public Object getProfileObject(final String key) {
+		return profileObjects.get(key);
+	}
+	
+	/**
+	 * Set a single property.
+	 * @param key The key.
+	 * @param value The value.
+ 	 * @return This.
+	 */
+	public ArastrejuProfile setProfileObject(final String key, final Object value) {
+		profileObjects.put(key, value);
 		return this;
 	}
 	

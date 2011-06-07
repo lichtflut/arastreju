@@ -6,7 +6,7 @@ package org.arastreju.bindings.neo4j.index;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.arastreju.bindings.neo4j.impl.NeoDataStore;
+import org.arastreju.bindings.neo4j.impl.SemanticNetworkAccess;
 import org.arastreju.bindings.neo4j.impl.TxAction;
 import org.arastreju.sge.model.ResourceID;
 import org.arastreju.sge.model.nodes.ResourceNode;
@@ -28,7 +28,7 @@ import static org.arastreju.sge.SNOPS.*;
  */
 public class ResourceIndex {
 	
-	private final NeoDataStore store;
+	private final SemanticNetworkAccess store;
 	private final IndexService service;
 
 	// -----------------------------------------------------
@@ -37,7 +37,7 @@ public class ResourceIndex {
 	 * Constructor.
 	 * @param store The neo data store.
 	 */
-	public ResourceIndex(final NeoDataStore store) {
+	public ResourceIndex(final SemanticNetworkAccess store) {
 		this.store = store;
 		this.service = store.getIndexService();
 	}
@@ -54,7 +54,7 @@ public class ResourceIndex {
 	/**
 	 * @return the store
 	 */
-	public NeoDataStore getStore() {
+	public SemanticNetworkAccess getStore() {
 		return store;
 	}
 	
@@ -80,7 +80,7 @@ public class ResourceIndex {
 	public List<ResourceNode> lookup(final String key, final String value) {
 		final List<ResourceNode> result = new ArrayList<ResourceNode>();
 		store.doTransacted(new TxAction() {
-			public void execute(final NeoDataStore store) {
+			public void execute(final SemanticNetworkAccess store) {
 				final IndexService index = store.getIndexService();
 				final IndexHits<Node> nodes = index.getNodes(key, value);
 				for (Node node : nodes) {

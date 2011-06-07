@@ -5,7 +5,7 @@ package org.arastreju.bindings.neo4j;
 
 import junit.framework.Assert;
 
-import org.arastreju.bindings.neo4j.impl.NeoDataStore;
+import org.arastreju.bindings.neo4j.impl.SemanticNetworkAccess;
 import org.arastreju.sge.apriori.Aras;
 import org.arastreju.sge.context.Context;
 import org.arastreju.sge.eh.ErrorCodes;
@@ -34,7 +34,7 @@ import org.junit.Test;
  */
 public class NeoIdentityManagementTest {
 
-	private NeoDataStore store;
+	private SemanticNetworkAccess store;
 	private NeoIdentityManagement im;
 	
 	// -----------------------------------------------------
@@ -44,7 +44,7 @@ public class NeoIdentityManagementTest {
 	 */
 	@Before
 	public void setUp() throws Exception {
-		store = new NeoDataStore();
+		store = new SemanticNetworkAccess();
 		im = new NeoIdentityManagement(store);
 	}
 

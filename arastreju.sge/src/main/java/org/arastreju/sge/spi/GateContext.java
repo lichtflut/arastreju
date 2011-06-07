@@ -16,6 +16,7 @@
 package org.arastreju.sge.spi;
 
 import org.arastreju.sge.ArastrejuGate;
+import org.arastreju.sge.ArastrejuProfile;
 import org.arastreju.sge.security.Credential;
 import org.arastreju.sge.security.Identity;
 import org.arastreju.sge.security.PasswordCredential;
@@ -32,6 +33,8 @@ import org.arastreju.sge.security.PasswordCredential;
  * @author Oliver Tigges
  */
 public class GateContext {
+
+	private final ArastrejuProfile profile;
 	
 	private String username;
 	
@@ -42,21 +45,19 @@ public class GateContext {
 	/**
 	 * Constructor for username/credential.
 	 */
-	public GateContext(final String username, final String credential) {
-		this.username = username;
-		this.credential = new PasswordCredential(credential);
-	}
-	
-	/**
-	 * Constructor for username/credential.
-	 */
-	public GateContext(final String username, final Credential credential) {
-		this.username = username;
-		this.credential = credential;
+	public GateContext(final ArastrejuProfile profile) {
+		this.profile = profile;
 	}
 	
 	// -----------------------------------------------------
 
+	/**
+	 * @return the profile
+	 */
+	public ArastrejuProfile getProfile() {
+		return profile;
+	}
+	
 	/**
 	 * @return the username
 	 */
@@ -67,8 +68,9 @@ public class GateContext {
 	/**
 	 * @param username the username to set
 	 */
-	public void setUsername(String username) {
+	public GateContext setUsername(String username) {
 		this.username = username;
+		return this;
 	}
 
 	/**
@@ -79,10 +81,19 @@ public class GateContext {
 	}
 
 	/**
-	 * @param credentials the credentials to set
+	 * @param credential the credentials to set
 	 */
-	public void setCredentials(final String credentials) {
-		this.credential = new PasswordCredential(credentials);
+	public GateContext setCredential(final String credential) {
+		setCredential(new PasswordCredential(credential));
+		return this;
+	}
+	
+	/**
+	 * @param credential the credentials to set
+	 */
+	public GateContext setCredential(final Credential credential) {
+		this.credential = credential;
+		return this;
 	}
 	
 	// -----------------------------------------------------

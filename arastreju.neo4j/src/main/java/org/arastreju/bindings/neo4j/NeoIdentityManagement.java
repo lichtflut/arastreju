@@ -6,7 +6,7 @@ package org.arastreju.bindings.neo4j;
 import java.util.List;
 import java.util.Set;
 
-import org.arastreju.bindings.neo4j.impl.NeoDataStore;
+import org.arastreju.bindings.neo4j.impl.SemanticNetworkAccess;
 import org.arastreju.bindings.neo4j.index.ResourceIndex;
 import org.arastreju.sge.IdentityManagement;
 import org.arastreju.sge.apriori.Aras;
@@ -49,7 +49,7 @@ public class NeoIdentityManagement implements IdentityManagement {
 	 * Constructor.
 	 * @param store The neo store.
 	 */
-	public NeoIdentityManagement(final NeoDataStore store) {
+	public NeoIdentityManagement(final SemanticNetworkAccess store) {
 		this.index = new ResourceIndex(store);
 	}
 	

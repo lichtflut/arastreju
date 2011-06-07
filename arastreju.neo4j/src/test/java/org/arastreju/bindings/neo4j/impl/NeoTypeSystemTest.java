@@ -41,14 +41,14 @@ import org.junit.Test;
  */
 public class NeoTypeSystemTest {
 	
-	private NeoDataStore store;
+	private SemanticNetworkAccess store;
 	private NeoTypeSystem typeSystem;
 	
 	// -----------------------------------------------------
 	
 	@Before
 	public void setUp() throws IOException{
-		store = new NeoDataStore();	
+		store = new SemanticNetworkAccess();	
 		typeSystem = new NeoTypeSystem(store);
 	}
 	

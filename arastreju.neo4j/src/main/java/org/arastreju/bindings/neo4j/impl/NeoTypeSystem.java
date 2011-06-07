@@ -50,15 +50,15 @@ public class NeoTypeSystem implements TypeSystem, NeoConstants {
 	private final String RDF_TYPE_URI = RDF.TYPE.getQualifiedName().toString();
 	private final String RDFS_SUB_CLASS = RDFS.SUB_CLASS_OF.getQualifiedName().toString();
 	
-	private final NeoDataStore store;
+	private final SemanticNetworkAccess store;
 
 	// -----------------------------------------------------
 	
 	/**
 	 * Constructor.
-	 * @param store The {@link NeoDataStore}.
+	 * @param store The {@link SemanticNetworkAccess}.
 	 */
-	public NeoTypeSystem(final NeoDataStore store) {
+	public NeoTypeSystem(final SemanticNetworkAccess store) {
 		this.store = store;
 	}
 	

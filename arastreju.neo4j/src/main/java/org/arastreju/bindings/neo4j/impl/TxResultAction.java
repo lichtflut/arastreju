@@ -33,6 +33,6 @@ public interface TxResultAction<T> {
 	/**
 	 * Execute.
 	 */
-	public T execute(NeoDataStore store);
+	public T execute(SemanticNetworkAccess store);
 
 }

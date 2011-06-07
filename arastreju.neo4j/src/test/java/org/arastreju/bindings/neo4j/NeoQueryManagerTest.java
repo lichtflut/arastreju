@@ -21,7 +21,7 @@ import java.util.Set;
 
 import junit.framework.Assert;
 
-import org.arastreju.bindings.neo4j.impl.NeoDataStore;
+import org.arastreju.bindings.neo4j.impl.SemanticNetworkAccess;
 import org.arastreju.sge.apriori.Aras;
 import org.arastreju.sge.apriori.RDF;
 import org.arastreju.sge.apriori.RDFS;
@@ -55,7 +55,7 @@ public class NeoQueryManagerTest {
 	private final QualifiedName qnCar = new QualifiedName("http://q#", "Car");
 	private final QualifiedName qnBike = new QualifiedName("http://q#", "Bike");
 	
-	private NeoDataStore store;
+	private SemanticNetworkAccess store;
 	private NeoQueryManager qm;
 	
 	// -----------------------------------------------------
@@ -65,7 +65,7 @@ public class NeoQueryManagerTest {
 	 */
 	@Before
 	public void setUp() throws Exception {
-		store = new NeoDataStore();
+		store = new SemanticNetworkAccess();
 		qm = new NeoQueryManager(store);
 	}
 

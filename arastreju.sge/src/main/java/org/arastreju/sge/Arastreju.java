@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2010 lichtflut Forschungs- und Entwicklungsgesellschaft mbH
+ * Copyright (C) 2011 lichtflut Forschungs- und Entwicklungsgesellschaft mbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -46,6 +46,7 @@ public final class Arastreju {
 
 	private final String factoryClass;
 	private final ArastrejuGateFactory factory;
+	private final ArastrejuProfile profile;
 
 	// -----------------------------------------------------
 
@@ -93,11 +94,12 @@ public final class Arastreju {
 	/**
 	 * Login into the Gate using given username and credentials.
 	 * @param username The unique username.
-	 * @param credentials The users credentials.
+	 * @param credential The user's credential.
 	 * @return The corresponding {@link ArastrejuGate}.
 	 */
-	public ArastrejuGate login(final String username, final String credentials) {
-		return factory.create(new GateContext(username, credentials));
+	public ArastrejuGate login(final String username, final String credential) {
+		final GateContext ctx = createGateContext(username, credential);
+		return factory.create(ctx);
 	}
 
 	/**
@@ -126,10 +128,19 @@ public final class Arastreju {
 	 * @return The ArastrejuGate for the root context.
 	 */
 	public ArastrejuGate rootContext(final String credential) {
-		return factory.create(new GateContext(Identity.ROOT, credential));
+		return login(Identity.ROOT, credential);
 	}
 
 	// -----------------------------------------------------
+	
+	/**
+	 * Create and initialize the Gate Context.
+	 */
+	private GateContext createGateContext(final String user, final String credential) {
+		return new GateContext(profile).setUsername(user).setCredential(credential);
+	}
+	
+	// -- PRIVATE CONSTRUCTORS -----------------------------
 
 	/**
 	 * Private constructor.
@@ -152,6 +163,7 @@ public final class Arastreju {
 	 */
 	@SuppressWarnings("rawtypes")
 	private Arastreju(final ArastrejuProfile profile) {
+		this.profile = profile;
 		this.factoryClass = profile.getProperty(ArastrejuProfile.GATE_FACTORY);
 		try {
 			final Constructor constructor = 

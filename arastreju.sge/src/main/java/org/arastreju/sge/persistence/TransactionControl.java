@@ -16,9 +16,13 @@
 package org.arastreju.sge.persistence;
 
 /**
- * Interface to transaction controlling of arastreju gate.
+ * <p>
+ * 	Interface to transaction controlling of Arastreju gate.
+ * </p>
  * 
- * Created: 10.07.2008
+ * <p>
+ * 	Created: 10.07.2008
+ * </p>
  *
  * @author Oliver Tigges
  */
@@ -35,12 +39,8 @@ public interface TransactionControl {
 	boolean isInTansaction();
 
 	/**
-	 * @return true if the transaction has been set to rollback. 
-	 */
-	boolean isRollbackOnly();
-
-	/**
 	 * flushes current state to database.
 	 */
 	void flush();
+	
 }

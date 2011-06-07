@@ -33,6 +33,6 @@ public interface TxAction {
 	/**
 	 * Execute.
 	 */
-	public void execute(NeoDataStore store);
+	public void execute(SemanticNetworkAccess store);
 
 }

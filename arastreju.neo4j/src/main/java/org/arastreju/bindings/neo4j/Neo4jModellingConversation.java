@@ -15,7 +15,7 @@
  */
 package org.arastreju.bindings.neo4j;
 
-import org.arastreju.bindings.neo4j.impl.NeoDataStore;
+import org.arastreju.bindings.neo4j.impl.SemanticNetworkAccess;
 import org.arastreju.bindings.neo4j.impl.ResourceRegistry;
 import org.arastreju.sge.ModelingConversation;
 import org.arastreju.sge.model.ResourceID;
@@ -43,7 +43,9 @@ import de.lichtflut.infra.exceptions.NotYetImplementedException;
  */
 public class Neo4jModellingConversation implements ModelingConversation {
 	
-	private final NeoDataStore store;
+	private final SemanticNetworkAccess store;
+	
+	private final TransactionControl txc;
 	
 	@SuppressWarnings("unused")
 	private final Logger logger = LoggerFactory.getLogger(Neo4jModellingConversation.class);
@@ -53,8 +55,9 @@ public class Neo4jModellingConversation implements ModelingConversation {
 	/**
 	 * Create a new Modelling Conversation instance using a given data store.
 	 */
-	public Neo4jModellingConversation(final NeoDataStore graphDb) {
+	public Neo4jModellingConversation(final SemanticNetworkAccess graphDb) {
 		this.store = graphDb;
+		this.txc = graphDb.getTransactionControl();
 	}
 	
 	// -----------------------------------------------------
@@ -131,7 +134,7 @@ public class Neo4jModellingConversation implements ModelingConversation {
 	 * @see org.arastreju.sge.ModellingConversation#getTransactionControl()
 	 */
 	public TransactionControl getTransactionControl() {
-		throw new UnsupportedOperationException("The Neo4JBinding doesn't support external Transaction Control");
+		return txc;
 	}
 	
 	/* (non-Javadoc)

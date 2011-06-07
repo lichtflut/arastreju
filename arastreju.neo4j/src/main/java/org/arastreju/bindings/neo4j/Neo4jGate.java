@@ -17,7 +17,8 @@ package org.arastreju.bindings.neo4j;
 
 import java.io.IOException;
 
-import org.arastreju.bindings.neo4j.impl.NeoDataStore;
+import org.arastreju.bindings.neo4j.impl.GraphDataStore;
+import org.arastreju.bindings.neo4j.impl.SemanticNetworkAccess;
 import org.arastreju.bindings.neo4j.impl.NeoTypeSystem;
 import org.arastreju.sge.ArastrejuGate;
 import org.arastreju.sge.ArastrejuProfile;
@@ -43,8 +44,10 @@ import de.lichtflut.infra.exceptions.NotYetImplementedException;
  * @author Oliver Tigges
  */
 public class Neo4jGate implements ArastrejuGate {
-
-	private final NeoDataStore neo4jDataStore;
+	
+	private static final String KEY_GRAPH_DATA_STORE = "aras:neo4j:profile-object:graph-data-store";
+	
+	private final SemanticNetworkAccess neo4jDataStore;
 	@SuppressWarnings("unused")
 	private final GateContext gateContext;
 
@@ -55,14 +58,10 @@ public class Neo4jGate implements ArastrejuGate {
 	 * @param profile The Arastreju profile.
 	 * @param ctx The gate context.
 	 */
-	public Neo4jGate(final ArastrejuProfile profile, final GateContext ctx) throws GateInitializationException {
+	public Neo4jGate(final GateContext ctx) throws GateInitializationException {
 		this.gateContext = ctx;
 		try {
-			if (profile.isDefined(ArastrejuProfile.ARAS_STORE_DIRECTORY)){
-				this.neo4jDataStore = new NeoDataStore(profile.getProperty(ArastrejuProfile.ARAS_STORE_DIRECTORY));
-			} else {
-				this.neo4jDataStore = new NeoDataStore();
-			}
+			this.neo4jDataStore = obtainSemanticNetworkAccesss(ctx.getProfile());
 			getIdentityManagement().login(ctx.getUsername(), ctx.getCredential());
 		} catch (IOException e) {
 			throw new GateInitializationException(e);
@@ -107,6 +106,25 @@ public class Neo4jGate implements ArastrejuGate {
 	 */
 	public IdentityManagement getIdentityManagement() {
 		return new NeoIdentityManagement(neo4jDataStore);
+	}
+	
+	// -----------------------------------------------------
+	
+	private synchronized SemanticNetworkAccess obtainSemanticNetworkAccesss(final ArastrejuProfile profile) throws IOException {
+		GraphDataStore store = (GraphDataStore) profile.getProfileObject(KEY_GRAPH_DATA_STORE);
+		if (store == null) { 
+			store = createStore(profile);
+			profile.setProfileObject(KEY_GRAPH_DATA_STORE, store);
+		}
+		return new SemanticNetworkAccess(store);
+	}
+
+	private GraphDataStore createStore(final ArastrejuProfile profile) throws IOException {
+		if (profile.isPropertyDefined(ArastrejuProfile.ARAS_STORE_DIRECTORY)){
+			return new GraphDataStore(profile.getProperty(ArastrejuProfile.ARAS_STORE_DIRECTORY));
+		} else {
+			return new GraphDataStore();
+		}
 	}
 
 }

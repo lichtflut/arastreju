@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2010 lichtflut Forschungs- und Entwicklungsgesellschaft mbH
+ * Copyright (C) 2011 lichtflut Forschungs- und Entwicklungsgesellschaft mbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,17 +15,18 @@
  */
 package org.arastreju.bindings.neo4j.impl;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.Set;
 
-import org.apache.lucene.search.Query;
 import org.arastreju.bindings.neo4j.ArasRelTypes;
 import org.arastreju.bindings.neo4j.NeoConstants;
 import org.arastreju.bindings.neo4j.extensions.NeoAssociationKeeper;
 import org.arastreju.bindings.neo4j.extensions.SNResourceNeo;
-import org.arastreju.bindings.neo4j.index.ResourceIndexDumper;
+import org.arastreju.bindings.neo4j.index.NeoIndexingService;
 import org.arastreju.bindings.neo4j.mapping.NodeMapper;
+import org.arastreju.bindings.neo4j.tx.NeoTransactionControl;
+import org.arastreju.bindings.neo4j.tx.TxProvider;
+import org.arastreju.bindings.neo4j.tx.TxWrapper;
 import org.arastreju.sge.context.Context;
 import org.arastreju.sge.model.ResourceID;
 import org.arastreju.sge.model.SemanticGraph;
@@ -40,11 +41,7 @@ import org.arastreju.sge.naming.QualifiedName;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
-import org.neo4j.graphdb.Transaction;
 import org.neo4j.index.IndexService;
-import org.neo4j.index.lucene.LuceneFulltextIndexService;
-import org.neo4j.index.lucene.LuceneFulltextQueryIndexService;
-import org.neo4j.kernel.EmbeddedGraphDatabase;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -66,51 +63,48 @@ import de.lichtflut.infra.exceptions.NotYetImplementedException;
  *
  * @author Oliver Tigges
  */
-public class NeoDataStore implements NeoConstants, ResourceResolver {
+public class SemanticNetworkAccess implements NeoConstants, ResourceResolver {
 	
 	private final GraphDatabaseService gdbService;
 	
-	private final LuceneFulltextIndexService indexService;
+	private final NeoIndexingService indexService;
 	
 	private final NodeMapper mapper;
 	
-	private final ResourceRegistry registry = new ResourceRegistry();
+	private final ResourceRegistry registry;
 	
-	private final Logger logger = LoggerFactory.getLogger(NeoDataStore.class);
+	private final TxProvider txProvider;
+	
+	private final Logger logger = LoggerFactory.getLogger(SemanticNetworkAccess.class);
 
-	private final ResourceIndexDumper iDumper;
-	
 	// -----------------------------------------------------
 
 	/**
 	 * Default constructor. Will use a <b>temporary</b> datastore!.
 	 */
-	public NeoDataStore() throws IOException {
-		this(prepareTempStore());
+	public SemanticNetworkAccess() throws IOException {
+		this(new GraphDataStore());
 	}
 	
 	/**
 	 * Constructor. Creates a store using given directory.
 	 * @param dir The directory for the store.
 	 */
-	public NeoDataStore(final String dir) {
-		logger.info("Neo4jDataStore created in " + dir);
-		iDumper = new ResourceIndexDumper(dir + "/index" );
-		gdbService = new EmbeddedGraphDatabase(dir); 
-		indexService = new LuceneFulltextQueryIndexService(gdbService){
-			protected Query formQuery(String key, Object value, Object matching){
-				String val = value.toString();
-				String[] SPECIAL_CHARACTERS = new String[]{
-						"+","-","&&","||","!","(",")","{","}","[","]","^","~","?",":"	
-				};
-				for (int i = 0; i < SPECIAL_CHARACTERS.length; i++) {
-				  val = val.replace(SPECIAL_CHARACTERS[i], "\\" + SPECIAL_CHARACTERS[i]);
-				}
-				return super.formQuery(key, val, matching);
-			}
-		};
-		//indexService.enableCache(INDEX_KEY_RESOURCE_URI, CACHE_SIZE);
-		mapper = new NodeMapper(this);
+	public SemanticNetworkAccess(final String dir) {
+		this(new GraphDataStore(dir));
+	}
+	
+	/**
+	 * Constructor. Creates a store using given directory.
+	 * @param dir The directory for the store.
+	 */
+	public SemanticNetworkAccess(final GraphDataStore store) {
+		this.gdbService = store.getGdbService();
+		this.indexService = store.getIndexService();
+		this.registry = store.getRegistry();
+		
+		this.txProvider = new TxProvider(gdbService);
+		this.mapper = new NodeMapper(this);
 	}
 
 	// -----------------------------------------------------
@@ -124,7 +118,7 @@ public class NeoDataStore implements NeoConstants, ResourceResolver {
 		}
 		// if not yet registered, load and wrap
 		return doTransacted(new TxResultAction<ResourceNode>() {
-			public ResourceNode execute(NeoDataStore store) {
+			public ResourceNode execute(SemanticNetworkAccess store) {
 				final Node neoNode = indexService.getSingleNode(INDEX_KEY_RESOURCE_URI, qn.toURI());
 				logger.debug("IndexLookup: " + qn + " --> " + neoNode); 
 				if (neoNode != null){
@@ -165,7 +159,7 @@ public class NeoDataStore implements NeoConstants, ResourceResolver {
 			ResourceNode node = findResource(resource.getQualifiedName());
 			if (node == null){
 				return doTransacted(new TxResultAction<ResourceNode>() {
-					public ResourceNode execute(NeoDataStore store) {
+					public ResourceNode execute(SemanticNetworkAccess store) {
 						return persist(resource.asResource());
 					}
 				});
@@ -185,7 +179,7 @@ public class NeoDataStore implements NeoConstants, ResourceResolver {
 			return resource;
 		}
 		return doTransacted(new TxResultAction<ResourceNode>() {
-			public ResourceNode execute(NeoDataStore store) {
+			public ResourceNode execute(SemanticNetworkAccess store) {
 				// 2nd: check if node for qualified name exists and has to be merged
 				ResourceNode attached = findResource(resource.getQualifiedName());
 				if (attached != null){
@@ -211,20 +205,11 @@ public class NeoDataStore implements NeoConstants, ResourceResolver {
 	// -----------------------------------------------------
 
 	/**
-	 * Returns a {@link ResourceIndexDumper} to dump out the current index of this store
-	 */
-	public ResourceIndexDumper getIndexDumper(){
-		return iDumper;
-	}
-	
-	// -----------------------------------------------------
-	
-	/**
 	 * {@inheritDoc}
 	 */
 	public SemanticGraph attach(final SemanticGraph graph){
 		return doTransacted(new TxResultAction<SemanticGraph>() {
-			public SemanticGraph execute(NeoDataStore store) {
+			public SemanticGraph execute(SemanticNetworkAccess store) {
 				for(ResourceNode node : graph.getSubjects()){
 					attach(node);
 				}
@@ -261,7 +246,7 @@ public class NeoDataStore implements NeoConstants, ResourceResolver {
 	 */
 	public void addAssociation(final Node subject, final Association assoc) {
 		doTransacted(new TxAction() {
-			public void execute(NeoDataStore store) {
+			public void execute(SemanticNetworkAccess store) {
 				final SemanticNode client = assoc.getObject();
 				final ResourceNode predicate = resolve(assoc.getPredicate());
 				
@@ -305,31 +290,6 @@ public class NeoDataStore implements NeoConstants, ResourceResolver {
 		});
 	}
 	
-	// -----------------------------------------------------
-	
-	public void doTransacted(final TxAction action){
-		Transaction tx = gdbService.beginTx();
-		try {
-			action.execute(this);
-			tx.success();
-		} finally {
-			tx.finish();
-		}
-	}
-	
-	public <T> T doTransacted(final TxResultAction<T> action){
-		Transaction tx = gdbService.beginTx();
-		try {
-			T result = action.execute(this);
-			tx.success();
-			return result;
-		} finally {
-			tx.finish();
-		}
-	}
-	
-	// -----------------------------------------------------
-	
 	/**
 	 * Merges all associations from the 'changed' node to the 'attached' node.
 	 * @param attached The currently attached node.
@@ -365,6 +325,36 @@ public class NeoDataStore implements NeoConstants, ResourceResolver {
 		return registry;
 	}
 	
+	// -- TRANSACTIONS ------------------------------------
+	
+	/**
+	 * @return the transaction control.
+	 */
+	public NeoTransactionControl getTransactionControl() {
+		return new NeoTransactionControl(txProvider);
+	}
+	
+	public void doTransacted(final TxAction action){
+		final TxWrapper tx = txProvider.begin();
+		try {
+			action.execute(this);
+			tx.markSuccessful();
+		} finally {
+			tx.finish();
+		}
+	}
+	
+	public <T> T doTransacted(final TxResultAction<T> action){
+		final TxWrapper tx = txProvider.begin();
+		try {
+			T result = action.execute(this);
+			tx.markSuccessful();
+			return result;
+		} finally {
+			tx.finish();
+		}
+	}
+	
 	// -----------------------------------------------------
 	
 	/**
@@ -397,20 +387,4 @@ public class NeoDataStore implements NeoConstants, ResourceResolver {
 		return node;
 	}
 	
-	// -----------------------------------------------------
-	
-	private static String prepareTempStore() throws IOException {
-		final File temp = File.createTempFile("aras", Long.toString(System.nanoTime()));
-		if (!temp.delete()) {
-			throw new IOException("Could not delete temp file: "
-					+ temp.getAbsolutePath());
-		}
-		if (!temp.mkdir()) {
-			throw new IOException("Could not create temp directory: "
-					+ temp.getAbsolutePath());
-		}
-		
-		return temp.getAbsolutePath();
-	}
-
 }

@@ -19,7 +19,7 @@ import org.arastreju.bindings.neo4j.NeoConstants;
 import org.arastreju.bindings.neo4j.extensions.NeoAssociationKeeper;
 import org.arastreju.bindings.neo4j.extensions.SNValueNeo;
 import org.arastreju.bindings.neo4j.impl.AssocKeeperAccess;
-import org.arastreju.bindings.neo4j.impl.NeoDataStore;
+import org.arastreju.bindings.neo4j.impl.SemanticNetworkAccess;
 import org.arastreju.sge.model.nodes.ResourceNode;
 import org.arastreju.sge.model.nodes.SNResource;
 import org.arastreju.sge.model.nodes.SNValue;
@@ -41,13 +41,13 @@ import org.neo4j.graphdb.Relationship;
  */
 public class NodeMapper implements NeoConstants {
 	
-	private final NeoDataStore store;
+	private final SemanticNetworkAccess store;
 
 	/**
 	 * Default constructor.
 	 * @param neo4jDataStore 
 	 */
-	public NodeMapper(NeoDataStore neo4jDataStore) {
+	public NodeMapper(SemanticNetworkAccess neo4jDataStore) {
 		this.store = neo4jDataStore;
 	}
 	

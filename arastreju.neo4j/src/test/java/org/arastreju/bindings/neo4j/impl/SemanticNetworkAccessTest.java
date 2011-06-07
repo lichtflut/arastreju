@@ -58,7 +58,7 @@ import org.neo4j.index.IndexService;
 
 /**
  * <p>
- *  Test cases for {@link NeoDataStore}.
+ *  Test cases for {@link SemanticNetworkAccess}.
  * </p>
  *
  * <p>
@@ -67,18 +67,18 @@ import org.neo4j.index.IndexService;
  *
  * @author Oliver Tigges
  */
-public class NeoDataStoreTest {
+public class SemanticNetworkAccessTest {
 	
 	private final QualifiedName qnVehicle = new QualifiedName("http://q#", "Verhicle");
 	private final QualifiedName qnCar = new QualifiedName("http://q#", "Car");
 	
-	private NeoDataStore store;
+	private SemanticNetworkAccess store;
 	
 	// -----------------------------------------------------
 	
 	@Before
 	public void setUp() throws IOException{
-		store = new NeoDataStore();	
+		store = new SemanticNetworkAccess();	
 	}
 	
 	@After
