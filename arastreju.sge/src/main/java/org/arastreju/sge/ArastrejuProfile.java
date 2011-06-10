@@ -5,12 +5,18 @@ package org.arastreju.sge;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 
 import org.arastreju.sge.eh.ArastrejuRuntimeException;
 import org.arastreju.sge.eh.ErrorCodes;
+import org.arastreju.sge.spi.GateLifecycleListener;
+import org.arastreju.sge.spi.ProfileCloseListener;
 
 /**
  * <p>
@@ -28,7 +34,7 @@ import org.arastreju.sge.eh.ErrorCodes;
  *
  * @author Oliver Tigges
  */
-public class ArastrejuProfile {
+public class ArastrejuProfile implements GateLifecycleListener {
 	
 	public static final String GATE_FACTORY = "org.arastreju.gate-factory";
 	
@@ -42,9 +48,15 @@ public class ArastrejuProfile {
 	
 	public static final String DEFAULT_PROFILE = "arastreju.default.profile";
 	
+	// -----------------------------------------------------
+	
 	private final Properties properties = new Properties();
 	
 	private final Map<String, Object> profileObjects = new HashMap<String, Object>();
+	
+	private final Set<ArastrejuGate> openGates = new HashSet<ArastrejuGate>();
+	
+	private final List<ProfileCloseListener> listeners = new ArrayList<ProfileCloseListener>();
 	
 	// -----------------------------------------------------
 	
@@ -185,6 +197,47 @@ public class ArastrejuProfile {
 		return this;
 	}
 	
+	// -- PROFILE LIFECYCLE --------------------------------
+	
+	/**
+	 * Add a listener for this profile.
+	 * @param listener The listener.
+	 * @return This.
+	 */
+	public ArastrejuProfile addListener(final ProfileCloseListener listener) {
+		this.listeners.add(listener);
+		return this;
+	}
+	
+	public void close() {
+		for (ArastrejuGate gate : openGates) {
+			gate.close();
+		}
+		for (ProfileCloseListener listener : listeners) {
+			listener.onClosed(this);
+		}
+	}
+	
+	// -- GATE LIFECYCLE -----------------------------------
+	
+
+	/* (non-Javadoc)
+	 * @see org.arastreju.sge.spi.GateLifecycleListener#gateOpened(org.arastreju.sge.ArastrejuGate)
+	 */
+	public void onOpen(final ArastrejuGate gate) {
+		openGates.add(gate);
+	}
+
+	/* (non-Javadoc)
+	 * @see org.arastreju.sge.spi.GateLifecycleListener#gateClosed(org.arastreju.sge.ArastrejuGate)
+	 */
+	public void onClose(final ArastrejuGate gate) {
+		if (!openGates.contains(gate)) {
+			throw new IllegalStateException("Gate is not known by this profile.");
+		}
+		openGates.remove(gate);
+	}
+	
 	// -----------------------------------------------------
 	
 	/* (non-Javadoc)
@@ -194,5 +247,6 @@ public class ArastrejuProfile {
 	public String toString() {
 		return properties.toString();
 	}
+
 
 }

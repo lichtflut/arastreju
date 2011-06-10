@@ -108,6 +108,13 @@ public class Neo4jGate implements ArastrejuGate {
 		return new NeoIdentityManagement(neo4jDataStore);
 	}
 	
+	/* (non-Javadoc)
+	 * @see org.arastreju.sge.ArastrejuGate#close()
+	 */
+	public void close() {
+		throw new NotYetImplementedException();
+	}
+	
 	// -----------------------------------------------------
 	
 	private synchronized SemanticNetworkAccess obtainSemanticNetworkAccesss(final ArastrejuProfile profile) throws IOException {
@@ -115,6 +122,7 @@ public class Neo4jGate implements ArastrejuGate {
 		if (store == null) { 
 			store = createStore(profile);
 			profile.setProfileObject(KEY_GRAPH_DATA_STORE, store);
+			profile.addListener(store);
 		}
 		return new SemanticNetworkAccess(store);
 	}

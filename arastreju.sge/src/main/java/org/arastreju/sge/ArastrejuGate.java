@@ -40,4 +40,9 @@ public interface ArastrejuGate {
 	
 	IdentityManagement getIdentityManagement();
 	
+	/**
+	 * Close the gate and free all resources.
+	 */
+	void close();
+	
 }

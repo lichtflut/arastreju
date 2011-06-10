@@ -7,6 +7,8 @@ import java.io.File;
 import java.io.IOException;
 
 import org.arastreju.bindings.neo4j.index.NeoIndexingService;
+import org.arastreju.sge.ArastrejuProfile;
+import org.arastreju.sge.spi.ProfileCloseListener;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.kernel.EmbeddedGraphDatabase;
 import org.slf4j.Logger;
@@ -23,7 +25,7 @@ import org.slf4j.LoggerFactory;
  *
  * @author Oliver Tigges
  */
-public class GraphDataStore {
+public class GraphDataStore implements ProfileCloseListener {
 	
 	private final GraphDatabaseService gdbService;
 	
@@ -77,6 +79,17 @@ public class GraphDataStore {
 	
 	// -----------------------------------------------------
 	
+	/* (non-Javadoc)
+	 * @see org.arastreju.sge.spi.ProfileCloseListener#onClosed(org.arastreju.sge.ArastrejuProfile)
+	 */
+	public void onClosed(final ArastrejuProfile profile) {
+		gdbService.shutdown();
+		indexService.shutdown();
+		registry.clear();
+	}
+	
+	// -----------------------------------------------------
+	
 	private static String prepareTempStore() throws IOException {
 		final File temp = File.createTempFile("aras", Long.toString(System.nanoTime()));
 		if (!temp.delete()) {
@@ -91,4 +104,5 @@ public class GraphDataStore {
 		return temp.getAbsolutePath();
 	}
 
+	
 }
