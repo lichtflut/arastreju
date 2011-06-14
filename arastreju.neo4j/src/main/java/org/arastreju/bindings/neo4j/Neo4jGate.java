@@ -112,7 +112,6 @@ public class Neo4jGate implements ArastrejuGate {
 	 * @see org.arastreju.sge.ArastrejuGate#close()
 	 */
 	public void close() {
-		throw new NotYetImplementedException();
 	}
 	
 	// -----------------------------------------------------
@@ -121,18 +120,30 @@ public class Neo4jGate implements ArastrejuGate {
 		GraphDataStore store = (GraphDataStore) profile.getProfileObject(KEY_GRAPH_DATA_STORE);
 		if (store == null) { 
 			store = createStore(profile);
-			profile.setProfileObject(KEY_GRAPH_DATA_STORE, store);
-			profile.addListener(store);
+			initStore(store, profile);
 		}
 		return new SemanticNetworkAccess(store);
 	}
 
 	private GraphDataStore createStore(final ArastrejuProfile profile) throws IOException {
-		if (profile.isPropertyDefined(ArastrejuProfile.ARAS_STORE_DIRECTORY)){
+		if (!isTemporaryStore()){
 			return new GraphDataStore(profile.getProperty(ArastrejuProfile.ARAS_STORE_DIRECTORY));
 		} else {
 			return new GraphDataStore();
 		}
+	}
+	
+	private void initStore(final GraphDataStore store, final ArastrejuProfile profile) {
+		profile.addListener(store);
+		if (!isTemporaryStore()) {
+			profile.setProfileObject(KEY_GRAPH_DATA_STORE, store);
+		}
+	}
+	
+	// -----------------------------------------------------
+	
+	private boolean isTemporaryStore() {
+		return !gateContext.getProfile().isPropertyDefined(ArastrejuProfile.ARAS_STORE_DIRECTORY);
 	}
 
 }

@@ -253,6 +253,9 @@ public class SemanticNetworkAccess implements NeoConstants, ResourceResolver {
 				Context ctx = assoc.getContext();
 				if (ctx != null){
 					ctx = new SNContext(resolve(ctx));
+					if (!ctx.isAttached()) {
+						throw new IllegalStateException("Context not attached: " + ctx);
+					}
 				}
 				
 				if (client.isResourceNode()){

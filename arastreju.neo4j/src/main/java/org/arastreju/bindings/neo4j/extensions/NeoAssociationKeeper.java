@@ -141,8 +141,10 @@ public class NeoAssociationKeeper extends AbstractAssociationKeeper implements N
 				ResourceNode node = store.findResource(new QualifiedName(rel.getProperty(CONTEXT_URI).toString()));
 				if (node instanceof Context){
 					ctx = (Context) node;
-				} else {
+				} else if (node != null) {
 					ctx = new SNContext(node);
+				} else {
+					throw new IllegalStateException("Could not find context: " + rel.getProperty(CONTEXT_URI));
 				}
 			}
 			

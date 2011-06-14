@@ -68,8 +68,10 @@ public class RelationMapper implements NeoConstants {
 			ResourceNode node = resolver.findResource(new QualifiedName(rel.getProperty(CONTEXT_URI).toString()));
 			if (node instanceof Context){
 				ctx = (Context) node;
-			} else {
+			} else if (node != null){
 				ctx = new SNContext(node);
+			} else {
+				throw new IllegalStateException("Context node not found: " + rel.getProperty(CONTEXT_URI));
 			}
 		}
 		

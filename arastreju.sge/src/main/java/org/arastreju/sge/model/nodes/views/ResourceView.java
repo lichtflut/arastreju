@@ -49,6 +49,9 @@ public abstract class ResourceView implements ResourceNode, Serializable {
 	 * @param resource The resource to be wrapped.
 	 */
 	public ResourceView(final ResourceNode resource) {
+		if (resource == null) {
+			throw new IllegalArgumentException("null resources not allowed!");
+		}
 		this.resource = resource;
 	}
 	
