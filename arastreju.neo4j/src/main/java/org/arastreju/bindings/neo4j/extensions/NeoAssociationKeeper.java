@@ -21,6 +21,7 @@ import java.util.Set;
 
 import org.arastreju.bindings.neo4j.ArasRelTypes;
 import org.arastreju.bindings.neo4j.NeoConstants;
+import org.arastreju.bindings.neo4j.impl.ContextAccess;
 import org.arastreju.bindings.neo4j.impl.SemanticNetworkAccess;
 import org.arastreju.sge.context.Context;
 import org.arastreju.sge.model.ResourceID;
@@ -30,7 +31,6 @@ import org.arastreju.sge.model.associations.AssociationKeeper;
 import org.arastreju.sge.model.associations.DetachedAssociationKeeper;
 import org.arastreju.sge.model.nodes.ResourceNode;
 import org.arastreju.sge.model.nodes.SemanticNode;
-import org.arastreju.sge.model.nodes.views.SNContext;
 import org.arastreju.sge.naming.QualifiedName;
 import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
@@ -128,26 +128,13 @@ public class NeoAssociationKeeper extends AbstractAssociationKeeper implements N
 	protected void resolveAssociations() {
 		for(Relationship rel : neoNode.getRelationships(Direction.OUTGOING)){
 			SemanticNode object = null;
-			Context ctx = null;
 			if (rel.isType(ArasRelTypes.REFERENCE)){
 				object = store.findResource(rel.getEndNode());	
 			} else if (rel.isType(ArasRelTypes.VALUE)){
 				object = new SNValueNeo(rel.getEndNode());
 			}
-			
 			final ResourceNode predicate = store.findResource(new QualifiedName(rel.getProperty(PREDICATE_URI).toString()));
-			
-			if (rel.hasProperty(CONTEXT_URI)){
-				ResourceNode node = store.findResource(new QualifiedName(rel.getProperty(CONTEXT_URI).toString()));
-				if (node instanceof Context){
-					ctx = (Context) node;
-				} else if (node != null) {
-					ctx = new SNContext(node);
-				} else {
-					throw new IllegalStateException("Could not find context: " + rel.getProperty(CONTEXT_URI));
-				}
-			}
-			
+			final Context[] ctx = new ContextAccess(store).getContextInfo(rel);
 			addResolvedAssociation(arasNode, predicate, object, ctx);
 		}
 	}
@@ -160,5 +147,5 @@ public class NeoAssociationKeeper extends AbstractAssociationKeeper implements N
 		logger.info("Serializing NeoAssociationKeeper --> Detaching");
 		return new DetachedAssociationKeeper(getAssociationsDirectly());
 	}
-
+	
 }

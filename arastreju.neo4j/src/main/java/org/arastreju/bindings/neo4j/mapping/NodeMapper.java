@@ -19,7 +19,9 @@ import org.arastreju.bindings.neo4j.NeoConstants;
 import org.arastreju.bindings.neo4j.extensions.NeoAssociationKeeper;
 import org.arastreju.bindings.neo4j.extensions.SNValueNeo;
 import org.arastreju.bindings.neo4j.impl.AssocKeeperAccess;
+import org.arastreju.bindings.neo4j.impl.ContextAccess;
 import org.arastreju.bindings.neo4j.impl.SemanticNetworkAccess;
+import org.arastreju.sge.context.Context;
 import org.arastreju.sge.model.nodes.ResourceNode;
 import org.arastreju.sge.model.nodes.SNResource;
 import org.arastreju.sge.model.nodes.SNValue;
@@ -64,16 +66,17 @@ public class NodeMapper implements NeoConstants {
 		
 		for(Relationship rel : neoNode.getRelationships(Direction.OUTGOING)){
 			final Node neoClient = rel.getEndNode();
+			final Context[] ctx = new ContextAccess(store).getContextInfo(rel);
 			if (neoClient.hasProperty(PROPERTY_URI)){
 				// Resource Relation
 				ResourceNode object = store.findResource(rel.getEndNode());
 				ResourceNode predicate = store.findResource(new QualifiedName(rel.getProperty(PREDICATE_URI).toString()));
-				assocKeeper.addResolvedAssociation(arasNode, predicate, object);
+				assocKeeper.addResolvedAssociation(arasNode, predicate, object,ctx);
 			} else if (neoClient.hasProperty(PROPERTY_VALUE)){
 				// Value assignment
 				final SNValue value = new SNValueNeo(neoClient);
 				ResourceNode predicate = store.findResource(new QualifiedName(rel.getProperty(PREDICATE_URI).toString()));
-				assocKeeper.addResolvedAssociation(arasNode, predicate, value);
+				assocKeeper.addResolvedAssociation(arasNode, predicate, value,ctx);
 			} else {
 				throw new IllegalStateException("Relation end has neither URI nor Value");
 			}

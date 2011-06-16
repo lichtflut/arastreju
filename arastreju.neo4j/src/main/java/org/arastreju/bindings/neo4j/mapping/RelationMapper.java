@@ -18,13 +18,13 @@ package org.arastreju.bindings.neo4j.mapping;
 import org.arastreju.bindings.neo4j.ArasRelTypes;
 import org.arastreju.bindings.neo4j.NeoConstants;
 import org.arastreju.bindings.neo4j.extensions.SNValueNeo;
+import org.arastreju.bindings.neo4j.impl.ContextAccess;
 import org.arastreju.bindings.neo4j.impl.ResourceResolver;
 import org.arastreju.sge.context.Context;
 import org.arastreju.sge.model.DetachedStatement;
 import org.arastreju.sge.model.Statement;
 import org.arastreju.sge.model.nodes.ResourceNode;
 import org.arastreju.sge.model.nodes.SemanticNode;
-import org.arastreju.sge.model.nodes.views.SNContext;
 import org.arastreju.sge.naming.QualifiedName;
 import org.neo4j.graphdb.Relationship;
 
@@ -51,9 +51,11 @@ public class RelationMapper implements NeoConstants {
 	
 	// -----------------------------------------------------
 	
+	/**
+	 * Converts a Neo4j relationship to an Arastreju Statement.
+	 */
 	public Statement toArasStatement(final Relationship rel){
 		SemanticNode object = null;
-		Context ctx = null;
 		if (rel.isType(ArasRelTypes.REFERENCE)){
 			object = resolver.findResource(rel.getEndNode());	
 		} else if (rel.isType(ArasRelTypes.VALUE)){
@@ -61,21 +63,9 @@ public class RelationMapper implements NeoConstants {
 		}
 		
 		final ResourceNode subject =  resolver.findResource(rel.getStartNode());	
-		
 		final ResourceNode predicate = resolver.findResource(new QualifiedName(rel.getProperty(PREDICATE_URI).toString()));
+		final Context[] ctx = new ContextAccess(resolver).getContextInfo(rel);
 		
-		if (rel.hasProperty(CONTEXT_URI)){
-			ResourceNode node = resolver.findResource(new QualifiedName(rel.getProperty(CONTEXT_URI).toString()));
-			if (node instanceof Context){
-				ctx = (Context) node;
-			} else if (node != null){
-				ctx = new SNContext(node);
-			} else {
-				throw new IllegalStateException("Context node not found: " + rel.getProperty(CONTEXT_URI));
-			}
-		}
-		
-
 		return new DetachedStatement(subject, predicate, object, ctx);
 	}
 

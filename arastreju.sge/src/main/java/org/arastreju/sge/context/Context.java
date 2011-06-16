@@ -28,6 +28,6 @@ import org.arastreju.sge.model.ResourceID;
  *
  * @author Oliver Tigges
  */
-public interface Context extends ResourceID {
+public interface Context extends ResourceID, Comparable<Context> {
 
 }

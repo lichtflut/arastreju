@@ -16,25 +16,24 @@
 package org.arastreju.bindings.neo4j.impl;
 
 import static org.arastreju.bindings.neo4j.util.test.Dumper.dumpDeep;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNotSame;
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertTrue;
+import static org.arastreju.sge.SNOPS.associate;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.Arrays;
 
-import junit.framework.Assert;
+import static org.junit.Assert.*;
 
 import org.arastreju.bindings.neo4j.ArasRelTypes;
 import org.arastreju.bindings.neo4j.NeoConstants;
 import org.arastreju.sge.SNOPS;
 import org.arastreju.sge.apriori.Aras;
 import org.arastreju.sge.apriori.RDFS;
+import org.arastreju.sge.context.Context;
+import org.arastreju.sge.context.SimpleContextID;
 import org.arastreju.sge.io.OntologyIOException;
 import org.arastreju.sge.io.RdfXmlBinding;
 import org.arastreju.sge.io.SemanticGraphIO;
@@ -258,7 +257,7 @@ public class SemanticNetworkAccessTest {
 		final QualifiedName qn = new QualifiedName("http://arastreju.org/kernel#BrandName");
 		final ResourceNode node = store.findResource(qn);
 		
-		Assert.assertTrue(node.isAttached());
+		assertTrue(node.isAttached());
 		
 		final ByteArrayOutputStream out = new ByteArrayOutputStream();
 		new ObjectOutputStream(out).writeObject(node);
@@ -269,7 +268,7 @@ public class SemanticNetworkAccessTest {
 		final ObjectInputStream in = new ObjectInputStream(new ByteArrayInputStream(bytes));
 		
 		final ResourceNode read = (ResourceNode) in.readObject();
-		Assert.assertFalse(read.isAttached());
+		assertFalse(read.isAttached());
 	}
 	
 	@Test
@@ -287,12 +286,11 @@ public class SemanticNetworkAccessTest {
 		final ResourceNode vehicleLoaded = store.findResource(qnVehicle);
 		final ResourceNode carLoaded = store.findResource(qnCar);
 		
-		Assert.assertFalse(vehicleLoaded.getAssociations().isEmpty());
-		Assert.assertFalse(carLoaded.getAssociations().isEmpty());
+		assertFalse(vehicleLoaded.getAssociations().isEmpty());
+		assertFalse(carLoaded.getAssociations().isEmpty());
 		
-		Assert.assertFalse(vehicleLoaded.getAssociations(pred1).isEmpty());
-		Assert.assertFalse(carLoaded.getAssociations(pred2).isEmpty());
-		
+		assertFalse(vehicleLoaded.getAssociations(pred1).isEmpty());
+		assertFalse(carLoaded.getAssociations(pred2).isEmpty());
 	}
 	
 	@Test
@@ -307,17 +305,17 @@ public class SemanticNetworkAccessTest {
 		store.attach(car1);
 		
 		final Association stored = car1.getSingleAssociation(Aras.HAS_BRAND_NAME);
-		Assert.assertEquals(association.hashCode(), stored.hashCode());
+		assertEquals(association.hashCode(), stored.hashCode());
 		
-		Assert.assertEquals(3, car1.getAssociations().size());
-		Assert.assertFalse(car1.getAssociations(Aras.HAS_BRAND_NAME).isEmpty());
-		Assert.assertTrue("Association not present", car1.getAssociations().contains(association));
+		assertEquals(3, car1.getAssociations().size());
+		assertFalse(car1.getAssociations(Aras.HAS_BRAND_NAME).isEmpty());
+		assertTrue("Association not present", car1.getAssociations().contains(association));
 		
 		final boolean removedFlag = car1.remove(association);
-		Assert.assertTrue(removedFlag);
+		assertTrue(removedFlag);
 		
-		Assert.assertEquals(2, car1.getAssociations().size());
-		Assert.assertTrue(car1.getAssociations( Aras.HAS_BRAND_NAME).isEmpty());
+		assertEquals(2, car1.getAssociations().size());
+		assertTrue(car1.getAssociations( Aras.HAS_BRAND_NAME).isEmpty());
 		
 	}
 	
@@ -335,21 +333,55 @@ public class SemanticNetworkAccessTest {
 		// detach 
 		store.detach(car1);
 		
-		Assert.assertEquals(3, car1.getAssociations().size());
-		Assert.assertFalse(car1.getAssociations(Aras.HAS_BRAND_NAME).isEmpty());
-		Assert.assertTrue("Association not present", car1.getAssociations().contains(association));
+		assertEquals(3, car1.getAssociations().size());
+		assertFalse(car1.getAssociations(Aras.HAS_BRAND_NAME).isEmpty());
+		assertTrue("Association not present", car1.getAssociations().contains(association));
 		
 		final boolean removedFlag = car1.remove(association);
-		Assert.assertTrue(removedFlag);
+		assertTrue(removedFlag);
 		
 		store.attach(car1);
 		
 		final ResourceNode car2 = store.findResource(qnCar);
 		assertNotSame(car1, car2);
 		
-		Assert.assertEquals(2, car2.getAssociations().size());
-		Assert.assertTrue(car2.getAssociations( Aras.HAS_BRAND_NAME).isEmpty());
+		assertEquals(2, car2.getAssociations().size());
+		assertTrue(car2.getAssociations( Aras.HAS_BRAND_NAME).isEmpty());
 		
+	}
+	
+	@Test
+	public void testMultipleContexts() {
+		final ResourceNode vehicle = new SNResource(qnVehicle);
+		final ResourceNode car1 = new SNResource(qnCar);
+		
+		final String ctxNamepsace = "http://lf.de/ctx#";
+		final SimpleContextID ctx1 = new SimpleContextID(ctxNamepsace, "ctx1");
+		final SimpleContextID ctx2 = new SimpleContextID(ctxNamepsace, "ctx2");
+		final SimpleContextID ctx3 = new SimpleContextID(ctxNamepsace, "ctx3");
+		
+		store.attach(car1);
+		
+		associate(car1, Aras.HAS_BRAND_NAME, new SNText("BMW"), ctx1);
+		associate(car1, RDFS.SUB_CLASS_OF, vehicle, ctx1, ctx2);
+		associate(car1, Aras.HAS_PROPER_NAME, new SNText("Knut"), ctx1, ctx2, ctx3);
+		
+		// detach 
+		store.detach(car1);
+		
+		final ResourceNode car2 = store.findResource(qnCar);
+		assertNotSame(car1, car2);
+		
+		final Context[] cl1 = car2.getSingleAssociation(Aras.HAS_BRAND_NAME).getContexts();
+		final Context[] cl2 = car2.getSingleAssociation(RDFS.SUB_CLASS_OF).getContexts();
+		final Context[] cl3 = car2.getSingleAssociation(Aras.HAS_PROPER_NAME).getContexts();
+		
+		System.out.println(Arrays.toString(cl1));
+		
+		assertArrayEquals(new Context[] {ctx1}, cl1);
+		assertArrayEquals(new Context[] {ctx1, ctx2}, cl2);
+		assertArrayEquals(new Context[] {ctx1, ctx2, ctx3}, cl3);
+		assertArrayEquals(new Context[] {ctx1, ctx2, ctx3}, cl3);
 	}
 
 }

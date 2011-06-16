@@ -36,7 +36,6 @@ import org.arastreju.sge.model.associations.DetachedAssociationKeeper;
 import org.arastreju.sge.model.nodes.ResourceNode;
 import org.arastreju.sge.model.nodes.SemanticNode;
 import org.arastreju.sge.model.nodes.ValueNode;
-import org.arastreju.sge.model.nodes.views.SNContext;
 import org.arastreju.sge.naming.QualifiedName;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Node;
@@ -236,7 +235,6 @@ public class SemanticNetworkAccess implements NeoConstants, ResourceResolver {
 	 * Close the graph database;
 	 */
 	public void close() {
-		gdbService.shutdown();
 	}
 
 	/**
@@ -249,15 +247,6 @@ public class SemanticNetworkAccess implements NeoConstants, ResourceResolver {
 			public void execute(SemanticNetworkAccess store) {
 				final SemanticNode client = assoc.getObject();
 				final ResourceNode predicate = resolve(assoc.getPredicate());
-				
-				Context ctx = assoc.getContext();
-				if (ctx != null){
-					ctx = new SNContext(resolve(ctx));
-					if (!ctx.isAttached()) {
-						throw new IllegalStateException("Context not attached: " + ctx);
-					}
-				}
-				
 				if (client.isResourceNode()){
 					// Resource node
 					final ResourceNode arasClient = resolve(client.asResource());
@@ -265,9 +254,7 @@ public class SemanticNetworkAccess implements NeoConstants, ResourceResolver {
 					
 					final Relationship relationship = subject.createRelationshipTo(neoClient, ArasRelTypes.REFERENCE);
 					relationship.setProperty(PREDICATE_URI, predicate.getQualifiedName().toURI());
-					if (ctx != null){
-						relationship.setProperty(CONTEXT_URI, ctx.asResource().getQualifiedName().toURI());	
-					}
+					assignContext(relationship, assoc.getContexts());
 					indexService.index(subject, predicate.getQualifiedName().toURI(), arasClient.getQualifiedName().toURI());
 					logger.debug("added relationship--> " + relationship + " to node " + subject);
 				} else {
@@ -279,9 +266,7 @@ public class SemanticNetworkAccess implements NeoConstants, ResourceResolver {
 					
 					final Relationship relationship = subject.createRelationshipTo(neoClient, ArasRelTypes.VALUE);
 					relationship.setProperty(PREDICATE_URI, predicate.getQualifiedName().toURI());
-					if (ctx != null){
-						relationship.setProperty(CONTEXT_URI, ctx.asResource().getQualifiedName().toURI());	
-					}
+					assignContext(relationship, assoc.getContexts());
 					
 					logger.debug("added value --> " + relationship + " to node " + subject);
 
@@ -293,6 +278,7 @@ public class SemanticNetworkAccess implements NeoConstants, ResourceResolver {
 		});
 	}
 	
+
 	/**
 	 * Merges all associations from the 'changed' node to the 'attached' node.
 	 * @param attached The currently attached node.
@@ -388,6 +374,16 @@ public class SemanticNetworkAccess implements NeoConstants, ResourceResolver {
 		}
 		
 		return node;
+	}
+	
+
+	/**
+	 * Assigns context information to a relationship.
+	 * @param relationship The relationship to be assigned to the contexts.
+	 * @param contexts The contexts.
+	 */
+	protected void assignContext(final Relationship relationship, final Context[] contexts) {
+		new ContextAccess(this).assignContext(relationship, contexts);
 	}
 	
 }

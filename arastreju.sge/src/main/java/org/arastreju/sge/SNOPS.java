@@ -13,6 +13,7 @@ import org.arastreju.sge.model.ResourceID;
 import org.arastreju.sge.model.associations.Association;
 import org.arastreju.sge.model.nodes.ResourceNode;
 import org.arastreju.sge.model.nodes.SemanticNode;
+import org.arastreju.sge.naming.QualifiedName;
 
 /**
  * <p>
@@ -29,6 +30,10 @@ public class SNOPS {
 
 	public static String uri(final ResourceID rid){
 		return rid.getQualifiedName().toURI();
+	}
+	
+	public static QualifiedName qualify(final String uri){
+		return new QualifiedName(uri);
 	}
 	
 	public static String string(final SemanticNode node) {

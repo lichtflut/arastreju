@@ -52,4 +52,13 @@ public class SNContext extends ResourceView implements Context {
 		super(resource);
 	}
 	
+	// -----------------------------------------------------
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	public int compareTo(final Context other) {
+		return getQualifiedName().compareTo(other.getQualifiedName());
+	}
+	
 }

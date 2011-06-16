@@ -23,7 +23,7 @@ import de.lichtflut.infra.Infra;
  */
 public class AbstractStatement implements Statement {
 	
-	protected static final Context[] NO_CTX = new Context[0];
+	public static final Context[] NO_CTX = new Context[0];
 
 	protected ResourceID subject;
 	protected ResourceID predicate;

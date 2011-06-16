@@ -48,7 +48,7 @@ public class Neo4jGate implements ArastrejuGate {
 	private static final String KEY_GRAPH_DATA_STORE = "aras:neo4j:profile-object:graph-data-store";
 	
 	private final SemanticNetworkAccess neo4jDataStore;
-	@SuppressWarnings("unused")
+
 	private final GateContext gateContext;
 
 	// -----------------------------------------------------
