@@ -67,6 +67,14 @@ public class SimpleResourceID implements ResourceID, Serializable {
 	
 	/**
 	 * Constructor.
+	 * @param uri The URI.
+	 */
+	public SimpleResourceID(final String uri) {
+		this(new QualifiedName(uri));
+	}
+	
+	/**
+	 * Constructor.
 	 * @param namespace The namespace.
 	 * @param name The simple name.
 	 */

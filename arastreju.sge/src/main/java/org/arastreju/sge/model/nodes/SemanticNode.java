@@ -15,6 +15,8 @@
  */
 package org.arastreju.sge.model.nodes;
 
+import java.io.Serializable;
+
 
 /**
  * <p>
@@ -27,7 +29,7 @@ package org.arastreju.sge.model.nodes;
  *
  * @author Oliver Tigges 
  */
-public interface SemanticNode {
+public interface SemanticNode extends Serializable {
 
 	/**
 	 * States if this node is attached to a managed semantic model.
