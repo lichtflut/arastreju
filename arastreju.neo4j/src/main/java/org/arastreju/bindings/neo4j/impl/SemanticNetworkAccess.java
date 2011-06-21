@@ -155,15 +155,20 @@ public class SemanticNetworkAccess implements NeoConstants, ResourceResolver {
 		if (resource.isAttached()){
 			return resource.asResource();
 		} else {
-			ResourceNode node = findResource(resource.getQualifiedName());
-			if (node == null){
+			final ResourceNode attached = findResource(resource.getQualifiedName());
+			if (attached == null){
 				return doTransacted(new TxResultAction<ResourceNode>() {
 					public ResourceNode execute(SemanticNetworkAccess store) {
-						return persist(resource.asResource(), false);
+						return persist(resource.asResource(), true);
+					}
+				});
+			} else {
+				return doTransacted(new TxResultAction<ResourceNode>() {
+					public ResourceNode execute(SemanticNetworkAccess store) {
+						return merge(attached, resource.asResource());
 					}
 				});
 			}
-			return node;
 		}
 	}
 	

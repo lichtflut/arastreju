@@ -5,3 +5,5 @@ target
 .idea
 *.iml
 pom-conf.tmproj
+arastreju.sge/bin/
+arastreju.neo4j/bin/
