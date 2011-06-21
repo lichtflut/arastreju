@@ -159,7 +159,7 @@ public class SemanticNetworkAccess implements NeoConstants, ResourceResolver {
 			if (node == null){
 				return doTransacted(new TxResultAction<ResourceNode>() {
 					public ResourceNode execute(SemanticNetworkAccess store) {
-						return persist(resource.asResource());
+						return persist(resource.asResource(), false);
 					}
 				});
 			}
@@ -185,7 +185,7 @@ public class SemanticNetworkAccess implements NeoConstants, ResourceResolver {
 					attached = merge(attached, resource);
 				} else {
 					// 3rd: if resource is really new, create a new Neo node.
-					attached = persist(resource);
+					attached = persist(resource, true);
 				}
 				return attached;
 			}
@@ -349,9 +349,10 @@ public class SemanticNetworkAccess implements NeoConstants, ResourceResolver {
 	/**
 	 * Create the given resource node in Neo4j DB.
 	 * @param node A not yet persisted node.
+	 * @param storeAssocs Flag indicating, if assocs of the node shall be persisted to.
 	 * @return The persisted ResourceNode.
 	 */
-	protected ResourceNode persist(final ResourceNode node) {
+	protected ResourceNode persist(final ResourceNode node, boolean storeAssocs) {
 		// 1st: create a corresponding Neo node.
 		final Node neoNode = gdbService.createNode();
 		mapper.toNeoNode(node, neoNode);
@@ -369,8 +370,10 @@ public class SemanticNetworkAccess implements NeoConstants, ResourceResolver {
 		registry.register(node);
 		
 		// 5th: store all associations.
-		for (Association assoc : copy) {
-			addAssociation(neoNode, assoc);
+		if (storeAssocs) {
+			for (Association assoc : copy) {
+				addAssociation(neoNode, assoc);
+			}
 		}
 		
 		return node;
