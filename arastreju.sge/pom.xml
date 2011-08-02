@@ -100,17 +100,4 @@
 			</releases>
 		</pluginRepository>
 	</pluginRepositories>
-
-	<distributionManagement>
-		<repository>
-			<id>lf-rep</id>
-			<name>lichtflut archiva repository</name>
-			<url>http://www.lichtflut.de:15080/archiva/repository/lf-rep/</url>
-		</repository>
-		<snapshotRepository>
-			<id>lf-rep</id>
-			<name>lichtflut archiva repository</name>
-			<url>http://www.lichtflut.de:15080/archiva/repository/lf-rep/</url>
-		</snapshotRepository>
-	</distributionManagement>
 </project>

@@ -130,14 +130,14 @@
 	</pluginRepositories>
 	<distributionManagement>
 		<repository>
-			<id>lf-rep</id>
-			<name>lichtflut archiva repository</name>
-			<url>http://www.lichtflut.de:15080/archiva/repository/lf-rep/</url>
+			<id>lf-releases</id>
+			<name>lichtflut release repository</name>
+			<url>http://nexus.lichtflut.de/nexus/content/repositories/releases/</url>
 		</repository>
 		<snapshotRepository>
-			<id>lf-rep</id>
-			<name>lichtflut archiva repository</name>
-			<url>http://www.lichtflut.de:15080/archiva/repository/lf-rep/</url>
-		</snapshotRepository>
+		    <id>lf-snapshots</id>
+			<name>lichtflut snapshot repository</name>
+		    <url>http://nexus.lichtflut.de/nexus/content/repositories/snapshots</url>
+		</snapshotRepository>		
 	</distributionManagement>
 </project>
