@@ -4,7 +4,7 @@
 	<groupId>org.arastreju</groupId>
 	<artifactId>arastreju</artifactId>
 	<name>Arastreju</name>
-	<version>0.5.0-SNAPSHOT</version>
+	<version>0.5.1-SNAPSHOT</version>
 	<description>Arastreju next gen</description>
 	<packaging>pom</packaging>
 	<modules>
