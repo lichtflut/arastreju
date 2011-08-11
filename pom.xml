@@ -96,6 +96,11 @@
 			<version>1.6.1</version>
 		</dependency>
 		<dependency>
+			<groupId>de.lichtflut</groupId>
+			<artifactId>lf.foundation.infra</artifactId>
+			<version>1.1.0</version>
+		</dependency>
+		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>4.5</version>
@@ -109,7 +114,12 @@
 			<url>http://download.java.net/maven/2/</url>
 			<layout>default</layout>
 		</repository>
-	</repositories>
+		<repository>
+			<id>lf-releases</id>
+			<name>lichtflut release repository</name>
+			<url>http://nexus.lichtflut.de/nexus/content/repositories/releases/</url>
+		</repository>
+	</repositories>	
 	<pluginRepositories>
 		<pluginRepository>
 			<id>maven2-repository.dev.java.net</id>

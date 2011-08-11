@@ -54,11 +54,6 @@
 	
 	<dependencies>
 		<dependency>
-			<groupId>de.lichtflut</groupId>
-			<artifactId>infra</artifactId>
-			<version>1.0.7</version>
-		</dependency>
-		<dependency>
 			<groupId>org.openrdf.sesame</groupId>
 			<artifactId>sesame-rio-api</artifactId>
 			<version>${sesame.version}</version>

@@ -40,11 +40,6 @@
 			<version>1.3-1.3.M01</version>
 		</dependency>
 		<dependency>
-			<groupId>de.lichtflut</groupId>
-			<artifactId>infra</artifactId>
-			<version>1.0.7</version>
-		</dependency>
-		<dependency>
 			<groupId>org.arastreju</groupId>
 			<artifactId>arastreju.sge</artifactId>
 			<version>${project.version}</version>
@@ -86,12 +81,6 @@
 		</testResources>
 	</build>
 	<repositories>
-		<repository>
-			<id>maven2-repository.dev.java.net</id>
-			<name>Java.net Repository for Maven</name>
-			<url>http://download.java.net/maven/2/</url>
-			<layout>default</layout>
-		</repository>
 		<repository>
 			<id>neo4j-public-repository</id>
 			<url>http://m2.neo4j.org</url>
