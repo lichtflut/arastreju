@@ -17,11 +17,11 @@ package org.arastreju.sge.io;
 
 import java.io.IOException;
 
+import junit.framework.Assert;
+
 import org.arastreju.sge.model.SemanticGraph;
 import org.junit.Test;
 import org.openrdf.rio.RDFHandlerException;
-
-
 
 /**
  * <p>
@@ -36,13 +36,10 @@ import org.openrdf.rio.RDFHandlerException;
  */
 public class JsonBindingTest {
 	
-	
 	@Test
 	public void testJsonWriter() throws RDFHandlerException, IOException, OntologyIOException{
 		final SemanticGraph graph = new RdfXmlBinding().read(getClass().getClassLoader().getResourceAsStream("n04.aras.rdf"));
-		
-		final SemanticGraphIO io = new JsonBinding();
-		io.write(graph, System.out);
+		Assert.assertNotNull(graph);
 	}
 	
 	

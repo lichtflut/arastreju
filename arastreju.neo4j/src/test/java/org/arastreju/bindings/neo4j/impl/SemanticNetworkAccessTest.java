@@ -15,17 +15,20 @@
  */
 package org.arastreju.bindings.neo4j.impl;
 
-import static org.arastreju.bindings.neo4j.util.test.Dumper.dumpDeep;
 import static org.arastreju.sge.SNOPS.associate;
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNotSame;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.util.Arrays;
-
-import static org.junit.Assert.*;
 
 import org.arastreju.bindings.neo4j.ArasRelTypes;
 import org.arastreju.bindings.neo4j.NeoConstants;
@@ -112,11 +115,7 @@ public class SemanticNetworkAccessTest {
 		
 		tx = gdbService.beginTx();
 		
-		System.out.println(dumpDeep(a));
-		
 		final Node a2 = index.getSingleNode("name", "a");
-		
-		System.out.println(dumpDeep(a2));
 		
 		assertTrue(a2.getRelationships().iterator().hasNext());
 		
@@ -375,8 +374,6 @@ public class SemanticNetworkAccessTest {
 		final Context[] cl1 = car2.getSingleAssociation(Aras.HAS_BRAND_NAME).getContexts();
 		final Context[] cl2 = car2.getSingleAssociation(RDFS.SUB_CLASS_OF).getContexts();
 		final Context[] cl3 = car2.getSingleAssociation(Aras.HAS_PROPER_NAME).getContexts();
-		
-		System.out.println(Arrays.toString(cl1));
 		
 		assertArrayEquals(new Context[] {ctx1}, cl1);
 		assertArrayEquals(new Context[] {ctx1, ctx2}, cl2);

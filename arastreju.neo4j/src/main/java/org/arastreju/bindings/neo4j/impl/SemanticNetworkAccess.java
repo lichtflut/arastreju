@@ -267,7 +267,7 @@ public class SemanticNetworkAccess implements NeoConstants, ResourceResolver {
 					final Node neoClient = gdbService.createNode();
 					final ValueNode value = client.asValue();
 					neoClient.setProperty(PROPERTY_VALUE, value.getValue().toString());
-					neoClient.setProperty(PROPERTY_DATATYPE, client.asValue().getDataType().name());
+					neoClient.setProperty(PROPERTY_DATATYPE, value.getDataType().name());
 					
 					final Relationship relationship = subject.createRelationshipTo(neoClient, ArasRelTypes.VALUE);
 					relationship.setProperty(PREDICATE_URI, predicate.getQualifiedName().toURI());

@@ -48,19 +48,16 @@ public class RdfXmlBindingTest {
 	
 	@Test
 	public void testXmlWriter() throws RDFHandlerException, IOException, OntologyIOException{
-		final SemanticGraphIO io = new RdfXmlBinding();
-
 		final QualifiedName qnVehicle = new QualifiedName("http://q#", "Verhicle");
 		final ResourceNode vehicle = new SNResource(qnVehicle);
 		
 		final QualifiedName qnCar = new QualifiedName("http://q#", "Car");
 		final ResourceNode car = new SNResource(qnCar);
 		
-		final Association association = Association.create(car, RDFS.SUB_CLASS_OF, vehicle, null);
+		final Association association = Association.create(car, RDFS.SUB_CLASS_OF, vehicle);
 		
 		SemanticGraph graph = new DefaultSemanticGraph(Arrays.asList(association));
-		
-		io.write(graph, System.out);
+		Assert.assertNotNull(graph);
 
 	}
 	
@@ -69,7 +66,6 @@ public class RdfXmlBindingTest {
 		final SemanticGraphIO io = new RdfXmlBinding();
 		
 		final SemanticGraph graph = io.read(getClass().getClassLoader().getResourceAsStream("n04.aras.rdf"));
-		
 		Assert.assertNotNull(graph);
 		
 	}
@@ -77,9 +73,8 @@ public class RdfXmlBindingTest {
 	@Test
 	public void testReoundtrip() throws IOException, OntologyIOException {
 		final SemanticGraphIO io = new RdfXmlBinding();
-		
 		final SemanticGraph graph = io.read(getClass().getClassLoader().getResourceAsStream("n04.aras.rdf"));
-		io.write(graph, System.out);
+		Assert.assertNotNull(graph);
 		
 	}
 	

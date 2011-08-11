@@ -54,6 +54,9 @@ public class SNValue implements ValueNode, Serializable {
 	 * @param value The value.
 	 */
 	public SNValue(final ElementaryDataType datatype, final Object value) {
+		if (value == null) {
+			throw new IllegalArgumentException("Value may not be null");
+		}
 		this.datatype = datatype;
 		this.value = value;
 	}
@@ -119,7 +122,7 @@ public class SNValue implements ValueNode, Serializable {
 		case TIMESTAMP:
 			return getTimeValue();
 		default:
-			return null;
+			throw new IllegalStateException("Cannot determine type of value: " + value + " (" + datatype + ")");
 		}
 	}
 	
