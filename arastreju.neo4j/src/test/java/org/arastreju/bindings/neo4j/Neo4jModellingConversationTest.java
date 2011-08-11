@@ -102,7 +102,7 @@ public class Neo4jModellingConversationTest {
 		ResourceNode car = new SNResource(qnCar);
 		car = mc.attach(car);
 		
-		Association.create(car, RDFS.SUB_CLASS_OF, vehicle, null);
+		Association.create(car, RDFS.SUB_CLASS_OF, vehicle);
 		
 		mc.getRegistry().clear();
 		

@@ -97,7 +97,6 @@ public class NeoTypeSystem implements TypeSystem, NeoConstants {
 		
 		final Traverser traverser = description.traverse(rdfClassNode);
 		for(Path path : traverser){
-			System.out.println("Path: " + path);
 			result.add(store.findResource(path.endNode()).asClass());
 		}
 		

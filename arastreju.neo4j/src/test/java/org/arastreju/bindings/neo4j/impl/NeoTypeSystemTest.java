@@ -73,9 +73,6 @@ public class NeoTypeSystemTest {
 		
 		Assert.assertNotNull(classes);
 		
-		
-		System.out.println(classes);
-		
 	}
 
 }

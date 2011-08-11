@@ -39,15 +39,15 @@ public interface ModelingConversation {
 	// -- RESOURCE NODE -----------------------------------
 	
 	/**
-	 * Tries to find an existing resource with given qualified name.
-	 * If no resource is found null will be returned.
+	 * Tries to find an existing resource with given qualified name. The returned node will be attached.
+	 * If no resource is found null will be returned. 
 	 * @param qn The qualified name.
-	 * @return The corresponding resource or null.
+	 * @return The corresponding resource or <code>null</code>.
 	 */
 	ResourceNode findResource(QualifiedName qn);
 	
 	/**
-	 * Resolves the resource referenced by given resource identifier.
+	 * Resolves the resource referenced by given resource identifier. The returned node will be attached.
 	 * If there does not exist a corresponding resource, it will be created.
 	 * Thus there will never be returned null. 
 	 * @param resourceID The resource identifier.
@@ -57,7 +57,7 @@ public interface ModelingConversation {
 	
 	/**
 	 * Attach the resource to the conversation. 
-	 * All changes to the attached node will immediately be persistent. 
+	 * All changes to the attached node will immediately be persistent.
 	 * @param node The node to be attached.
 	 * @return The attached node.
 	 */
