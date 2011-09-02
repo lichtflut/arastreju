@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2010 lichtflut Forschungs- und Entwicklungsgesellschaft mbH
+ * Copyright (C) 2011 lichtflut Forschungs- und Entwicklungsgesellschaft mbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -104,36 +104,6 @@ public class Association extends AbstractStatement implements Serializable {
 		sb.append(" " + predicate + " ");
 		sb.append(object);
 		return sb.toString();
-	}
-	
-	// -----------------------------------------------------
-	
-	/**
-	 * @deprecated Use getSubject() instead.
-	 */
-	public ResourceNode getSupplier() {
-		return getSubject();
-	}
-	
-	/**
-	 * @deprecated Use getObject() instead.
-	 */
-	public SemanticNode getClient() {
-		return object;
-	}
-	
-	/**
-	 * @deprecated Use getContexts() instead.
-	 */
-	public Context getContext() {
-		final Context[] contexts = super.getContexts();
-		if (contexts == null || contexts.length == 0) {
-			return null;
-		} else if (contexts.length == 1) {
-			return contexts[0];
-		} else {
-			throw new IllegalStateException("Called getContext() when there where " + contexts.length + " contexts.");
-		}
 	}
 
 }

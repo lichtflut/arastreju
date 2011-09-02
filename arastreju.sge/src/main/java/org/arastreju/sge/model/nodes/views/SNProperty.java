@@ -68,7 +68,7 @@ public class SNProperty extends ResourceView {
 		superProperties.add(this);
 		final Set<Association> extensions = getAssociations(RDFS.SUB_PROPERTY_OF);
 		for (Association current : extensions) {
-			final SNProperty directSuperProperty = current.getClient().asResource().asProperty();
+			final SNProperty directSuperProperty = current.getObject().asResource().asProperty();
 			superProperties.add(directSuperProperty);
 			superProperties.addAll(directSuperProperty.getSuperProperties());
 		}
@@ -83,7 +83,7 @@ public class SNProperty extends ResourceView {
 		final Set<SNProperty> result = new HashSet<SNProperty>();
 		final Set<Association> extensions = getAssociations(RDFS.SUB_PROPERTY_OF);
 		for (Association current : extensions) {
-			final SNProperty directSuperProperty = current.getClient().asResource().asProperty();
+			final SNProperty directSuperProperty = current.getObject().asResource().asProperty();
 			result.add(directSuperProperty);
 		}
 		return result;
@@ -98,7 +98,7 @@ public class SNProperty extends ResourceView {
 			inverseProperties = new HashSet<SNProperty>();
 			Set<Association> assocs = getAssociations(Owl.INVERSE_OF);
 			for (Association current : assocs) {
-				SNProperty property = current.getClient().asResource().asProperty();
+				SNProperty property = current.getObject().asResource().asProperty();
 				inverseProperties.add(property);
 			}
 		}
@@ -156,7 +156,7 @@ public class SNProperty extends ResourceView {
 	protected boolean isOfType(final ResourceID type){
 		Set<Association> assocs = getAssociations(RDF.TYPE);
 		for (Association association : assocs) {
-			final SemanticNode client = association.getClient();
+			final SemanticNode client = association.getObject();
 			if (client.isResourceNode() && client.asResource().references(type)){
 				return true;
 			}
