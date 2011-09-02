@@ -52,16 +52,6 @@ public class SNOPS {
 		return Association.create(subject, predicate, object, contexts);
 	}
 	
-	public static Association replace(final ResourceNode subject, final ResourceID predicate, final SemanticNode object, final Context... contexts){
-		final Set<Association> existing = subject.getAssociations(predicate);
-		if (existing.size() == 1) {
-			subject.remove(existing.iterator().next());
-		} else if (existing.size() > 1) {
-			throw new IllegalStateException("replace not possible if more than one associations exists: " + existing);
-		}
-		return Association.create(subject, predicate, object, contexts);
-	}
-	
 	public static List<SemanticNode> objects(final Collection<Association> assocs){
 		final List<SemanticNode> result = new ArrayList<SemanticNode>(assocs.size());
 		for (Association assoc : assocs) {
@@ -78,28 +68,24 @@ public class SNOPS {
 		return result;
 	}
 	
-	/**
-	 * Replaces all associations for given subject and predicate by a new one using the given object.
-	 * @param ctx The context.
-	 * @param subject
-	 * @param predicate
-	 * @param object
-	 */
-	public static void replace(final Context ctx, final ResourceNode subject, final ResourceID predicate, final SemanticNode object){
-		for(Association assoc: subject.getAssociations(predicate)){
-			subject.revoke(assoc);
+	public static Association replace(final ResourceNode subject, final ResourceID predicate, final SemanticNode object, final Context... contexts){
+		final Set<Association> existing = subject.getAssociations(predicate);
+		if (existing.size() == 1) {
+			subject.remove(existing.iterator().next());
+		} else if (existing.size() > 1) {
+			throw new IllegalStateException("replace not possible if more than one associations exists: " + existing);
 		}
-		Association.create(subject, predicate, object, ctx);
+		return Association.create(subject, predicate, object, contexts);
 	}
 	
 	/**
 	 * Replaces all associations for given subject and predicate by the new ones.
-	 * @param ctx The context.
-	 * @param subject
-	 * @param predicate
+	 * @param subject The subject.
+	 * @param predicate The predicate.
 	 * @param objects The collection of objects to be added.
+	 * @param contexts The contexts.
 	 */
-	public static void replace(final Context ctx, final ResourceNode subject, final ResourceID predicate, final Collection<? extends SemanticNode> objects){
+	public static void replace(final ResourceNode subject, final ResourceID predicate, final Collection<? extends SemanticNode> objects, final Context... contexts){
 		final List<SemanticNode> existing = new ArrayList<SemanticNode>();
 		// 1st: remove no longer existing
 		for(Association assoc: subject.getAssociations(predicate)){
@@ -112,7 +98,7 @@ public class SNOPS {
 		// 2nd: add not yet existing
 		for (SemanticNode current: objects){
 			if (!existing.contains(objects)){
-				Association.create(subject, predicate, current, ctx);
+				Association.create(subject, predicate, current, contexts);
 			}
 		}
 	}

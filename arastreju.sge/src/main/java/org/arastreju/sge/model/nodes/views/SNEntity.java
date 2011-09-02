@@ -64,11 +64,12 @@ public class SNEntity extends ResourceView {
 
 	/**
 	 * Get the 'main' class of this entity.
+	 * TODO: pick best class!
 	 */
 	public SNClass getMainClass() {
 		Association assoc = getSingleAssociation(RDF.TYPE);
 		if (assoc != null){
-			return assoc.getClient().asResource().asClass();
+			return assoc.getObject().asResource().asClass();
 		}
 		Log.warn(this, "individual has no class: " + this);
 		return null;
@@ -81,7 +82,7 @@ public class SNEntity extends ResourceView {
 	public Set<SNClass> getDirectClasses() {
 		Set<SNClass> result = new HashSet<SNClass>();
 		for(Association assoc: getAssociations(RDF.TYPE)){
-			result.add(assoc.getClient().asResource().asClass());
+			result.add(assoc.getObject().asResource().asClass());
 		}
 		return result;
 	}
@@ -121,7 +122,7 @@ public class SNEntity extends ResourceView {
 		List<SNName> result = new ArrayList<SNName>();
 		Set<Association> assocs = getAssociations(Aras.HAS_PROPER_NAME);
 		for (Association current : assocs) {
-			result.add(current.getClient().asValue().asName());
+			result.add(current.getObject().asValue().asName());
 		}
 		return result;
 	}
