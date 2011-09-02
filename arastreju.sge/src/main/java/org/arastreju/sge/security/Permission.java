@@ -19,7 +19,7 @@ import org.arastreju.sge.model.nodes.ResourceNode;
 
 /**
  * <p>
- *  [DESCRIPTION]
+ *  A permission.
  * </p>
  *
  * <p>

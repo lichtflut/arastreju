@@ -43,6 +43,10 @@ public interface IdentityManagement {
 	
 	/**
 	 * Login the user specified by name and credential.
+	 * @param uniqueName The unique user name.
+	 * @param credential The credential.
+	 * @return The user if login was successful.
+	 * @throws LoginException if the login was not successful.
 	 */
 	User login(String uniqueName, Credential credential) throws LoginException;
 	
@@ -57,7 +61,8 @@ public interface IdentityManagement {
 	User register(String uniqueName, Credential credential);
 	
 	/**
-	 * Register a user for an existing Resource.
+	 * Register a user for an existing Resource. The Resource could be a person
+	 * already known in the system. 
 	 * @param uniqueName The unique name.
 	 * @param credential The credential.
 	 * @param corresponding The corresponding Resource.

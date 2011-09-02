@@ -70,6 +70,7 @@ public interface ResourceNode extends SemanticNode, ResourceID {
 	 * client objects.
 	 * @param predicate The relevant predicate.
 	 * @return Set of the clients of the matching associations.
+	 * @deprecated Use SNOPS
 	 */
 	Set<SemanticNode> getAssociationClients(final ResourceID predicate);
 	
@@ -77,6 +78,7 @@ public interface ResourceNode extends SemanticNode, ResourceID {
 	 * Get an association with given predicate.
 	 * @param type The relevant predicate.
 	 * @return The first matching association.
+	 * @deprecated Use SNOPS
 	 */
 	Association getSingleAssociation(final ResourceID predicate);
 	
@@ -84,6 +86,7 @@ public interface ResourceNode extends SemanticNode, ResourceID {
 	 * Get the client of single association with given predicate.
 	 * @param type The relevant predicate.
 	 * @return The first matching association's client.
+	 * @deprecated Use SNOPS
 	 */
 	SemanticNode getSingleAssociationClient(final ResourceID predicate);
 

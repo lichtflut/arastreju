@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2010 lichtflut Forschungs- und Entwicklungsgesellschaft mbH
+ * Copyright (C) 2011 lichtflut Forschungs- und Entwicklungsgesellschaft mbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,8 +15,8 @@
  */
 package org.arastreju.sge.apriori;
 
-import org.arastreju.sge.model.ResourceID;
-import org.arastreju.sge.model.SimpleResourceID;
+import org.arastreju.sge.context.Context;
+import org.arastreju.sge.context.SimpleContextID;
 
 /**
  * <p>
@@ -35,7 +35,7 @@ public interface CTX {
 	
 	public static final String NAMESPACE_URI = "http://arastreju.org/contexts#";
 	
-	public static final ResourceID IDENT = new SimpleResourceID(NAMESPACE_URI, "IdentityManagement");
-	public static final ResourceID TYPES = new SimpleResourceID(NAMESPACE_URI, "TypeSystem");
+	public static final Context IDENT = new SimpleContextID(NAMESPACE_URI, "IdentityManagement");
+	public static final Context TYPES = new SimpleContextID(NAMESPACE_URI, "TypeSystem");
 	
 }

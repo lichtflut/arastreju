@@ -80,10 +80,15 @@ public interface Aras {
 	public static final ResourceID USER = new SimpleResourceID(NAMESPACE_URI, "User");
 	public static final ResourceID GROUP = new SimpleResourceID(NAMESPACE_URI, "Group");
 	public static final ResourceID CREDENTIAL = new SimpleResourceID(NAMESPACE_URI, "Credential");
+	public static final ResourceID ROLE = new SimpleResourceID(NAMESPACE_URI, "Role");
+	public static final ResourceID PERMISSION = new SimpleResourceID(NAMESPACE_URI, "Permission");
 	
 	public static final ResourceID IDENTIFIED_BY = new SimpleResourceID(NAMESPACE_URI, "isIdentifiedBy");
 	public static final ResourceID HAS_CREDENTIAL = new SimpleResourceID(NAMESPACE_URI, "hasCredential");
 	public static final ResourceID HAS_EMAIL = new SimpleResourceID(NAMESPACE_URI, "hasEmail");
+	public static final ResourceID HAS_UNIQUE_NAME = new SimpleResourceID(NAMESPACE_URI, "hasUniqueName");
+	public static final ResourceID HAS_ROLE = new SimpleResourceID(NAMESPACE_URI, "hasRole");
+	public static final ResourceID HAS_PERMISSION = new SimpleResourceID(NAMESPACE_URI, "hasPermission");
 	
 	// -- SCHEMAS -----------------------------------------
 	

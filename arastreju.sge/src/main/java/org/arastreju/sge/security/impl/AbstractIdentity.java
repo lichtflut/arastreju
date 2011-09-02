@@ -12,6 +12,7 @@ import org.arastreju.sge.security.Identity;
 import org.arastreju.sge.security.Permission;
 import org.arastreju.sge.security.Role;
 
+import de.lichtflut.infra.Infra;
 import de.lichtflut.infra.exceptions.NotYetImplementedException;
 
 /**
@@ -97,6 +98,26 @@ public abstract class AbstractIdentity implements Identity {
 	 */
 	public ResourceNode getIdentityNode() {
 		return identityNode;
+	}
+	
+	/* (non-Javadoc)
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		return identityNode.hashCode();
+	}
+	
+	/* (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(final Object obj) {
+		if (obj instanceof Identity) {
+			final Identity other = (Identity) obj;
+			return Infra.equals(identityNode, other.getAssociatedResource());
+		}
+		return super.equals(obj);
 	}
 	
 	

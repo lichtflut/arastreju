@@ -6,7 +6,7 @@ import org.neo4j.index.lucene.LuceneFulltextQueryIndexService;
 
 /**
  * <p>
- *  [DESCRIPTION]
+ *  Indexing service used by Arastreju with Neo4j binding.
  * </p>
  *
  * <p>
@@ -24,9 +24,10 @@ public final class NeoIndexingService extends LuceneFulltextQueryIndexService {
 	// -----------------------------------------------------
 	
 	/**
-	 * @param graphDb
+	 * Constructor.
+	 * @param graphDb The graph database service.
 	 */
-	public NeoIndexingService(GraphDatabaseService graphDb) {
+	public NeoIndexingService(final GraphDatabaseService graphDb) {
 		super(graphDb);
 	}
 	

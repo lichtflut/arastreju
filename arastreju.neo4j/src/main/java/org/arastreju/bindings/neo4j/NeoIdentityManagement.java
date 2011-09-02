@@ -3,16 +3,25 @@
  */
 package org.arastreju.bindings.neo4j;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 import org.arastreju.bindings.neo4j.impl.SemanticNetworkAccess;
 import org.arastreju.bindings.neo4j.index.ResourceIndex;
 import org.arastreju.sge.IdentityManagement;
+import org.arastreju.sge.SNOPS;
 import org.arastreju.sge.apriori.Aras;
+import org.arastreju.sge.apriori.CTX;
+import org.arastreju.sge.apriori.RDF;
+import org.arastreju.sge.eh.ArastrejuRuntimeException;
 import org.arastreju.sge.eh.ErrorCodes;
+import org.arastreju.sge.model.ResourceID;
 import org.arastreju.sge.model.nodes.ResourceNode;
+import org.arastreju.sge.model.nodes.SNResource;
+import org.arastreju.sge.model.nodes.SemanticNode;
 import org.arastreju.sge.model.nodes.views.SNEntity;
+import org.arastreju.sge.model.nodes.views.SNText;
 import org.arastreju.sge.security.Credential;
 import org.arastreju.sge.security.Identity;
 import org.arastreju.sge.security.LoginException;
@@ -20,11 +29,13 @@ import org.arastreju.sge.security.Permission;
 import org.arastreju.sge.security.Role;
 import org.arastreju.sge.security.User;
 import org.arastreju.sge.security.impl.ArastrejuRootUser;
+import org.arastreju.sge.security.impl.PermissionImpl;
+import org.arastreju.sge.security.impl.RoleImpl;
 import org.arastreju.sge.security.impl.UserImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import de.lichtflut.infra.exceptions.NotYetImplementedException;
+import de.lichtflut.infra.Infra;
 
 /**
  * <p>
@@ -39,9 +50,11 @@ import de.lichtflut.infra.exceptions.NotYetImplementedException;
  */
 public class NeoIdentityManagement implements IdentityManagement {
 	
+	private final Logger logger = LoggerFactory.getLogger(NeoIdentityManagement.class);
+	
 	private final ResourceIndex index;
 	
-	private final Logger logger = LoggerFactory.getLogger(NeoIdentityManagement.class);
+	private final SemanticNetworkAccess store;
 
 	// -----------------------------------------------------
 	
@@ -50,15 +63,8 @@ public class NeoIdentityManagement implements IdentityManagement {
 	 * @param store The neo store.
 	 */
 	public NeoIdentityManagement(final SemanticNetworkAccess store) {
+		this.store = store;
 		this.index = new ResourceIndex(store);
-	}
-	
-	/**
-	 * Constructor.
-	 * @param index The resource index.
-	 */
-	public NeoIdentityManagement(final ResourceIndex index) {
-		this.index = index;
 	}
 	
 	// -----------------------------------------------------
@@ -90,54 +96,98 @@ public class NeoIdentityManagement implements IdentityManagement {
 		return new UserImpl(user);
 	}
 
-	/* (non-Javadoc)
-	 * @see org.arastreju.sge.IdentityManagement#register(java.lang.String, org.arastreju.sge.security.Credential)
+	/**
+	 * {@inheritDoc}
 	 */
-	public User register(String uniqueName, Credential credential) {
-		throw new NotYetImplementedException();
+	public User register(final String uniqueName, final Credential credential) {
+		return register(uniqueName, credential, new SNEntity());
 	}
 
-	/* (non-Javadoc)
-	 * @see org.arastreju.sge.IdentityManagement#register(java.lang.String, org.arastreju.sge.security.Credential, org.arastreju.sge.model.nodes.ResourceNode)
+	/**
+	 * {@inheritDoc}
 	 */
-	public User register(String uniqueName, Credential credential,
-			ResourceNode corresponding) {
-		throw new NotYetImplementedException();
+	public User register(final String name, final Credential credential, final ResourceNode corresponding) {
+		assertUnique(Aras.USER, name);
+		SNOPS.associate(corresponding, Aras.IDENTIFIED_BY, new SNText(name), CTX.IDENT);
+		SNOPS.associate(corresponding, Aras.HAS_CREDENTIAL, new SNText(credential.stringRepesentation()), CTX.IDENT);
+		SNOPS.associate(corresponding, RDF.TYPE, Aras.USER, CTX.IDENT);
+		store.attach(corresponding);
+		return new UserImpl(corresponding);
 	}
 
 	/* (non-Javadoc)
 	 * @see org.arastreju.sge.IdentityManagement#createRole(java.lang.String)
 	 */
-	public Role createRole(String name) {
-		throw new NotYetImplementedException();
+	public Role createRole(final String name) {
+		assertUnique(Aras.ROLE, name);
+		final SNResource role = new SNResource();
+		SNOPS.associate(role, Aras.HAS_UNIQUE_NAME, new SNText(name), CTX.IDENT);
+		SNOPS.associate(role, RDF.TYPE, Aras.ROLE, CTX.IDENT);
+		store.attach(role);
+		return new RoleImpl(role);
 	}
 
 	/* (non-Javadoc)
 	 * @see org.arastreju.sge.IdentityManagement#getRoles()
 	 */
 	public Set<Role> getRoles() {
-		throw new NotYetImplementedException();
+		final List<ResourceNode> nodes = index.lookup(RDF.TYPE, Aras.ROLE);
+		final Set<Role> roles = new HashSet<Role>(nodes.size());
+		for(ResourceNode current: nodes) {
+			roles.add(new RoleImpl(current));
+		}
+		return roles;
 	}
 
 	/* (non-Javadoc)
 	 * @see org.arastreju.sge.IdentityManagement#addUserToRoles(org.arastreju.sge.security.User, org.arastreju.sge.security.Role[])
 	 */
-	public void addUserToRoles(User user, Role... roles) {
-		throw new NotYetImplementedException();
+	public void addUserToRoles(final User user, final Role... roles) {
+		final ResourceNode userNode = user.getAssociatedResource();
+		store.attach(userNode);
+		for (Role role : roles) {
+			SNOPS.associate(userNode, Aras.HAS_ROLE, role.getAssociatedResource(), CTX.IDENT);
+		}
 	}
 
 	/* (non-Javadoc)
 	 * @see org.arastreju.sge.IdentityManagement#createPermission(java.lang.String)
 	 */
-	public Permission createPermission(String name) {
-		throw new NotYetImplementedException();
+	public Permission createPermission(final String name) {
+		assertUnique(Aras.PERMISSION, name);
+		final SNResource permission = new SNResource();
+		SNOPS.associate(permission, Aras.HAS_UNIQUE_NAME, new SNText(name), CTX.IDENT);
+		SNOPS.associate(permission, RDF.TYPE, Aras.PERMISSION, CTX.IDENT);
+		store.attach(permission);
+		return new PermissionImpl(permission);
 	}
 
 	/* (non-Javadoc)
 	 * @see org.arastreju.sge.IdentityManagement#getPermissions()
 	 */
 	public Set<Permission> getPermissions() {
-		throw new NotYetImplementedException();
+		final List<ResourceNode> nodes = index.lookup(RDF.TYPE, Aras.PERMISSION);
+		final Set<Permission> permissions = new HashSet<Permission>(nodes.size());
+		for(ResourceNode current: nodes) {
+			permissions.add(new PermissionImpl(current));
+		}
+		return permissions;
+	}
+	
+	// -----------------------------------------------------
+	
+	/**
+	 * TODO: improve loolup.
+	 */
+	private void assertUnique(final ResourceID type, final String name) {
+		final List<ResourceNode> all = index.lookup(RDF.TYPE, type);
+		for (ResourceNode current : all) {
+			final SemanticNode currentName = SNOPS.singleObject(current, Aras.HAS_UNIQUE_NAME);
+			if (Infra.equals(name, SNOPS.string(currentName))) {
+				throw new ArastrejuRuntimeException(ErrorCodes.GENERAL_CONSISTENCY_FAILURE, 
+						"Name already used for type " + type + ": " + name);
+			}
+		}
 	}
 
 }

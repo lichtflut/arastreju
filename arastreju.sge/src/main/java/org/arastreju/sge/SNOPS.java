@@ -5,10 +5,13 @@ package org.arastreju.sge;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 import org.arastreju.sge.context.Context;
+import org.arastreju.sge.eh.ArastrejuRuntimeException;
+import org.arastreju.sge.eh.ErrorCodes;
 import org.arastreju.sge.model.ResourceID;
 import org.arastreju.sge.model.associations.Association;
 import org.arastreju.sge.model.nodes.ResourceNode;
@@ -52,22 +55,116 @@ public class SNOPS {
 		return Association.create(subject, predicate, object, contexts);
 	}
 	
-	public static List<SemanticNode> objects(final Collection<Association> assocs){
-		final List<SemanticNode> result = new ArrayList<SemanticNode>(assocs.size());
-		for (Association assoc : assocs) {
-			result.add(assoc.getObject());
+	/**
+	 * Fetch the first association corresponding to given predicate.
+	 * @param subject The subject.
+	 * @param predicate The predicate.
+	 * @return The first matching association or null.
+	 */
+	public static Association fetchAssociation(final ResourceNode subject, final ResourceID predicate) {
+		Set<Association> associations = subject.getAssociations(predicate);
+		if (associations.isEmpty()) {
+			return null;
+		} else {
+			return associations.iterator().next();
 		}
-		return result;
 	}
 	
-	public static List<ResourceNode> subjects(final Collection<Association> assocs){
-		final List<ResourceNode> result = new ArrayList<ResourceNode>(assocs.size());
+	/**
+	 * Fetch the first association's object corresponding to given predicate.
+	 * @param subject The subject.
+	 * @param predicate The predicate.
+	 * @return The first matching object or null.
+	 */
+	public static SemanticNode fetchObject(final ResourceNode subject, final ResourceID predicate) {
+		Set<Association> associations = subject.getAssociations(predicate);
+		if (associations.isEmpty()) {
+			return null;
+		} else {
+			return associations.iterator().next().getObject();
+		}
+	}
+	
+	/**
+	 * Fetch the only association corresponding to given predicate.
+	 * @param subject The subject.
+	 * @param predicate The predicate.
+	 * @return The single association or null.
+	 * @throws ArastrejuRuntimeException if more than one association of given predicate present.
+	 */
+	public static Association singleAssociation(final ResourceNode subject, final ResourceID predicate) {
+		Set<Association> associations = subject.getAssociations(predicate);
+		if (associations.isEmpty()) {
+			return null;
+		} else if (associations.size() > 1) {
+			throw new ArastrejuRuntimeException(ErrorCodes.GENERAL_RUNTIME_ERROR, 
+					"Expected only one association with predicate '" + predicate + "' but found: " + associations);
+		} else {
+			return associations.iterator().next();
+		}
+	}
+	
+	/**
+	 * Fetch the only association corresponding to given predicate.
+	 * @param subject The subject.
+	 * @param predicate The predicate.
+	 * @return The single association or null.
+	 * @throws ArastrejuRuntimeException if more than one association of given predicate present.
+	 */
+	public static SemanticNode singleObject(final ResourceNode subject, final ResourceID predicate) {
+		final Association association = singleAssociation(subject, predicate);
+		if (association != null) {
+			return association.getObject();
+		} else {
+			return null;
+		}
+	}
+	
+	public static Set<ResourceNode> subjects(final ResourceNode subject, final ResourceID predicate){
+		return subjects(subject.getAssociations(predicate));
+	}
+	
+	public static Set<SemanticNode> objects(final ResourceNode subject, final ResourceID predicate){
+		return objects(subject.getAssociations(predicate));
+	}
+	
+	public static Set<ResourceID> predicates(final ResourceNode subject, final ResourceID predicate){
+		return predicates(subject.getAssociations(predicate));
+	}
+	
+	public static Set<ResourceNode> subjects(final Collection<Association> assocs){
+		final Set<ResourceNode> result = new HashSet<ResourceNode>(assocs.size());
 		for (Association assoc : assocs) {
 			result.add(assoc.getSubject());
 		}
 		return result;
 	}
 	
+	public static Set<SemanticNode> objects(final Collection<Association> assocs){
+		final Set<SemanticNode> result = new HashSet<SemanticNode>(assocs.size());
+		for (Association assoc : assocs) {
+			result.add(assoc.getObject());
+		}
+		return result;
+	}
+	
+	public static Set<ResourceID> predicates(final Collection<Association> assocs){
+		final Set<ResourceID> result = new HashSet<ResourceID>(assocs.size());
+		for (Association assoc : assocs) {
+			result.add(assoc.getPredicate());
+		}
+		return result;
+	}
+	
+	// -- MODIFICATIONS -----------------------------------
+	
+	/**
+	 * Replaces all associations for given subject and predicate by the single new one.
+	 * @param subject The subject.
+	 * @param predicate The predicate.
+	 * @param object The object to be set.
+	 * @param contexts The contexts.
+	 */
 	public static Association replace(final ResourceNode subject, final ResourceID predicate, final SemanticNode object, final Context... contexts){
 		final Set<Association> existing = subject.getAssociations(predicate);
 		if (existing.size() == 1) {

@@ -19,7 +19,9 @@ import org.arastreju.sge.model.ElementaryDataType;
 import org.arastreju.sge.model.nodes.SNValue;
 
 /**
- * Representation of a text value.
+ * <p>
+ * 	Representation of a text value.
+ * </p>
  * 
  * Created: 25.05.2009
  *

@@ -3,7 +3,7 @@
  */
 package org.arastreju.sge.security.impl;
 
-import static org.arastreju.sge.SNOPS.string;
+import static org.arastreju.sge.SNOPS.*;
 
 import org.arastreju.sge.apriori.Aras;
 import org.arastreju.sge.model.nodes.ResourceNode;
@@ -36,7 +36,7 @@ public class UserImpl extends AbstractIdentity implements User {
 	 * @see org.arastreju.sge.security.User#getEmail()
 	 */
 	public String getEmail() {
-		return string(getIdentityNode().getSingleAssociationClient(Aras.HAS_EMAIL));
+		return string(singleObject(getIdentityNode(), Aras.HAS_EMAIL));
 	}
 	
 	

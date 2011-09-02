@@ -3,11 +3,15 @@
  */
 package org.arastreju.bindings.neo4j;
 
+import java.util.Set;
+
 import junit.framework.Assert;
 
 import org.arastreju.bindings.neo4j.impl.SemanticNetworkAccess;
 import org.arastreju.sge.apriori.Aras;
+import org.arastreju.sge.apriori.CTX;
 import org.arastreju.sge.context.Context;
+import org.arastreju.sge.eh.ArastrejuRuntimeException;
 import org.arastreju.sge.eh.ErrorCodes;
 import org.arastreju.sge.model.associations.Association;
 import org.arastreju.sge.model.nodes.views.SNClass;
@@ -15,6 +19,8 @@ import org.arastreju.sge.model.nodes.views.SNEntity;
 import org.arastreju.sge.model.nodes.views.SNText;
 import org.arastreju.sge.security.LoginException;
 import org.arastreju.sge.security.PasswordCredential;
+import org.arastreju.sge.security.Permission;
+import org.arastreju.sge.security.Role;
 import org.arastreju.sge.security.User;
 import org.junit.After;
 import org.junit.Before;
@@ -60,7 +66,7 @@ public class NeoIdentityManagementTest {
 	
 	@Test
 	public void testLogin() {
-		final Context ctx = null;
+		final Context ctx = CTX.IDENT;
 		final SNClass identity = store.resolve(Aras.IDENTITY).asClass();
 		final SNEntity user = identity.createInstance(ctx);
 		
@@ -90,6 +96,74 @@ public class NeoIdentityManagementTest {
 			Assert.fail("User should have logged in.");
 		}
 		
+	}
+	
+	@Test
+	public void testRegistration() throws LoginException {
+		final User user = im.register("bud", new PasswordCredential("spencer"));
+		Assert.assertEquals("bud", user.getName());
+		Assert.assertTrue(user.getAssociatedResource().isAttached());
+		
+		User loggedIn = im.login("bud", new PasswordCredential("spencer"));
+		Assert.assertNotNull(loggedIn);
+		Assert.assertEquals(user, loggedIn);
+		
+		final SNEntity node = new SNEntity();
+		final User user2 = im.register("terrence", new PasswordCredential("hill"), node);
+		Assert.assertEquals("terrence", user2.getName());
+		Assert.assertTrue(user2.getAssociatedResource().isAttached());
+		
+		User loggedIn2 = im.login("terrence", new PasswordCredential("hill"));
+		Assert.assertNotNull(loggedIn2);
+		Assert.assertEquals(user2, loggedIn2);
+		Assert.assertEquals(node, loggedIn2.getAssociatedResource());
+	}
+	
+	@Test
+	public void testRoles() {
+		Role anything = im.createRole("anything");
+		Role nothing = im.createRole("nothing");
+		
+		Assert.assertEquals("anything", anything.getName());
+		Assert.assertNotNull(anything.getAssociatedResource());
+		
+		Assert.assertEquals("nothing", nothing.getName());
+		Assert.assertNotNull(nothing.getAssociatedResource());
+		
+		Set<Role> roles = im.getRoles();
+		Assert.assertEquals(2, roles.size());
+		Assert.assertTrue(roles.contains(anything));
+		Assert.assertTrue(roles.contains(nothing));
+		
+		im.createPermission("anything");
+		try {
+			im.createRole("anything");	
+		} catch (ArastrejuRuntimeException asExpected) {
+		}
+		
+	}
+	
+	@Test
+	public void testPermissions() {
+		Permission anything = im.createPermission("anything");
+		Permission nothing = im.createPermission("nothing");
+		
+		Assert.assertEquals("anything", anything.getName());
+		Assert.assertNotNull(anything.getAssociatedResource());
+		
+		Assert.assertEquals("nothing", nothing.getName());
+		Assert.assertNotNull(nothing.getAssociatedResource());
+		
+		Set<Permission> permissions = im.getPermissions();
+		Assert.assertEquals(2, permissions.size());
+		Assert.assertTrue(permissions.contains(anything));
+		Assert.assertTrue(permissions.contains(nothing));
+		
+		im.createRole("anything");
+		try {
+			im.createPermission("anything");	
+		} catch (ArastrejuRuntimeException asExpected) {
+		}
 	}
 	
 }
