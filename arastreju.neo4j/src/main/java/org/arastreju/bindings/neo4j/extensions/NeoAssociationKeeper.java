@@ -79,6 +79,9 @@ public class NeoAssociationKeeper extends AbstractAssociationKeeper implements N
 		return true;
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void add(final Association assoc) {
 		super.add(assoc);
@@ -140,7 +143,7 @@ public class NeoAssociationKeeper extends AbstractAssociationKeeper implements N
 	}
 	
 	/**
-	 * Called when beeing serialized --> Replace by detached assoc keeper
+	 * Called when being serialized --> Replace by detached association keeper.
 	 * @return A Detached Association Keeper.
 	 */
 	private Object writeReplace() {

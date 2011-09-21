@@ -70,6 +70,16 @@ public interface ModelingConversation {
 	 */
 	void detach(ResourceNode node);
 	
+	/**
+	 * Removes the resource identified by given ID and all of it's incoming
+	 * and outgoing associations. 
+	 * If 'cascade' is <code>true</code> all resources will be removed cascading that 
+	 * have been associated only by the removed and have no incoming associations thereafter.
+	 * @param id The ID of the resource to be removed.
+	 * @param cascade Flag denoting if remove shall be cascaded.
+	 */
+	void remove(ResourceID id, boolean cascade);
+	
 	// -- SEMANTIC GRAPH ----------------------------------
 	
 	SemanticGraph findGraph(QualifiedName qn);

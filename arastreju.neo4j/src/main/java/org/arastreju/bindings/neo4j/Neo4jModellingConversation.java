@@ -15,12 +15,18 @@
  */
 package org.arastreju.bindings.neo4j;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+
 import org.arastreju.bindings.neo4j.impl.SemanticNetworkAccess;
 import org.arastreju.bindings.neo4j.impl.ResourceRegistry;
 import org.arastreju.sge.ModelingConversation;
 import org.arastreju.sge.model.ResourceID;
 import org.arastreju.sge.model.SemanticGraph;
+import org.arastreju.sge.model.associations.Association;
 import org.arastreju.sge.model.nodes.ResourceNode;
+import org.arastreju.sge.model.nodes.SemanticNode;
 import org.arastreju.sge.naming.QualifiedName;
 import org.arastreju.sge.persistence.TransactionControl;
 import org.arastreju.sge.query.QueryManager;
@@ -88,6 +94,13 @@ public class Neo4jModellingConversation implements ModelingConversation {
 	 */
 	public void detach(final ResourceNode node) {
 		store.detach(node);
+	}
+	
+	/* (non-Javadoc)
+	 * @see org.arastreju.sge.ModelingConversation#remove(org.arastreju.sge.model.ResourceID, boolean)
+	 */
+	public void remove(final ResourceID id, final boolean cascade) {
+		store.remove(id, cascade);
 	}
 	
 	// -----------------------------------------------------

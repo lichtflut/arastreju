@@ -34,6 +34,7 @@ import org.arastreju.bindings.neo4j.ArasRelTypes;
 import org.arastreju.bindings.neo4j.NeoConstants;
 import org.arastreju.sge.SNOPS;
 import org.arastreju.sge.apriori.Aras;
+import org.arastreju.sge.apriori.RDF;
 import org.arastreju.sge.apriori.RDFS;
 import org.arastreju.sge.context.Context;
 import org.arastreju.sge.context.SimpleContextID;
@@ -47,6 +48,7 @@ import org.arastreju.sge.model.associations.Association;
 import org.arastreju.sge.model.nodes.ResourceNode;
 import org.arastreju.sge.model.nodes.SNResource;
 import org.arastreju.sge.model.nodes.ValueNode;
+import org.arastreju.sge.model.nodes.views.SNClass;
 import org.arastreju.sge.model.nodes.views.SNText;
 import org.arastreju.sge.naming.QualifiedName;
 import org.junit.After;
@@ -73,6 +75,7 @@ public class SemanticNetworkAccessTest {
 	
 	private final QualifiedName qnVehicle = new QualifiedName("http://q#", "Verhicle");
 	private final QualifiedName qnCar = new QualifiedName("http://q#", "Car");
+	private final QualifiedName qnBike = new QualifiedName("http://q#", "Bike");
 	
 	private SemanticNetworkAccess store;
 	
@@ -174,7 +177,7 @@ public class SemanticNetworkAccessTest {
 		
 		final ResourceNode car2 = store.findResource(qnCar);
 		assertNotSame(car, car2);
-		final ValueNode value = car2.getSingleAssociationClient(Aras.HAS_PROPER_NAME).asValue();
+		final ValueNode value = SNOPS.singleObject(car2, Aras.HAS_PROPER_NAME).asValue();
 		
 		assertEquals(value.getStringValue(), "BMW");
 	}
@@ -194,10 +197,10 @@ public class SemanticNetworkAccessTest {
 		final ResourceNode car2 = store.findResource(qnCar);
 		assertNotSame(car, car2);
 
-		final ResourceNode res = car2.getSingleAssociationClient(RDFS.SUB_CLASS_OF).asResource();
+		final ResourceNode res = SNOPS.singleObject(car2, RDFS.SUB_CLASS_OF).asResource();
 		assertEquals(vehicle, res);
 		
-		final ValueNode value = car2.getSingleAssociationClient(Aras.HAS_PROPER_NAME).asValue();
+		final ValueNode value = SNOPS.singleObject(car2, Aras.HAS_PROPER_NAME).asValue();
 		assertEquals(value.getStringValue(), "BMW");
 	}
 	
@@ -225,13 +228,13 @@ public class SemanticNetworkAccessTest {
 		final ResourceNode car2 = store.findResource(qnCar);
 		assertNotSame(car1, car2);
 		
-		final ResourceNode subClasss = car2.getSingleAssociationClient(RDFS.SUB_CLASS_OF).asResource();
+		final ResourceNode subClasss = SNOPS.singleObject(car2, RDFS.SUB_CLASS_OF).asResource();
 		assertEquals(vehicle, subClasss);
 		
-		final ValueNode brandname = car2.getSingleAssociationClient(Aras.HAS_BRAND_NAME).asValue();
+		final ValueNode brandname = SNOPS.singleObject(car2, Aras.HAS_BRAND_NAME).asValue();
 		assertEquals(brandname.getStringValue(), "BMW");
 
-		final ValueNode propername = car2.getSingleAssociationClient(Aras.HAS_PROPER_NAME).asValue();
+		final ValueNode propername = SNOPS.singleObject(car2, Aras.HAS_PROPER_NAME).asValue();
 		assertEquals(propername.getStringValue(), "Knut");
 	}
 
@@ -303,7 +306,7 @@ public class SemanticNetworkAccessTest {
 		
 		store.attach(car1);
 		
-		final Association stored = car1.getSingleAssociation(Aras.HAS_BRAND_NAME);
+		final Association stored = SNOPS.singleAssociation(car1, Aras.HAS_BRAND_NAME);
 		assertEquals(association.hashCode(), stored.hashCode());
 		
 		assertEquals(3, car1.getAssociations().size());
@@ -371,14 +374,52 @@ public class SemanticNetworkAccessTest {
 		final ResourceNode car2 = store.findResource(qnCar);
 		assertNotSame(car1, car2);
 		
-		final Context[] cl1 = car2.getSingleAssociation(Aras.HAS_BRAND_NAME).getContexts();
-		final Context[] cl2 = car2.getSingleAssociation(RDFS.SUB_CLASS_OF).getContexts();
-		final Context[] cl3 = car2.getSingleAssociation(Aras.HAS_PROPER_NAME).getContexts();
+		final Context[] cl1 = SNOPS.singleAssociation(car2, Aras.HAS_BRAND_NAME).getContexts();
+		final Context[] cl2 = SNOPS.singleAssociation(car2, RDFS.SUB_CLASS_OF).getContexts();
+		final Context[] cl3 = SNOPS.singleAssociation(car2, Aras.HAS_PROPER_NAME).getContexts();
 		
 		assertArrayEquals(new Context[] {ctx1}, cl1);
 		assertArrayEquals(new Context[] {ctx1, ctx2}, cl2);
 		assertArrayEquals(new Context[] {ctx1, ctx2, ctx3}, cl3);
 		assertArrayEquals(new Context[] {ctx1, ctx2, ctx3}, cl3);
+	}
+	
+	@Test
+	public void testRemove() {
+		final SNClass vehicle = new SNResource(qnVehicle).asClass();
+		final SNClass car = new SNResource(qnCar).asClass();
+		final SNClass bike = new SNResource(qnBike).asClass();
+		
+		final ResourceNode car1 = car.createInstance();
+		
+		Association.create(vehicle, RDFS.SUB_CLASS_OF, RDF.TYPE);
+		Association.create(car, RDFS.SUB_CLASS_OF, vehicle);
+		Association.create(bike, RDFS.SUB_CLASS_OF, vehicle);
+		
+		store.attach(vehicle);
+		store.attach(bike);
+		
+		Association.create(car1, Aras.HAS_BRAND_NAME, new SNText("BMW"));
+		Association.create(car1, Aras.HAS_PROPER_NAME, new SNText("Knut"));
+		
+		store.attach(car1);
+
+		store.remove(car1, true);
+		
+		assertTrue(car1.getAssociations().isEmpty());
+		assertFalse(car1.isAttached());
+		assertTrue(car.getAssociations().isEmpty());
+		assertFalse(car.isAttached());
+		
+		assertFalse(vehicle.getAssociations().isEmpty());
+		assertTrue(vehicle.isAttached());
+		
+		store.detach(vehicle);
+		
+		ResourceNode found = store.findResource(qnVehicle);
+		assertNotNull(found);
+		assertEquals(RDF.TYPE, SNOPS.singleObject(found, RDFS.SUB_CLASS_OF));
+		
 	}
 
 }

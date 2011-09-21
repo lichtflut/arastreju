@@ -13,6 +13,7 @@ import org.arastreju.sge.context.Context;
 import org.arastreju.sge.eh.ArastrejuRuntimeException;
 import org.arastreju.sge.eh.ErrorCodes;
 import org.arastreju.sge.model.ResourceID;
+import org.arastreju.sge.model.SimpleResourceID;
 import org.arastreju.sge.model.associations.Association;
 import org.arastreju.sge.model.nodes.ResourceNode;
 import org.arastreju.sge.model.nodes.SemanticNode;
@@ -37,6 +38,10 @@ public class SNOPS {
 	
 	public static QualifiedName qualify(final String uri){
 		return new QualifiedName(uri);
+	}
+	
+	public static ResourceID id(final QualifiedName qn){
+		return new SimpleResourceID(qn);
 	}
 	
 	public static String string(final SemanticNode node) {

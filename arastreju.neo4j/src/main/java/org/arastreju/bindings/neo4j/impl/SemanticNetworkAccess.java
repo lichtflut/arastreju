@@ -206,6 +206,21 @@ public class SemanticNetworkAccess implements NeoConstants, ResourceResolver {
 		AssocKeeperAccess.setAssociationKeeper(node, new DetachedAssociationKeeper(node.getAssociations()));
 	}
 	
+	/**
+	 * Remove the node.
+	 * @param id The ID.
+	 * @param cascade The cascade flag.
+	 */
+	public void remove(final ResourceID id, final boolean cascade) {
+		final ResourceNode node = resolve(id);
+		AssocKeeperAccess.getAssociationKeeper(node).clearAssociations();
+		doTransacted(new TxAction() {
+			public void execute(SemanticNetworkAccess store) {
+				new NodeRemover(registry).remove(node, cascade);
+			}
+		});
+	}
+	
 	// -----------------------------------------------------
 
 	/**
@@ -281,6 +296,15 @@ public class SemanticNetworkAccess implements NeoConstants, ResourceResolver {
 				}
 			}
 		});
+	}
+	
+	/**
+	 * @param neoNode
+	 * @param assoc
+	 * @return
+	 */
+	public boolean remove(final Node neoNode, final Association assoc) {
+		return false;
 	}
 	
 
@@ -393,5 +417,5 @@ public class SemanticNetworkAccess implements NeoConstants, ResourceResolver {
 	protected void assignContext(final Relationship relationship, final Context[] contexts) {
 		new ContextAccess(this).assignContext(relationship, contexts);
 	}
-	
+
 }

@@ -85,6 +85,14 @@ public abstract class AbstractAssociationKeeper implements AssociationKeeper {
 	}
 	
 	/**
+	 * {@inheritDoc}
+	 */
+	public boolean clearAssociations() {
+		getAssociationsInternal().clear();
+		return true;
+	}
+	
+	/**
 	 * @return the revokedAssociations
 	 */
 	public Set<Association> getAssociationsForRevocation() {

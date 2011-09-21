@@ -41,6 +41,8 @@ public interface AssociationKeeper {
 	boolean revoke(Association assoc);
 
 	boolean remove(Association assoc);
+	
+	boolean clearAssociations();
 
 	/**
 	 * @return The active Associations.
