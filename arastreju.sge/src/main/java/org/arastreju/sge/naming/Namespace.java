@@ -15,6 +15,8 @@
  */
 package org.arastreju.sge.naming;
 
+import java.io.Serializable;
+
 /**
  * <p>
  * 	A globally unique namespace.
@@ -26,7 +28,7 @@ package org.arastreju.sge.naming;
  *
  * @author Oliver Tigges 
  */
-public interface Namespace extends Comparable<Namespace> {
+public interface Namespace extends Comparable<Namespace>, Serializable {
 
 	/**
 	 * The URI of this namespace.
