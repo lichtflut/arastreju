@@ -36,7 +36,7 @@ public interface ArastrejuGate {
 	
 	TypeSystem getTypeSystem();
 	
-	ContextManager getContextManager();
+	Organizer getOrganizer();
 	
 	IdentityManagement getIdentityManagement();
 	

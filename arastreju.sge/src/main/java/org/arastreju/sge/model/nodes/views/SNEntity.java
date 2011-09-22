@@ -20,6 +20,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.arastreju.sge.SNOPS;
 import org.arastreju.sge.apriori.Aras;
 import org.arastreju.sge.apriori.RDF;
 import org.arastreju.sge.context.Context;
@@ -67,7 +68,7 @@ public class SNEntity extends ResourceView {
 	 * TODO: pick best class!
 	 */
 	public SNClass getMainClass() {
-		Association assoc = getSingleAssociation(RDF.TYPE);
+		Association assoc = SNOPS.singleAssociation(this, RDF.TYPE);
 		if (assoc != null){
 			return assoc.getObject().asResource().asClass();
 		}

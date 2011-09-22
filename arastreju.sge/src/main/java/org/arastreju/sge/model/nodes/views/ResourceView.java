@@ -130,27 +130,6 @@ public abstract class ResourceView implements ResourceNode, Serializable {
 	}
 
 	/* (non-Javadoc)
-	 * @see org.arastreju.api.ontology.model.sn.ResourceNode#getClients(org.arastreju.api.ontology.model.ResourceID)
-	 */
-	public Set<SemanticNode> getAssociationClients(final ResourceID predicate) {
-		return resource.getAssociationClients(predicate);
-	}
-
-	/* (non-Javadoc)
-	 * @see org.arastreju.api.ontology.model.sn.IResource#getSingleAssociation(org.arastreju.api.ontology.model.ResourceID)
-	 */
-	public Association getSingleAssociation(final ResourceID predicate) {
-		return resource.getSingleAssociation(predicate);
-	}
-
-	/* (non-Javadoc)
-	 * @see org.arastreju.api.ontology.model.sn.ResourceNode#getSingleAssociationClient(org.arastreju.api.ontology.model.ResourceID)
-	 */
-	public SemanticNode getSingleAssociationClient(final ResourceID predicate) {
-		return resource.getSingleAssociationClient(predicate);
-	}
-	
-	/* (non-Javadoc)
 	 * @see org.arastreju.api.ontology.model.sn.IResource#hasAssociation(org.arastreju.api.ontology.model.Association)
 	 */
 	public boolean hasAssociation(final Association assoc) {

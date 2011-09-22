@@ -5,6 +5,7 @@ package org.arastreju.sge.security.impl;
 
 import java.util.Set;
 
+import org.arastreju.sge.SNOPS;
 import org.arastreju.sge.apriori.Aras;
 import org.arastreju.sge.model.nodes.ResourceNode;
 import org.arastreju.sge.model.nodes.SemanticNode;
@@ -54,7 +55,7 @@ public abstract class AbstractIdentity implements Identity {
 	 * @see org.arastreju.sge.security.Identity#getName()
 	 */
 	public String getName() {
-		final SemanticNode idNode = identityNode.getSingleAssociationClient(Aras.IDENTIFIED_BY);
+		final SemanticNode idNode = SNOPS.singleObject(identityNode, Aras.IDENTIFIED_BY);
 		if (idNode == null) {
 			throw new IllegalStateException("Identity has no name!");
 		}

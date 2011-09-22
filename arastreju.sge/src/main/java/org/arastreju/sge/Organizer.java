@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2010 lichtflut Forschungs- und Entwicklungsgesellschaft mbH
+ * Copyright (C) 2011 lichtflut Forschungs- und Entwicklungsgesellschaft mbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,9 +15,16 @@
  */
 package org.arastreju.sge;
 
+import java.util.Collection;
+
+import org.arastreju.sge.context.Context;
+import org.arastreju.sge.naming.Namespace;
+import org.arastreju.sge.naming.QualifiedName;
+
+
 /**
  * <p>
- *  [DESCRIPTION]
+ *  Organizer for Contexts und Namespaces.
  * </p>
  *
  * <p>
@@ -26,6 +33,14 @@ package org.arastreju.sge;
  *
  * @author Oliver Tigges
  */
-public class ContextManager {
+public interface Organizer {
+	
+	Collection<Namespace> getNamespaces();
+	
+	Namespace registerNamespace(String namespace, String defaultPrefix);
+	
+	Collection<Context> getContexts();
+	
+	Context registerContext(QualifiedName qn);
 
 }

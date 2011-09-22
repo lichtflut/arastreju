@@ -18,19 +18,18 @@ package org.arastreju.bindings.neo4j;
 import java.io.IOException;
 
 import org.arastreju.bindings.neo4j.impl.GraphDataStore;
-import org.arastreju.bindings.neo4j.impl.SemanticNetworkAccess;
 import org.arastreju.bindings.neo4j.impl.NeoTypeSystem;
+import org.arastreju.bindings.neo4j.impl.SemanticNetworkAccess;
+import org.arastreju.bindings.neo4j.index.ResourceIndex;
 import org.arastreju.sge.ArastrejuGate;
 import org.arastreju.sge.ArastrejuProfile;
-import org.arastreju.sge.ContextManager;
 import org.arastreju.sge.IdentityManagement;
 import org.arastreju.sge.ModelingConversation;
+import org.arastreju.sge.Organizer;
 import org.arastreju.sge.TypeSystem;
 import org.arastreju.sge.security.LoginException;
 import org.arastreju.sge.spi.GateContext;
 import org.arastreju.sge.spi.GateInitializationException;
-
-import de.lichtflut.infra.exceptions.NotYetImplementedException;
 
 /**
  * <p>
@@ -72,44 +71,37 @@ public class Neo4jGate implements ArastrejuGate {
 
 	// -----------------------------------------------------
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.arastreju.sge.ArastrejuGate#startConversation()
+	/**
+	 * {@inheritDoc}
 	 */
 	public ModelingConversation startConversation() {
 		return new Neo4jModellingConversation(neo4jDataStore);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.arastreju.sge.ArastrejuGate#getTypeSystem()
+	/**
+	 * {@inheritDoc}
 	 */
 	public TypeSystem getTypeSystem() {
 		return new NeoTypeSystem(neo4jDataStore);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.arastreju.sge.ArastrejuGate#getContextManager()
+	/**
+	 * {@inheritDoc}
 	 */
-	public ContextManager getContextManager() {
-		throw new NotYetImplementedException();
+	public Organizer getOrganizer() {
+		return new NeoOrganizer(new ResourceIndex(neo4jDataStore));
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.arastreju.sge.ArastrejuGate#getIdentityManagement()
+	/**
+	 * {@inheritDoc}
 	 */
+
 	public IdentityManagement getIdentityManagement() {
 		return new NeoIdentityManagement(neo4jDataStore);
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.arastreju.sge.ArastrejuGate#close()
+	/**
+	 * {@inheritDoc}
 	 */
 	public void close() {
 	}

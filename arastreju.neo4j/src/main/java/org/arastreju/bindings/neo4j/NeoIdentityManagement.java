@@ -89,7 +89,7 @@ public class NeoIdentityManagement implements IdentityManagement {
 		}
 		
 		final SNEntity user = found.get(0).asEntity();
-		if (!credential.applies(user.getSingleAssociationClient(Aras.HAS_CREDENTIAL))){
+		if (!credential.applies(SNOPS.singleObject(user, Aras.HAS_CREDENTIAL))){
 			throw new LoginException(ErrorCodes.LOGIN_USER_CREDENTIAL_NOT_MATCH, "Wrong credential");
 		}
 		

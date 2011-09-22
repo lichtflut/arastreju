@@ -15,18 +15,12 @@
  */
 package org.arastreju.bindings.neo4j;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-
-import org.arastreju.bindings.neo4j.impl.SemanticNetworkAccess;
 import org.arastreju.bindings.neo4j.impl.ResourceRegistry;
+import org.arastreju.bindings.neo4j.impl.SemanticNetworkAccess;
 import org.arastreju.sge.ModelingConversation;
 import org.arastreju.sge.model.ResourceID;
 import org.arastreju.sge.model.SemanticGraph;
-import org.arastreju.sge.model.associations.Association;
 import org.arastreju.sge.model.nodes.ResourceNode;
-import org.arastreju.sge.model.nodes.SemanticNode;
 import org.arastreju.sge.naming.QualifiedName;
 import org.arastreju.sge.persistence.TransactionControl;
 import org.arastreju.sge.query.QueryManager;
