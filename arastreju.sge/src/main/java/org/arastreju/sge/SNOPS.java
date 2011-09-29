@@ -44,6 +44,14 @@ public class SNOPS {
 		return new SimpleResourceID(qn);
 	}
 	
+	/**
+	 * @param node The node.
+	 * @return An isolated ID object.
+	 */
+	public static ResourceID id(final ResourceNode node) {
+		return new SimpleResourceID(node);
+	}
+	
 	public static String string(final SemanticNode node) {
 		if (node == null) {
 			return null;
@@ -204,5 +212,5 @@ public class SNOPS {
 			}
 		}
 	}
-	
+
 }
