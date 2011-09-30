@@ -60,6 +60,11 @@ public interface Aras {
 	public static final ResourceID DATATYPE_TERM = new SimpleResourceID("http://arastreju.org/kernel#", "Term");
 	public static final ResourceID DATATYPE_RESOURCE = new SimpleResourceID("http://www.w3.org/2000/01/rdf-schema#", "Resource");
 	
+	// -- VALUES ---------------------------------------
+	
+	public static final ResourceID TRUE = new SimpleResourceID("http://arastreju.org/kernel#", "True");
+	public static final ResourceID FALSE = new SimpleResourceID("http://arastreju.org/kernel#", "False");
+	
 	// -- MODEL SELECTIONS --------------------------------
 	
 	public static final ResourceID MODEL_SELECTION = new SimpleResourceID(NAMESPACE_URI, "ModelSelection");

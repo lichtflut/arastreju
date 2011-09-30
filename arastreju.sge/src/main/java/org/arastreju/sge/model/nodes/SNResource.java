@@ -49,11 +49,11 @@ public class SNResource implements ResourceNode, Serializable {
 	
 	private String name;
 	
-	private Namespace namespace = VoidNamespace.getInstance();
+	private Namespace namespace;
 	
 	private AssociationKeeper associationKeeper;
 	
-	// ------------------------------------------------------
+	// -- PUBLIC CONSTRUCTORS -----------------------------
 	
 	/**
 	 * Default constructor for new unattached resource.
@@ -76,6 +76,8 @@ public class SNResource implements ResourceNode, Serializable {
 	public SNResource(final QualifiedName qn) {
 		this(qn.getNamespace(), qn.getSimpleName(), new DetachedAssociationKeeper());
 	}
+	
+	// -- PROTECTED CONSTRUCTORS --------------------------
 	
 	/**
 	 * Constructor for SPI subclasses.
