@@ -81,19 +81,11 @@ public class Association extends AbstractStatement implements Serializable {
 	
 	//-----------------------------------------------------
 	
-	/* (non-Javadoc)
-	 * @see org.arastreju.sge.model.associations.Statement#getSubject()
+	/**
+	 * {@inheritDoc}
 	 */
 	public ResourceNode getSubject() {
 		return (ResourceNode) subject;
-	}
-	
-	/**
-	 * Checks if all elements of this association are attached.
-	 * @return true if attached.
-	 */
-	public boolean isAttached(){
-		return subject.isAttached() && object.isAttached() && predicate.isAttached();
 	}
 	
 	// -----------------------------------------------------

@@ -27,16 +27,14 @@ import org.arastreju.bindings.neo4j.mapping.RelationMapper;
 import org.arastreju.sge.apriori.RDF;
 import org.arastreju.sge.model.ResourceID;
 import org.arastreju.sge.model.Statement;
-import org.arastreju.sge.model.associations.Association;
 import org.arastreju.sge.model.nodes.ResourceNode;
+import org.arastreju.sge.model.nodes.SemanticNode;
 import org.arastreju.sge.query.QueryManager;
 import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import de.lichtflut.infra.exceptions.NoLongerSupportedException;
 
 /**
  * <p>
@@ -86,11 +84,18 @@ public class NeoQueryManager implements QueryManager, NeoConstants {
 		return result;
 	}
 	
-	/**
+	/** 
 	 * {@inheritDoc}
 	 */
-	public List<Association> findIncomingAssociations(final ResourceID resource) {
-		throw new NoLongerSupportedException();
+	public List<ResourceNode> findSubjects(final ResourceID predicate, final SemanticNode object) {
+		if (object.isValueNode()) {
+			return findByTag(predicate, object.asValue().getStringValue());
+		}
+		final String property = uri(predicate);
+		final String objectURI = uri(object.asResource());
+		final List<ResourceNode> result = index.lookup(property, objectURI);
+		logger.debug("found for predicate '" + property + "'and value '" + objectURI + "': " + result);
+		return result;
 	}
 	
 	/**
@@ -120,7 +125,4 @@ public class NeoQueryManager implements QueryManager, NeoConstants {
 		return result;
 	}
 	
-	// -----------------------------------------------------
-	
-
 }

@@ -20,8 +20,8 @@ import java.util.Set;
 
 import org.arastreju.sge.model.ResourceID;
 import org.arastreju.sge.model.Statement;
-import org.arastreju.sge.model.associations.Association;
 import org.arastreju.sge.model.nodes.ResourceNode;
+import org.arastreju.sge.model.nodes.SemanticNode;
 
 /**
  * <p>
@@ -53,20 +53,20 @@ public interface QueryManager {
 	List<ResourceNode> findByTag(ResourceID predicate, String tag);
 	
 	/**
+	 * Find resources with that are subject in a statement with given predicate and object.
+	 * @param predicate The predicate.
+	 * @param object The object.
+	 * @return The corresponding result list.
+	 */
+	List<ResourceNode> findSubjects(ResourceID predicate, SemanticNode object);
+	
+	/**
 	 * Find resources with the given rdf:type.
 	 * @param type The resource ID of the type.
 	 * @return A list with all resources having given resource type as rdf:type.
 	 */
 	List<ResourceNode> findByType(ResourceID type);
 	
-	/**
-	 * Find all incoming associations for the given resource.
-	 * @param resource The resource.
-	 * @return A list with all associations where the resource is the client/object.
-	 */
-	@Deprecated
-	List<Association> findIncomingAssociations(ResourceID resource);
-
 	/**
 	 * Find all incoming statements for the given resource. These are the statements where
 	 * <code>resource</code> is the object.
