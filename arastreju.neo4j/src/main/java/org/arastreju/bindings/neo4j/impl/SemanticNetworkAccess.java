@@ -16,17 +16,23 @@
 package org.arastreju.bindings.neo4j.impl;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 
 import org.arastreju.bindings.neo4j.ArasRelTypes;
 import org.arastreju.bindings.neo4j.NeoConstants;
 import org.arastreju.bindings.neo4j.extensions.NeoAssociationKeeper;
 import org.arastreju.bindings.neo4j.extensions.SNResourceNeo;
-import org.arastreju.bindings.neo4j.index.NeoIndexingService;
+import org.arastreju.bindings.neo4j.index.ResourceIndex;
 import org.arastreju.bindings.neo4j.mapping.NodeMapper;
 import org.arastreju.bindings.neo4j.tx.NeoTransactionControl;
+import org.arastreju.bindings.neo4j.tx.TxAction;
 import org.arastreju.bindings.neo4j.tx.TxProvider;
+import org.arastreju.bindings.neo4j.tx.TxResultAction;
 import org.arastreju.bindings.neo4j.tx.TxWrapper;
+import org.arastreju.sge.SNOPS;
 import org.arastreju.sge.context.Context;
 import org.arastreju.sge.model.ResourceID;
 import org.arastreju.sge.model.SemanticGraph;
@@ -37,10 +43,10 @@ import org.arastreju.sge.model.nodes.ResourceNode;
 import org.arastreju.sge.model.nodes.SemanticNode;
 import org.arastreju.sge.model.nodes.ValueNode;
 import org.arastreju.sge.naming.QualifiedName;
+import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
-import org.neo4j.index.IndexService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -66,7 +72,7 @@ public class SemanticNetworkAccess implements NeoConstants, ResourceResolver {
 	
 	private final GraphDatabaseService gdbService;
 	
-	private final NeoIndexingService indexService;
+	private final ResourceIndex index;
 	
 	private final NodeMapper mapper;
 	
@@ -99,7 +105,7 @@ public class SemanticNetworkAccess implements NeoConstants, ResourceResolver {
 	 */
 	public SemanticNetworkAccess(final GraphDataStore store) {
 		this.gdbService = store.getGdbService();
-		this.indexService = store.getIndexService();
+		this.index = new ResourceIndex(this, store.getIndexService());
 		this.registry = store.getRegistry();
 		
 		this.txProvider = new TxProvider(gdbService);
@@ -118,8 +124,7 @@ public class SemanticNetworkAccess implements NeoConstants, ResourceResolver {
 		// if not yet registered, load and wrap
 		return doTransacted(new TxResultAction<ResourceNode>() {
 			public ResourceNode execute(SemanticNetworkAccess store) {
-				final Node neoNode = indexService.getSingleNode(INDEX_KEY_RESOURCE_URI, qn.toURI());
-				logger.debug("IndexLookup: " + qn + " --> " + neoNode); 
+				final Node neoNode = index.lookup(qn);
 				if (neoNode != null){
 					final SNResourceNeo arasNode = new SNResourceNeo(qn);
 					registry.register(arasNode);
@@ -136,7 +141,7 @@ public class SemanticNetworkAccess implements NeoConstants, ResourceResolver {
 	/**
 	 * {@inheritDoc}
 	 */
-	public ResourceNode findResource(final Node neoNode) {
+	public ResourceNode resolveResource(final Node neoNode) {
 		final QualifiedName qn = new QualifiedName(neoNode.getProperty(PROPERTY_URI).toString());
 		if (registry.contains(qn)){
 			return registry.get(qn);
@@ -147,6 +152,16 @@ public class SemanticNetworkAccess implements NeoConstants, ResourceResolver {
 		return arasNode;
 	}
 	
+	/** 
+	 * {@inheritDoc}
+	 */
+	public List<ResourceNode> resolveResources(final Collection<Node> neoNodes) {
+		final List<ResourceNode> result = new ArrayList<ResourceNode>();
+		for (Node node : neoNodes) {
+			result.add(resolveResource(node));
+		}
+		return result;
+	}
 	
 	/**
 	 * {@inheritDoc}
@@ -216,7 +231,7 @@ public class SemanticNetworkAccess implements NeoConstants, ResourceResolver {
 		AssocKeeperAccess.getAssociationKeeper(node).clearAssociations();
 		doTransacted(new TxAction() {
 			public void execute(SemanticNetworkAccess store) {
-				new NodeRemover(registry).remove(node, cascade);
+				new NodeRemover(registry, index).remove(node, cascade);
 			}
 		});
 	}
@@ -275,7 +290,7 @@ public class SemanticNetworkAccess implements NeoConstants, ResourceResolver {
 					final Relationship relationship = subject.createRelationshipTo(neoClient, ArasRelTypes.REFERENCE);
 					relationship.setProperty(PREDICATE_URI, predicate.getQualifiedName().toURI());
 					assignContext(relationship, assoc.getContexts());
-					indexService.index(subject, predicate.getQualifiedName().toURI(), arasClient.getQualifiedName().toURI());
+					index.index(subject, predicate, arasClient);
 					logger.debug("added relationship--> " + relationship + " to node " + subject);
 				} else {
 					// Value node
@@ -290,8 +305,8 @@ public class SemanticNetworkAccess implements NeoConstants, ResourceResolver {
 					
 					logger.debug("added value --> " + relationship + " to node " + subject);
 
-					indexService.index(subject, INDEX_KEY_RESOURCE_VALUE, value.getStringValue());
-					indexService.index(subject, predicate.getQualifiedName().toURI(), value.getStringValue());
+					index.index(subject, value);
+					index.index(subject, predicate, value);
 					logger.debug("Indexed: " + value.getStringValue() + " --> " + subject);
 				}
 			}
@@ -304,10 +319,21 @@ public class SemanticNetworkAccess implements NeoConstants, ResourceResolver {
 	 * @return
 	 */
 	public boolean remove(final Node neoNode, final Association assoc) {
-		return false;
+		final Relationship relationship = findCorresponding(neoNode, assoc);
+		if (relationship != null) {
+			doTransacted(new TxAction() {
+				public void execute(final SemanticNetworkAccess store) {
+					index.remove(relationship);
+					relationship.delete();
+				}
+			});
+			return true;
+		} else {
+			logger.warn("Didn't find corresponding relationship to delete: " + assoc);
+			return false;	
+		}
 	}
 	
-
 	/**
 	 * Merges all associations from the 'changed' node to the 'attached' node.
 	 * @param attached The currently attached node.
@@ -331,8 +357,8 @@ public class SemanticNetworkAccess implements NeoConstants, ResourceResolver {
 		return attached;
 	}
 	
-	public IndexService getIndexService() {
-		return indexService;
+	public ResourceIndex getIndex() {
+		return index;
 	}
 	
 	public GraphDatabaseService getGdbService() {
@@ -387,9 +413,7 @@ public class SemanticNetworkAccess implements NeoConstants, ResourceResolver {
 		mapper.toNeoNode(node, neoNode);
 		
 		// 2nd: index the Neo node.
-		final QualifiedName qn = node.getQualifiedName();
-		indexService.index(neoNode, INDEX_KEY_RESOURCE_URI, qn.toURI());
-		logger.debug("Indexed: " + qn + " --> " + neoNode);
+		index.index(neoNode, node);
 		
 		// 3rd: attach the Resource with this store.
 		final Set<Association> copy = node.getAssociations();
@@ -416,6 +440,28 @@ public class SemanticNetworkAccess implements NeoConstants, ResourceResolver {
 	 */
 	protected void assignContext(final Relationship relationship, final Context[] contexts) {
 		new ContextAccess(this).assignContext(relationship, contexts);
+	}
+	
+	protected Relationship findCorresponding(final Node neoNode, final Association assoc) {
+		final String assocPredicate = assoc.getPredicate().getQualifiedName().toURI();
+		final String assocValue = SNOPS.string(assoc.getObject());
+		for(Relationship rel : neoNode.getRelationships(Direction.OUTGOING)) {
+			final String predicate = (String) rel.getProperty(PREDICATE_URI);
+			if (assocPredicate.equals(predicate)) {
+				if (assoc.getObject().isResourceNode()) {
+					final String uri = (String) rel.getEndNode().getProperty(PROPERTY_URI);
+					if (assocValue.equals(uri)) {
+						return rel;
+					}
+				} else {
+					final String value = (String) rel.getEndNode().getProperty(PROPERTY_VALUE);
+					if (assocValue.equals(value)) {
+						return rel;
+					}
+				}
+			}
+		}
+		return null;
 	}
 
 }

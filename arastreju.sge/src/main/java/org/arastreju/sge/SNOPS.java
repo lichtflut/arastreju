@@ -52,6 +52,12 @@ public class SNOPS {
 		return new SimpleResourceID(node);
 	}
 	
+	/**
+	 * Creates a string representation for given node. For a resource node this
+	 * will be the URI.
+	 * @param node The node.
+	 * @return The string representation.
+	 */
 	public static String string(final SemanticNode node) {
 		if (node == null) {
 			return null;

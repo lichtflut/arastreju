@@ -13,13 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.arastreju.bindings.neo4j.impl;
+package org.arastreju.bindings.neo4j.tx;
 
-
+import org.arastreju.bindings.neo4j.impl.SemanticNetworkAccess;
 
 /**
  * <p>
- *  [DESCRIPTION]
+ *  Action inside a transaction.
  * </p>
  *
  * <p>
@@ -33,6 +33,6 @@ public interface TxAction {
 	/**
 	 * Execute.
 	 */
-	public void execute(SemanticNetworkAccess store);
+	void execute(SemanticNetworkAccess store);
 
 }

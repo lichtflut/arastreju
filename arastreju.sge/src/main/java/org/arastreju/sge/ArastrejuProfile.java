@@ -88,7 +88,7 @@ public class ArastrejuProfile implements GateLifecycleListener {
 		}
 	}
 	
-	// -----------------------------------------------------
+	// -- READ PROFILE ------------------------------------
 	
 	public static ArastrejuProfile read() {
 		InputStream in = find(STANDARD_APP_PROFILE);

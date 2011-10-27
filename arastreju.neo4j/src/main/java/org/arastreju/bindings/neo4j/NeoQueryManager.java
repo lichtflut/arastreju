@@ -21,7 +21,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.arastreju.bindings.neo4j.impl.SemanticNetworkAccess;
 import org.arastreju.bindings.neo4j.index.ResourceIndex;
 import org.arastreju.bindings.neo4j.mapping.RelationMapper;
 import org.arastreju.sge.apriori.RDF;
@@ -58,17 +57,26 @@ public class NeoQueryManager implements QueryManager, NeoConstants {
 	/**
 	 * Constructor.
 	 */
-	public NeoQueryManager(final SemanticNetworkAccess store) {
-		this.index = new ResourceIndex(store);
+	public NeoQueryManager(final ResourceIndex index) {
+		this.index = index;
 	}
 	
 	// -----------------------------------------------------
+	
+	/** 
+	 * {@inheritDoc}
+	 */
+	public List<ResourceNode> findByURI(final String term) {
+		final List<ResourceNode> result = index.searchById(term);
+		logger.debug("found for term '" + term + "': " + result);
+		return result;
+	}
 	
 	/**
 	 * {@inheritDoc}
 	 */
 	public List<ResourceNode> findByTag(final String tag) {
-		final List<ResourceNode> result = index.lookup(INDEX_KEY_RESOURCE_VALUE, tag);
+		final List<ResourceNode> result = index.searchByValue(tag);
 		logger.debug("found for tag '" + tag + "': " + result);
 		return result;
 	}
@@ -124,5 +132,5 @@ public class NeoQueryManager implements QueryManager, NeoConstants {
 		logger.debug("found with rdf:type '" + typeURI + "': " + result);
 		return result;
 	}
-	
+
 }

@@ -16,22 +16,15 @@
 package org.arastreju.bindings.neo4j.impl;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
-import org.arastreju.bindings.neo4j.ArasRelTypes;
 import org.arastreju.bindings.neo4j.NeoConstants;
 import org.arastreju.sge.TypeSystem;
 import org.arastreju.sge.apriori.RDF;
 import org.arastreju.sge.apriori.RDFS;
+import org.arastreju.sge.model.nodes.ResourceNode;
 import org.arastreju.sge.model.nodes.views.SNClass;
-import org.neo4j.graphdb.Direction;
-import org.neo4j.graphdb.Node;
-import org.neo4j.graphdb.Path;
-import org.neo4j.graphdb.Relationship;
-import org.neo4j.graphdb.traversal.TraversalDescription;
-import org.neo4j.graphdb.traversal.Traverser;
-import org.neo4j.helpers.Predicate;
-import org.neo4j.kernel.Traversal;
 
 /**
  * <p>
@@ -47,8 +40,6 @@ import org.neo4j.kernel.Traversal;
 public class NeoTypeSystem implements TypeSystem, NeoConstants {
 	
 	private final String RDFS_CLASS_URI = RDFS.CLASS.getQualifiedName().toURI();
-	private final String RDF_TYPE_URI = RDF.TYPE.getQualifiedName().toString();
-	private final String RDFS_SUB_CLASS = RDFS.SUB_CLASS_OF.getQualifiedName().toString();
 	
 	private final SemanticNetworkAccess store;
 
@@ -69,37 +60,10 @@ public class NeoTypeSystem implements TypeSystem, NeoConstants {
 	 */
 	public Set<SNClass> getAllClasses() {
 		final Set<SNClass> result = new HashSet<SNClass>();
-		final Node rdfClassNode = store.getIndexService().getSingleNode(INDEX_KEY_RESOURCE_URI, RDFS_CLASS_URI);
-		if (rdfClassNode == null){
-			throw new IllegalStateException("Node for rdfs:Class does not exist.");
+		final List<ResourceNode> nodes = store.getIndex().lookup(RDF.TYPE, RDFS_CLASS_URI);
+		for (ResourceNode current : nodes) {
+			result.add(current.asClass());
 		}
-
-		final TraversalDescription description = 
-			Traversal.description()
-				.breadthFirst()
-				.relationships(ArasRelTypes.REFERENCE, Direction.INCOMING)
-				.filter(new Predicate<Path>() {
-			public boolean accept(final Path path) {
-				final Relationship rel = path.lastRelationship();
-				if (rel == null || !rel.hasProperty(PREDICATE_URI)){
-					return false;
-				}
-				final String pred = rel.getProperty(PREDICATE_URI).toString();
-				if (RDF_TYPE_URI.equals(pred) && rel.getEndNode().equals(rdfClassNode)){
-					return true;	
-				} else if (RDFS_SUB_CLASS.equals(pred)) {
-					return true;
-				} else {
-					return false;
-				}
-			}
-		});
-		
-		final Traverser traverser = description.traverse(rdfClassNode);
-		for(Path path : traverser){
-			result.add(store.findResource(path.endNode()).asClass());
-		}
-		
 		return result;
 	}
 

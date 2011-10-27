@@ -64,7 +64,7 @@ public class NeoIdentityManagement implements IdentityManagement {
 	 */
 	public NeoIdentityManagement(final SemanticNetworkAccess store) {
 		this.store = store;
-		this.index = new ResourceIndex(store);
+		this.index = store.getIndex();
 	}
 	
 	// -----------------------------------------------------

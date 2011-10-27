@@ -37,6 +37,13 @@ import org.arastreju.sge.model.nodes.SemanticNode;
 public interface QueryManager {
 
 	/**
+	 * Find resources with given term in their URI.
+	 * @param term The term.
+	 * @return The corresponding result list.
+	 */
+	List<ResourceNode> findByURI(String term);
+	
+	/**
 	 * Find resources with a given tag. 
 	 * @param tag The tag.
 	 * @return The corresponding result list.

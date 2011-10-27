@@ -20,7 +20,6 @@ import java.io.IOException;
 import org.arastreju.bindings.neo4j.impl.GraphDataStore;
 import org.arastreju.bindings.neo4j.impl.NeoTypeSystem;
 import org.arastreju.bindings.neo4j.impl.SemanticNetworkAccess;
-import org.arastreju.bindings.neo4j.index.ResourceIndex;
 import org.arastreju.sge.ArastrejuGate;
 import org.arastreju.sge.ArastrejuProfile;
 import org.arastreju.sge.IdentityManagement;
@@ -89,7 +88,7 @@ public class Neo4jGate implements ArastrejuGate {
 	 * {@inheritDoc}
 	 */
 	public Organizer getOrganizer() {
-		return new NeoOrganizer(new ResourceIndex(neo4jDataStore));
+		return new NeoOrganizer(neo4jDataStore.getIndex());
 	}
 
 	/**

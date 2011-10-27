@@ -125,7 +125,7 @@ public class Neo4jModellingConversation implements ModelingConversation {
 	 * @see org.arastreju.sge.ModellingConversation#createQueryManager()
 	 */
 	public QueryManager createQueryManager() {
-		return new NeoQueryManager(store);
+		return new NeoQueryManager(store.getIndex());
 	}
 	
 	// -----------------------------------------------------

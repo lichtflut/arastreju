@@ -43,14 +43,16 @@ import org.neo4j.graphdb.Relationship;
  */
 public class NodeMapper implements NeoConstants {
 	
-	private final SemanticNetworkAccess store;
+	private final SemanticNetworkAccess snAccess;
+	
+	// -----------------------------------------------------
 
 	/**
 	 * Default constructor.
 	 * @param neo4jDataStore 
 	 */
-	public NodeMapper(SemanticNetworkAccess neo4jDataStore) {
-		this.store = neo4jDataStore;
+	public NodeMapper(final SemanticNetworkAccess snAccess) {
+		this.snAccess = snAccess;
 	}
 	
 	// -----------------------------------------------------
@@ -60,22 +62,22 @@ public class NodeMapper implements NeoConstants {
 	}
 	
 	public void toArasNode(final Node neoNode, final SNResource arasNode){
-		final NeoAssociationKeeper assocKeeper = new NeoAssociationKeeper(arasNode, neoNode, store);
+		final NeoAssociationKeeper assocKeeper = new NeoAssociationKeeper(arasNode, neoNode, snAccess);
 		
 		AssocKeeperAccess.setAssociationKeeper(arasNode, assocKeeper);
 		
 		for(Relationship rel : neoNode.getRelationships(Direction.OUTGOING)){
 			final Node neoClient = rel.getEndNode();
-			final Context[] ctx = new ContextAccess(store).getContextInfo(rel);
+			final Context[] ctx = new ContextAccess(snAccess).getContextInfo(rel);
 			if (neoClient.hasProperty(PROPERTY_URI)){
 				// Resource Relation
-				ResourceNode object = store.findResource(rel.getEndNode());
-				ResourceNode predicate = store.findResource(new QualifiedName(rel.getProperty(PREDICATE_URI).toString()));
+				ResourceNode object = snAccess.resolveResource(rel.getEndNode());
+				ResourceNode predicate = snAccess.findResource(new QualifiedName(rel.getProperty(PREDICATE_URI).toString()));
 				assocKeeper.addResolvedAssociation(arasNode, predicate, object,ctx);
 			} else if (neoClient.hasProperty(PROPERTY_VALUE)){
 				// Value assignment
 				final SNValue value = new SNValueNeo(neoClient);
-				ResourceNode predicate = store.findResource(new QualifiedName(rel.getProperty(PREDICATE_URI).toString()));
+				ResourceNode predicate = snAccess.findResource(new QualifiedName(rel.getProperty(PREDICATE_URI).toString()));
 				assocKeeper.addResolvedAssociation(arasNode, predicate, value,ctx);
 			} else {
 				throw new IllegalStateException("Relation end has neither URI nor Value");

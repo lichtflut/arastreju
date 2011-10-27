@@ -66,7 +66,7 @@ public class NeoQueryManagerTest {
 	@Before
 	public void setUp() throws Exception {
 		store = new SemanticNetworkAccess();
-		qm = new NeoQueryManager(store);
+		qm = new NeoQueryManager(store.getIndex());
 	}
 
 	/**

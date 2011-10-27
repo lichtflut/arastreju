@@ -89,6 +89,16 @@ public class NeoAssociationKeeper extends AbstractAssociationKeeper implements N
 		store.addAssociation(neoNode, assoc);
 	}
 	
+	/** 
+	 * {@inheritDoc}
+	 */
+	@Override
+	public boolean remove(Association assoc) {
+		super.remove(assoc);
+		logger.info("Removed Association: " + assoc);
+		return store.remove(neoNode, assoc);
+	}
+	
 	// -----------------------------------------------------
 	
 	/**
@@ -115,8 +125,8 @@ public class NeoAssociationKeeper extends AbstractAssociationKeeper implements N
 		return Collections.emptySet();
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.arastreju.sge.model.associations.AbstractAssociationKeeper#addResolvedAssociation(org.arastreju.sge.model.nodes.ResourceNode, org.arastreju.sge.model.ResourceID, org.arastreju.sge.model.nodes.SemanticNode, org.arastreju.sge.context.Context[])
+	/**
+	 * {@inheritDoc}
 	 */
 	@Override
 	public void addResolvedAssociation(ResourceNode subject,
@@ -132,7 +142,7 @@ public class NeoAssociationKeeper extends AbstractAssociationKeeper implements N
 		for(Relationship rel : neoNode.getRelationships(Direction.OUTGOING)){
 			SemanticNode object = null;
 			if (rel.isType(ArasRelTypes.REFERENCE)){
-				object = store.findResource(rel.getEndNode());	
+				object = store.resolveResource(rel.getEndNode());	
 			} else if (rel.isType(ArasRelTypes.VALUE)){
 				object = new SNValueNeo(rel.getEndNode());
 			}
@@ -147,7 +157,7 @@ public class NeoAssociationKeeper extends AbstractAssociationKeeper implements N
 	 * @return A Detached Association Keeper.
 	 */
 	private Object writeReplace() {
-		logger.info("Serializing NeoAssociationKeeper --> Detaching");
+		logger.debug("Serializing NeoAssociationKeeper --> Detaching");
 		return new DetachedAssociationKeeper(getAssociationsDirectly());
 	}
 	

@@ -15,6 +15,9 @@
  */
 package org.arastreju.bindings.neo4j.impl;
 
+import java.util.Collection;
+import java.util.List;
+
 import org.arastreju.sge.model.ResourceID;
 import org.arastreju.sge.model.nodes.ResourceNode;
 import org.arastreju.sge.naming.QualifiedName;
@@ -22,7 +25,7 @@ import org.neo4j.graphdb.Node;
 
 /**
  * <p>
- *  [DESCRIPTION]
+ *  Interface for resource resolving.
  * </p>
  *
  * <p>
@@ -33,16 +36,32 @@ import org.neo4j.graphdb.Node;
  */
 public interface ResourceResolver {
 
-	/* (non-Javadoc)
-	 * @see org.arastreju.sge.ModellingConversation#findResource(com.sun.xml.internal.fastinfoset.QualifiedName)
+	/**
+	 * Find a resource by it's qualified name.
+	 * @param qn The qualified name.
+	 * @return The resource node or null.
 	 */
-	ResourceNode findResource(final QualifiedName qn);
+	ResourceNode findResource(QualifiedName qn);
 
-	ResourceNode findResource(final Node neoNode);
-
-	/* (non-Javadoc)
-	 * @see org.arastreju.sge.ModellingConversation#resolve(org.arastreju.sge.model.ResourceID)
+	/**
+	 * Resolve a resource by it's ID. If it does not exist, it will be created.
+	 * @param id The ID.
+	 * @return The resource node.
 	 */
-	ResourceNode resolve(final ResourceID resource);
+	ResourceNode resolve(ResourceID id);
+	
+	/**
+	 * Find a resource by it's corresponding neo node.
+	 * @param neoNode The neo node.
+	 * @return The resource node.
+	 */
+	ResourceNode resolveResource(Node neoNode);
+	
+	/**
+	 * Find all resource by their corresponding neo nodes.
+	 * @param neoNodes The neo nodes.
+	 * @return The resource nodes.
+	 */
+	List<ResourceNode> resolveResources(Collection<Node> neoNodes);
 
 }

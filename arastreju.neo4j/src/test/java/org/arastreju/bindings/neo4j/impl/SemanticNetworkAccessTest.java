@@ -32,6 +32,7 @@ import java.io.ObjectOutputStream;
 
 import org.arastreju.bindings.neo4j.ArasRelTypes;
 import org.arastreju.bindings.neo4j.NeoConstants;
+import org.arastreju.bindings.neo4j.index.ResourceIndex;
 import org.arastreju.sge.SNOPS;
 import org.arastreju.sge.apriori.Aras;
 import org.arastreju.sge.apriori.RDF;
@@ -95,7 +96,7 @@ public class SemanticNetworkAccessTest {
 
 	@Test
 	public void testResourceIndexing() throws IOException {
-		final IndexService index = store.getIndexService();
+		final IndexService index = store.getIndex().getIndexService();
 		
 		final GraphDatabaseService gdbService = store.getGdbService();
 		Transaction tx = gdbService.beginTx();
@@ -134,7 +135,7 @@ public class SemanticNetworkAccessTest {
 	
 	@Test
 	public void testValueIndexing() throws IOException {
-		final IndexService index = store.getIndexService();
+		final IndexService index = store.getIndex().getIndexService();;
 		
 		final ResourceNode car = new SNResource(qnCar);
 		Association.create(car, Aras.HAS_PROPER_NAME, new SNText("BMW"));

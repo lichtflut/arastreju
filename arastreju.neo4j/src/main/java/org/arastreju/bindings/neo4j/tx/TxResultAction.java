@@ -13,7 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.arastreju.bindings.neo4j.impl;
+package org.arastreju.bindings.neo4j.tx;
+
+import org.arastreju.bindings.neo4j.impl.SemanticNetworkAccess;
 
 
 
