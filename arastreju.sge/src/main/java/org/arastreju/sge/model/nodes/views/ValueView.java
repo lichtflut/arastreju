@@ -108,24 +108,10 @@ public abstract class ValueView implements ValueNode, Serializable {
 	// -----------------------------------------------------
 
 	/* (non-Javadoc)
-	 * @see org.arastreju.api.ontology.model.sn.ValueNode#asName()
-	 */
-	public SNName asName() {
-		return value.asName();
-	}
-
-	/* (non-Javadoc)
 	 * @see org.arastreju.api.ontology.model.sn.ValueNode#asScalar()
 	 */
 	public SNScalar asScalar() {
 		return value.asScalar();
-	}
-
-	/* (non-Javadoc)
-	 * @see org.arastreju.api.ontology.model.sn.ValueNode#asTerm()
-	 */
-	public SNTerm asTerm() {
-		return value.asTerm();
 	}
 
 	/* (non-Javadoc)

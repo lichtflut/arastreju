@@ -34,7 +34,7 @@ import org.neo4j.graphdb.Node;
 public class SNValueNeo extends SNValue implements NeoConstants {
 
 	/**
-	 * Creates a new {@link SNValue} based on a Neo {@link Node}.
+	 * Creates a new {@link SNValue} based on a Neo4j {@link Node}.
 	 * @param neoNode The Neo4j Node.
 	 */
 	public SNValueNeo(final Node neoNode){

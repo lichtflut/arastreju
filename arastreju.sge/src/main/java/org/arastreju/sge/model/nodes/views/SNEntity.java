@@ -119,16 +119,16 @@ public class SNEntity extends ResourceView {
 		return !getAssociations(Aras.HAS_PROPER_NAME).isEmpty();
 	}
 	
-	public List<SNName> getNames(){
-		List<SNName> result = new ArrayList<SNName>();
+	public List<SNText> getNames(){
+		List<SNText> result = new ArrayList<SNText>();
 		Set<Association> assocs = getAssociations(Aras.HAS_PROPER_NAME);
 		for (Association current : assocs) {
-			result.add(current.getObject().asValue().asName());
+			result.add(current.getObject().asValue().asText());
 		}
 		return result;
 	}
 
-	public void addName(SNName name, ResourceID type, Context context) {
+	public void addName(SNText name, ResourceID type, Context context) {
 		Association.create(this, type, name, context);
 	}
 	

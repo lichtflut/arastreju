@@ -103,11 +103,11 @@ public class SNClass extends ResourceView {
 	
 	// -- INTENSIONS --------------------------------------
 	
-	public List<SNTerm> getTerms(){
+	public List<SNText> getTerms(){
 		Set<Association> intensions = getAssociations(RDFS.LABEL);
-		List<SNTerm> terms = new ArrayList<SNTerm>(intensions.size());
+		List<SNText> terms = new ArrayList<SNText>(intensions.size());
 		for (Association assoc : intensions) {
-			terms.add(assoc.getObject().asValue().asTerm());
+			terms.add(assoc.getObject().asValue().asText());
 		}
 		return terms;
 	}

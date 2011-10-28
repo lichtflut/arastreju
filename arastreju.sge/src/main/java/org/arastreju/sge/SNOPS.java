@@ -12,6 +12,7 @@ import java.util.Set;
 import org.arastreju.sge.context.Context;
 import org.arastreju.sge.eh.ArastrejuRuntimeException;
 import org.arastreju.sge.eh.ErrorCodes;
+import org.arastreju.sge.model.ElementaryDataType;
 import org.arastreju.sge.model.ResourceID;
 import org.arastreju.sge.model.SimpleResourceID;
 import org.arastreju.sge.model.associations.Association;
@@ -31,6 +32,8 @@ import org.arastreju.sge.naming.QualifiedName;
  * @author Oliver Tigges
  */
 public class SNOPS {
+	
+	// -- TRANSFORMATION ----------------------------------
 
 	public static String uri(final ResourceID rid){
 		return rid.getQualifiedName().toURI();

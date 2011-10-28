@@ -147,10 +147,11 @@ public class DefaultSemanticGraph implements SemanticGraph {
 	}
 	
 	private void addCascading(final ResourceNode node, final Set<ResourceNode> visited) {
+		visited.add(node);
 		this.associations.addAll(node.getAssociations());
 		for (SemanticNode object : SNOPS.objects(node.getAssociations())) {
 			if (object.isResourceNode() && !visited.contains(object)) {
-				addCascading(node.asResource(), visited);
+				addCascading(object.asResource(), visited);
 			}
 		}
 	}

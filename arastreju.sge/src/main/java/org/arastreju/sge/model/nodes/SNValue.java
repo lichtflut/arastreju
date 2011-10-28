@@ -18,12 +18,13 @@ package org.arastreju.sge.model.nodes;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.arastreju.sge.model.ElementaryDataType;
-import org.arastreju.sge.model.nodes.views.SNName;
 import org.arastreju.sge.model.nodes.views.SNScalar;
-import org.arastreju.sge.model.nodes.views.SNTerm;
 import org.arastreju.sge.model.nodes.views.SNText;
 import org.arastreju.sge.model.nodes.views.SNTimeSpec;
 import org.arastreju.sge.model.nodes.views.SNUri;
@@ -44,10 +45,14 @@ import de.lichtflut.infra.Infra;
  */
 public class SNValue implements ValueNode, Serializable {
 	
+	private static final DateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
+	
 	private final ElementaryDataType datatype;
 	
 	private final Object value;
 
+	// -----------------------------------------------------
+	
 	/**
 	 * Constructor.
 	 * @param datatype The datatype.
@@ -58,45 +63,52 @@ public class SNValue implements ValueNode, Serializable {
 			throw new IllegalArgumentException("Value may not be null");
 		}
 		this.datatype = datatype;
-		this.value = value;
+		try {
+			this.value = convert(value, datatype);
+		} catch (ParseException e) {
+			throw new IllegalStateException("Value not of expected type", e);
+		}
 	}
 	
 	//-----------------------------------------------------
 	
-	/* (non-Javadoc)
-	 * @see org.arastreju.api.ontology.model.SemanticNode#isResourceNode()
+	/**
+	 * {@inheritDoc}
 	 */
 	public boolean isResourceNode() {
 		return false;
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.arastreju.api.ontology.model.SemanticNode#isValueNode()
+	/**
+	 * {@inheritDoc}
 	 */
 	public boolean isValueNode() {
 		return true;
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	public boolean isAttached() {
 		return true;
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.arastreju.api.ontology.model.sn.ValueNode#getDataType()
+	/**
+	 * {@inheritDoc}
 	 */
 	public ElementaryDataType getDataType() {
 		return datatype;
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.arastreju.sge.model.nodes.SemanticNode#asResource()
+	/**
+	 * {@inheritDoc}
 	 */
 	public ResourceNode asResource() {
 		throw new IllegalStateException("Not a resource: " + this);
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.arastreju.sge.model.nodes.SemanticNode#asValue()
+	/**
+	 * {@inheritDoc}
 	 */
 	public ValueNode asValue() {
 		return this;
@@ -104,8 +116,8 @@ public class SNValue implements ValueNode, Serializable {
 	
 	// ------------------------------------------------------
 	
-	/* (non-Javadoc)
-	 * @see org.arastreju.api.ontology.model.sn.ValueNode#getValue()
+	/**
+	 * {@inheritDoc}
 	 */
 	public Object getValue(){
 		switch (datatype) {
@@ -127,18 +139,25 @@ public class SNValue implements ValueNode, Serializable {
 	}
 	
 
-	/* (non-Javadoc)
-	 * @see org.arastreju.sge.model.nodes.ValueNode#getStringValue()
+	/**
+	 * {@inheritDoc}
 	 */
 	public String getStringValue() {
 		if (value == null){
 			return "";
 		} 
-		return value.toString();
+		switch (datatype) {
+		case DATE:
+		case TIME_OF_DAY:
+		case TIMESTAMP:
+			return DATE_FORMAT.format(getTimeValue());
+		default:
+			return value.toString();
+		}
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.arastreju.sge.model.nodes.ValueNode#getDecimalValue()
+	/**
+	 * {@inheritDoc}
 	 */
 	public BigDecimal getDecimalValue() {
 		if (value instanceof String){
@@ -147,8 +166,8 @@ public class SNValue implements ValueNode, Serializable {
 		return (BigDecimal) value;
 	}
 
-	/* (non-Javadoc)
-	 * @see org.arastreju.sge.model.nodes.ValueNode#getIntegerValue()
+	/**
+	 * {@inheritDoc}
 	 */
 	public BigInteger getIntegerValue() {
 		if (value instanceof String){
@@ -157,8 +176,8 @@ public class SNValue implements ValueNode, Serializable {
 		return (BigInteger) value;
 	}
 
-	/* (non-Javadoc)
-	 * @see org.arastreju.sge.model.nodes.ValueNode#getTimeValue()
+	/**
+	 * {@inheritDoc}
 	 */
 	public Date getTimeValue() {
 		return (Date) value;
@@ -166,57 +185,46 @@ public class SNValue implements ValueNode, Serializable {
 	
 	// -----------------------------------------------------
 	
-	/* (non-Javadoc)
-	 * @see org.arastreju.api.ontology.model.sn.ValueNode#asUri()
+	/**
+	 * {@inheritDoc}
 	 */
 	public SNUri asUri() {
 		return new SNUri(this);
 	}
 
-	/* (non-Javadoc)
-	 * @see org.arastreju.api.ontology.model.sn.ValueNode#asTimeSpec()
+	/**
+	 * {@inheritDoc}
 	 */
 	public SNTimeSpec asTimeSpec() {
 		return new SNTimeSpec(this);
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.arastreju.api.ontology.model.sn.ValueNode#asScalar()
+	/**
+	 * {@inheritDoc}
 	 */
 	public SNScalar asScalar() {
 		return new SNScalar(this);
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.arastreju.api.ontology.model.sn.ValueNode#asText()
+	/**
+	 * {@inheritDoc}
 	 */
 	public SNText asText() {
 		return new SNText(this);
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.arastreju.api.ontology.model.sn.ValueNode#asTerm()
-	 */
-	public SNTerm asTerm(){
-		return new SNTerm(this);
-	}
-
-	/* (non-Javadoc)
-	 * @see org.arastreju.api.ontology.model.sn.ValueNode#asName()
-	 */
-	public SNName asName(){
-		return new SNName(this);
-	}
-	
 	// -----------------------------------------------------
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public String toString() {
 		return getStringValue();
 	}
 
-	/* (non-Javadoc)
-	 * @see java.lang.Object#hashCode()
+	/**
+	 * {@inheritDoc}
 	 */
 	@Override
 	public int hashCode() {
@@ -228,8 +236,8 @@ public class SNValue implements ValueNode, Serializable {
 		return result;
 	}
 
-	/* (non-Javadoc)
-	 * @see java.lang.Object#equals(java.lang.Object)
+	/**
+	 * {@inheritDoc}
 	 */
 	@Override
 	public boolean equals(final Object obj) {
@@ -246,6 +254,26 @@ public class SNValue implements ValueNode, Serializable {
 		return super.equals(obj);
 	}
 	
+	// -----------------------------------------------------
 	
+	/**
+	 * Converts a String value to needed type, if necessary.
+	 * @throws ParseException 
+	 */
+	private Object convert(final Object value, final ElementaryDataType datatype) throws ParseException {
+		if (!(value instanceof String)) {
+			return value;
+		}
+		final String sVal = (String) value;
+		switch (datatype) {
+		case DATE:
+		case TIME_OF_DAY:
+		case TIMESTAMP:
+			return DATE_FORMAT.parse(sVal);
+
+		default:
+			return sVal;
+		}
+	}
 	
 }

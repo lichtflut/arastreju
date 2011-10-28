@@ -21,7 +21,7 @@ import org.arastreju.sge.naming.QualifiedName;
 
 /**
  * <p>
- *  [DESCRIPTION]
+ *  Extension of {@link SNResource} for neo4j binding.
  * </p>
  *
  * <p>
@@ -33,6 +33,7 @@ import org.arastreju.sge.naming.QualifiedName;
 public class SNResourceNeo extends SNResource {
 
 	/**
+	 * Constructor.
 	 * @param name
 	 * @param namespace
 	 * @param associationKeeper
@@ -42,14 +43,14 @@ public class SNResourceNeo extends SNResource {
 	}
 	
 	/**
-	 * 
+	 * Constructor.
 	 */
 	public SNResourceNeo(final QualifiedName qn, final NeoAssociationKeeper associationKeeper) {
 		super(qn, associationKeeper);
 	}
 	
 	/**
-	 * 
+	 * Constructor.
 	 */
 	public SNResourceNeo(final QualifiedName qn) {
 		super(qn);

@@ -20,9 +20,7 @@ import java.math.BigInteger;
 import java.util.Date;
 
 import org.arastreju.sge.model.ElementaryDataType;
-import org.arastreju.sge.model.nodes.views.SNName;
 import org.arastreju.sge.model.nodes.views.SNScalar;
-import org.arastreju.sge.model.nodes.views.SNTerm;
 import org.arastreju.sge.model.nodes.views.SNText;
 import org.arastreju.sge.model.nodes.views.SNTimeSpec;
 import org.arastreju.sge.model.nodes.views.SNUri;
@@ -66,9 +64,5 @@ public interface ValueNode extends SemanticNode {
 	SNScalar asScalar();
 
 	SNText asText();
-
-	SNTerm asTerm();
-
-	SNName asName();
 
 }

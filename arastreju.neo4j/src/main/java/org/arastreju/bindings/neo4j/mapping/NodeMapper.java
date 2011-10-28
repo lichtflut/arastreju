@@ -25,6 +25,7 @@ import org.arastreju.sge.context.Context;
 import org.arastreju.sge.model.nodes.ResourceNode;
 import org.arastreju.sge.model.nodes.SNResource;
 import org.arastreju.sge.model.nodes.SNValue;
+import org.arastreju.sge.model.nodes.ValueNode;
 import org.arastreju.sge.naming.QualifiedName;
 import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
@@ -59,6 +60,11 @@ public class NodeMapper implements NeoConstants {
 
 	public void toNeoNode(final ResourceNode arasNode, final Node neoNode){
 		neoNode.setProperty(PROPERTY_URI, arasNode.getQualifiedName().toURI());
+	}
+	
+	public void toNeoNode(final ValueNode value, final Node neoNode){
+		neoNode.setProperty(PROPERTY_DATATYPE, value.getDataType().name());
+		neoNode.setProperty(PROPERTY_VALUE, value.getStringValue());
 	}
 	
 	public void toArasNode(final Node neoNode, final SNResource arasNode){
