@@ -19,7 +19,7 @@
 	
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<neo4j.version>1.3</neo4j.version>
+		<neo4j.version>1.4.2</neo4j.version>
 	</properties>
 
 	<dependencies>
@@ -36,8 +36,8 @@
 		</dependency>
 		<dependency>
 			<groupId>org.neo4j</groupId>
-			<artifactId>neo4j-index</artifactId>
-			<version>1.3-1.3.M01</version>
+			<artifactId>neo4j-lucene-index</artifactId>
+			<version>${neo4j.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.arastreju</groupId>

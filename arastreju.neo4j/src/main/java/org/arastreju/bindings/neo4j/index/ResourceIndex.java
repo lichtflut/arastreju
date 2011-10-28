@@ -18,8 +18,9 @@ import org.arastreju.sge.model.nodes.ValueNode;
 import org.arastreju.sge.naming.QualifiedName;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
-import org.neo4j.index.IndexHits;
-import org.neo4j.index.IndexService;
+import org.neo4j.graphdb.index.Index;
+import org.neo4j.graphdb.index.IndexHits;
+import org.neo4j.graphdb.index.IndexManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,8 +37,27 @@ import org.slf4j.LoggerFactory;
  */
 public class ResourceIndex implements NeoConstants {
 	
+	/**
+	 * Index for resources.
+	 */
+	public static final String INDEX_RESOURCES = "resources";
+	
+	// -----------------------------------------------------
+	
+	/**
+	 * Index key representing a resource'id.
+	 */
+	public static final String INDEX_KEY_RESOURCE_URI = "resource-uri";
+	
+	/**
+	 * Index key for a resource's value. 
+	 */
+	public static final String INDEX_KEY_RESOURCE_VALUE = "resource-value";
+	
+	// -----------------------------------------------------
+	
 	private final SemanticNetworkAccess store;
-	private final IndexService service;
+	private final IndexManager manager;
 	
 	private final Logger logger = LoggerFactory.getLogger(ResourceIndex.class);
 
@@ -47,19 +67,12 @@ public class ResourceIndex implements NeoConstants {
 	 * Constructor.
 	 * @param store The neo data store.
 	 */
-	public ResourceIndex(final SemanticNetworkAccess store, final IndexService service) {
+	public ResourceIndex(final SemanticNetworkAccess store, final IndexManager service) {
 		this.store = store;
-		this.service = service;
+		this.manager = service;
 	}
 	
 	// -----------------------------------------------------
-	
-	/**
-	 * @return the service
-	 */
-	public IndexService getIndexService() {
-		return service;
-	}
 	
 	/**
 	 * @return the store
@@ -74,7 +87,7 @@ public class ResourceIndex implements NeoConstants {
 	 * Find in Index by key and value.
 	 */
 	public Node lookup(final QualifiedName qn) {
-		return service.getSingleNode(INDEX_KEY_RESOURCE_URI, qn.toURI());
+		return manager.forNodes(INDEX_RESOURCES).get(INDEX_KEY_RESOURCE_URI, qn.toURI()).getSingle();
 	}
 	
 	// -----------------------------------------------------
@@ -96,15 +109,15 @@ public class ResourceIndex implements NeoConstants {
 	/**
 	 * Find in Index by key and value.
 	 */
-	public List<ResourceNode> lookup(final ResourceID key, final ResourceID value) {
-		return lookup(uri(key), uri(value));
+	public List<ResourceNode> lookup(final ResourceID predicate, final ResourceID value) {
+		return lookup(uri(predicate), uri(value));
 	}
 	
 	/**
 	 * Find in Index by key and value.
 	 */
-	public List<ResourceNode> lookup(final ResourceID key, final String value) {
-		return lookup(uri(key), value);
+	public List<ResourceNode> lookup(final ResourceID predicate, final String value) {
+		return lookup(uri(predicate), value);
 	}
 	
 	/**
@@ -114,7 +127,7 @@ public class ResourceIndex implements NeoConstants {
 		final List<ResourceNode> result = new ArrayList<ResourceNode>();
 		store.doTransacted(new TxAction() {
 			public void execute(final SemanticNetworkAccess store) {
-				final IndexHits<Node> nodes = service.getNodes(key, value);
+				final IndexHits<Node> nodes = resourceIndex().get(key, value);
 				for (Node node : nodes) {
 					if (node.hasProperty(PROPERTY_URI)) {
 						result.add(store.resolveResource(node));
@@ -135,25 +148,24 @@ public class ResourceIndex implements NeoConstants {
 	
 	public void index(Node subject, ResourceID predicate, SemanticNode value) {
 		if (value.isResourceNode()) {
-			service.index(subject, uri(predicate), uri(value.asResource()));	
+			resourceIndex().add(subject, uri(predicate), uri(value.asResource()));	
 		} else {
-			service.index(subject, uri(predicate), value.asValue().getStringValue());
+			resourceIndex().add(subject, uri(predicate), value.asValue().getStringValue());
 		}
 	}
 	
 	public void index(Node subject, ValueNode value) {
-		service.index(subject, INDEX_KEY_RESOURCE_VALUE, value.asValue().getStringValue());
+		resourceIndex().add(subject, INDEX_KEY_RESOURCE_VALUE, value.asValue().getStringValue());
 	}
 	
 	public void index(Node subject, ResourceID resourceID) {
-		service.index(subject, INDEX_KEY_RESOURCE_URI, uri(resourceID));
+		resourceIndex().add(subject, INDEX_KEY_RESOURCE_URI, uri(resourceID));
 	}
 	
 	// -----------------------------------------------------
 	
 	public void remove(final Node node) {
-		service.removeIndex(node, INDEX_KEY_RESOURCE_URI);
-		service.removeIndex(node, INDEX_KEY_RESOURCE_VALUE);
+		resourceIndex().remove(node);
 	}
 
 	/**
@@ -161,7 +173,13 @@ public class ResourceIndex implements NeoConstants {
 	 * @param rel The relationship to be removed.
 	 */
 	public void remove(final Relationship rel) {
-		service.removeIndex(rel.getStartNode(), (String) rel.getProperty(PREDICATE_URI));
+		resourceIndex().remove(rel.getStartNode(), (String) rel.getProperty(PREDICATE_URI));
+	}
+	
+	// -----------------------------------------------------
+	
+	private Index<Node> resourceIndex() {
+		return manager.forNodes(INDEX_RESOURCES);
 	}
 
 }

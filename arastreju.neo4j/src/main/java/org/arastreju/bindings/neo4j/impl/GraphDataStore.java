@@ -6,10 +6,10 @@ package org.arastreju.bindings.neo4j.impl;
 import java.io.File;
 import java.io.IOException;
 
-import org.arastreju.bindings.neo4j.index.NeoIndexingService;
 import org.arastreju.sge.ArastrejuProfile;
 import org.arastreju.sge.spi.ProfileCloseListener;
 import org.neo4j.graphdb.GraphDatabaseService;
+import org.neo4j.graphdb.index.IndexManager;
 import org.neo4j.kernel.EmbeddedGraphDatabase;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,11 +29,11 @@ public class GraphDataStore implements ProfileCloseListener {
 	
 	private final GraphDatabaseService gdbService;
 	
-	private final NeoIndexingService indexService;
-	
 	private final ResourceRegistry registry = new ResourceRegistry();
 	
 	private final Logger logger = LoggerFactory.getLogger(GraphDataStore.class);
+
+	private IndexManager indexManager;
 
 	// -----------------------------------------------------
 
@@ -51,7 +51,7 @@ public class GraphDataStore implements ProfileCloseListener {
 	public GraphDataStore(final String dir) {
 		logger.info("Neo4jDataStore created in " + dir);
 		gdbService = new EmbeddedGraphDatabase(dir); 
-		indexService = new NeoIndexingService(gdbService);
+		indexManager = gdbService.index();
 	}
 	
 	// -----------------------------------------------------
@@ -62,12 +62,12 @@ public class GraphDataStore implements ProfileCloseListener {
 	public GraphDatabaseService getGdbService() {
 		return gdbService;
 	}
-
+	
 	/**
-	 * @return the indexService
+	 * @return the indexManager
 	 */
-	public NeoIndexingService getIndexService() {
-		return indexService;
+	public IndexManager getIndexManager() {
+		return indexManager;
 	}
 
 	/**
@@ -84,7 +84,6 @@ public class GraphDataStore implements ProfileCloseListener {
 	 */
 	public void onClosed(final ArastrejuProfile profile) {
 		gdbService.shutdown();
-		indexService.shutdown();
 		registry.clear();
 	}
 	

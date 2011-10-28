@@ -29,9 +29,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.List;
 
-import org.arastreju.bindings.neo4j.ArasRelTypes;
-import org.arastreju.bindings.neo4j.NeoConstants;
 import org.arastreju.bindings.neo4j.index.ResourceIndex;
 import org.arastreju.sge.SNOPS;
 import org.arastreju.sge.apriori.Aras;
@@ -56,10 +55,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.neo4j.graphdb.GraphDatabaseService;
-import org.neo4j.graphdb.Node;
-import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.Transaction;
-import org.neo4j.index.IndexService;
 
 /**
  * <p>
@@ -95,47 +91,8 @@ public class SemanticNetworkAccessTest {
 	// -----------------------------------------------------
 
 	@Test
-	public void testResourceIndexing() throws IOException {
-		final IndexService index = store.getIndex().getIndexService();
-		
-		final GraphDatabaseService gdbService = store.getGdbService();
-		Transaction tx = gdbService.beginTx();
-		
-		final Node a = gdbService.createNode();
-		
-		index.index(a, "name", "a");
-		final Node b = gdbService.createNode();
-		
-		tx.success();
-		tx.finish();
-		
-		tx = gdbService.beginTx();
-		
-		Relationship rel = a.createRelationshipTo(b, ArasRelTypes.VALUE);
-		rel.setProperty("type", "123");
-		
-		tx.success();
-		tx.finish();
-		
-		tx = gdbService.beginTx();
-		
-		final Node a2 = index.getSingleNode("name", "a");
-		
-		assertTrue(a2.getRelationships().iterator().hasNext());
-		
-		Relationship relationship = a2.getRelationships().iterator().next();
-		
-		assertEquals(a, relationship.getStartNode());
-		assertEquals(b, relationship.getEndNode());
-		assertEquals("123", relationship.getProperty("type"));
-		
-		tx.success();
-		tx.finish();
-	}
-	
-	@Test
 	public void testValueIndexing() throws IOException {
-		final IndexService index = store.getIndex().getIndexService();;
+		final ResourceIndex index = store.getIndex();
 		
 		final ResourceNode car = new SNResource(qnCar);
 		Association.create(car, Aras.HAS_PROPER_NAME, new SNText("BMW"));
@@ -145,8 +102,9 @@ public class SemanticNetworkAccessTest {
 		final GraphDatabaseService gdbService = store.getGdbService();
 		Transaction tx = gdbService.beginTx();
 		
-		Node found = index.getSingleNode(NeoConstants.INDEX_KEY_RESOURCE_VALUE, "BMW");
+		List<ResourceNode> found = index.lookup(Aras.HAS_PROPER_NAME, "BMW");
 		assertNotNull(found);
+		assertEquals(1, found.size());
 		
 		tx.finish();
 	}

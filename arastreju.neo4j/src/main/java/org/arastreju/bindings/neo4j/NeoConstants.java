@@ -46,16 +46,4 @@ public interface NeoConstants {
 	 */
 	String PREDICATE_URI = "predicate-uri";
 	
-	// -- INDEX -------------------------------------------
-	
-	/**
-	 * Index key representing a resource'id.
-	 */
-	String INDEX_KEY_RESOURCE_URI = "resource-uri";
-	
-	/**
-	 * Index key for a resource's value. 
-	 */
-	String INDEX_KEY_RESOURCE_VALUE = "resource-value";
-
 }

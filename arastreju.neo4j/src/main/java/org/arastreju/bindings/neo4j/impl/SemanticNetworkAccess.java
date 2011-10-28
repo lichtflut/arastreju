@@ -105,7 +105,7 @@ public class SemanticNetworkAccess implements NeoConstants, ResourceResolver {
 	 */
 	public SemanticNetworkAccess(final GraphDataStore store) {
 		this.gdbService = store.getGdbService();
-		this.index = new ResourceIndex(this, store.getIndexService());
+		this.index = new ResourceIndex(this, store.getIndexManager());
 		this.registry = store.getRegistry();
 		
 		this.txProvider = new TxProvider(gdbService);
