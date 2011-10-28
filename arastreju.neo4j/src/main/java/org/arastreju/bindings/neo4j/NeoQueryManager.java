@@ -21,6 +21,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.arastreju.bindings.neo4j.impl.ResourceResolver;
 import org.arastreju.bindings.neo4j.index.ResourceIndex;
 import org.arastreju.bindings.neo4j.mapping.RelationMapper;
 import org.arastreju.sge.apriori.RDF;
@@ -48,16 +49,19 @@ import org.slf4j.LoggerFactory;
  */
 public class NeoQueryManager implements QueryManager, NeoConstants {
 
+	private final Logger logger = LoggerFactory.getLogger(NeoQueryManager.class);
+	
 	private final ResourceIndex index;
 	
-	private final Logger logger = LoggerFactory.getLogger(NeoQueryManager.class);
+	private final ResourceResolver resolver;
 
 	// -----------------------------------------------------
 	
 	/**
 	 * Constructor.
 	 */
-	public NeoQueryManager(final ResourceIndex index) {
+	public NeoQueryManager(final ResourceResolver resolver, final ResourceIndex index) {
+		this.resolver = resolver;
 		this.index = index;
 	}
 	
@@ -111,7 +115,7 @@ public class NeoQueryManager implements QueryManager, NeoConstants {
 	 */
 	public Set<Statement> findIncomingStatements(final ResourceID resource) {
 		final Set<Statement> result = new HashSet<Statement>();
-		final RelationMapper mapper = new RelationMapper(index.getStore());
+		final RelationMapper mapper = new RelationMapper(resolver);
 		final Node node = index.lookup(resource.getQualifiedName());
 		if (node != null){
 			for (Relationship rel : node.getRelationships(Direction.INCOMING)) {

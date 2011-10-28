@@ -38,16 +38,35 @@ import org.arastreju.sge.naming.Namespace;
  */
 public interface SemanticGraph {
 	
+	/**
+	 * Get all associations of this graph.
+	 * @return The associations.
+	 */
 	Set<Association> getAssociations();
 	
+	/**
+	 * Get all nodes of the graph.
+	 * @return The nodes.
+	 */
 	Set<SemanticNode> getNodes();
 	
+	/**
+	 * Get all subjects, i.e. all nodes that are the subject in at least one association. 
+	 * @return The subjects.
+	 */
 	Set<ResourceNode> getSubjects();
 	
+	/**
+	 * Get all namespaces.
+	 * @return The namespaces.
+	 */
 	Collection<Namespace> getNamespaces();
 	
 	// -----------------------------------------------------
 	
+	/**
+	 * Add some associations.
+	 */
 	void addAssociations(Collection<Association> associations);
 	
 	/**

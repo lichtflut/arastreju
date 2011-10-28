@@ -55,9 +55,9 @@ public class Neo4jModellingConversation implements ModelingConversation {
 	/**
 	 * Create a new Modelling Conversation instance using a given data store.
 	 */
-	public Neo4jModellingConversation(final SemanticNetworkAccess graphDb) {
-		this.store = graphDb;
-		this.txc = graphDb.getTransactionControl();
+	public Neo4jModellingConversation(final SemanticNetworkAccess access) {
+		this.store = access;
+		this.txc = access.getTransactionControl();
 	}
 	
 	// -----------------------------------------------------
@@ -125,7 +125,7 @@ public class Neo4jModellingConversation implements ModelingConversation {
 	 * @see org.arastreju.sge.ModellingConversation#createQueryManager()
 	 */
 	public QueryManager createQueryManager() {
-		return new NeoQueryManager(store.getIndex());
+		return new NeoQueryManager(store, store.getIndex());
 	}
 	
 	// -----------------------------------------------------

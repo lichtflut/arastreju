@@ -33,6 +33,6 @@ public interface TxAction {
 	/**
 	 * Execute.
 	 */
-	void execute(SemanticNetworkAccess store);
+	void execute(SemanticNetworkAccess access);
 
 }

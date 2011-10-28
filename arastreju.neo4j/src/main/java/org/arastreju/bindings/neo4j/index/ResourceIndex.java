@@ -9,8 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.arastreju.bindings.neo4j.NeoConstants;
+import org.arastreju.bindings.neo4j.impl.ResourceResolver;
 import org.arastreju.bindings.neo4j.impl.SemanticNetworkAccess;
-import org.arastreju.bindings.neo4j.tx.TxAction;
 import org.arastreju.sge.model.ResourceID;
 import org.arastreju.sge.model.nodes.ResourceNode;
 import org.arastreju.sge.model.nodes.SemanticNode;
@@ -18,11 +18,7 @@ import org.arastreju.sge.model.nodes.ValueNode;
 import org.arastreju.sge.naming.QualifiedName;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
-import org.neo4j.graphdb.index.Index;
-import org.neo4j.graphdb.index.IndexHits;
 import org.neo4j.graphdb.index.IndexManager;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * <p>
@@ -37,29 +33,9 @@ import org.slf4j.LoggerFactory;
  */
 public class ResourceIndex implements NeoConstants {
 	
-	/**
-	 * Index for resources.
-	 */
-	public static final String INDEX_RESOURCES = "resources";
+	private final ResourceResolver resolver;
 	
-	// -----------------------------------------------------
-	
-	/**
-	 * Index key representing a resource'id.
-	 */
-	public static final String INDEX_KEY_RESOURCE_URI = "resource-uri";
-	
-	/**
-	 * Index key for a resource's value. 
-	 */
-	public static final String INDEX_KEY_RESOURCE_VALUE = "resource-value";
-	
-	// -----------------------------------------------------
-	
-	private final SemanticNetworkAccess store;
-	private final IndexManager manager;
-	
-	private final Logger logger = LoggerFactory.getLogger(ResourceIndex.class);
+	private final NeoIndex neoIndex;
 
 	// -----------------------------------------------------
 	
@@ -68,43 +44,20 @@ public class ResourceIndex implements NeoConstants {
 	 * @param store The neo data store.
 	 */
 	public ResourceIndex(final SemanticNetworkAccess store, final IndexManager service) {
-		this.store = store;
-		this.manager = service;
+		this.resolver = store;
+		this.neoIndex = new NeoIndex(store, service);
 	}
 	
-	// -----------------------------------------------------
-	
-	/**
-	 * @return the store
-	 */
-	public SemanticNetworkAccess getStore() {
-		return store;
-	}
-	
-	// -----------------------------------------------------
+	// -- LOOKUP ------------------------------------------
 	
 	/**
 	 * Find in Index by key and value.
 	 */
 	public Node lookup(final QualifiedName qn) {
-		return manager.forNodes(INDEX_RESOURCES).get(INDEX_KEY_RESOURCE_URI, qn.toURI()).getSingle();
+		return neoIndex.lookup(qn);
 	}
 	
 	// -----------------------------------------------------
-	
-	/**
-	 * Search in URI index by serach term. 
-	 */
-	public List<ResourceNode> searchById(final String searchTerm) {
-		return lookup(INDEX_KEY_RESOURCE_URI, searchTerm);
-	}
-	
-	/**
-	 * Search in value index by serach term.
-	 */
-	public List<ResourceNode> searchByValue(final String searchTerm) {
-		return lookup(INDEX_KEY_RESOURCE_VALUE, searchTerm);
-	}
 	
 	/**
 	 * Find in Index by key and value.
@@ -124,48 +77,50 @@ public class ResourceIndex implements NeoConstants {
 	 * Find in Index by key and value.
 	 */
 	public List<ResourceNode> lookup(final String key, final String value) {
-		final List<ResourceNode> result = new ArrayList<ResourceNode>();
-		store.doTransacted(new TxAction() {
-			public void execute(final SemanticNetworkAccess store) {
-				final IndexHits<Node> nodes = resourceIndex().get(key, value);
-				for (Node node : nodes) {
-					if (node.hasProperty(PROPERTY_URI)) {
-						result.add(store.resolveResource(node));
-					} else {
-						logger.error("Invalid node in index, will be removed: " + node);
-						remove(node);
-						for(Relationship rel : node.getRelationships()) {
-							remove(rel);
-						}
-					}
-				}
-			}
-		});
-		return result;
+		return map(neoIndex.lookup(key, value));
 	}
 	
-	// -----------------------------------------------------
+	// -- SEARCH ------------------------------------------
+	
+	/**
+	 * Search in URI index by serach term. 
+	 */
+	public List<ResourceNode> searchById(final String searchTerm) {
+		return map(neoIndex.searchById(searchTerm));
+	}
+	
+	/**
+	 * Search in value index by serach term.
+	 */
+	public List<ResourceNode> searchByValue(final String searchTerm) {
+		return map(neoIndex.searchByValue(searchTerm));
+	}
+	
+	/**
+	 * Find in Index by key and value.
+	 */
+	public List<ResourceNode> search(final String key, final String value) {
+		return map(neoIndex.search(key, value));
+	}
+	
+	// -- ADD TO INDEX ------------------------------------
 	
 	public void index(Node subject, ResourceID predicate, SemanticNode value) {
-		if (value.isResourceNode()) {
-			resourceIndex().add(subject, uri(predicate), uri(value.asResource()));	
-		} else {
-			resourceIndex().add(subject, uri(predicate), value.asValue().getStringValue());
-		}
+		neoIndex.index(subject, predicate, value);
 	}
 	
 	public void index(Node subject, ValueNode value) {
-		resourceIndex().add(subject, INDEX_KEY_RESOURCE_VALUE, value.asValue().getStringValue());
+		neoIndex.index(subject, value);
 	}
 	
 	public void index(Node subject, ResourceID resourceID) {
-		resourceIndex().add(subject, INDEX_KEY_RESOURCE_URI, uri(resourceID));
+		neoIndex.index(subject, resourceID);
 	}
 	
-	// -----------------------------------------------------
+	// --REMOVE FROM INDEX --------------------------------
 	
 	public void remove(final Node node) {
-		resourceIndex().remove(node);
+		neoIndex.remove(node);
 	}
 
 	/**
@@ -173,13 +128,17 @@ public class ResourceIndex implements NeoConstants {
 	 * @param rel The relationship to be removed.
 	 */
 	public void remove(final Relationship rel) {
-		resourceIndex().remove(rel.getStartNode(), (String) rel.getProperty(PREDICATE_URI));
+		neoIndex.remove(rel);
 	}
 	
 	// -----------------------------------------------------
 	
-	private Index<Node> resourceIndex() {
-		return manager.forNodes(INDEX_RESOURCES);
+	private List<ResourceNode> map(final List<Node> neoNodes) {
+		final List<ResourceNode> result = new ArrayList<ResourceNode>(neoNodes.size());
+		for (Node node : neoNodes) {
+			result.add(resolver.resolveResource(node));
+		}
+		return result;
 	}
-
+	
 }

@@ -30,7 +30,7 @@ import org.neo4j.graphdb.Relationship;
 
 /**
  * <p>
- *  Simple mapper for Neo4j Relations and Arastreju Statments.
+ *  Simple mapper for Neo4j Relations and Arastreju Statements.
  * </p>
  *
  * <p>

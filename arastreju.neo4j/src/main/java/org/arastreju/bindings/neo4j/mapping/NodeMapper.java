@@ -32,7 +32,7 @@ import org.neo4j.graphdb.Relationship;
 
 /**
  * <p>
- *  [DESCRIPTION]
+ *  Mapper between Arastreju and Neo4j nodes.
  * </p>
  *
  * <p>
@@ -49,7 +49,7 @@ public class NodeMapper implements NeoConstants {
 
 	/**
 	 * Default constructor.
-	 * @param neo4jDataStore 
+	 * @param snAccess The sccess to the semantic network. 
 	 */
 	public NodeMapper(final SemanticNetworkAccess snAccess) {
 		this.snAccess = snAccess;

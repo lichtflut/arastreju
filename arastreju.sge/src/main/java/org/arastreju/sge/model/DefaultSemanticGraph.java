@@ -20,16 +20,15 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.arastreju.sge.SNOPS;
 import org.arastreju.sge.model.associations.Association;
 import org.arastreju.sge.model.nodes.ResourceNode;
 import org.arastreju.sge.model.nodes.SemanticNode;
 import org.arastreju.sge.naming.Namespace;
 
-import de.lichtflut.infra.exceptions.NotYetImplementedException;
-
 /**
  * <p>
- *  [DESCRIPTION]
+ *  Default implementation of a semantic graph.
  * </p>
  *
  * <p>
@@ -44,8 +43,24 @@ public class DefaultSemanticGraph implements SemanticGraph {
 	
 	// -----------------------------------------------------
 	
+	/**
+	 * Creates an empty graph. 
+	 */
+	public DefaultSemanticGraph() {
+	}
+	
+	/**
+	 * Constructor based on associations.
+	 */
 	public DefaultSemanticGraph(final Collection<Association> associations){
 		this.associations.addAll(associations);
+	}
+	
+	/**
+	 * Constructor based on a root node.
+	 */
+	public DefaultSemanticGraph(final ResourceNode root) {
+		addCascading(root, new HashSet<ResourceNode>());
 	}
 	
 	// -----------------------------------------------------
@@ -61,7 +76,12 @@ public class DefaultSemanticGraph implements SemanticGraph {
 	 * @see org.arastreju.sge.model.SemanticGraph#getNodes()
 	 */
 	public Set<SemanticNode> getNodes() {
-		throw new NotYetImplementedException();
+		final Set<SemanticNode> nodes = new HashSet<SemanticNode>();
+		for(Association assoc : associations){
+			nodes.add(assoc.getSubject());
+			nodes.add(assoc.getObject());
+		}
+		return nodes;
 	}
 
 	/* (non-Javadoc)
@@ -124,6 +144,15 @@ public class DefaultSemanticGraph implements SemanticGraph {
 		if (node.isResourceNode() && !node.asResource().isBlankNode()){
 			targetSet.add(node.asResource().getNamespace());
 		} 
+	}
+	
+	private void addCascading(final ResourceNode node, final Set<ResourceNode> visited) {
+		this.associations.addAll(node.getAssociations());
+		for (SemanticNode object : SNOPS.objects(node.getAssociations())) {
+			if (object.isResourceNode() && !visited.contains(object)) {
+				addCascading(node.asResource(), visited);
+			}
+		}
 	}
 
 }
