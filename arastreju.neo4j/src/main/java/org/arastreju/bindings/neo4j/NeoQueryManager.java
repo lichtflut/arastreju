@@ -29,6 +29,8 @@ import org.arastreju.sge.model.ResourceID;
 import org.arastreju.sge.model.Statement;
 import org.arastreju.sge.model.nodes.ResourceNode;
 import org.arastreju.sge.model.nodes.SemanticNode;
+import org.arastreju.sge.query.Query;
+import org.arastreju.sge.query.QueryBuilder;
 import org.arastreju.sge.query.QueryManager;
 import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
@@ -63,6 +65,16 @@ public class NeoQueryManager implements QueryManager, NeoConstants {
 	public NeoQueryManager(final ResourceResolver resolver, final ResourceIndex index) {
 		this.resolver = resolver;
 		this.index = index;
+	}
+	
+	// -----------------------------------------------------
+	
+	public QueryBuilder buildQuery() {
+		return new QueryBuilder();
+	}
+	
+	public List<ResourceNode> query(Query query) {
+		return null;
 	}
 	
 	// -----------------------------------------------------
@@ -122,7 +134,6 @@ public class NeoQueryManager implements QueryManager, NeoConstants {
 				result.add(mapper.toArasStatement(rel));
 			}
 		}
-		
 		return result;
 	}
 	
