@@ -3,6 +3,7 @@
  */
 package org.arastreju.bindings.neo4j.tx;
 
+import org.arastreju.sge.persistence.TransactionControl;
 import org.neo4j.graphdb.GraphDatabaseService;
 
 /**
@@ -38,7 +39,7 @@ public class TxProvider {
 	 * Begin a new transaction if not already one open.
 	 * @return An active transaction.
 	 */
-	public TxWrapper begin() {
+	public TransactionControl begin() {
 		if (!inTransaction()) {
 			tx = new ArasNeoTransaction(gdbService.beginTx());
 			return tx;
@@ -53,6 +54,32 @@ public class TxProvider {
 	 */
 	public boolean inTransaction() {
 		return tx != null && tx.isActive();
+	}
+	
+	// -----------------------------------------------------
+	
+	public void doTransacted(final TxAction action){
+		final TransactionControl tx = begin();
+		try {
+			action.execute();
+			tx.commit();
+		} catch (RuntimeException e) {
+			e.printStackTrace();
+			tx.rollback();
+			throw e;
+		}
+	}
+	
+	public <T> T doTransacted(final TxResultAction<T> action){
+		final TransactionControl tx = begin();
+		try {
+			T result = action.execute();
+			tx.commit();
+			return result;
+		} catch (RuntimeException e) {
+			tx.rollback();
+			throw e;
+		}
 	}
 	
 }

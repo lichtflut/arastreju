@@ -3,6 +3,7 @@
  */
 package org.arastreju.bindings.neo4j.tx;
 
+import org.arastreju.sge.persistence.TransactionControl;
 import org.neo4j.graphdb.Transaction;
 
 /**
@@ -16,11 +17,10 @@ import org.neo4j.graphdb.Transaction;
  *
  * @author Oliver Tigges
  */
-class ArasNeoTransaction implements TxWrapper {
+class ArasNeoTransaction implements TransactionControl {
 
 	private Transaction tx;
 	private boolean active; 
-	private boolean failure;
 	
 	// -----------------------------------------------------
 
@@ -43,20 +43,36 @@ class ArasNeoTransaction implements TxWrapper {
 	}
 	
 	// -----------------------------------------------------
-
-	/* (non-Javadoc)
-	 * @see org.arastreju.bindings.neo4j.tx.TxWrapper#markSuccessful()
+	
+	/** 
+	 * {@inheritDoc}
 	 */
-	public void markSuccessful() {
+	public void commit() {
 		tx.success();
+		finish();
 	}
+
+	/** 
+	 * {@inheritDoc}
+	 */
+	public void rollback() {
+		tx.failure();
+		finish();
+	}
+
+	/** 
+	 * {@inheritDoc}
+	 */
+	public void flush() {
+	}
+	
+	// -----------------------------------------------------
 
 	/* (non-Javadoc)
 	 * @see org.arastreju.bindings.neo4j.tx.TxWrapper#markFailure()
 	 */
 	public void markFailure() {
 		tx.failure();
-		failure = true;
 	}
 
 	/* (non-Javadoc)
@@ -68,11 +84,4 @@ class ArasNeoTransaction implements TxWrapper {
 		active = false;
 	}
 
-	/* (non-Javadoc)
-	 * @see org.arastreju.bindings.neo4j.tx.TxWrapper#isFailure()
-	 */
-	public boolean isFailure() {
-		return failure;
-	}
-	
 }

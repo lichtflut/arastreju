@@ -12,7 +12,6 @@ import org.arastreju.bindings.neo4j.NeoConstants;
 import org.arastreju.bindings.neo4j.index.ResourceIndex;
 import org.arastreju.sge.model.associations.DetachedAssociationKeeper;
 import org.arastreju.sge.model.nodes.ResourceNode;
-import org.arastreju.sge.naming.QualifiedName;
 import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
@@ -30,18 +29,15 @@ import org.neo4j.graphdb.Relationship;
  */
 public class NodeRemover {
 	
-	private final ResourceRegistry registry;
 	private final ResourceIndex index;
 	
 	// -----------------------------------------------------
 
 	/**
 	 * Constructor.
-	 * @param registry The registry.
 	 * @param index The resource index.
 	 */
-	public NodeRemover(final ResourceRegistry registry, final ResourceIndex index) {
-		this.registry = registry;
+	public NodeRemover(final ResourceIndex index) {
 		this.index = index;
 	}
 	
@@ -100,12 +96,8 @@ public class NodeRemover {
 	
 	private void detachArastrejuNode(final Node neoNode) {
 		if (neoNode.hasProperty(NeoConstants.PROPERTY_URI)) {
-			final QualifiedName qn = new QualifiedName(neoNode.getProperty(NeoConstants.PROPERTY_URI).toString());
-			if (registry.contains(qn)){
-				final ResourceNode node = registry.get(qn);
-				registry.unregister(node);
-				AssocKeeperAccess.setAssociationKeeper(node, new DetachedAssociationKeeper());
-			}
+			final ResourceNode node = index.resolveResource(neoNode);
+			AssocKeeperAccess.setAssociationKeeper(node, new DetachedAssociationKeeper());
 		}
 	}
 

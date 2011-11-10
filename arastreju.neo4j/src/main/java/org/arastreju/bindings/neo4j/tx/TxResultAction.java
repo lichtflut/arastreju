@@ -15,10 +15,6 @@
  */
 package org.arastreju.bindings.neo4j.tx;
 
-import org.arastreju.bindings.neo4j.impl.SemanticNetworkAccess;
-
-
-
 /**
  * <p>
  *  [DESCRIPTION]
@@ -35,6 +31,6 @@ public interface TxResultAction<T> {
 	/**
 	 * Execute.
 	 */
-	public T execute(SemanticNetworkAccess store);
+	public T execute();
 
 }

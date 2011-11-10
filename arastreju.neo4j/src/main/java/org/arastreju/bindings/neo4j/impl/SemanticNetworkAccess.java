@@ -16,22 +16,16 @@
 package org.arastreju.bindings.neo4j.impl;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 import java.util.Set;
 
 import org.arastreju.bindings.neo4j.ArasRelTypes;
 import org.arastreju.bindings.neo4j.NeoConstants;
 import org.arastreju.bindings.neo4j.extensions.NeoAssociationKeeper;
-import org.arastreju.bindings.neo4j.extensions.SNResourceNeo;
 import org.arastreju.bindings.neo4j.index.ResourceIndex;
 import org.arastreju.bindings.neo4j.mapping.NodeMapper;
-import org.arastreju.bindings.neo4j.tx.NeoTransactionControl;
 import org.arastreju.bindings.neo4j.tx.TxAction;
 import org.arastreju.bindings.neo4j.tx.TxProvider;
 import org.arastreju.bindings.neo4j.tx.TxResultAction;
-import org.arastreju.bindings.neo4j.tx.TxWrapper;
 import org.arastreju.sge.SNOPS;
 import org.arastreju.sge.context.Context;
 import org.arastreju.sge.model.ResourceID;
@@ -76,8 +70,6 @@ public class SemanticNetworkAccess implements NeoConstants, ResourceResolver {
 	
 	private final NodeMapper mapper;
 	
-	private final ResourceRegistry registry;
-	
 	private final TxProvider txProvider;
 	
 	private final Logger logger = LoggerFactory.getLogger(SemanticNetworkAccess.class);
@@ -105,10 +97,8 @@ public class SemanticNetworkAccess implements NeoConstants, ResourceResolver {
 	 */
 	public SemanticNetworkAccess(final GraphDataStore store) {
 		this.gdbService = store.getGdbService();
-		this.index = new ResourceIndex(this, store.getIndexManager());
-		this.registry = store.getRegistry();
-		
 		this.txProvider = new TxProvider(gdbService);
+		this.index = new ResourceIndex(this, store.getIndexManager(), txProvider);
 		this.mapper = new NodeMapper(this);
 	}
 
@@ -118,23 +108,7 @@ public class SemanticNetworkAccess implements NeoConstants, ResourceResolver {
 	 * {@inheritDoc}
 	 */
 	public ResourceNode findResource(final QualifiedName qn) {
-		if (registry.contains(qn)){
-			return registry.get(qn);
-		}
-		// if not yet registered, load and wrap
-		return doTransacted(new TxResultAction<ResourceNode>() {
-			public ResourceNode execute(SemanticNetworkAccess store) {
-				final Node neoNode = index.lookup(qn);
-				if (neoNode != null){
-					final SNResourceNeo arasNode = new SNResourceNeo(qn);
-					registry.register(arasNode);
-					mapper.toArasNode(neoNode, arasNode);
-					return arasNode;
-				} else {
-					return null;
-				}
-			}
-		});
+		return index.findResource(qn);
 	}
 	
 	
@@ -142,25 +116,7 @@ public class SemanticNetworkAccess implements NeoConstants, ResourceResolver {
 	 * {@inheritDoc}
 	 */
 	public ResourceNode resolveResource(final Node neoNode) {
-		final QualifiedName qn = new QualifiedName(neoNode.getProperty(PROPERTY_URI).toString());
-		if (registry.contains(qn)){
-			return registry.get(qn);
-		}
-		final SNResourceNeo arasNode = new SNResourceNeo(qn);
-		registry.register(arasNode);
-		mapper.toArasNode(neoNode, arasNode);
-		return arasNode;
-	}
-	
-	/** 
-	 * {@inheritDoc}
-	 */
-	public List<ResourceNode> resolveResources(final Collection<Node> neoNodes) {
-		final List<ResourceNode> result = new ArrayList<ResourceNode>();
-		for (Node node : neoNodes) {
-			result.add(resolveResource(node));
-		}
-		return result;
+		return index.resolveResource(neoNode);
 	}
 	
 	/**
@@ -172,20 +128,22 @@ public class SemanticNetworkAccess implements NeoConstants, ResourceResolver {
 		} else {
 			final ResourceNode attached = findResource(resource.getQualifiedName());
 			if (attached == null){
-				return doTransacted(new TxResultAction<ResourceNode>() {
-					public ResourceNode execute(SemanticNetworkAccess store) {
+				return txProvider.doTransacted(new TxResultAction<ResourceNode>() {
+					public ResourceNode execute() {
 						return persist(resource.asResource(), true);
 					}
 				});
 			} else {
-				return doTransacted(new TxResultAction<ResourceNode>() {
-					public ResourceNode execute(SemanticNetworkAccess store) {
+				return txProvider.doTransacted(new TxResultAction<ResourceNode>() {
+					public ResourceNode execute() {
 						return merge(attached, resource.asResource());
 					}
 				});
 			}
 		}
 	}
+	
+	// -----------------------------------------------------
 	
 	/**
 	 * Attach the given node if it is not already attached.
@@ -197,8 +155,8 @@ public class SemanticNetworkAccess implements NeoConstants, ResourceResolver {
 		if (resource.isAttached()){
 			return resource;
 		}
-		return doTransacted(new TxResultAction<ResourceNode>() {
-			public ResourceNode execute(SemanticNetworkAccess store) {
+		return txProvider.doTransacted(new TxResultAction<ResourceNode>() {
+			public ResourceNode execute() {
 				// 2nd: check if node for qualified name exists and has to be merged
 				ResourceNode attached = findResource(resource.getQualifiedName());
 				if (attached != null){
@@ -217,7 +175,7 @@ public class SemanticNetworkAccess implements NeoConstants, ResourceResolver {
 	 * @param node
 	 */
 	public void detach(final ResourceNode node){
-		registry.unregister(node);
+		index.onDetach(node);
 		AssocKeeperAccess.setAssociationKeeper(node, new DetachedAssociationKeeper(node.getAssociations()));
 	}
 	
@@ -229,9 +187,9 @@ public class SemanticNetworkAccess implements NeoConstants, ResourceResolver {
 	public void remove(final ResourceID id, final boolean cascade) {
 		final ResourceNode node = resolve(id);
 		AssocKeeperAccess.getAssociationKeeper(node).clearAssociations();
-		doTransacted(new TxAction() {
-			public void execute(SemanticNetworkAccess store) {
-				new NodeRemover(registry, index).remove(node, cascade);
+		txProvider.doTransacted(new TxAction() {
+			public void execute() {
+				new NodeRemover(index).remove(node, cascade);
 			}
 		});
 	}
@@ -242,8 +200,8 @@ public class SemanticNetworkAccess implements NeoConstants, ResourceResolver {
 	 * {@inheritDoc}
 	 */
 	public SemanticGraph attach(final SemanticGraph graph){
-		return doTransacted(new TxResultAction<SemanticGraph>() {
-			public SemanticGraph execute(SemanticNetworkAccess store) {
+		return txProvider.doTransacted(new TxResultAction<SemanticGraph>() {
+			public SemanticGraph execute() {
 				for(ResourceNode node : graph.getSubjects()){
 					attach(node);
 				}
@@ -270,6 +228,7 @@ public class SemanticNetworkAccess implements NeoConstants, ResourceResolver {
 	 * Close the graph database;
 	 */
 	public void close() {
+		index.clearCache();
 	}
 
 	/**
@@ -278,8 +237,8 @@ public class SemanticNetworkAccess implements NeoConstants, ResourceResolver {
 	 * @param assoc The Association.
 	 */
 	public void addAssociation(final Node subject, final Association assoc) {
-		doTransacted(new TxAction() {
-			public void execute(SemanticNetworkAccess store) {
+		txProvider.doTransacted(new TxAction() {
+			public void execute() {
 				final SemanticNode client = assoc.getObject();
 				final ResourceNode predicate = resolve(assoc.getPredicate());
 				if (client.isResourceNode()){
@@ -313,15 +272,16 @@ public class SemanticNetworkAccess implements NeoConstants, ResourceResolver {
 	}
 	
 	/**
-	 * @param neoNode
-	 * @param assoc
-	 * @return
+	 * Remove the association from the neo node.
+	 * @param neoNode The neo node.
+	 * @param assoc The corresponding association.
+	 * @return true if a relationship has been removed.
 	 */
-	public boolean remove(final Node neoNode, final Association assoc) {
+	public boolean removeAssociation(final Node neoNode, final Association assoc) {
 		final Relationship relationship = findCorresponding(neoNode, assoc);
 		if (relationship != null) {
-			doTransacted(new TxAction() {
-				public void execute(final SemanticNetworkAccess store) {
+			txProvider.doTransacted(new TxAction() {
+				public void execute() {
 					index.remove(relationship);
 					relationship.delete();
 				}
@@ -356,6 +316,8 @@ public class SemanticNetworkAccess implements NeoConstants, ResourceResolver {
 		return attached;
 	}
 	
+	// -----------------------------------------------------
+	
 	public ResourceIndex getIndex() {
 		return index;
 	}
@@ -364,38 +326,11 @@ public class SemanticNetworkAccess implements NeoConstants, ResourceResolver {
 		return gdbService;
 	}
 	
-	public ResourceRegistry getRegistry() {
-		return registry;
-	}
-	
-	// -- TRANSACTIONS ------------------------------------
-	
 	/**
-	 * @return the transaction control.
+	 * @return the txProvider
 	 */
-	public NeoTransactionControl getTransactionControl() {
-		return new NeoTransactionControl(txProvider);
-	}
-	
-	public void doTransacted(final TxAction action){
-		final TxWrapper tx = txProvider.begin();
-		try {
-			action.execute(this);
-			tx.markSuccessful();
-		} finally {
-			tx.finish();
-		}
-	}
-	
-	public <T> T doTransacted(final TxResultAction<T> action){
-		final TxWrapper tx = txProvider.begin();
-		try {
-			T result = action.execute(this);
-			tx.markSuccessful();
-			return result;
-		} finally {
-			tx.finish();
-		}
+	public TxProvider getTxProvider() {
+		return txProvider;
 	}
 	
 	// -----------------------------------------------------
@@ -418,10 +353,7 @@ public class SemanticNetworkAccess implements NeoConstants, ResourceResolver {
 		final Set<Association> copy = node.getAssociations();
 		AssocKeeperAccess.setAssociationKeeper(node, new NeoAssociationKeeper(node, neoNode, this));
 		
-		// 4th: register resource.
-		registry.register(node);
-		
-		// 5th: store all associations.
+		// 4th: store all associations.
 		if (storeAssocs) {
 			for (Association assoc : copy) {
 				addAssociation(neoNode, assoc);

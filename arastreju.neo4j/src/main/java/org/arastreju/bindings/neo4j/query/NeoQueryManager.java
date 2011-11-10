@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.arastreju.bindings.neo4j;
+package org.arastreju.bindings.neo4j.query;
 
 import static org.arastreju.sge.SNOPS.uri;
 
@@ -21,6 +21,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.arastreju.bindings.neo4j.NeoConstants;
 import org.arastreju.bindings.neo4j.impl.ResourceResolver;
 import org.arastreju.bindings.neo4j.index.ResourceIndex;
 import org.arastreju.bindings.neo4j.mapping.RelationMapper;
@@ -28,9 +29,6 @@ import org.arastreju.sge.apriori.RDF;
 import org.arastreju.sge.model.ResourceID;
 import org.arastreju.sge.model.Statement;
 import org.arastreju.sge.model.nodes.ResourceNode;
-import org.arastreju.sge.model.nodes.SemanticNode;
-import org.arastreju.sge.query.Query;
-import org.arastreju.sge.query.QueryBuilder;
 import org.arastreju.sge.query.QueryManager;
 import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
@@ -69,58 +67,14 @@ public class NeoQueryManager implements QueryManager, NeoConstants {
 	
 	// -----------------------------------------------------
 	
-	public QueryBuilder buildQuery() {
-		return new QueryBuilder();
-	}
-	
-	public List<ResourceNode> query(Query query) {
-		return null;
+	/** 
+	 * {@inheritDoc}
+	 */
+	public NeoQueryBuilder buildQuery() {
+		return new NeoQueryBuilder(index, resolver);
 	}
 	
 	// -----------------------------------------------------
-	
-	/** 
-	 * {@inheritDoc}
-	 */
-	public List<ResourceNode> findByURI(final String term) {
-		final List<ResourceNode> result = index.searchById(term);
-		logger.debug("found for term '" + term + "': " + result);
-		return result;
-	}
-	
-	/**
-	 * {@inheritDoc}
-	 */
-	public List<ResourceNode> findByTag(final String tag) {
-		final List<ResourceNode> result = index.searchByValue(tag);
-		logger.debug("found for tag '" + tag + "': " + result);
-		return result;
-	}
-	
-	/**
-	 * {@inheritDoc}
-	 */
-	
-	public List<ResourceNode> findByTag(final ResourceID predicate, final String tag) {
-		final String property = uri(predicate);
-		final List<ResourceNode> result = index.lookup(property, tag);
-		logger.debug("found for predicate '" + property + "'and tag '" + tag + "': " + result);
-		return result;
-	}
-	
-	/** 
-	 * {@inheritDoc}
-	 */
-	public List<ResourceNode> findSubjects(final ResourceID predicate, final SemanticNode object) {
-		if (object.isValueNode()) {
-			return findByTag(predicate, object.asValue().getStringValue());
-		}
-		final String property = uri(predicate);
-		final String objectURI = uri(object.asResource());
-		final List<ResourceNode> result = index.lookup(property, objectURI);
-		logger.debug("found for predicate '" + property + "'and value '" + objectURI + "': " + result);
-		return result;
-	}
 	
 	/**
 	 * {@inheritDoc}

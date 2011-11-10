@@ -22,6 +22,7 @@ import java.util.Set;
 import org.arastreju.bindings.neo4j.ArasRelTypes;
 import org.arastreju.bindings.neo4j.NeoConstants;
 import org.arastreju.bindings.neo4j.impl.ContextAccess;
+import org.arastreju.bindings.neo4j.impl.ResourceResolver;
 import org.arastreju.bindings.neo4j.impl.SemanticNetworkAccess;
 import org.arastreju.sge.context.Context;
 import org.arastreju.sge.model.ResourceID;
@@ -54,6 +55,7 @@ public class NeoAssociationKeeper extends AbstractAssociationKeeper implements N
 	private final ResourceNode arasNode;
 	private final Node neoNode;
 	private final SemanticNetworkAccess store;
+	private final ResourceResolver resolver;
 	
 	private final Logger logger = LoggerFactory.getLogger(NeoAssociationKeeper.class);
 	
@@ -68,6 +70,7 @@ public class NeoAssociationKeeper extends AbstractAssociationKeeper implements N
 		this.arasNode = arasNode;
 		this.neoNode = neoNode;
 		this.store = store;
+		this.resolver = store;
 	}
 	
 	// -----------------------------------------------------
@@ -96,7 +99,7 @@ public class NeoAssociationKeeper extends AbstractAssociationKeeper implements N
 	public boolean remove(Association assoc) {
 		super.remove(assoc);
 		logger.info("Removed Association: " + assoc);
-		return store.remove(neoNode, assoc);
+		return store.removeAssociation(neoNode, assoc);
 	}
 	
 	// -----------------------------------------------------
@@ -142,12 +145,12 @@ public class NeoAssociationKeeper extends AbstractAssociationKeeper implements N
 		for(Relationship rel : neoNode.getRelationships(Direction.OUTGOING)){
 			SemanticNode object = null;
 			if (rel.isType(ArasRelTypes.REFERENCE)){
-				object = store.resolveResource(rel.getEndNode());	
+				object = resolver.resolveResource(rel.getEndNode());	
 			} else if (rel.isType(ArasRelTypes.VALUE)){
 				object = new SNValueNeo(rel.getEndNode());
 			}
-			final ResourceNode predicate = store.findResource(new QualifiedName(rel.getProperty(PREDICATE_URI).toString()));
-			final Context[] ctx = new ContextAccess(store).getContextInfo(rel);
+			final ResourceNode predicate = resolver.findResource(new QualifiedName(rel.getProperty(PREDICATE_URI).toString()));
+			final Context[] ctx = new ContextAccess(resolver).getContextInfo(rel);
 			addResolvedAssociation(arasNode, predicate, object, ctx);
 		}
 	}

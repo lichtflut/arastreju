@@ -3,71 +3,23 @@
  */
 package org.arastreju.sge.query;
 
-import org.arastreju.sge.model.ResourceID;
-import org.arastreju.sge.naming.QualifiedName;
-
 /**
  * <p>
- *  [DESCRIPTION]
+ *  Query parameter.
  * </p>
  *
  * <p>
- * 	Created Nov 4, 2011
+ * 	Created Nov 8, 2011
  * </p>
  *
  * @author Oliver Tigges
  */
-public class QueryParam {
+public interface QueryParam {
+	
+	QueryOperator getOperator();
 
-	private final String name;
-	
-	private final Object value;
-	
-	// -----------------------------------------------------
+	String getName();
 
-	/**
-	 * Constructor.
-	 * @param name
-	 * @param value
-	 */
-	public QueryParam(final String name, final Object value) {
-		this.name = name;
-		this.value = value;
-	}
-	
-	/**
-	 * Constructor.
-	 * @param name
-	 * @param value
-	 */
-	public QueryParam(final ResourceID name, final Object value) {
-		this(name.getQualifiedName(), value);
-	}
-	
-	/**
-	 * @param name
-	 * @param value
-	 */
-	public QueryParam(QualifiedName name, final Object value) {
-		this(name.toURI(), value);
-	}
+	Object getValue();
 
-	// -----------------------------------------------------
-
-	public String getName() {
-		return name;
-	}
-
-	public Object getValue() {
-		return value;
-	}
-	
-	/** 
-	 * {@inheritDoc}
-	 */
-	@Override
-	public String toString() {
-		return name + "=" + value;
-	}
-	
 }

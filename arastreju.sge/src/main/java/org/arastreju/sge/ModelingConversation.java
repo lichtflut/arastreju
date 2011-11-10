@@ -96,7 +96,11 @@ public interface ModelingConversation {
 	
 	ConversationSettings getSettings();
 	
-	TransactionControl getTransactionControl();
+	/**
+	 * Begins a new transaction and returns the corresponding control object.
+	 * @return The tx control object.
+	 */
+	TransactionControl beginTransaction();
 	
 	/**
 	 * Finish the conversation and release all resources.

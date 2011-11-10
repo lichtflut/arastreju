@@ -26,6 +26,15 @@ class GroupedQueryExpression extends AbstractQueryExpression {
 	public GroupedQueryExpression(final QueryOperator queryOperator) {
 		super(queryOperator);
 	}
+	
+	// -----------------------------------------------------
+	
+	/** 
+	 * {@inheritDoc}
+	 */
+	public boolean isLeaf() {
+		return false;
+	}
 
 	@Override
 	public List<QueryExpression> getChildren() {

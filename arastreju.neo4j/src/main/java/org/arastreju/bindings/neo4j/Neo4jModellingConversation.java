@@ -15,8 +15,9 @@
  */
 package org.arastreju.bindings.neo4j;
 
-import org.arastreju.bindings.neo4j.impl.ResourceRegistry;
 import org.arastreju.bindings.neo4j.impl.SemanticNetworkAccess;
+import org.arastreju.bindings.neo4j.index.ResourceIndex;
+import org.arastreju.bindings.neo4j.query.NeoQueryManager;
 import org.arastreju.sge.ModelingConversation;
 import org.arastreju.sge.model.ResourceID;
 import org.arastreju.sge.model.SemanticGraph;
@@ -45,8 +46,6 @@ public class Neo4jModellingConversation implements ModelingConversation {
 	
 	private final SemanticNetworkAccess store;
 	
-	private final TransactionControl txc;
-	
 	@SuppressWarnings("unused")
 	private final Logger logger = LoggerFactory.getLogger(Neo4jModellingConversation.class);
 	
@@ -57,7 +56,6 @@ public class Neo4jModellingConversation implements ModelingConversation {
 	 */
 	public Neo4jModellingConversation(final SemanticNetworkAccess access) {
 		this.store = access;
-		this.txc = access.getTransactionControl();
 	}
 	
 	// -----------------------------------------------------
@@ -137,11 +135,11 @@ public class Neo4jModellingConversation implements ModelingConversation {
 		return null;
 	}
 
-	/* (non-Javadoc)
-	 * @see org.arastreju.sge.ModellingConversation#getTransactionControl()
+	/**
+	 * {@inheritDoc}
 	 */
-	public TransactionControl getTransactionControl() {
-		return txc;
+	public TransactionControl beginTransaction() {
+		return store.getTxProvider().begin();
 	}
 	
 	/* (non-Javadoc)
@@ -153,8 +151,8 @@ public class Neo4jModellingConversation implements ModelingConversation {
 	
 	// -----------------------------------------------------
 	
-	protected ResourceRegistry getRegistry() {
-		return store.getRegistry();
+	protected ResourceIndex getIndex() {
+		return store.getIndex();
 	}
 	
 }

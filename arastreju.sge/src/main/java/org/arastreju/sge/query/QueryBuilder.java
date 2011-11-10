@@ -5,11 +5,12 @@ package org.arastreju.sge.query;
 
 import java.util.Stack;
 
+import org.arastreju.sge.model.nodes.ResourceNode;
 import org.arastreju.sge.query.exp.AbstractQueryExpression;
 
 /**
  * <p>
- *  [DESCRIPTION]
+ *  Basic implementation of {@link Query}.
  * </p>
  *
  * <p>
@@ -18,51 +19,76 @@ import org.arastreju.sge.query.exp.AbstractQueryExpression;
  *
  * @author Oliver Tigges
  */
-public class QueryBuilder  {
+public abstract class QueryBuilder implements Query {
 	
 	private Stack<QueryExpression> stack = new Stack<QueryExpression>();
 
 	// -----------------------------------------------------
 	
-	public QueryBuilder() {
-	}
+	/**
+	 * Default constructor.
+	 */
+	public QueryBuilder() {}
 	
 	// -----------------------------------------------------
 	
-	public Query query() {
-		return new QueryImpl(stack.firstElement());
-	}
+	/**
+	 * {@inheritDoc}
+	 */
+	public abstract QueryResult getResult();
 	
-	public Query simple(final QueryParam param) {
-		return add(param).query();
-	}
+	/** 
+	 * {@inheritDoc}
+	 */
+	public abstract ResourceNode getSingleNode();
 	
 	// -----------------------------------------------------
 	
+	/** 
+	 * {@inheritDoc}
+	 */
 	public QueryBuilder add(final QueryParam param) {
 		return append(param);
 	}
 
+	/** 
+	 * {@inheritDoc}
+	 */
 	public QueryBuilder and() {
 		return prepend(AbstractQueryExpression.and());
 	}
 	
+	/** 
+	 * {@inheritDoc}
+	 */
 	public QueryBuilder or() {
 		return prepend(AbstractQueryExpression.or());
 	}
 	
+	/** 
+	 * {@inheritDoc}
+	 */
 	public QueryBuilder not() {
 		return append(AbstractQueryExpression.not());
 	}
 	
+	/** 
+	 * {@inheritDoc}
+	 */
 	public QueryBuilder beginAnd() {
 		return append(AbstractQueryExpression.and());
 	}
 	
+	/** 
+	 * {@inheritDoc}
+	 */
 	public QueryBuilder beginOr() {
 		return append(AbstractQueryExpression.or());
 	}
 	
+	/** 
+	 * {@inheritDoc}
+	 */
 	public QueryBuilder end() {
 		if (stack.size() > 1) {
 			stack.pop();
@@ -71,6 +97,10 @@ public class QueryBuilder  {
 	}
 	
 	// -----------------------------------------------------
+	
+	protected QueryExpression getRoot() {
+		return stack.firstElement();
+	}
 	
 	protected QueryBuilder append(final QueryParam param) {
 		final QueryExpression exp = AbstractQueryExpression.leaf(param);
@@ -99,28 +129,6 @@ public class QueryBuilder  {
 			stack.push(exp);
 		}
 		return this;
-	}
-	
-	// -----------------------------------------------------
-	
-	private class QueryImpl implements Query {
-
-		private final QueryExpression root;
-
-		/**
-		 * @param root The root expression.
-		 */
-		public QueryImpl(final QueryExpression root) {
-			this.root = root;
-		}
-		
-		/**
-		 * @return the root
-		 */
-		public QueryExpression getRoot() {
-			return root;
-		}
-
 	}
 	
 }

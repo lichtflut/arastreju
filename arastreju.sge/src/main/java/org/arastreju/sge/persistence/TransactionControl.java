@@ -28,16 +28,16 @@ package org.arastreju.sge.persistence;
  */
 public interface TransactionControl {
 	
-	void begin();
-	
-	void beginOrContinue();
-	
+	/**
+	 * Commit the transaction.
+	 */
 	void commit();
 	
+	/**
+	 * Rolles the transaction back .
+	 */
 	void rollback();
 	
-	boolean isInTansaction();
-
 	/**
 	 * flushes current state to database.
 	 */

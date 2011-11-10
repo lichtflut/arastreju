@@ -3,10 +3,12 @@
  */
 package org.arastreju.bindings.neo4j.tx;
 
+import org.arastreju.sge.persistence.TransactionControl;
+
 
 /**
  * <p>
- *  [DESCRIPTION]
+ *  Sub transaction.
  * </p>
  *
  * <p>
@@ -15,47 +17,40 @@ package org.arastreju.bindings.neo4j.tx;
  *
  * @author Oliver Tigges
  */
-class ArasNeoSubTransaction implements TxWrapper {
+class ArasNeoSubTransaction implements TransactionControl {
 
-	private final TxWrapper superTx;
+	private final TransactionControl superTx;
 	
 	// -----------------------------------------------------
 
 	/**
 	 * @param superTx The super transaction.
 	 */
-	public ArasNeoSubTransaction(final TxWrapper superTx) {
+	public ArasNeoSubTransaction(final TransactionControl superTx) {
 		this.superTx = superTx;
 	}
 	
 	// -----------------------------------------------------
-
-	/* (non-Javadoc)
-	 * @see org.arastreju.bindings.neo4j.tx.TxWrapper#markSuccessful()
+	
+	/** 
+	 * {@inheritDoc}
 	 */
-	public void markSuccessful() {
-		superTx.markSuccessful();
-	}
-
-	/* (non-Javadoc)
-	 * @see org.arastreju.bindings.neo4j.tx.TxWrapper#markFailure()
-	 */
-	public void markFailure() {
-		superTx.markFailure();
-	}
-
-	/* (non-Javadoc)
-	 * @see org.arastreju.bindings.neo4j.tx.TxWrapper#finish()
-	 */
-	public void finish() {
+	public void commit() {
 		// do nothing
 	}
 
-	/* (non-Javadoc)
-	 * @see org.arastreju.bindings.neo4j.tx.TxWrapper#isFailure()
+	/** 
+	 * {@inheritDoc}
 	 */
-	public boolean isFailure() {
-		return superTx.isFailure();
+	public void rollback() {
+		superTx.rollback();
 	}
 
+	/** 
+	 * {@inheritDoc}
+	 */
+	public void flush() {
+		superTx.flush();
+	}
+	
 }

@@ -75,7 +75,7 @@ public abstract class AbstractQueryExpression implements QueryExpression {
 		return new Not();
 	}
 	
-	public static LeafQueryExpression leaf(QueryParam param) {
+	public static LeafQueryExpression leaf(final QueryParam param) {
 		return new LeafQueryExpression(param);
 	}
 	

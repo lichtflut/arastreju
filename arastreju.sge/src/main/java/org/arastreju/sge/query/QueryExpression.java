@@ -8,7 +8,7 @@ import java.util.List;
 
 /**
  * <p>
- *  [DESCRIPTION]
+ *  Expression of a {@link Query}.
  * </p>
  *
  * <p>
@@ -18,6 +18,8 @@ import java.util.List;
  * @author Oliver Tigges
  */
 public interface QueryExpression {
+	
+	boolean isLeaf();
 
 	QueryOperator getOperator();
 

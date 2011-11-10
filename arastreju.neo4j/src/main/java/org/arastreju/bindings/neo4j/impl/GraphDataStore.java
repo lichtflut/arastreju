@@ -29,8 +29,6 @@ public class GraphDataStore implements ProfileCloseListener {
 	
 	private final GraphDatabaseService gdbService;
 	
-	private final ResourceRegistry registry = new ResourceRegistry();
-	
 	private final Logger logger = LoggerFactory.getLogger(GraphDataStore.class);
 
 	private IndexManager indexManager;
@@ -69,13 +67,6 @@ public class GraphDataStore implements ProfileCloseListener {
 	public IndexManager getIndexManager() {
 		return indexManager;
 	}
-
-	/**
-	 * @return the registry
-	 */
-	public ResourceRegistry getRegistry() {
-		return registry;
-	}
 	
 	// -----------------------------------------------------
 	
@@ -84,7 +75,6 @@ public class GraphDataStore implements ProfileCloseListener {
 	 */
 	public void onClosed(final ArastrejuProfile profile) {
 		gdbService.shutdown();
-		registry.clear();
 	}
 	
 	// -----------------------------------------------------

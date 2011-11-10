@@ -9,8 +9,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.arastreju.bindings.neo4j.NeoConstants;
-import org.arastreju.bindings.neo4j.impl.SemanticNetworkAccess;
 import org.arastreju.bindings.neo4j.tx.TxAction;
+import org.arastreju.bindings.neo4j.tx.TxProvider;
+import org.arastreju.bindings.neo4j.tx.TxResultAction;
 import org.arastreju.sge.model.ResourceID;
 import org.arastreju.sge.model.nodes.SemanticNode;
 import org.arastreju.sge.model.nodes.ValueNode;
@@ -55,7 +56,7 @@ public class NeoIndex implements NeoConstants {
 	
 	// -----------------------------------------------------
 	
-	private final SemanticNetworkAccess txScope;
+	private final TxProvider txProvider;
 	private final IndexManager manager;
 	
 	private final Logger logger = LoggerFactory.getLogger(NeoIndex.class);
@@ -66,8 +67,8 @@ public class NeoIndex implements NeoConstants {
 	 * Constructor.
 	 * @param store The neo data store.
 	 */
-	public NeoIndex(final SemanticNetworkAccess store, final IndexManager service) {
-		this.txScope = store;
+	public NeoIndex(final TxProvider txProvider, final IndexManager service) {
+		this.txProvider = txProvider;
 		this.manager = service;
 	}
 	
@@ -99,8 +100,8 @@ public class NeoIndex implements NeoConstants {
 	 */
 	public List<Node> lookup(final String key, final String value) {
 		final List<Node> result = new ArrayList<Node>();
-		txScope.doTransacted(new TxAction() {
-			public void execute(final SemanticNetworkAccess store) {
+		txProvider.doTransacted(new TxAction() {
+			public void execute() {
 				toList(result, resourceIndex().get(key, value));
 			}
 		});
@@ -110,13 +111,6 @@ public class NeoIndex implements NeoConstants {
 	// -- SEARCH ------------------------------------------
 	
 	/**
-	 * Search in URI index by serach term. 
-	 */
-	public List<Node> searchById(final String searchTerm) {
-		return search(INDEX_KEY_RESOURCE_URI, searchTerm);
-	}
-	
-	/**
 	 * Search in value index by serach term.
 	 */
 	public List<Node> searchByValue(final String searchTerm) {
@@ -124,12 +118,25 @@ public class NeoIndex implements NeoConstants {
 	}
 	
 	/**
+	 * Execute the query.
+	 * @param query The query.
+	 * @return The resulting index hits.
+	 */
+	public IndexHits<Node> search(final String query) {
+		return txProvider.doTransacted(new TxResultAction<IndexHits<Node>>() {
+			public IndexHits<Node> execute() {
+				return resourceIndex().query(query);
+			}
+		});
+	}
+	
+	/**
 	 * Find in Index by key and value.
 	 */
 	public List<Node> search(final String key, final String value) {
 		final List<Node> result = new ArrayList<Node>();
-		txScope.doTransacted(new TxAction() {
-			public void execute(final SemanticNetworkAccess store) {
+		txProvider.doTransacted(new TxAction() {
+			public void execute() {
 				toList(result, resourceIndex().query(key, value));
 			}
 		});

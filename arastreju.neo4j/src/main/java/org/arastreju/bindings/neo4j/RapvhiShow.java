@@ -26,6 +26,9 @@ import org.arastreju.sge.model.nodes.views.SNClass;
 import org.arastreju.sge.model.nodes.views.SNEntity;
 import org.arastreju.sge.model.nodes.views.SNText;
 import org.arastreju.sge.naming.QualifiedName;
+import org.arastreju.sge.query.FieldParam;
+import org.arastreju.sge.query.Query;
+import org.arastreju.sge.query.QueryManager;
 
 /**
  * <p>
@@ -79,7 +82,10 @@ public class RapvhiShow {
 		
 		mc.attach(ravi);
 		
-		System.out.println("Alle Resourcen mit name 'Ravi': " + mc.createQueryManager().findByTag("Ravi"));
+		final QueryManager qm = mc.createQueryManager();
+		final Query query = qm.buildQuery().add(new FieldParam("resource-value", "Ravi"));
+		
+		System.out.println("Alle Resourcen mit name 'Ravi': " + query.getResult().iterator().next());
 
 	}
 

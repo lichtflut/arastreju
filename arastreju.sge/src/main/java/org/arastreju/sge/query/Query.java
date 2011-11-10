@@ -3,6 +3,8 @@
  */
 package org.arastreju.sge.query;
 
+import org.arastreju.sge.model.nodes.ResourceNode;
+
 /**
  * <p>
  *  Query object.
@@ -15,10 +17,47 @@ package org.arastreju.sge.query;
  * @author Oliver Tigges
  */
 public interface Query {
+	
+	/**
+	 * @param param
+	 * @return
+	 */
+	Query add(QueryParam param);
 
 	/**
-	 * @return The root expression.
+	 * @return
 	 */
-	QueryExpression getRoot();
+	Query and();
+
+	/**
+	 * @return
+	 */
+	Query or();
+
+	/**
+	 * @return
+	 */
+	Query not();
+
+	/**
+	 * @return
+	 */
+	Query beginAnd();
+
+	/**
+	 * @return
+	 */
+	Query beginOr();
+
+	/**
+	 * @return
+	 */
+	Query end();
 	
+	// -----------------------------------------------------
+
+	QueryResult getResult();
+	
+	ResourceNode getSingleNode();
+
 }

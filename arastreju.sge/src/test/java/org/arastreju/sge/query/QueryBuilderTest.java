@@ -5,7 +5,10 @@ package org.arastreju.sge.query;
 
 import junit.framework.Assert;
 
+import org.arastreju.sge.model.nodes.ResourceNode;
 import org.junit.Test;
+
+import de.lichtflut.infra.exceptions.NotYetImplementedException;
 
 /**
  * <p>
@@ -20,77 +23,86 @@ import org.junit.Test;
  */
 public class QueryBuilderTest {
 	
+	static class TestQueryBuilder extends QueryBuilder {
+		public QueryResult getResult() {
+			throw new NotYetImplementedException();
+		}
+		public ResourceNode getSingleNode() {
+			throw new NotYetImplementedException();
+		}
+	}
+	
 	@Test
 	public void testSimple() {
-		final QueryBuilder builder = new QueryBuilder();
+		final QueryBuilder builder = new TestQueryBuilder();
 		
-		builder.add(new QueryParam("a", 1));
-		final Query query = builder.query();
-		
-		Assert.assertTrue(query.getRoot() != null);
-		Assert.assertEquals(0, query.getRoot().getChildren().size());
-		Assert.assertEquals(QueryOperator.EQUALS, query.getRoot().getOperator());
+		builder.add(new FieldParam("a", 1));
+
+		final QueryExpression root = builder.getRoot();
+		Assert.assertTrue(root != null);
+		Assert.assertEquals(0, root.getChildren().size());
+		Assert.assertEquals(QueryOperator.EQUALS, root.getOperator());
 		
 	}
 
 	@Test
 	public void testPlainQueryBuilder() {
-		final QueryBuilder builder = new QueryBuilder();
+		final QueryBuilder builder = new TestQueryBuilder();
 		
 		builder
 			.beginAnd()
-				.add(new QueryParam("a", 1))
-				.add(new QueryParam("b", 2))
-				.add(new QueryParam("c", 3))
+				.add(new FieldParam("a", 1))
+				.add(new FieldParam("b", 2))
+				.add(new FieldParam("c", 3))
 				.beginOr()
-					.add(new QueryParam("d1", 1))
-					.add(new QueryParam("d2", 2))
-					.add(new QueryParam("d3", 3))
+					.add(new FieldParam("d1", 1))
+					.add(new FieldParam("d2", 2))
+					.add(new FieldParam("d3", 3))
 				.end()
 			.end();
-		final Query query = builder.query();
-		
-		Assert.assertTrue(query.getRoot() != null);
-		Assert.assertEquals(4, query.getRoot().getChildren().size());
-		Assert.assertEquals(3, query.getRoot().getChildren().get(3).getChildren().size());
+
+		final QueryExpression root = builder.getRoot();
+		Assert.assertTrue(root != null);
+		Assert.assertEquals(4, root.getChildren().size());
+		Assert.assertEquals(3, root.getChildren().get(3).getChildren().size());
 		
 	}
 	
 	@Test
 	public void testPrepandQueryBuilder() {
-		final QueryBuilder builder = new QueryBuilder();
+		final QueryBuilder builder = new TestQueryBuilder();
 		
-		builder.add(new QueryParam("a", 1)).and().add(new QueryParam("b", 2));
-		final Query query = builder.query();
+		builder.add(new FieldParam("a", 1)).and().add(new FieldParam("b", 2));
 		
-		Assert.assertTrue(query.getRoot() != null);
-		Assert.assertEquals(2, query.getRoot().getChildren().size());
-		Assert.assertEquals(QueryOperator.AND, query.getRoot().getOperator());
+		final QueryExpression root = builder.getRoot();
+		Assert.assertTrue(root != null);
+		Assert.assertEquals(2, root.getChildren().size());
+		Assert.assertEquals(QueryOperator.AND, root.getOperator());
 		
 	}
 	
 	@Test
 	public void testComplexPrepandQueryBuilder() {
-		final QueryBuilder builder = new QueryBuilder();
+		final QueryBuilder builder = new TestQueryBuilder();
 		
 		builder
 			.beginAnd()
-				.add(new QueryParam("a", 1))
-				.add(new QueryParam("b", 2))
-				.add(new QueryParam("c", 3))
+				.add(new FieldParam("a", 1))
+				.add(new FieldParam("b", 2))
+				.add(new FieldParam("c", 3))
 				.beginOr()
-					.add(new QueryParam("d1", 1))
-					.add(new QueryParam("d2", 2))
-					.add(new QueryParam("d3", 3))
+					.add(new FieldParam("d1", 1))
+					.add(new FieldParam("d2", 2))
+					.add(new FieldParam("d3", 3))
 				.end()
 			.end()
 		.and()
-			.add(new QueryParam("e4", 3));
-		final Query query = builder.query();
+			.add(new FieldParam("e4", 3));
 		
-		Assert.assertTrue(query.getRoot() != null);
-		Assert.assertEquals(2, query.getRoot().getChildren().size());
-		Assert.assertEquals(4, query.getRoot().getChildren().get(0).getChildren().size());
+		final QueryExpression root = builder.getRoot();
+		Assert.assertTrue(root != null);
+		Assert.assertEquals(2, root.getChildren().size());
+		Assert.assertEquals(4, root.getChildren().get(0).getChildren().size());
 		
 	}
 	

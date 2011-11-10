@@ -21,7 +21,6 @@ import java.util.Set;
 import org.arastreju.sge.model.ResourceID;
 import org.arastreju.sge.model.Statement;
 import org.arastreju.sge.model.nodes.ResourceNode;
-import org.arastreju.sge.model.nodes.SemanticNode;
 
 /**
  * <p>
@@ -35,38 +34,15 @@ import org.arastreju.sge.model.nodes.SemanticNode;
  * @author Oliver Tigges
  */
 public interface QueryManager {
+	
+	/**
+	 * Creates a new query builder.
+	 * @return The query builder.
+	 */
+	Query buildQuery();
+	
+	// -----------------------------------------------------
 
-	/**
-	 * Find resources with given term in their URI.
-	 * @param term The term.
-	 * @return The corresponding result list.
-	 */
-	List<ResourceNode> findByURI(String term);
-	
-	/**
-	 * Find resources with a given tag. 
-	 * @param tag The tag.
-	 * @return The corresponding result list.
-	 */
-	List<ResourceNode> findByTag(String tag);
-	
-	/**
-	 * Find resources with a given tag on a special predicate.
-	 * The result list will contain all resource nodes with a relation with this predicate and tag. 
-	 * @param predicate The predicate.
-	 * @param tag The tag.
-	 * @return The corresponding result list.
-	 */
-	List<ResourceNode> findByTag(ResourceID predicate, String tag);
-	
-	/**
-	 * Find resources with that are subject in a statement with given predicate and object.
-	 * @param predicate The predicate.
-	 * @param object The object.
-	 * @return The corresponding result list.
-	 */
-	List<ResourceNode> findSubjects(ResourceID predicate, SemanticNode object);
-	
 	/**
 	 * Find resources with the given rdf:type.
 	 * @param type The resource ID of the type.

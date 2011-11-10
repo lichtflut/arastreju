@@ -1,24 +1,24 @@
+/*
+ * Copyright (C) 2011 lichtflut Forschungs- und Entwicklungsgesellschaft mbH
+ */
 import java.util.List;
 
 import org.arastreju.sge.Arastreju;
 import org.arastreju.sge.ArastrejuGate;
 import org.arastreju.sge.ModelingConversation;
+import org.arastreju.sge.SNOPS;
 import org.arastreju.sge.apriori.RDF;
 import org.arastreju.sge.model.nodes.ResourceNode;
 import org.arastreju.sge.model.nodes.views.SNClass;
 import org.arastreju.sge.persistence.TransactionControl;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.arastreju.sge.query.FieldParam;
+import org.arastreju.sge.query.Query;
 
 import de.lichtflut.infra.logging.StopWatch;
 
-/*
- * Copyright (C) 2011 lichtflut Forschungs- und Entwicklungsgesellschaft mbH
- */
-
 /**
  * <p>
- *  [DESCRIPTION]
+ *  Test case for multithreading.
  * </p>
  *
  * <p>
@@ -29,10 +29,6 @@ import de.lichtflut.infra.logging.StopWatch;
  */
 public class MultiThreadingTest {
 	
-	private static final Logger logger = LoggerFactory.getLogger(MultiThreadingTest.class);
-	
-	// -----------------------------------------------------
-	
 	/**
 	 * Constructor.
 	 */
@@ -41,14 +37,14 @@ public class MultiThreadingTest {
 		for(int i = 0; i < numberOfThreads; i++) {
 			final Thread t = new Thread(new Worker(Arastreju.getInstance().rootContext()));
 			t.start();
-			logger.info("Startet Thread: " + t.getId());
+			System.out.println("Startet Thread: " + t.getId());
 		}
 	}
 	
 	// -----------------------------------------------------
 	
 	public static void main(String[] args) {
-		new MultiThreadingTest(1);
+		new MultiThreadingTest(10);
 	}
 	
 	// -----------------------------------------------------
@@ -65,8 +61,7 @@ public class MultiThreadingTest {
 			final StopWatch sw = new StopWatch();
 			final ModelingConversation mc = gate.startConversation();
 			
-			final TransactionControl txc = mc.getTransactionControl();
-			txc.begin();
+			final TransactionControl txc = mc.beginTransaction();
 			
 			final SNClass clazz = createClass();
 			mc.attach(clazz);
@@ -77,12 +72,13 @@ public class MultiThreadingTest {
 			
 			sw.displayTime("created instances of " + clazz);
 			
-			final List<ResourceNode> instances = mc.createQueryManager().findByTag(RDF.TYPE, clazz.getQualifiedName().toURI());
+			final Query query = mc.createQueryManager().buildQuery().add(new FieldParam(RDF.TYPE, SNOPS.uri(clazz)));
+			final List<ResourceNode> instances = query.getResult().toList();
 			sw.displayTime("found "+ instances.size() + " instances of " + clazz);
 			
 			txc.commit();
 			
-			logger.info("Thread '" + Thread.currentThread().getId() + "' finished.");
+			System.out.println("Thread '" + Thread.currentThread().getId() + "' finished.");
 		}
 		
 		public SNClass createClass() {

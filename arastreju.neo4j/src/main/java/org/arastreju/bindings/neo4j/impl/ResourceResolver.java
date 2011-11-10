@@ -15,9 +15,6 @@
  */
 package org.arastreju.bindings.neo4j.impl;
 
-import java.util.Collection;
-import java.util.List;
-
 import org.arastreju.sge.model.ResourceID;
 import org.arastreju.sge.model.nodes.ResourceNode;
 import org.arastreju.sge.naming.QualifiedName;
@@ -57,11 +54,4 @@ public interface ResourceResolver {
 	 */
 	ResourceNode resolveResource(Node neoNode);
 	
-	/**
-	 * Find all resource by their corresponding neo nodes.
-	 * @param neoNodes The neo nodes.
-	 * @return The resource nodes.
-	 */
-	List<ResourceNode> resolveResources(Collection<Node> neoNodes);
-
 }

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.arastreju.bindings.neo4j;
+package org.arastreju.bindings.neo4j.query;
 
 
 import java.util.List;
@@ -22,6 +22,7 @@ import java.util.Set;
 import junit.framework.Assert;
 
 import org.arastreju.bindings.neo4j.impl.SemanticNetworkAccess;
+import org.arastreju.bindings.neo4j.query.NeoQueryBuilder;
 import org.arastreju.sge.apriori.Aras;
 import org.arastreju.sge.apriori.RDF;
 import org.arastreju.sge.apriori.RDFS;
@@ -35,6 +36,12 @@ import org.arastreju.sge.model.nodes.SNResource;
 import org.arastreju.sge.model.nodes.views.SNEntity;
 import org.arastreju.sge.model.nodes.views.SNText;
 import org.arastreju.sge.naming.QualifiedName;
+import org.arastreju.sge.query.FieldParam;
+import org.arastreju.sge.query.Query;
+import org.arastreju.sge.query.QueryExpression;
+import org.arastreju.sge.query.QueryResult;
+import org.arastreju.sge.query.UriParam;
+import org.arastreju.sge.query.ValueParam;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -80,16 +87,38 @@ public class NeoQueryManagerTest {
 	// -----------------------------------------------------
 	
 	@Test
+	public void testQueryBuilder() {
+		final NeoQueryBuilder query = qm.buildQuery();
+			query.beginAnd()
+				.add(new FieldParam("a", 1))
+				.add(new FieldParam("b", 2))
+				.add(new FieldParam("c", 3))
+				.beginOr()
+					.add(new FieldParam("d1", 1))
+					.add(new FieldParam("d2", 2))
+					.add(new FieldParam("d3", 3))
+				.end();
+		
+
+		final QueryExpression root = query.getRoot();
+		Assert.assertTrue(root != null);
+		Assert.assertEquals(4, root.getChildren().size());
+		Assert.assertEquals(3, root.getChildren().get(3).getChildren().size());
+		
+	}
+	
+	@Test
 	public void testFindByTag(){
 		final ResourceNode car = new SNResource(qnCar);
 		Association.create(car, Aras.HAS_PROPER_NAME, new SNText("BMW"));
 		Association.create(car, RDFS.LABEL, new SNText("Automobil"));
 		store.attach(car);
 		
-		final List<ResourceNode> result = qm.findByTag("BMW");
-		
-		Assert.assertEquals(1, result.size());
-		Assert.assertTrue(result.contains(car));
+		final Query query = qm.buildQuery().add(new ValueParam("BMW"));
+		final QueryResult result = query.getResult();
+		final List<ResourceNode> list = result.toList();
+		Assert.assertEquals(1, list.size());
+		Assert.assertTrue(list.contains(car));
 		
 	}
 	
@@ -100,10 +129,37 @@ public class NeoQueryManagerTest {
 		Association.create(car, RDFS.LABEL, new SNText("Automobil"));
 		store.attach(car);
 		
-		final List<ResourceNode> result = qm.findByTag(RDFS.LABEL, "Automobil");
+		final Query query = qm.buildQuery().add(new FieldParam(RDFS.LABEL, "Automobil"));
+		final QueryResult result = query.getResult();
+		final List<ResourceNode> list = result.toList();
+		Assert.assertEquals(1, list.size());
+		Assert.assertTrue(list.contains(car));
 		
-		Assert.assertEquals(1, result.size());
-		Assert.assertTrue(result.contains(car));
+	}
+	
+	@Test
+	public void testFindByQuery(){
+		final Context ctx = null;
+		final ResourceNode car = new SNResource(qnCar);
+		Association.create(car, RDF.TYPE, RDFS.CLASS, ctx);
+		store.attach(car);
+		
+		final ResourceNode bike = new SNResource(qnBike);
+		Association.create(bike, RDF.TYPE, RDFS.CLASS, ctx);
+		store.attach(bike);
+		
+		final SNEntity aCar = car.asClass().createInstance(ctx);
+		store.attach(aCar);
+		
+		final SNEntity aBike = bike.asClass().createInstance(ctx);
+		store.attach(aBike);
+		
+		final Query query = qm.buildQuery().add(new UriParam("*Car"));
+		final QueryResult result = query.getResult();
+		final List<ResourceNode> list = result.toList();
+		Assert.assertEquals(1, list.size());
+		Assert.assertEquals(new SimpleResourceID(qnCar), list.get(0));
+		
 	}
 	
 	@Test

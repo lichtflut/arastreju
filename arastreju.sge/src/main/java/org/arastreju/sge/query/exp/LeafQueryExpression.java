@@ -4,22 +4,43 @@
 package org.arastreju.sge.query.exp;
 
 import org.arastreju.sge.query.QueryExpression;
-import org.arastreju.sge.query.QueryOperator;
 import org.arastreju.sge.query.QueryParam;
 
+/**
+ * <p>
+ *  Leaf in query expression tree.
+ * </p>
+ *
+ * <p>
+ * 	Created Nov 8, 2011
+ * </p>
+ *
+ * @author Oliver Tigges
+ */
 class LeafQueryExpression extends AbstractQueryExpression {
 
 	private final QueryParam param;
+	
+	// -----------------------------------------------------
 
 	/**
-	 * @param queryOperator
+	 * Constructor.
 	 * @param param
 	 */
 	public LeafQueryExpression(final QueryParam param) {
-		super(QueryOperator.EQUALS);
+		super(param.getOperator());
 		this.param = param;
 	}
 
+	// -----------------------------------------------------
+	
+	/** 
+	 * {@inheritDoc}
+	 */
+	public boolean isLeaf() {
+		return true;
+	}
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -35,6 +56,8 @@ class LeafQueryExpression extends AbstractQueryExpression {
 	public void add(final QueryExpression expr) {
 		throw new UnsupportedOperationException("Can't add a query expression to a leaf.");
 	}
+	
+	// -----------------------------------------------------
 	
 	/** 
 	 * {@inheritDoc}
