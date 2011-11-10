@@ -49,5 +49,15 @@ public class ValueParam implements QueryParam {
 	public Object getValue() {
 		return term;
 	}
+	
+	// -----------------------------------------------------
+	
+	/** 
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String toString() {
+		return term;
+	}
 
 }

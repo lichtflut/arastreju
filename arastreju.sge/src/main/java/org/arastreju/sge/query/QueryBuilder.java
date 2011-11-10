@@ -98,6 +98,20 @@ public abstract class QueryBuilder implements Query {
 	
 	// -----------------------------------------------------
 	
+	/** 
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String toString() {
+		if (!stack.isEmpty()) {
+			return getRoot().toString();	
+		} else {
+			return "<empty-query>";
+		}
+	}
+	
+	// -----------------------------------------------------
+	
 	protected QueryExpression getRoot() {
 		return stack.firstElement();
 	}
