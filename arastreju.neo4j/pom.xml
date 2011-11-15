@@ -19,7 +19,7 @@
 	
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<neo4j.version>1.4.2</neo4j.version>
+		<neo4j.version>1.5</neo4j.version>
 	</properties>
 
 	<dependencies>
