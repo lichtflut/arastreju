@@ -17,15 +17,15 @@ package org.arastreju.bindings.neo4j;
 
 import org.arastreju.bindings.neo4j.impl.SemanticNetworkAccess;
 import org.arastreju.bindings.neo4j.index.ResourceIndex;
-import org.arastreju.bindings.neo4j.query.NeoQueryManager;
 import org.arastreju.sge.ModelingConversation;
+import org.arastreju.sge.SNOPS;
 import org.arastreju.sge.model.ResourceID;
 import org.arastreju.sge.model.SemanticGraph;
+import org.arastreju.sge.model.Statement;
+import org.arastreju.sge.model.associations.Association;
 import org.arastreju.sge.model.nodes.ResourceNode;
 import org.arastreju.sge.naming.QualifiedName;
 import org.arastreju.sge.persistence.TransactionControl;
-import org.arastreju.sge.query.QueryManager;
-import org.arastreju.sge.settings.ConversationSettings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -59,37 +59,47 @@ public class Neo4jModellingConversation implements ModelingConversation {
 	}
 	
 	// -----------------------------------------------------
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	public Association addStatement(final Statement stmt) {
+		final ResourceNode subject = resolve(stmt.getSubject());
+		return SNOPS.associate(subject, stmt.getPredicate(), stmt.getObject(), stmt.getContexts());
+	}
+	
+	// ----------------------------------------------------
 
-	/* (non-Javadoc)
-	 * @see org.arastreju.sge.ModellingConversation#findResource(com.sun.xml.internal.fastinfoset.QualifiedName)
+	/**
+	 * {@inheritDoc}
 	 */
 	public ResourceNode findResource(final QualifiedName qn) {
 		return store.findResource(qn);
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.arastreju.sge.ModellingConversation#resolve(org.arastreju.sge.model.ResourceID)
+	/**
+	 * {@inheritDoc}
 	 */
 	public ResourceNode resolve(final ResourceID resource) {
 		return store.resolve(resource);
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.arastreju.sge.ModellingConversation#attach(org.arastreju.sge.model.nodes.ResourceNode)
+	/**
+	 * {@inheritDoc}
 	 */
 	public ResourceNode attach(final ResourceNode node) {
 		return store.attach(node);
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.arastreju.sge.ModellingConversation#detach(org.arastreju.sge.model.nodes.ResourceNode)
+	/**
+	 * {@inheritDoc}
 	 */
 	public void detach(final ResourceNode node) {
 		store.detach(node);
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.arastreju.sge.ModelingConversation#remove(org.arastreju.sge.model.ResourceID, boolean)
+	/**
+	 * {@inheritDoc}
 	 */
 	public void remove(final ResourceID id, final boolean cascade) {
 		store.remove(id, cascade);
@@ -97,43 +107,29 @@ public class Neo4jModellingConversation implements ModelingConversation {
 	
 	// -----------------------------------------------------
 
-	/* (non-Javadoc)
-	 * @see org.arastreju.sge.ModellingConversation#findGraph(com.sun.xml.internal.fastinfoset.QualifiedName)
+	/**
+	 * {@inheritDoc}
 	 */
 	public SemanticGraph findGraph(final QualifiedName qn) {
 		throw new NotYetImplementedException();
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.arastreju.sge.ModellingConversation#attach(org.arastreju.sge.model.SemanticGraph)
+	/**
+	 * {@inheritDoc}
 	 */
 	public SemanticGraph attach(final SemanticGraph graph) {
 		return store.attach(graph);
 	}
 
-	/* (non-Javadoc)
-	 * @see org.arastreju.sge.ModellingConversation#detach(org.arastreju.sge.model.SemanticGraph)
+	/**
+	 * {@inheritDoc}
 	 */
 	public void detach(final SemanticGraph graph) {
 		store.detach(graph);
 	}
 
 	
-	/* (non-Javadoc)
-	 * @see org.arastreju.sge.ModellingConversation#createQueryManager()
-	 */
-	public QueryManager createQueryManager() {
-		return new NeoQueryManager(store, store.getIndex());
-	}
-	
 	// -----------------------------------------------------
-
-	/* (non-Javadoc)
-	 * @see org.arastreju.sge.ModellingConversation#getSettings()
-	 */
-	public ConversationSettings getSettings() {
-		return null;
-	}
 
 	/**
 	 * {@inheritDoc}
@@ -142,8 +138,8 @@ public class Neo4jModellingConversation implements ModelingConversation {
 		return store.getTxProvider().begin();
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.arastreju.sge.ModellingConversation#close()
+	/**
+	 * {@inheritDoc}
 	 */
 	public void close() {
 		store.close();
@@ -154,5 +150,5 @@ public class Neo4jModellingConversation implements ModelingConversation {
 	protected ResourceIndex getIndex() {
 		return store.getIndex();
 	}
-	
+
 }

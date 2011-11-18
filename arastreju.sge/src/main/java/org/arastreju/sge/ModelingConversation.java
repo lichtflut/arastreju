@@ -17,11 +17,11 @@ package org.arastreju.sge;
 
 import org.arastreju.sge.model.ResourceID;
 import org.arastreju.sge.model.SemanticGraph;
+import org.arastreju.sge.model.Statement;
+import org.arastreju.sge.model.associations.Association;
 import org.arastreju.sge.model.nodes.ResourceNode;
 import org.arastreju.sge.naming.QualifiedName;
 import org.arastreju.sge.persistence.TransactionControl;
-import org.arastreju.sge.query.QueryManager;
-import org.arastreju.sge.settings.ConversationSettings;
 
 /**
  * <p>
@@ -35,6 +35,13 @@ import org.arastreju.sge.settings.ConversationSettings;
  * @author Oliver Tigges
  */
 public interface ModelingConversation {
+	
+	/**
+	 * Adds a statement to the semantic model.
+	 * @param stmt The statment.
+	 * @return The attached association.
+	 */
+	Association addStatement(Statement stmt);
 	
 	// -- RESOURCE NODE -----------------------------------
 	
@@ -89,12 +96,6 @@ public interface ModelingConversation {
 	void detach(SemanticGraph graph);
 	
 	// -----------------------------------------------------
-	
-	QueryManager createQueryManager();
-	
-	// -----------------------------------------------------
-	
-	ConversationSettings getSettings();
 	
 	/**
 	 * Begins a new transaction and returns the corresponding control object.

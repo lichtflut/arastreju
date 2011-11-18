@@ -15,6 +15,8 @@
  */
 package org.arastreju.sge;
 
+import org.arastreju.sge.query.QueryManager;
+
 /**
  * <p>
  *  Single point of entrance to Arastreju.
@@ -33,6 +35,12 @@ public interface ArastrejuGate {
 	 * @return The modeling conversation.
 	 */
 	ModelingConversation startConversation();
+	
+	/**
+	 * Obtain a query manager to execute complex queries.
+	 * @return The query manager.
+	 */
+	QueryManager createQueryManager();
 	
 	TypeSystem getTypeSystem();
 	

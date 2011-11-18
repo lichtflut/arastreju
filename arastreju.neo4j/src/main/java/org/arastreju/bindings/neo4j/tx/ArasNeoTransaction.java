@@ -47,8 +47,31 @@ class ArasNeoTransaction implements TransactionControl {
 	/** 
 	 * {@inheritDoc}
 	 */
-	public void commit() {
+	public void success() {
 		tx.success();
+	}
+
+	/** 
+	 * {@inheritDoc}
+	 */
+	public void fail() {
+		tx.failure();
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	public void finish() {
+		tx.finish();
+		tx = null;
+		active = false;
+	}
+	
+	/** 
+	 * {@inheritDoc}
+	 */
+	public void commit() {
+		success();
 		finish();
 	}
 
@@ -56,7 +79,7 @@ class ArasNeoTransaction implements TransactionControl {
 	 * {@inheritDoc}
 	 */
 	public void rollback() {
-		tx.failure();
+		fail();
 		finish();
 	}
 
@@ -67,21 +90,5 @@ class ArasNeoTransaction implements TransactionControl {
 	}
 	
 	// -----------------------------------------------------
-
-	/* (non-Javadoc)
-	 * @see org.arastreju.bindings.neo4j.tx.TxWrapper#markFailure()
-	 */
-	public void markFailure() {
-		tx.failure();
-	}
-
-	/* (non-Javadoc)
-	 * @see org.arastreju.bindings.neo4j.tx.TxWrapper#finish()
-	 */
-	public void finish() {
-		tx.finish();
-		tx = null;
-		active = false;
-	}
 
 }

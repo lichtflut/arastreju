@@ -82,7 +82,7 @@ public class RapvhiShow {
 		
 		mc.attach(ravi);
 		
-		final QueryManager qm = mc.createQueryManager();
+		final QueryManager qm = gate.createQueryManager();
 		final Query query = qm.buildQuery().add(new FieldParam("resource-value", "Ravi"));
 		
 		System.out.println("Alle Resourcen mit name 'Ravi': " + query.getResult().iterator().next());

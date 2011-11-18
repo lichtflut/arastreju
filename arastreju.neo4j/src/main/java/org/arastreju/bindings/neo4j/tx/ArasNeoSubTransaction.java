@@ -35,8 +35,29 @@ class ArasNeoSubTransaction implements TransactionControl {
 	/** 
 	 * {@inheritDoc}
 	 */
+	public void success() {
+		superTx.success();
+	};
+	
+	/** 
+	 * {@inheritDoc}
+	 */
 	public void commit() {
 		// do nothing
+	}
+	
+	/** 
+	 * {@inheritDoc}
+	 */
+	public void finish() {
+		// do nothing
+	}
+	
+	/** 
+	 * {@inheritDoc}
+	 */
+	public void fail() {
+		superTx.fail();
 	}
 
 	/** 

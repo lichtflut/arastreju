@@ -29,12 +29,27 @@ package org.arastreju.sge.persistence;
 public interface TransactionControl {
 	
 	/**
+	 * Marks the transaction as successful. 
+	 */
+	void success();
+	
+	/**
+	 * Marks the transaction as failed. 
+	 */
+	void fail();
+	
+	/**
+	 * Finish the transaction. 
+	 */
+	void finish();
+	
+	/**
 	 * Commit the transaction.
 	 */
 	void commit();
 	
 	/**
-	 * Rolles the transaction back .
+	 * Roles the transaction back .
 	 */
 	void rollback();
 	
@@ -42,5 +57,7 @@ public interface TransactionControl {
 	 * flushes current state to database.
 	 */
 	void flush();
+
+	
 	
 }

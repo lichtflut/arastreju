@@ -81,6 +81,11 @@ public class NeoQueryResult implements QueryResult {
 		return hits.size() <= 0;
 	}
 	
+	@Override
+	public String toString() {
+		return getClass().getSimpleName() + "[" + size() + " results]";
+	}
+	
 	// -----------------------------------------------------
 	
 	class ResolvingIterator implements Iterator<ResourceNode> {
