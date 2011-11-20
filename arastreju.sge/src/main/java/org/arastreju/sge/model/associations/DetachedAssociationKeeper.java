@@ -89,7 +89,14 @@ public class DetachedAssociationKeeper extends AbstractAssociationKeeper impleme
 	 */
 	@Override
 	protected void resolveAssociations() {
-		throw new UnsupportedOperationException("DetachedAssociationKeeper cannot resolve Associations");
+		throw new UnsupportedOperationException("DetachedAssociationKeeper cannot resolve Associations: " + this);
+	}
+	
+	// ----------------------------------------------------
+	
+	@Override
+	public String toString() {
+		return super.toString();
 	}
 
 }

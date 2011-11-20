@@ -208,7 +208,7 @@ public class SNOPS {
 		// 1st: remove no longer existing
 		for(Association assoc: subject.getAssociations(predicate)){
 			if (!objects.contains(assoc.getObject())){
-				subject.revoke(assoc);
+				subject.remove(assoc);
 			} else {
 				existing.add(assoc.getObject());
 			}

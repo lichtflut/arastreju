@@ -65,6 +65,7 @@ public abstract class AbstractAssociationKeeper implements AssociationKeeper {
 		associations.clear();
 		revokedAssociations.clear();
 		resolved = false;
+		throw new RuntimeException("RESET CALLED");
 	}
 	
 	public void add(final Association assoc) {
@@ -106,7 +107,12 @@ public abstract class AbstractAssociationKeeper implements AssociationKeeper {
 	 */
 	@Override
 	public String toString() {
-		return getClass().getSimpleName() + " " + getAssociationsDirectly();
+		final StringBuilder sb = new StringBuilder(getClass().getSimpleName());
+		if (resolved) {
+			sb.append(" resolved ");
+		}
+		sb.append(getAssociationsDirectly());
+		return sb.toString();
 	}
 	
 	// -----------------------------------------------------
