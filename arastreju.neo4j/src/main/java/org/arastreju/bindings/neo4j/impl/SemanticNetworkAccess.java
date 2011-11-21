@@ -62,7 +62,7 @@ import de.lichtflut.infra.exceptions.NotYetImplementedException;
  *
  * @author Oliver Tigges
  */
-public class SemanticNetworkAccess implements NeoConstants, ResourceResolver {
+public class SemanticNetworkAccess implements NeoConstants, NeoResourceResolver {
 	
 	private final GraphDatabaseService gdbService;
 	

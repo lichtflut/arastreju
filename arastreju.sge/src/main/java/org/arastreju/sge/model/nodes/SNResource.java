@@ -65,16 +65,15 @@ public class SNResource implements ResourceNode, Serializable {
 	/**
 	 * Default constructor for new unattached resource.
 	 */
-	public SNResource(final Namespace namespace, final String name) {
-		this(namespace, name, new DetachedAssociationKeeper());
+	public SNResource(final QualifiedName qn) {
+		this(qn.getNamespace(), qn.getSimpleName(), new DetachedAssociationKeeper());
 	}
-	
 	
 	/**
 	 * Default constructor for new unattached resource.
 	 */
-	public SNResource(final QualifiedName qn) {
-		this(qn.getNamespace(), qn.getSimpleName(), new DetachedAssociationKeeper());
+	public SNResource(final Namespace namespace, final String name) {
+		this(namespace, name, new DetachedAssociationKeeper());
 	}
 	
 	// -- PROTECTED CONSTRUCTORS --------------------------
@@ -122,22 +121,6 @@ public class SNResource implements ResourceNode, Serializable {
 	 */
 	public QualifiedName getQualifiedName() {
 		return new QualifiedName(namespace, name);
-	}
-	
-	/* (non-Javadoc)
-	 * @see org.arastreju.sge.model.nodes.ResourceNode#setName(java.lang.String)
-	 */
-	public void setName(final String name) {
-		// TODO: make protected: Only changeable in SPI
-		this.name = name;
-	}
-	
-	/* (non-Javadoc)
-	 * @see org.arastreju.sge.model.nodes.ResourceNode#setNamespace(org.arastreju.sge.naming.Namespace)
-	 */
-	public void setNamespace(final Namespace namespace) {
-		// TODO: make protected: Only changeable in SPI
-		this.namespace = namespace;
 	}
 	
 	/* (non-Javadoc)

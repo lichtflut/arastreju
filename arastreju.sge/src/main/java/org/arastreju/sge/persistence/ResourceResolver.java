@@ -13,20 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.arastreju.bindings.neo4j.impl;
+package org.arastreju.sge.persistence;
 
 import org.arastreju.sge.model.ResourceID;
 import org.arastreju.sge.model.nodes.ResourceNode;
-import org.arastreju.sge.naming.QualifiedName;
-import org.neo4j.graphdb.Node;
 
 /**
  * <p>
- *  Interface for resource resolving.
+ *  Resolver for ResourceIDs.
  * </p>
  *
  * <p>
- * 	Created Jan 14, 2011
+ * 	Created Nov 21, 2011
  * </p>
  *
  * @author Oliver Tigges
@@ -34,24 +32,10 @@ import org.neo4j.graphdb.Node;
 public interface ResourceResolver {
 
 	/**
-	 * Find a resource by it's qualified name.
-	 * @param qn The qualified name.
-	 * @return The resource node or null.
-	 */
-	ResourceNode findResource(QualifiedName qn);
-
-	/**
 	 * Resolve a resource by it's ID. If it does not exist, it will be created.
 	 * @param id The ID.
 	 * @return The resource node.
 	 */
 	ResourceNode resolve(ResourceID id);
-	
-	/**
-	 * Find a resource by it's corresponding neo node.
-	 * @param neoNode The neo node.
-	 * @return The resource node.
-	 */
-	ResourceNode resolveResource(Node neoNode);
-	
+
 }

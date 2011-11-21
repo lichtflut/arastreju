@@ -22,7 +22,7 @@ import java.util.Set;
 import org.arastreju.bindings.neo4j.ArasRelTypes;
 import org.arastreju.bindings.neo4j.NeoConstants;
 import org.arastreju.bindings.neo4j.impl.ContextAccess;
-import org.arastreju.bindings.neo4j.impl.ResourceResolver;
+import org.arastreju.bindings.neo4j.impl.NeoResourceResolver;
 import org.arastreju.bindings.neo4j.impl.SemanticNetworkAccess;
 import org.arastreju.sge.context.Context;
 import org.arastreju.sge.model.ResourceID;
@@ -55,7 +55,7 @@ public class NeoAssociationKeeper extends AbstractAssociationKeeper implements N
 	private final ResourceNode arasNode;
 	private final Node neoNode;
 	private final SemanticNetworkAccess store;
-	private final ResourceResolver resolver;
+	private final NeoResourceResolver resolver;
 	
 	private final Logger logger = LoggerFactory.getLogger(NeoAssociationKeeper.class);
 	
@@ -96,7 +96,7 @@ public class NeoAssociationKeeper extends AbstractAssociationKeeper implements N
 	 * {@inheritDoc}
 	 */
 	@Override
-	public boolean remove(Association assoc) {
+	public boolean remove(final Association assoc) {
 		super.remove(assoc);
 		logger.info("Removed Association: " + assoc);
 		return store.removeAssociation(neoNode, assoc);
@@ -113,8 +113,8 @@ public class NeoAssociationKeeper extends AbstractAssociationKeeper implements N
 	
 	// -----------------------------------------------------
 	
-	/* (non-Javadoc)
-	 * @see org.arastreju.sge.model.associations.AbstractAssociationKeeper#markResolved()
+	/**
+	 * {@inheritDoc}
 	 */
 	@Override
 	public AbstractAssociationKeeper markResolved() {
@@ -137,8 +137,8 @@ public class NeoAssociationKeeper extends AbstractAssociationKeeper implements N
 		super.addResolvedAssociation(subject, predicate, object, contexts);
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.arastreju.sge.model.associations.AbstractAssociationKeeper#resolveAssociations()
+	/**
+	 * {@inheritDoc}
 	 */
 	@Override
 	protected void resolveAssociations() {
@@ -154,6 +154,8 @@ public class NeoAssociationKeeper extends AbstractAssociationKeeper implements N
 			addResolvedAssociation(arasNode, predicate, object, ctx);
 		}
 	}
+	
+	// ----------------------------------------------------
 	
 	/**
 	 * Called when being serialized --> Replace by detached association keeper.

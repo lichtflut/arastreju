@@ -20,7 +20,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.arastreju.sge.SNOPS;
 import org.arastreju.sge.apriori.Aras;
 import org.arastreju.sge.apriori.RDF;
 import org.arastreju.sge.context.Context;
@@ -28,13 +27,11 @@ import org.arastreju.sge.model.ResourceID;
 import org.arastreju.sge.model.associations.Association;
 import org.arastreju.sge.model.nodes.ResourceNode;
 import org.arastreju.sge.model.nodes.SNResource;
-import org.arastreju.sge.model.nodes.SemanticNode;
-
-import de.lichtflut.infra.logging.Log;
+import org.arastreju.sge.naming.QualifiedName;
 
 /**
  * <p>
- * View on all entities (instances of classifiers).
+ *  View on all entities (instances of classes).
  * </p>
  * 
  * Created: 12.09.2008
@@ -43,14 +40,12 @@ import de.lichtflut.infra.logging.Log;
  */
 public class SNEntity extends ResourceView {
 	
-	public static boolean isEntity(SemanticNode node) {
-		return node instanceof SNEntity;
-	}
-	
-	//-----------------------------------------------------
-	
 	public SNEntity() {
 		super(new SNResource());
+	}
+	
+	public SNEntity(final QualifiedName qn) {
+		super(new SNResource(qn));
 	}
 	
 	/**
@@ -63,19 +58,6 @@ public class SNEntity extends ResourceView {
 
 	//------------------------------------------------------
 
-	/**
-	 * Get the 'main' class of this entity.
-	 * TODO: pick best class!
-	 */
-	public SNClass getMainClass() {
-		Association assoc = SNOPS.singleAssociation(this, RDF.TYPE);
-		if (assoc != null){
-			return assoc.getObject().asResource().asClass();
-		}
-		Log.warn(this, "individual has no class: " + this);
-		return null;
-	}
-	
 	/**
 	 * Get all direct classes, i.e. with asserted rdf:type, not inferred.
 	 * @return A set with the direct classes.
@@ -96,7 +78,7 @@ public class SNEntity extends ResourceView {
 		return !getAssociations(RDF.TYPE).isEmpty();
 	}
 	
-	public synchronized void addToClass(SNClass newClass, Context context) {
+	public void addToClass(SNClass newClass, Context context) {
 		Association.create(this, RDF.TYPE, newClass, context);
 	}
 
@@ -109,10 +91,6 @@ public class SNEntity extends ResourceView {
 		return false;
 	}
 
-	public Set<Association> getRelations(final ResourceID role) {
-		return getAssociations(role);
-	}
-	
 	//-----------------------------------------------------
 	
 	public boolean isNamed() {

@@ -20,7 +20,7 @@ import org.arastreju.bindings.neo4j.extensions.NeoAssociationKeeper;
 import org.arastreju.bindings.neo4j.extensions.SNValueNeo;
 import org.arastreju.bindings.neo4j.impl.AssocKeeperAccess;
 import org.arastreju.bindings.neo4j.impl.ContextAccess;
-import org.arastreju.bindings.neo4j.impl.ResourceResolver;
+import org.arastreju.bindings.neo4j.impl.NeoResourceResolver;
 import org.arastreju.bindings.neo4j.impl.SemanticNetworkAccess;
 import org.arastreju.sge.context.Context;
 import org.arastreju.sge.model.SimpleResourceID;
@@ -46,7 +46,7 @@ import org.neo4j.graphdb.Relationship;
 public class NodeMapper implements NeoConstants {
 	
 	private final SemanticNetworkAccess snAccess;
-	private final ResourceResolver resolver;
+	private final NeoResourceResolver resolver;
 	
 	// -----------------------------------------------------
 

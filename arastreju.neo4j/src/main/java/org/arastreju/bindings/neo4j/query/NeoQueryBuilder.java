@@ -3,7 +3,7 @@
  */
 package org.arastreju.bindings.neo4j.query;
 
-import org.arastreju.bindings.neo4j.impl.ResourceResolver;
+import org.arastreju.bindings.neo4j.impl.NeoResourceResolver;
 import org.arastreju.bindings.neo4j.index.NeoIndex;
 import org.arastreju.bindings.neo4j.index.ResourceIndex;
 import org.arastreju.sge.model.nodes.ResourceNode;
@@ -31,14 +31,14 @@ public class NeoQueryBuilder extends QueryBuilder {
 	
 	private final ResourceIndex index;
 	
-	private final ResourceResolver resolver;
+	private final NeoResourceResolver resolver;
 	
 	// -----------------------------------------------------
 	
 	/**
 	 * @param index
 	 */
-	public NeoQueryBuilder(final ResourceIndex index, final ResourceResolver resolver) {
+	public NeoQueryBuilder(final ResourceIndex index, final NeoResourceResolver resolver) {
 		this.index = index;
 		this.resolver = resolver;
 	}

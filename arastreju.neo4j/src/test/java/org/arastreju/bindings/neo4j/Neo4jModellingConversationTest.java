@@ -48,11 +48,8 @@ public class Neo4jModellingConversationTest {
 	public void testInstantiation() throws IOException{
 		ModelingConversation mc = new Neo4jModellingConversation(new SemanticNetworkAccess());
 		
-		ResourceNode node = new SNResource();
-		node.setNamespace(new SimpleNamespace("http://q#"));
-		node.setName("N1");
+		ResourceNode node = new SNResource(new SimpleNamespace("http://q#"), "N1");
 		mc.attach(node);
-		
 		mc.close();
 	}
 	

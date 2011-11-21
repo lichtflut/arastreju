@@ -20,6 +20,6 @@ import org.arastreju.sge.model.Statement;
  */
 public interface Inferencer {
 
-	Set<Statement> onStatement(Statement stmt);
+	void addInferenced(Statement stmt, Set<Statement> target);
 
 }

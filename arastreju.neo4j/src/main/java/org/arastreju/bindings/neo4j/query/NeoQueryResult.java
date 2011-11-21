@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.arastreju.bindings.neo4j.impl.ResourceResolver;
+import org.arastreju.bindings.neo4j.impl.NeoResourceResolver;
 import org.arastreju.sge.model.nodes.ResourceNode;
 import org.arastreju.sge.query.QueryResult;
 import org.neo4j.graphdb.Node;
@@ -27,7 +27,7 @@ import org.neo4j.graphdb.index.IndexHits;
 public class NeoQueryResult implements QueryResult {
 
 	private final IndexHits<Node> hits;
-	private final ResourceResolver resolver;
+	private final NeoResourceResolver resolver;
 	
 	// -----------------------------------------------------
 	
@@ -35,7 +35,7 @@ public class NeoQueryResult implements QueryResult {
 	 * Constructor.
 	 * @param hits The index hits.
 	 */
-	public NeoQueryResult(final IndexHits<Node> hits, final ResourceResolver resolver) {
+	public NeoQueryResult(final IndexHits<Node> hits, final NeoResourceResolver resolver) {
 		this.hits = hits;
 		this.resolver = resolver;
 	}

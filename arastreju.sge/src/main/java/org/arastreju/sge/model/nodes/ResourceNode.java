@@ -40,11 +40,7 @@ public interface ResourceNode extends SemanticNode, ResourceID {
 	
 	String getName();
 	
-	void setName(String name);
-	
 	Namespace getNamespace();
-	
-	void setNamespace(Namespace namespace);
 	
 	QualifiedName getQualifiedName();
 	

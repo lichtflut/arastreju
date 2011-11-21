@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.arastreju.bindings.neo4j.NeoConstants;
-import org.arastreju.bindings.neo4j.impl.ResourceResolver;
+import org.arastreju.bindings.neo4j.impl.NeoResourceResolver;
 import org.arastreju.bindings.neo4j.index.ResourceIndex;
 import org.arastreju.bindings.neo4j.mapping.RelationMapper;
 import org.arastreju.sge.apriori.RDF;
@@ -53,14 +53,14 @@ public class NeoQueryManager implements QueryManager, NeoConstants {
 	
 	private final ResourceIndex index;
 	
-	private final ResourceResolver resolver;
+	private final NeoResourceResolver resolver;
 
 	// -----------------------------------------------------
 	
 	/**
 	 * Constructor.
 	 */
-	public NeoQueryManager(final ResourceResolver resolver, final ResourceIndex index) {
+	public NeoQueryManager(final NeoResourceResolver resolver, final ResourceIndex index) {
 		this.resolver = resolver;
 		this.index = index;
 	}

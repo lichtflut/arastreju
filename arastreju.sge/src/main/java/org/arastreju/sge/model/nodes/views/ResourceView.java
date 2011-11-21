@@ -85,20 +85,6 @@ public abstract class ResourceView implements ResourceNode, Serializable {
 	}
 
 	/* (non-Javadoc)
-	 * @see org.arastreju.api.ontology.model.SemanticNode#setName(java.lang.String)
-	 */
-	public void setName(final String name) {
-		resource.setName(name);
-	}
-
-	/* (non-Javadoc)
-	 * @see org.arastreju.api.ontology.model.SemanticNode#setNamespace(org.arastreju.api.ontology.Namespace)
-	 */
-	public void setNamespace(final Namespace namespace) {
-		resource.setNamespace(namespace);
-	}
-
-	/* (non-Javadoc)
 	 * @see org.arastreju.api.ontology.model.ResourceID#references(org.arastreju.api.ontology.model.ResourceID)
 	 */
 	public boolean references(final ResourceID ref) {

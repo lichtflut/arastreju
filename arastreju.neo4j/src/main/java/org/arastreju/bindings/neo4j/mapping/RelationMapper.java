@@ -19,7 +19,7 @@ import org.arastreju.bindings.neo4j.ArasRelTypes;
 import org.arastreju.bindings.neo4j.NeoConstants;
 import org.arastreju.bindings.neo4j.extensions.SNValueNeo;
 import org.arastreju.bindings.neo4j.impl.ContextAccess;
-import org.arastreju.bindings.neo4j.impl.ResourceResolver;
+import org.arastreju.bindings.neo4j.impl.NeoResourceResolver;
 import org.arastreju.sge.context.Context;
 import org.arastreju.sge.model.DetachedStatement;
 import org.arastreju.sge.model.Statement;
@@ -41,11 +41,11 @@ import org.neo4j.graphdb.Relationship;
  */
 public class RelationMapper implements NeoConstants {
 	
-	private final ResourceResolver resolver;
+	private final NeoResourceResolver resolver;
 	
 	// -----------------------------------------------------
 	
-	public RelationMapper(final ResourceResolver resolver) {
+	public RelationMapper(final NeoResourceResolver resolver) {
 		this.resolver = resolver;
 	}
 	

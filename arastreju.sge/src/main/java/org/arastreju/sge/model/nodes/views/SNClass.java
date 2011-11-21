@@ -37,11 +37,6 @@ import org.arastreju.sge.naming.QualifiedName;
  */
 public class SNClass extends ResourceView {
 	
-	public final static SNClass ROOT_CLASS = new SNClass();
-	
-	
-	//------------------------------------------------------
-	
 	/**
 	 * Creates a new class resource.
 	 */
@@ -90,9 +85,7 @@ public class SNClass extends ResourceView {
 	}
 	
 	public SNEntity createInstance(final QualifiedName qn, final Context... contexts){
-		final SNEntity instance = new SNEntity();
-		instance.setName(qn.getSimpleName());
-		instance.setNamespace(qn.getNamespace());
+		final SNEntity instance = new SNEntity(qn);
 		Association.create(instance, RDF.TYPE, this, contexts);
 		return instance;
 	}

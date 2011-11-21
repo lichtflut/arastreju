@@ -3,7 +3,6 @@
  */
 package org.arastreju.sge.inferencing.implicit;
 
-import java.util.HashSet;
 import java.util.Set;
 
 import org.arastreju.sge.apriori.RDF;
@@ -29,21 +28,19 @@ import org.arastreju.sge.model.nodes.views.SNClass;
  */
 public class TypeInferencer implements Inferencer {
 	
-	/* (non-Javadoc)
-	 * @see org.arastreju.sge.inferencing.Inferencer#onStatement(org.arastreju.sge.model.Statement)
+	/**
+	 * {@inheritDoc}
 	 */
-	public Set<Statement> onStatement(final Statement stmt) {
+	public void addInferenced(Statement stmt, Set<Statement> target) {
 		if (!RDF.TYPE.equals(stmt.getPredicate())) {
 			throw new ArastrejuRuntimeException(ErrorCodes.GENERAL_CONSISTENCY_FAILURE, 
 					"Expected rdf:type but was " + stmt.getPredicate());
 		}
 		final SNClass clazz = stmt.getObject().asResource().asClass();
 		final Set<SNClass> allClasses = clazz.getSuperClasses();
-		final Set<Statement> inferred = new HashSet<Statement>();
 		for (SNClass current : allClasses) {
-			inferred.add(new DetachedStatement(stmt.getSubject(), RDF.TYPE, current, stmt.getContexts()));
+			target.add(new DetachedStatement(stmt.getSubject(), RDF.TYPE, current, stmt.getContexts()));
 		}
-		return inferred;
 	}
 
 }

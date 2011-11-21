@@ -3,7 +3,6 @@
  */
 package org.arastreju.sge.inferencing;
 
-import java.util.HashSet;
 import java.util.Set;
 
 import org.arastreju.sge.model.ResourceID;
@@ -28,16 +27,14 @@ public class CompoundInferencer implements Inferencer {
 	
 	// -----------------------------------------------------
 
-	/* (non-Javadoc)
-	 * @see org.arastreju.sge.inferencing.Inferencer#onStatement(org.arastreju.sge.model.Statement)
+	/**
+	 * {@inheritDoc}
 	 */
-	public Set<Statement> onStatement(Statement stmt) {
-		final Set<Statement> inferred = new HashSet<Statement>();
+	public void addInferenced(final Statement stmt, final Set<Statement> target) {
 		final Set<Inferencer> inferencers = predicateMap.getValues(stmt.getPredicate());
 		for (Inferencer current : inferencers) {
-			inferred.addAll(current.onStatement(stmt));
+			current.addInferenced(stmt, target);
 		}
-		return inferred;
-	}
-
+	};
+	
 }

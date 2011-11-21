@@ -25,7 +25,7 @@ import org.neo4j.graphdb.Relationship;
  */
 public class ContextAccess implements NeoConstants {
 	
-	private final ResourceResolver resolver;
+	private final NeoResourceResolver resolver;
 	
 	// -----------------------------------------------------
 	
@@ -33,7 +33,7 @@ public class ContextAccess implements NeoConstants {
 	 * Constructor.
 	 * @param resolver The resource resolver.
 	 */
-	public ContextAccess(final ResourceResolver resolver) {
+	public ContextAccess(final NeoResourceResolver resolver) {
 		this.resolver = resolver;
 	}
 	

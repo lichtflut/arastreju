@@ -141,10 +141,7 @@ public class SimpleResourceID implements ResourceID, Serializable {
 	 * @see org.arastreju.api.ontology.model.INode#asResource()
 	 */
 	public ResourceNode asResource() {
-		final SNResource sn = new SNResource();
-		sn.setName(getName());
-		sn.setNamespace(getNamespace());
-		return sn;
+		return new SNResource(getNamespace(), getName());
 	}
 
 	/* (non-Javadoc)

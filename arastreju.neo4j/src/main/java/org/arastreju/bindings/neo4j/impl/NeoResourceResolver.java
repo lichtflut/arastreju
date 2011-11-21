@@ -13,40 +13,38 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.arastreju.sge.model.nodes.views;
+package org.arastreju.bindings.neo4j.impl;
 
-import org.arastreju.sge.context.Context;
 import org.arastreju.sge.model.nodes.ResourceNode;
+import org.arastreju.sge.naming.QualifiedName;
+import org.arastreju.sge.persistence.ResourceResolver;
+import org.neo4j.graphdb.Node;
 
 /**
  * <p>
- * 	Resource representing a context for semantic statements.
+ *  Interface for resource resolving.
  * </p>
- * 
+ *
  * <p>
- * 	Created: 22.02.2010
+ * 	Created Jan 14, 2011
  * </p>
  *
  * @author Oliver Tigges
- *
  */
-public class SNContext extends ResourceView implements Context {
+public interface NeoResourceResolver extends ResourceResolver {
 
 	/**
-	 * Create a new context view for given resource.
-	 * @param resource The context resource to be wrapped.
+	 * Find a resource by it's qualified name.
+	 * @param qn The qualified name.
+	 * @return The resource node or null.
 	 */
-	public SNContext(final ResourceNode resource) {
-		super(resource);
-	}
-	
-	// -----------------------------------------------------
-	
+	ResourceNode findResource(QualifiedName qn);
+
 	/**
-	 * {@inheritDoc}
+	 * Find a resource by it's corresponding neo node.
+	 * @param neoNode The neo node.
+	 * @return The resource node.
 	 */
-	public int compareTo(final Context other) {
-		return getQualifiedName().compareTo(other.getQualifiedName());
-	}
+	ResourceNode resolveResource(Node neoNode);
 	
 }
