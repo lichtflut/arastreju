@@ -4,6 +4,6 @@ target
 .settings
 .idea
 *.iml
-pom-conf.tmproj
+aras_poms.tmproj
 arastreju.sge/bin/
 arastreju.neo4j/bin/
