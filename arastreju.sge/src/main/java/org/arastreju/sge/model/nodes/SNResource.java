@@ -223,8 +223,8 @@ public class SNResource implements ResourceNode, Serializable {
 		Set<Association> result = new HashSet<Association>();
 		for (Association assoc : getAssociations()) {
 			final ResourceID assocPred = assoc.getPredicate();
-			if (!RDFS.SUB_PROPERTY_OF.equals(predicate) && assocPred.isAttached()){
-				final SNProperty property = assocPred.asResource().asProperty();
+			final SNProperty property = assocPred.asResource().asProperty();
+			if (!RDFS.SUB_PROPERTY_OF.equals(predicate) && property.isAttached()){
 				if (property.isSubPropertyOf(predicate)){
 					result.add(assoc);
 				}

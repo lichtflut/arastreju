@@ -32,12 +32,6 @@ import java.io.Serializable;
 public interface SemanticNode extends Serializable {
 
 	/**
-	 * States if this node is attached to a managed semantic model.
-	 * @return true if the node is attached.
-	 */
-	boolean isAttached();
-	
-	/**
 	 * States if this node is a value node.
 	 * @return true if this node is a value node.
 	 */

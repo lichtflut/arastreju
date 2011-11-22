@@ -123,8 +123,9 @@ public class SemanticNetworkAccess implements NeoConstants, NeoResourceResolver 
 	 * {@inheritDoc}
 	 */
 	public ResourceNode resolve(final ResourceID resource) {
-		if (resource.isAttached()){
-			return resource.asResource();
+		final ResourceNode node = resource.asResource();
+		if (node.isAttached()){
+			return node;
 		} else {
 			final ResourceNode attached = findResource(resource.getQualifiedName());
 			if (attached == null){
@@ -216,7 +217,7 @@ public class SemanticNetworkAccess implements NeoConstants, NeoResourceResolver 
 	 */
 	public void detach(final SemanticGraph graph){
 		for(SemanticNode node : graph.getNodes()){
-			if (node.isAttached() && node.isResourceNode()){
+			if (node.isResourceNode() && node.asResource().isAttached()){
 				detach(node.asResource());
 			}
 		}
@@ -246,11 +247,17 @@ public class SemanticNetworkAccess implements NeoConstants, NeoResourceResolver 
 					final ResourceNode arasClient = resolve(client.asResource());
 					final Node neoClient = AssocKeeperAccess.getNeoNode(arasClient);
 					
-					final Relationship relationship = subject.createRelationshipTo(neoClient, ArasRelTypes.REFERENCE);
-					relationship.setProperty(PREDICATE_URI, predicate.getQualifiedName().toURI());
-					assignContext(relationship, assoc.getContexts());
-					index.index(subject, predicate, arasClient);
-					logger.debug("added relationship--> " + relationship + " to node " + subject);
+					try {
+						final Relationship relationship = subject.createRelationshipTo(neoClient, ArasRelTypes.REFERENCE);
+						relationship.setProperty(PREDICATE_URI, predicate.getQualifiedName().toURI());
+						assignContext(relationship, assoc.getContexts());
+						index.index(subject, predicate, arasClient);
+						logger.debug("added relationship--> " + relationship + " to node " + subject);
+					} catch (Exception e) {
+						logger.error("Could not store " + assoc);
+						logger.error("looking up " + arasClient.getQualifiedName() + ": " +index.lookup(arasClient.getQualifiedName()));
+						throw new RuntimeException(e);
+					}
 				} else {
 					// Value node
 					final Node neoClient = gdbService.createNode();
@@ -283,6 +290,7 @@ public class SemanticNetworkAccess implements NeoConstants, NeoResourceResolver 
 			txProvider.doTransacted(new TxAction() {
 				public void execute() {
 					index.remove(relationship);
+					logger.warn("Deleting: " + assoc);
 					relationship.delete();
 				}
 			});

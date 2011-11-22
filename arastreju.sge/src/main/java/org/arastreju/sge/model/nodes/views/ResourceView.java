@@ -23,7 +23,6 @@ import org.arastreju.sge.model.associations.Association;
 import org.arastreju.sge.model.nodes.ResourceNode;
 import org.arastreju.sge.model.nodes.SNResource;
 import org.arastreju.sge.model.nodes.ValueNode;
-import org.arastreju.sge.naming.Namespace;
 import org.arastreju.sge.naming.QualifiedName;
 
 /**
@@ -63,20 +62,6 @@ public abstract class ResourceView implements ResourceNode, Serializable {
 	
 	// -----------------------------------------------------
 	
-	/* (non-Javadoc)
-	 * @see org.arastreju.api.ontology.model.SemanticNode#getName()
-	 */
-	public String getName() {
-		return resource.getName();
-	}
-
-	/* (non-Javadoc)
-	 * @see org.arastreju.api.ontology.model.SemanticNode#getNamespace()
-	 */
-	public Namespace getNamespace() {
-		return resource.getNamespace();
-	}
-
 	/* (non-Javadoc)
 	 * @see org.arastreju.api.ontology.model.SemanticNode#getQualifiedName()
 	 */

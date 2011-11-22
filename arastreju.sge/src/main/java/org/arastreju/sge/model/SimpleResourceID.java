@@ -54,7 +54,7 @@ public class SimpleResourceID implements ResourceID, Serializable {
 	 * Creates a copied ResourceID based on an existing ReosourceID.
 	 */
 	public SimpleResourceID(final ResourceID id) {
-		this(id.getNamespace(), id.getName());
+		this(id.getQualifiedName());
 	}
 	
 	/**
@@ -62,7 +62,16 @@ public class SimpleResourceID implements ResourceID, Serializable {
 	 * @param qn The qualified name.
 	 */
 	public SimpleResourceID(final QualifiedName qn) {
-		this(qn.getNamespace(), qn.getSimpleName());
+		this.qualifiedName = qn;
+	}
+	
+	/**
+	 * Constructor.
+	 * @param namespace The namespace.
+	 * @param name The simple name.
+	 */
+	public SimpleResourceID(final Namespace namespace, final String name) {
+		this(new QualifiedName(namespace, name));
 	}
 	
 	/**
@@ -82,15 +91,6 @@ public class SimpleResourceID implements ResourceID, Serializable {
 		this(new QualifiedName(uri));
 	}
 	
-	/**
-	 * Constructor.
-	 * @param namespace The namespace.
-	 * @param name The simple name.
-	 */
-	public SimpleResourceID(final Namespace namespace, final String name) {
-		this.qualifiedName = new QualifiedName(namespace, name);
-	}
-	
 	// --- ResourceID -------------------------------------
 	
 	public QualifiedName getQualifiedName() {
@@ -99,18 +99,6 @@ public class SimpleResourceID implements ResourceID, Serializable {
 	
 	public boolean references(final ResourceID ref) {
 		return qualifiedName.equals(ref.getQualifiedName());
-	}
-	
-	public String getNamespaceUri(){
-		return qualifiedName.getNamespace().getUri();
-	}
-	
-	public Namespace getNamespace(){
-		return qualifiedName.getNamespace();
-	}
-	
-	public String getName(){
-		return qualifiedName.getSimpleName();
 	}
 	
 	// -- INode -------------------------------------------
@@ -141,7 +129,7 @@ public class SimpleResourceID implements ResourceID, Serializable {
 	 * @see org.arastreju.api.ontology.model.INode#asResource()
 	 */
 	public ResourceNode asResource() {
-		return new SNResource(getNamespace(), getName());
+		return new SNResource(qualifiedName.getNamespace(), qualifiedName.getSimpleName());
 	}
 
 	/* (non-Javadoc)

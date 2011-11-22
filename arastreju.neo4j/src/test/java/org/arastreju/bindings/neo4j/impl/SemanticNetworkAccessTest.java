@@ -20,6 +20,7 @@ import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
@@ -363,6 +364,8 @@ public class SemanticNetworkAccessTest {
 		
 		store.attach(car1);
 
+		store.remove(car, true);
+		assertNull(store.findResource(qnCar));
 		store.remove(car1, true);
 		
 		assertTrue(car1.getAssociations().isEmpty());
@@ -378,6 +381,10 @@ public class SemanticNetworkAccessTest {
 		ResourceNode found = store.findResource(qnVehicle);
 		assertNotNull(found);
 		assertEquals(RDF.TYPE, SNOPS.singleObject(found, RDFS.SUB_CLASS_OF));
+		
+		assertNotNull(store.findResource(RDF.TYPE.getQualifiedName()));
+		store.remove(bike, true);
+		assertNull(store.findResource(RDF.TYPE.getQualifiedName()));
 		
 	}
 

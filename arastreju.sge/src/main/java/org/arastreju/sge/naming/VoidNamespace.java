@@ -72,7 +72,7 @@ public class VoidNamespace implements Namespace, Serializable {
 	 * @return true if URI references the void namespace.
 	 */
 	public static boolean isInVoidNamespace(final ResourceID ref) {
-		return INSTANCE.equals(ref.getNamespace());
+		return INSTANCE.equals(ref.getQualifiedName().getNamespace());
 	}
 	
 	// ------------------------------------------------------

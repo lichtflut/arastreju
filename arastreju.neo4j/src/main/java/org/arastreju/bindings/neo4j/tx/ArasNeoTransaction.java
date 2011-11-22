@@ -20,7 +20,6 @@ import org.neo4j.graphdb.Transaction;
 class ArasNeoTransaction implements TransactionControl {
 
 	private Transaction tx;
-	private boolean active; 
 	
 	// -----------------------------------------------------
 
@@ -30,7 +29,6 @@ class ArasNeoTransaction implements TransactionControl {
 	 */
 	public ArasNeoTransaction(final Transaction tx) {
 		this.tx = tx;
-		this.active = true;
 	}
 	
 	// -----------------------------------------------------
@@ -39,7 +37,7 @@ class ArasNeoTransaction implements TransactionControl {
 	 * @return true if the transaction is active.
 	 */
 	public boolean isActive() {
-		return active;
+		return tx != null;
 	}
 	
 	// -----------------------------------------------------
@@ -48,6 +46,7 @@ class ArasNeoTransaction implements TransactionControl {
 	 * {@inheritDoc}
 	 */
 	public void success() {
+		assertTxActive();
 		tx.success();
 	}
 
@@ -55,6 +54,7 @@ class ArasNeoTransaction implements TransactionControl {
 	 * {@inheritDoc}
 	 */
 	public void fail() {
+		assertTxActive();
 		tx.failure();
 	}
 	
@@ -62,10 +62,12 @@ class ArasNeoTransaction implements TransactionControl {
 	 * {@inheritDoc}
 	 */
 	public void finish() {
+		assertTxActive();
 		tx.finish();
 		tx = null;
-		active = false;
 	}
+	
+	// ----------------------------------------------------
 	
 	/** 
 	 * {@inheritDoc}
@@ -82,6 +84,8 @@ class ArasNeoTransaction implements TransactionControl {
 		fail();
 		finish();
 	}
+	
+	// ----------------------------------------------------
 
 	/** 
 	 * {@inheritDoc}
@@ -89,6 +93,11 @@ class ArasNeoTransaction implements TransactionControl {
 	public void flush() {
 	}
 	
-	// -----------------------------------------------------
-
+	// ----------------------------------------------------
+	
+	protected void assertTxActive() {
+		if (!isActive()) {
+			throw new IllegalStateException("Transaction has already been closed.");
+		}
+	}
 }

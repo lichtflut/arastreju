@@ -142,7 +142,7 @@ public class DefaultSemanticGraph implements SemanticGraph {
 	
 	private void addNamespace(final SemanticNode node, final Set<Namespace> targetSet){
 		if (node.isResourceNode() && !node.asResource().isBlankNode()){
-			targetSet.add(node.asResource().getNamespace());
+			targetSet.add(node.asResource().getQualifiedName().getNamespace());
 		} 
 	}
 	

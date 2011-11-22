@@ -84,7 +84,7 @@ public class RioStatement implements Statement {
 	public Resource getSubject() {
 		final ResourceNode subject = assoc.getSubject();
 		if (subject.isBlankNode()){
-			return new BNodeImpl(subject.getName());
+			return new BNodeImpl(subject.getQualifiedName().getSimpleName());
 		}
 		return new URIImpl(subject.getQualifiedName().toURI());
 	}

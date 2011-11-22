@@ -62,11 +62,13 @@ public class TxProvider {
 		final TransactionControl tx = begin();
 		try {
 			action.execute();
-			tx.commit();
+			tx.success();
 		} catch (RuntimeException e) {
 			e.printStackTrace();
-			tx.rollback();
+			tx.fail();
 			throw e;
+		} finally {
+			tx.finish();
 		}
 	}
 	
@@ -74,11 +76,14 @@ public class TxProvider {
 		final TransactionControl tx = begin();
 		try {
 			T result = action.execute();
-			tx.commit();
+			tx.success();
 			return result;
 		} catch (RuntimeException e) {
-			tx.rollback();
+			e.printStackTrace();
+			tx.fail();
 			throw e;
+		} finally {
+			tx.finish();
 		}
 	}
 	

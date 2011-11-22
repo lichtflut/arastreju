@@ -49,10 +49,8 @@ public class NodeRemover {
 	 * @param cascade Flag if removing shall be cascaded.
 	 * @return The set of removed nodes.
 	 */
-	public Set<Node> remove(final Node neoNode, final boolean cascade) {
-		final Set<Node> deleted = new HashSet<Node>();
-		remove(neoNode, deleted, cascade);
-		return deleted;
+	public Set<Node> remove(final ResourceNode node, final boolean cascade) {
+		return remove(AssocKeeperAccess.getNeoNode(node), cascade);
 	}
 	
 	/**
@@ -61,8 +59,10 @@ public class NodeRemover {
 	 * @param cascade Flag if removing shall be cascaded.
 	 * @return The set of removed nodes.
 	 */
-	public Set<Node> remove(final ResourceNode node, final boolean cascade) {
-		return remove(AssocKeeperAccess.getNeoNode(node), cascade);
+	public Set<Node> remove(final Node neoNode, final boolean cascade) {
+		final Set<Node> deleted = new HashSet<Node>();
+		remove(neoNode, deleted, cascade);
+		return deleted;
 	}
 	
 	// -----------------------------------------------------
@@ -96,8 +96,12 @@ public class NodeRemover {
 	
 	private void detachArastrejuNode(final Node neoNode) {
 		if (neoNode.hasProperty(NeoConstants.PROPERTY_URI)) {
-			final ResourceNode node = index.resolveResource(neoNode);
-			AssocKeeperAccess.setAssociationKeeper(node, new DetachedAssociationKeeper());
+			final ResourceNode arasNode = index.resolveResource(neoNode);
+			AssocKeeperAccess.setAssociationKeeper(arasNode, new DetachedAssociationKeeper());
+		} else if (neoNode.hasProperty(NeoConstants.PROPERTY_VALUE)) {
+			// everything O.K.
+		} else {
+			throw new IllegalStateException("Neo node ha neither URI not value");
 		}
 	}
 

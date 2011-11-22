@@ -107,9 +107,7 @@ public class QualifiedName implements Comparable<QualifiedName>, Serializable {
 	 * @param ref The {@link ResourceID}.
 	 */
 	public QualifiedName(final ResourceID ref){
-		this.namespace = ref.getNamespace();
-		this.name = ref.getName();
-		this.prefix = null;
+		this(ref.getQualifiedName().getNamespace(), ref.getQualifiedName().getSimpleName());
 	}
 	
 	/**

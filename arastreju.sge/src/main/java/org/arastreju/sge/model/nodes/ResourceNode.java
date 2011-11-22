@@ -22,7 +22,6 @@ import org.arastreju.sge.model.associations.Association;
 import org.arastreju.sge.model.nodes.views.SNClass;
 import org.arastreju.sge.model.nodes.views.SNEntity;
 import org.arastreju.sge.model.nodes.views.SNProperty;
-import org.arastreju.sge.naming.Namespace;
 import org.arastreju.sge.naming.QualifiedName;
 
 /**
@@ -38,13 +37,22 @@ import org.arastreju.sge.naming.QualifiedName;
  */
 public interface ResourceNode extends SemanticNode, ResourceID {
 	
-	String getName();
-	
-	Namespace getNamespace();
-	
+	/**
+	 * Get the qualified name.
+	 */
 	QualifiedName getQualifiedName();
 	
+	/**
+	 * Check if this node is a blank node.
+	 * @return true if this is a blank node.
+	 */
 	boolean isBlankNode();
+	
+	/**
+	 * States if this node is attached to a managed semantic model.
+	 * @return true if the node is attached.
+	 */
+	boolean isAttached();
 	
 	// -----------------------------------------------------
 

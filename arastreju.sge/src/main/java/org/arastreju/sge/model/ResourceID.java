@@ -16,9 +16,7 @@
 package org.arastreju.sge.model;
 
 import org.arastreju.sge.model.nodes.SemanticNode;
-import org.arastreju.sge.naming.Namespace;
 import org.arastreju.sge.naming.QualifiedName;
-
 
 /**
  * <p>
@@ -34,18 +32,6 @@ import org.arastreju.sge.naming.QualifiedName;
  */
 public interface ResourceID extends SemanticNode {
 
-	/**
-	 * Returns the simple, unqualified name of the resource.
-	 * @return The simple, unqualified name of the resource
-	 */
-	String getName();
-	
-	/**
-	 * Returns the namespace of this resource.
-	 * @return The namespace URI.
-	 */
-	Namespace getNamespace();
-	
 	/**
 	 * Returns the QualifiedName of the referenced Resource.
 	 * @return The {@link QualifiedName}.
