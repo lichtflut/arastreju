@@ -62,22 +62,15 @@ public abstract class ResourceView implements ResourceNode, Serializable {
 	
 	// -----------------------------------------------------
 	
-	/* (non-Javadoc)
-	 * @see org.arastreju.api.ontology.model.SemanticNode#getQualifiedName()
+	/**
+	 * {@inheritDoc}
 	 */
 	public QualifiedName getQualifiedName() {
 		return resource.getQualifiedName();
 	}
 
-	/* (non-Javadoc)
-	 * @see org.arastreju.api.ontology.model.ResourceID#references(org.arastreju.api.ontology.model.ResourceID)
-	 */
-	public boolean references(final ResourceID ref) {
-		return resource.references(ref);
-	}
-	
-	/* (non-Javadoc)
-	 * @see org.arastreju.sge.model.nodes.ResourceNode#isBlankNode()
+	/**
+	 * {@inheritDoc}
 	 */
 	public boolean isBlankNode() {
 		return resource.isBlankNode();
@@ -85,42 +78,31 @@ public abstract class ResourceView implements ResourceNode, Serializable {
 	
 	// -----------------------------------------------------
 	
-	/* (non-Javadoc)
-	 * @see org.arastreju.api.ontology.model.sn.IResource#getAssociations()
+	/**
+	 * {@inheritDoc}
 	 */
 	public Set<Association> getAssociations() {
 		return resource.getAssociations();
 	}
 
-	/* (non-Javadoc)
-	 * @see org.arastreju.api.ontology.model.sn.IResource#getAssociations(org.arastreju.api.ontology.model.ResourceID)
+	/**
+	 * {@inheritDoc}
 	 */
 	public Set<Association> getAssociations(final ResourceID predicate) {
 		return resource.getAssociations(predicate);
 	}
 
-	/* (non-Javadoc)
-	 * @see org.arastreju.api.ontology.model.sn.IResource#hasAssociation(org.arastreju.api.ontology.model.Association)
+	/**
+	 * {@inheritDoc}
 	 */
-	public boolean hasAssociation(final Association assoc) {
-		return resource.hasAssociation(assoc);
-	}
-	
-	/* (non-Javadoc)
-	 * @see org.arastreju.api.ontology.model.sn.IResource#removeAssociation(org.arastreju.api.ontology.model.Association)
-	 */
-	public boolean revoke(final Association assoc) {
-		return resource.revoke(assoc);
-	}
-	
 	public void removeAssociations(final ResourceID predicate){
 		for (Association assoc : getAssociations(predicate)) {
 			remove(assoc);
 		}
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.arastreju.api.ontology.model.sn.ResourceNode#addToAssociations(org.arastreju.api.ontology.model.Association)
+	/**
+	 * {@inheritDoc}
 	 */
 	public void addToAssociations(final Association assoc) {
 		resource.addToAssociations(assoc);

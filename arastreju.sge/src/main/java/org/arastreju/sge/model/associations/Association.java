@@ -44,6 +44,8 @@ import org.arastreju.sge.model.nodes.SemanticNode;
  */
 public class Association extends AbstractStatement implements Serializable {
 	
+	private boolean inferred;
+	
 	// -- STATIC METHODS ----------------------------------
 	
 	/**
@@ -51,7 +53,21 @@ public class Association extends AbstractStatement implements Serializable {
 	 */
 	public static Association create(final ResourceNode subject, final ResourceID predicate, final SemanticNode object, final Context... contexts){
 		Association assoc =  new Association(subject, predicate, object, contexts);
-		if (!subject.hasAssociation(assoc)){
+		if (!subject.getAssociations().contains(assoc)){
+			subject.addToAssociations(assoc);
+			return assoc;
+		} else {
+			return assoc;
+		}
+	}
+	
+	/**
+	 * Creates a new Association based on given data.
+	 */
+	public static Association infer(final ResourceNode subject, final ResourceID predicate, final SemanticNode object, final Context... contexts){
+		final Association assoc = new Association(subject, predicate, object, contexts);
+		assoc.setInferred(true);
+		if (!subject.getAssociations().contains(assoc)){
 			subject.addToAssociations(assoc);
 			return assoc;
 		} else {
@@ -86,6 +102,14 @@ public class Association extends AbstractStatement implements Serializable {
 	 */
 	public ResourceNode getSubject() {
 		return (ResourceNode) subject;
+	}
+	
+	public boolean isInferred() {
+		return inferred;
+	}
+	
+	protected void setInferred(boolean inferred) {
+		this.inferred = inferred;
 	}
 	
 	// -----------------------------------------------------

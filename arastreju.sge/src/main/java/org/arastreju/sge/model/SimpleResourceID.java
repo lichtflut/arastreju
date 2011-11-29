@@ -149,8 +149,8 @@ public class SimpleResourceID implements ResourceID, Serializable {
 	@Override
 	public boolean equals(Object obj) {
 		if (obj instanceof ResourceID){
-			ResourceID other = (ResourceID) obj;
-			return references(other);
+			final ResourceID other = (ResourceID) obj;
+			return qualifiedName.equals(other.getQualifiedName());
 		}
 		return super.equals(obj);
 	}

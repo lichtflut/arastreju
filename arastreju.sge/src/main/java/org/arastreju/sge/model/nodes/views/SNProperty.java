@@ -157,7 +157,7 @@ public class SNProperty extends ResourceView {
 		Set<Association> assocs = getAssociations(RDF.TYPE);
 		for (Association association : assocs) {
 			final SemanticNode client = association.getObject();
-			if (client.isResourceNode() && client.asResource().references(type)){
+			if (client.isResourceNode() && client.asResource().equals(type)){
 				return true;
 			}
 		}

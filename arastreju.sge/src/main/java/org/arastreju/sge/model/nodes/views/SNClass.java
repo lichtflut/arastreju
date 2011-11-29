@@ -73,7 +73,7 @@ public class SNClass extends ResourceView {
 	}
 	
 	public boolean isSpecializationOf(final ResourceID other) {
-		return other.references(this) || getSuperClasses().contains(other);
+		return other.equals(this) || getSuperClasses().contains(other);
 	}
 	
 	//-- INSTANCES ----------------------------------------

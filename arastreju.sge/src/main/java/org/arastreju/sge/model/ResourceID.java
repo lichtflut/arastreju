@@ -38,11 +38,4 @@ public interface ResourceID extends SemanticNode {
 	 */
 	QualifiedName getQualifiedName();
 	
-	/**
-	 * Checks whether this resource references the same resource as the given.
-	 * @param ref The reference to compare.
-	 * @return true if this.getUri().equals(ref.getUri())
-	 */
-	boolean references(ResourceID ref);
-	
 }

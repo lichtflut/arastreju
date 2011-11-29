@@ -22,7 +22,6 @@ import org.arastreju.sge.model.associations.Association;
 import org.arastreju.sge.model.nodes.views.SNClass;
 import org.arastreju.sge.model.nodes.views.SNEntity;
 import org.arastreju.sge.model.nodes.views.SNProperty;
-import org.arastreju.sge.naming.QualifiedName;
 
 /**
  * <p>
@@ -36,11 +35,6 @@ import org.arastreju.sge.naming.QualifiedName;
  * @author Oliver Tigges
  */
 public interface ResourceNode extends SemanticNode, ResourceID {
-	
-	/**
-	 * Get the qualified name.
-	 */
-	QualifiedName getQualifiedName();
 	
 	/**
 	 * Check if this node is a blank node.
@@ -71,12 +65,12 @@ public interface ResourceNode extends SemanticNode, ResourceID {
 	
 	// -----------------------------------------------------
 
-	boolean hasAssociation(final Association assoc);
-
+	/**
+	 * Add an association.
+	 * @param assoc The association to add.
+	 */
 	void addToAssociations(final Association assoc);
 	
-	// -----------------------------------------------------
-
 	/**
 	 * Removes the association from this resource object. This will have no effect on the database when this node isn't
 	 * attached!
@@ -84,13 +78,6 @@ public interface ResourceNode extends SemanticNode, ResourceID {
 	 * @return TODO
 	 */
 	boolean remove(Association assoc);
-	
-	/**
-	 * Revoke the association. It will be detached from this resource node, but will be
-	 * remembered as revoked. If you want to remove the Association directly use remove() instead.
-	 * @param assoc The association to be revoked.
-	 */
-	boolean revoke(Association assoc);
 	
 	/**
 	 * Revert all transient changes made to this node.

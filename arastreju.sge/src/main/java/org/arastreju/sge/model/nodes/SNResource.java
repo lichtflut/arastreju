@@ -102,29 +102,29 @@ public class SNResource implements ResourceNode, Serializable {
 	
 	// ------------------------------------------------------
 
-	/* (non-Javadoc)
-	 * @see org.arastreju.sge.model.nodes.ResourceNode#getName()
+	/**
+	 * {@inheritDoc}
 	 */
 	public String getName() {
 		return name;
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.arastreju.sge.model.nodes.ResourceNode#getNamespace()
+	/**
+	 * {@inheritDoc}
 	 */
 	public Namespace getNamespace() {
 		return namespace;
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.arastreju.sge.model.nodes.ResourceNode#getQualifiedName()
+	/**
+	 * {@inheritDoc}
 	 */
 	public QualifiedName getQualifiedName() {
 		return new QualifiedName(namespace, name);
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.arastreju.sge.model.nodes.ResourceNode#isBlankNode()
+	/**
+	 * {@inheritDoc}
 	 */
 	public boolean isBlankNode() {
 		return VoidNamespace.isInVoidNamespace(this);
@@ -132,52 +132,45 @@ public class SNResource implements ResourceNode, Serializable {
 	
 	// -----------------------------------------------------
 	
-	/* (non-Javadoc)
-	 * @see org.arastreju.api.ontology.model.sn.ResourceNode#getUri()
+	/**
+	 * {@inheritDoc}
 	 */
 	public String getUri() {
 		return getQualifiedName().toURI();
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.arastreju.api.ontology.model.sn.ResourceNode#references(org.arastreju.api.ontology.model.ResourceID)
-	 */
-	public boolean references(final ResourceID ref) {
-		return getQualifiedName().equals(ref.getQualifiedName());
-	}
-	
 	// -----------------------------------------------------
 	
-	/* (non-Javadoc)
-	 * @see org.arastreju.api.ontology.model.sn.ResourceNode#isAttached()
+	/**
+	 * {@inheritDoc}
 	 */
 	public boolean isAttached() {
 		return associationKeeper.isAttached();
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.arastreju.api.ontology.model.sn.ResourceNode#isResourceNode()
+	/**
+	 * {@inheritDoc}
 	 */
 	public boolean isResourceNode() {
 		return true;
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.arastreju.api.ontology.model.sn.ResourceNode#isValueNode()
+	/**
+	 * {@inheritDoc}
 	 */
 	public boolean isValueNode() {
 		return false;
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.arastreju.sge.model.nodes.SemanticNode#asResource()
+	/**
+	 * {@inheritDoc}
 	 */
 	public ResourceNode asResource() {
 		return this;
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.arastreju.sge.model.nodes.SemanticNode#asValue()
+	/**
+	 * {@inheritDoc}
 	 */
 	public ValueNode asValue() {
 		throw new IllegalStateException("Not a value: " + this);
@@ -185,39 +178,15 @@ public class SNResource implements ResourceNode, Serializable {
 	
 	// -- ASSOCIATIONS ------------------------------------
 	
-	/* (non-Javadoc)
-	 * @see org.arastreju.api.ontology.model.sn.ResourceNode#getAssociations()
+	/**
+	 * {@inheritDoc}
 	 */
 	public synchronized Set<Association> getAssociations() {
 		return associationKeeper.getAssociations();
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.arastreju.api.ontology.model.sn.ResourceNode#getSingleAssociation(org.arastreju.api.ontology.model.ResourceID)
-	 */
-	public Association getSingleAssociation(final ResourceID predicate) {
-		for (Association assoc : getAssociations()) {
-			if (predicate.references(assoc.getPredicate())) {
-				return assoc;
-			}
-		}
-		return null;
-	}
-	
-	/* (non-Javadoc)
-	 * @see org.arastreju.api.ontology.model.sn.ResourceNode#getSingleAssociationClient(org.arastreju.api.ontology.model.ResourceID)
-	 */
-	public SemanticNode getSingleAssociationClient(final ResourceID predicate) {
-		final Association assoc = getSingleAssociation(predicate);
-		if (assoc != null){
-			return assoc.getObject();
-		} else {
-			return null;
-		}
-	}
-
-	/* (non-Javadoc)
-	 * @see org.arastreju.api.ontology.model.sn.ResourceNode#getAssociations(org.arastreju.api.ontology.model.ResourceID)
+	/**
+	 * {@inheritDoc}
 	 */
 	public Set<Association> getAssociations(final ResourceID predicate) {
 		Set<Association> result = new HashSet<Association>();
@@ -228,38 +197,15 @@ public class SNResource implements ResourceNode, Serializable {
 				if (property.isSubPropertyOf(predicate)){
 					result.add(assoc);
 				}
-			} else if (predicate.references(assoc.getPredicate())) {
+			} else if (predicate.equals(assoc.getPredicate())) {
 				result.add(assoc);
 			}
 		}
 		return result;
 	}
 	
-	public Set<SemanticNode> getAssociationClients(final ResourceID predicate) {
-		Set<SemanticNode> result = new HashSet<SemanticNode>();
-		for (Association assoc : getAssociations()) {
-			final ResourceID assocPred = assoc.getPredicate();
-			if (assocPred instanceof SNProperty){
-				final SNProperty property = (SNProperty) assocPred;
-				if (property.isSubPropertyOf(predicate)){
-					result.add(assoc.getObject());
-				}
-			} else if (predicate.references(assoc.getPredicate())) {
-				result.add(assoc.getObject());
-			}
-		}
-		return result;
-	}
-
-	/* (non-Javadoc)
-	 * @see org.arastreju.api.ontology.model.sn.ResourceNode#hasAssociation(org.arastreju.api.ontology.model.Association)
-	 */
-	public boolean hasAssociation(final Association assoc) {
-		return getAssociations().contains(assoc);
-	}
-
-	/* (non-Javadoc)
-	 * @see org.arastreju.api.ontology.model.sn.ResourceNode#addToAssociations(org.arastreju.api.ontology.model.Association)
+	/**
+	 * {@inheritDoc}
 	 */
 	public void addToAssociations(final Association assoc) {
 		if (!assoc.getSubject().equals(this)){
@@ -270,22 +216,15 @@ public class SNResource implements ResourceNode, Serializable {
 	
 	// -- DENY ASSOC --------------------------------------
 	
-	/* (non-Javadoc)
-	 * @see org.arastreju.api.ontology.model.sn.ResourceNode#revokeAssociation(org.arastreju.api.ontology.model.Association)
-	 */
-	public boolean revoke(Association assoc) {
-		return associationKeeper.revoke(assoc);
-	}
-	
-	/* (non-Javadoc)
-	 * @see org.arastreju.api.ontology.model.sn.ResourceNode#remove(org.arastreju.api.ontology.model.Association)
+	/**
+	 * {@inheritDoc}
 	 */
 	public boolean remove(final Association assoc){
 		return associationKeeper.remove(assoc);
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.arastreju.api.ontology.model.sn.ResourceNode#reset()
+	/**
+	 * {@inheritDoc}
 	 */
 	public void reset() {
 		associationKeeper.reset();
@@ -293,22 +232,22 @@ public class SNResource implements ResourceNode, Serializable {
 	
 	// -----------------------------------------------------
 	
-	/* (non-Javadoc)
-	 * @see org.arastreju.api.ontology.model.sn.ResourceNode#asEntity()
+	/**
+	 * {@inheritDoc}
 	 */
 	public SNEntity asEntity() {
 		return new SNEntity(this);
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.arastreju.api.ontology.model.sn.ResourceNode#asClass()
+	/**
+	 * {@inheritDoc}
 	 */
 	public SNClass asClass() {
 		return new SNClass(this);
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.arastreju.api.ontology.model.sn.ResourceNode#asProperty()
+	/**
+	 * {@inheritDoc}
 	 */
 	public SNProperty asProperty(){
 		return new SNProperty(this);
@@ -329,7 +268,8 @@ public class SNResource implements ResourceNode, Serializable {
 	@Override
 	public boolean equals(Object obj) {
 		if (obj instanceof ResourceID) {
-			return references((ResourceID) obj);
+			final ResourceID other = (ResourceID) obj;
+			return getQualifiedName().equals(other.getQualifiedName());
 		}
 		return false;
 	}
