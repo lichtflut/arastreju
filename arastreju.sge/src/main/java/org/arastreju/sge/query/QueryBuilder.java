@@ -5,7 +5,9 @@ package org.arastreju.sge.query;
 
 import java.util.Stack;
 
+import org.arastreju.sge.model.ResourceID;
 import org.arastreju.sge.model.nodes.ResourceNode;
+import org.arastreju.sge.naming.QualifiedName;
 import org.arastreju.sge.query.exp.AbstractQueryExpression;
 
 /**
@@ -49,6 +51,41 @@ public abstract class QueryBuilder implements Query {
 	 */
 	public QueryBuilder add(final QueryParam param) {
 		return append(param);
+	}
+	
+	/** 
+	 * {@inheritDoc}
+	 */
+	public Query addField(String name, Object value) {
+		return append(new FieldParam(name, value));
+	}
+
+	/** 
+	 * {@inheritDoc}
+	 */
+	public Query addField(ResourceID name, Object value) {
+		return append(new FieldParam(name, value));
+	}
+
+	/** 
+	 * {@inheritDoc}
+	 */
+	public Query addField(QualifiedName name, Object value) {
+		return append(new FieldParam(name, value));
+	}
+
+	/** 
+	 * {@inheritDoc}
+	 */
+	public Query addURI(String term) {
+		return append(new UriParam(term));
+	}
+
+	/** 
+	 * {@inheritDoc}
+	 */
+	public Query addValue(String term) {
+		return append(new ValueParam(term));
 	}
 
 	/** 

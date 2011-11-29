@@ -18,7 +18,7 @@ import de.lichtflut.infra.exceptions.NotYetSupportedException;
 
 /**
  * <p>
- *  [DESCRIPTION]
+ *  Query Builder specific for Neo4j and Lucene.
  * </p>
  *
  * <p>

@@ -31,20 +31,14 @@ import org.arastreju.sge.model.SimpleResourceID;
  */
 public interface Aras {
 	
+	public static final String NAMESPACE_URI = "http://arastreju.org/kernel#";
+	
 	// -- TYPES -------------------------------------------
 	
-	public static final String NAMESPACE_URI = "http://arastreju.org/kernel#";
-	public static final ResourceID ACTIVITY_CLASS = new SimpleResourceID(NAMESPACE_URI, "ActivityClass");
-
-	public static final ResourceID COUNTABLE = new SimpleResourceID(NAMESPACE_URI, "Countable");
-	
-	public static final ResourceID NAME_TYPE_FORNAME = new SimpleResourceID(NAMESPACE_URI, "Forename");
-	public static final ResourceID NAME_TYPE_SURNAME = new SimpleResourceID(NAMESPACE_URI, "Surname");
-	public static final ResourceID NAME_TYPE_MIDDLENAME = new SimpleResourceID(NAMESPACE_URI, "Middlename");
-	public static final ResourceID NAME_TYPE_BRAND_NAME = new SimpleResourceID(NAMESPACE_URI, "BrandName");
-	public static final ResourceID NAME_TYPE_FULL_NAME = new SimpleResourceID(NAMESPACE_URI, "Fullname");
-	
-	public static final ResourceID OBJECT_STATMENT = new SimpleResourceID("http://arastreju.org/grammar#", "ObjectStatement");
+	public static final ResourceID CONTEXT = new SimpleResourceID(NAMESPACE_URI, "Context");
+	public static final ResourceID NAMESPACE = new SimpleResourceID(NAMESPACE_URI, "Namespace");
+	public static final ResourceID DIAGRAM = new SimpleResourceID(NAMESPACE_URI, "Diagram");
+	public static final ResourceID REGISTER = new SimpleResourceID(NAMESPACE_URI, "Register");
 	
 	// -- DATATYPES ---------------------------------------
 	
@@ -65,13 +59,13 @@ public interface Aras {
 	public static final ResourceID TRUE = new SimpleResourceID("http://arastreju.org/kernel#", "True");
 	public static final ResourceID FALSE = new SimpleResourceID("http://arastreju.org/kernel#", "False");
 	
-	// -- MODEL SELECTIONS --------------------------------
+	// -- ORGANIZATION --------------------------------
 	
-	public static final ResourceID MODEL_SELECTION = new SimpleResourceID(NAMESPACE_URI, "ModelSelection");
-	public static final ResourceID DIAGRAM = new SimpleResourceID(NAMESPACE_URI, "Diagram");
-	public static final ResourceID REGISTER = new SimpleResourceID(NAMESPACE_URI, "Register");
-	public static final ResourceID CONTEXT = new SimpleResourceID(NAMESPACE_URI, "Context");
-	public static final ResourceID SCENARIO_CONTEXT = new SimpleResourceID(NAMESPACE_URI, "ScenarioContext");
+	public static final ResourceID HAS_NAME = new SimpleResourceID(NAMESPACE_URI, "hasName");
+	public static final ResourceID HAS_PREFIX = new SimpleResourceID(NAMESPACE_URI, "hasPrefix");
+	public static final ResourceID HAS_URI = new SimpleResourceID(NAMESPACE_URI, "hasURI");
+	
+	// -- MODEL SELECTIONS --------------------------------
 	
 	public static final ResourceID CONTAINS = new SimpleResourceID(NAMESPACE_URI, "contains");
 	public static final ResourceID SELECTS_BY_QUERY = new SimpleResourceID(NAMESPACE_URI, "selectsByQuery");
@@ -110,11 +104,6 @@ public interface Aras {
 	public static final ResourceID CONTAINS_CHOICE_ELEMENTS = new SimpleResourceID(NAMESPACE_URI, "containsChoiceElements");
 	
 	// -- CONSTRAINTS -------------------------------------
-	
-	public static final ResourceID HAS_IMPLICATION = new SimpleResourceID(NAMESPACE_URI, "hasImplication");
-	public static final ResourceID DESCRIBES = new SimpleResourceID(NAMESPACE_URI, "describes");
-	public static final ResourceID HAS_MEDIA_DESC = new SimpleResourceID(NAMESPACE_URI, "hasMediaDescription");
-	public static final ResourceID HAS_TERM = new SimpleResourceID(NAMESPACE_URI, "isReferencedByTerm");
 	
 	public static final ResourceID HAS_PROPER_NAME = new SimpleResourceID(NAMESPACE_URI, "hasProperName");
 	public static final ResourceID HAS_FORENAME = new SimpleResourceID(NAMESPACE_URI, "hasForename");

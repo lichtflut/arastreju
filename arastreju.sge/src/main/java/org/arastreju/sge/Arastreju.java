@@ -118,6 +118,19 @@ public final class Arastreju {
 	}
 	
 	/**
+	 * Obtain an anonymous context for unidentified (guest) users.
+	 * 
+	 * <p>
+	 *  Specific providers can deny anonymous access.
+	 * </p>
+	 * 
+	 * @return The ArastrejuGate for the root context.
+	 */
+	public ArastrejuGate anonymousContext() {
+		return login(Identity.ANONYMOUS, null);
+	}
+	
+	/**
 	 * Obtain the root context. Use Carefully! ArastrejuGate will be used in root context.
 	 * 
 	 * <p>

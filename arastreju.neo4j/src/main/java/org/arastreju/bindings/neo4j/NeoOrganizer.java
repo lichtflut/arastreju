@@ -3,13 +3,22 @@
  */
 package org.arastreju.bindings.neo4j;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
-import org.arastreju.bindings.neo4j.index.ResourceIndex;
-import org.arastreju.sge.Organizer;
+import org.arastreju.bindings.neo4j.impl.SemanticNetworkAccess;
+import org.arastreju.bindings.neo4j.query.NeoQueryBuilder;
+import org.arastreju.sge.apriori.Aras;
+import org.arastreju.sge.apriori.RDF;
 import org.arastreju.sge.context.Context;
+import org.arastreju.sge.context.SimpleContextID;
+import org.arastreju.sge.model.nodes.ResourceNode;
 import org.arastreju.sge.naming.Namespace;
 import org.arastreju.sge.naming.QualifiedName;
+import org.arastreju.sge.naming.SimpleNamespace;
+import org.arastreju.sge.query.Query;
+import org.arastreju.sge.spi.abstracts.AbstractOrganizer;
 
 /**
  * <p>
@@ -22,19 +31,18 @@ import org.arastreju.sge.naming.QualifiedName;
  *
  * @author Oliver Tigges
  */
-public class NeoOrganizer implements Organizer {
+public class NeoOrganizer extends AbstractOrganizer {
 
-	@SuppressWarnings("unused")
-	private final ResourceIndex index;
+	private final SemanticNetworkAccess sna;
 	
 	// -----------------------------------------------------
 	
 	/**
 	 * Constructor.
-	 * @param index The index.
+	 * @param sna The semantic network access.
 	 */
-	public NeoOrganizer(final ResourceIndex index) {
-		this.index = index;
+	public NeoOrganizer(final SemanticNetworkAccess sna) {
+		this.sna = sna;
 	}
 	
 	// -----------------------------------------------------
@@ -43,14 +51,29 @@ public class NeoOrganizer implements Organizer {
 	 * {@inheritDoc}
 	 */
 	public Collection<Namespace> getNamespaces() {
-		return null;
+		final List<Namespace> result = new ArrayList<Namespace>();
+		final List<ResourceNode> nodes = sna.getIndex().lookup(RDF.TYPE, Aras.NAMESPACE);
+		for (ResourceNode node : nodes) {
+			result.add(createNamespace(node));
+		}
+		return result;
 	}
 	
 	/** 
 	 * {@inheritDoc}
 	 */
-	public Namespace registerNamespace(final String namespace, final String defaultPrefix) {
-		return null;
+	public Namespace registerNamespace(final String uri, final String prefix) {
+		final Query query = query()
+				.addField(RDF.TYPE, Aras.NAMESPACE)
+				.and()
+				.addField(Aras.HAS_URI, uri);
+		if (!query.getResult().isEmpty()) {
+			throw new IllegalStateException("Namespace with URI " + uri + " already exists.");
+		}
+		final Namespace ns = new SimpleNamespace(uri, prefix);
+		final ResourceNode node = createNamespaceNode(ns);
+		sna.attach(node);
+		return ns;
 	}
 	
 	// -----------------------------------------------------
@@ -59,14 +82,28 @@ public class NeoOrganizer implements Organizer {
 	 * {@inheritDoc}
 	 */
 	public Collection<Context> getContexts() {
-		return null;
+		final List<Context> result = new ArrayList<Context>();
+		final List<ResourceNode> nodes = sna.getIndex().lookup(RDF.TYPE, Aras.CONTEXT);
+		for (ResourceNode node : nodes) {
+			result.add(createContext(node));
+		}
+		return result;
 	}
 
 	/** 
 	 * {@inheritDoc}
 	 */
-	public Context registerContext(QualifiedName qn) {
-		return null;
+	public Context registerContext(final QualifiedName qn) {
+		final ResourceNode node = createContextNode(qn);
+		sna.attach(node);
+		return new SimpleContextID(qn);
+	}
+	
+	
+	// ----------------------------------------------------
+	
+	private Query query() {
+		return new NeoQueryBuilder(sna.getIndex(), sna);
 	}
 	
 }

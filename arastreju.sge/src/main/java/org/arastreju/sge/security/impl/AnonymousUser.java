@@ -1,8 +1,9 @@
 /*
- * Copyright (C) 2011 lichtflut Forschungs- und Entwicklungsgesellschaft mbH
+ * Copyright 2011 by lichtflut Forschungs- und Entwicklungsgesellschaft mbH
  */
 package org.arastreju.sge.security.impl;
 
+import java.util.Collections;
 import java.util.Set;
 
 import org.arastreju.sge.model.nodes.ResourceNode;
@@ -11,64 +12,62 @@ import org.arastreju.sge.security.Permission;
 import org.arastreju.sge.security.Role;
 import org.arastreju.sge.security.User;
 
-import de.lichtflut.infra.exceptions.NotYetImplementedException;
-
 /**
  * <p>
- *  User representing root.
+ *  Special user class for unidentified users.
  * </p>
  *
  * <p>
- * 	Created Apr 29, 2011
+ * 	Created Nov 28, 2011
  * </p>
  *
  * @author Oliver Tigges
  */
-public class ArastrejuRootUser implements User {
+public class AnonymousUser implements User {
 
-	/**
+	/** 
 	 * {@inheritDoc}
 	 */
 	public ResourceNode getAssociatedResource() {
 		return null;
 	}
-	
-	/**
+
+	/** 
 	 * {@inheritDoc}
 	 */
 	public String getName() {
-		return Identity.ROOT;
+		return Identity.ANONYMOUS;
 	}
 
-	/**
+	/** 
 	 * {@inheritDoc}
 	 */
 	public Set<Role> getRoles() {
-		throw new NotYetImplementedException();
+		return Collections.emptySet();
 	}
 
-	/**
+	/** 
 	 * {@inheritDoc}
 	 */
 	public Set<Permission> getPermissions() {
-		throw new NotYetImplementedException();
+		return Collections.emptySet();
 	}
 
-	/**
+	/** 
 	 * {@inheritDoc}
 	 */
 	public boolean isInRole(Role role) {
-		return true;
+		return false;
 	}
 
-	/**
+	/** 
 	 * {@inheritDoc}
 	 */
 	public boolean hasPermission(Permission permission) {
-		return true;
+		return false;
 	}
 
-	/**
+	/** 
 	 * {@inheritDoc}
 	 */
 	public String getEmail() {

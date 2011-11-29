@@ -5,7 +5,7 @@ package org.arastreju.sge.query;
 
 /**
  * <p>
- *  Parameter for query nodes by one of their values.
+ *  Parameter for query nodes by one of their values, whatever field this is.
  * </p>
  *
  * <p>

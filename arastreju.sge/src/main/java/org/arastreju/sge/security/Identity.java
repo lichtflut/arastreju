@@ -34,6 +34,8 @@ public interface Identity {
 	
 	public static final String ROOT = "root";
 	
+	public static final String ANONYMOUS = "anonymous";
+	
 	// -----------------------------------------------------
 
 	ResourceNode getAssociatedResource();

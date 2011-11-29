@@ -47,7 +47,7 @@ public class Neo4jGate implements ArastrejuGate {
 	
 	private static final String KEY_GRAPH_DATA_STORE = "aras:neo4j:profile-object:graph-data-store";
 	
-	private final SemanticNetworkAccess neo4jDataStore;
+	private final SemanticNetworkAccess sna;
 
 	private final GateContext gateContext;
 
@@ -61,7 +61,7 @@ public class Neo4jGate implements ArastrejuGate {
 	public Neo4jGate(final GateContext ctx) throws GateInitializationException {
 		this.gateContext = ctx;
 		try {
-			this.neo4jDataStore = obtainSemanticNetworkAccesss(ctx.getProfile());
+			this.sna = obtainSemanticNetworkAccesss(ctx.getProfile());
 			getIdentityManagement().login(ctx.getUsername(), ctx.getCredential());
 		} catch (IOException e) {
 			throw new GateInitializationException(e);
@@ -76,28 +76,28 @@ public class Neo4jGate implements ArastrejuGate {
 	 * {@inheritDoc}
 	 */
 	public ModelingConversation startConversation() {
-		return new Neo4jModellingConversation(neo4jDataStore);
+		return new Neo4jModellingConversation(sna);
 	}
 	
 	/**
 	 * {@inheritDoc}
 	 */
 	public QueryManager createQueryManager() {
-		return new NeoQueryManager(neo4jDataStore, neo4jDataStore.getIndex());
+		return new NeoQueryManager(sna, sna.getIndex());
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	public TypeSystem getTypeSystem() {
-		return new NeoTypeSystem(neo4jDataStore);
+		return new NeoTypeSystem(sna);
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	public Organizer getOrganizer() {
-		return new NeoOrganizer(neo4jDataStore.getIndex());
+		return new NeoOrganizer(sna);
 	}
 
 	/**
@@ -105,7 +105,7 @@ public class Neo4jGate implements ArastrejuGate {
 	 */
 
 	public IdentityManagement getIdentityManagement() {
-		return new NeoIdentityManagement(neo4jDataStore);
+		return new NeoIdentityManagement(sna);
 	}
 	
 	/**

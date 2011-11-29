@@ -37,7 +37,7 @@ public interface Organizer {
 	
 	Collection<Namespace> getNamespaces();
 	
-	Namespace registerNamespace(String namespace, String defaultPrefix);
+	Namespace registerNamespace(String uri, String prefix);
 	
 	Collection<Context> getContexts();
 	

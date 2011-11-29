@@ -42,11 +42,25 @@ public interface ArastrejuGate {
 	 */
 	QueryManager createQueryManager();
 	
+	/**
+	 * Obtain access to the type system.
+	 * @return The type system.
+	 */
 	TypeSystem getTypeSystem();
 	
+	/**
+	 * Obtain the Organizer for Contexts and Namespaces.
+	 * @return The organizer.
+	 */
 	Organizer getOrganizer();
 	
+	/**
+	 * Obtain the Identity Manager.
+	 * @return The Identity Manager.
+	 */
 	IdentityManagement getIdentityManagement();
+	
+	// ----------------------------------------------------
 	
 	/**
 	 * Close the gate and free all resources.

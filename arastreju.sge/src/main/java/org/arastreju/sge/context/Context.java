@@ -19,7 +19,7 @@ import org.arastreju.sge.model.ResourceID;
 
 /**
  * <p>
- *  [DESCRIPTION]
+ *  Special ResourceID that represents a context for information.
  * </p>
  *
  * <p>

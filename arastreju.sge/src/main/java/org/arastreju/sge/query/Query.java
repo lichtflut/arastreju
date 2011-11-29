@@ -3,7 +3,9 @@
  */
 package org.arastreju.sge.query;
 
+import org.arastreju.sge.model.ResourceID;
 import org.arastreju.sge.model.nodes.ResourceNode;
+import org.arastreju.sge.naming.QualifiedName;
 
 /**
  * <p>
@@ -20,10 +22,45 @@ public interface Query {
 	
 	/**
 	 * @param param
-	 * @return
+	 * @return This.
 	 */
 	Query add(QueryParam param);
+	
+	/**
+	 * @param name
+	 * @param value
+	 * @return This.
+	 */
+	Query addField(String name, Object value);
+	
+	/**
+	 * Constructor.
+	 * @param name
+	 * @param value
+	 * @return This.
+	 */
+	Query addField(ResourceID name, Object value);
+	
+	/**
+	 * @param name
+	 * @param value
+	 */
+	Query addField(QualifiedName name, Object value);
+	
+	/**
+	 * @param name
+	 * @param value
+	 */
+	Query addURI(String term);
+	
+	/**
+	 * @param name
+	 * @param value
+	 */
+	Query addValue(String term);
 
+	// ----------------------------------------------------
+	
 	/**
 	 * @return
 	 */
