@@ -106,7 +106,7 @@ public class ArastrejuProfile implements GateLifecycleListener {
 		InputStream in = find(profile);
 		if (in == null) {
 			throw new ArastrejuRuntimeException(ErrorCodes.INITIALIZATION_EXCEPTION, 
-					"Didn't find Arastreu profile file: " + profile);
+					"Didn't find Arastreu profile file: " + STANDARD_DIR + "/" + profile );
 		}
 		return new ArastrejuProfile(in);
 	}
