@@ -16,35 +16,25 @@
 package org.arastreju.bindings.neo4j.impl;
 
 import java.io.IOException;
-import java.util.HashSet;
 import java.util.Set;
 
-import org.arastreju.bindings.neo4j.ArasRelTypes;
 import org.arastreju.bindings.neo4j.NeoConstants;
 import org.arastreju.bindings.neo4j.extensions.NeoAssociationKeeper;
+import org.arastreju.bindings.neo4j.extensions.SNResourceNeo;
 import org.arastreju.bindings.neo4j.index.ResourceIndex;
-import org.arastreju.bindings.neo4j.mapping.NodeMapper;
 import org.arastreju.bindings.neo4j.tx.TxAction;
 import org.arastreju.bindings.neo4j.tx.TxProvider;
 import org.arastreju.bindings.neo4j.tx.TxResultAction;
-import org.arastreju.sge.SNOPS;
-import org.arastreju.sge.context.Context;
 import org.arastreju.sge.model.ResourceID;
 import org.arastreju.sge.model.SemanticGraph;
-import org.arastreju.sge.model.Statement;
 import org.arastreju.sge.model.associations.Association;
 import org.arastreju.sge.model.associations.AssociationKeeper;
 import org.arastreju.sge.model.associations.DetachedAssociationKeeper;
 import org.arastreju.sge.model.nodes.ResourceNode;
 import org.arastreju.sge.model.nodes.SemanticNode;
 import org.arastreju.sge.naming.QualifiedName;
-import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Node;
-import org.neo4j.graphdb.Relationship;
-import org.neo4j.graphdb.RelationshipType;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * <p>
@@ -68,14 +58,10 @@ public class SemanticNetworkAccess implements NeoConstants, NeoResourceResolver 
 	
 	private final ResourceIndex index;
 	
-	private final NodeMapper mapper;
-	
 	private final AssociationHandler assocHandler;
 	
 	private final TxProvider txProvider;
 	
-	private final Logger logger = LoggerFactory.getLogger(SemanticNetworkAccess.class);
-
 	// -----------------------------------------------------
 
 	/**
@@ -100,9 +86,8 @@ public class SemanticNetworkAccess implements NeoConstants, NeoResourceResolver 
 	public SemanticNetworkAccess(final GraphDataStore store) {
 		this.gdbService = store.getGdbService();
 		this.txProvider = new TxProvider(gdbService);
-		this.mapper = new NodeMapper(this);
-		this.index = new ResourceIndex(mapper, store.getIndexManager(), txProvider);
-		this.assocHandler = new AssociationHandler(gdbService, this, txProvider, index);
+		this.index = new ResourceIndex(this, store.getIndexManager(), txProvider);
+		this.assocHandler = new AssociationHandler(this, index, txProvider);
 	}
 	
 	// -----------------------------------------------------
@@ -118,14 +103,23 @@ public class SemanticNetworkAccess implements NeoConstants, NeoResourceResolver 
 	public TxProvider getTxProvider() {
 		return txProvider;
 	}
-
+	
 	// -- FIND / RESOLVE ----------------------------------
 	
 	/**
 	 * {@inheritDoc}
 	 */
 	public ResourceNode findResource(final QualifiedName qn) {
-		return index.findResource(qn);
+		final ResourceNode registered = index.findResourceNode(qn);
+		if (registered != null) {
+			return registered;
+		}
+		final Node neoNode = index.findNeoNode(qn);
+		if (neoNode != null){
+			return createArasNode(neoNode, qn);
+		} else {
+			return null;
+		}
 	}
 	
 	/**
@@ -142,7 +136,7 @@ public class SemanticNetworkAccess implements NeoConstants, NeoResourceResolver 
 			} else {
 				return txProvider.doTransacted(new TxResultAction<ResourceNode>() {
 					public ResourceNode execute() {
-						return persist(resource.asResource(), true);
+						return persist(resource.asResource());
 					}
 				});
 			}
@@ -153,7 +147,20 @@ public class SemanticNetworkAccess implements NeoConstants, NeoResourceResolver 
 	 * {@inheritDoc}
 	 */
 	public ResourceNode resolve(final Node neoNode) {
-		return index.resolveResource(neoNode);
+		final QualifiedName qn = new QualifiedName(neoNode.getProperty(PROPERTY_URI).toString());
+		final ResourceNode found = index.findResourceNode(qn);
+		if (found != null){
+			return found;
+		}
+		return createArasNode(neoNode, qn);
+	}
+
+	protected SNResourceNeo createArasNode(final Node neoNode, final QualifiedName qn) {
+		final SNResourceNeo arasNode = new SNResourceNeo(qn);
+		index.register(arasNode);
+		final NeoAssociationKeeper assocKeeper = new NeoAssociationKeeper(arasNode, neoNode, assocHandler);
+		AssocKeeperAccess.setAssociationKeeper(arasNode, assocKeeper);
+		return arasNode;
 	}
 	
 	// -----------------------------------------------------
@@ -176,7 +183,7 @@ public class SemanticNetworkAccess implements NeoConstants, NeoResourceResolver 
 					attached = merge(attached, resource);
 				} else {
 					// 3rd: if resource is really new, create a new Neo node.
-					attached = persist(resource, true);
+					attached = persist(resource);
 				}
 				return attached;
 			}
@@ -244,71 +251,29 @@ public class SemanticNetworkAccess implements NeoConstants, NeoResourceResolver 
 		index.clearRegister();
 	}
 
-	/**
-	 * Add a new Association to given Neo node, or rather create a corresponding Relation.
-	 * @param subject The neo node, which shall be the subject in the new Relation.
-	 * @param stmt The Association.
-	 */
-	public void addAssociation(final Node subject, final Statement... statements) {
-		final Set<Statement> inferenced = new HashSet<Statement>();
-		for (Statement stmt : statements) {
-			new NeoInferencer().addInferenced(stmt, inferenced);
-			inferenced.add(stmt);
-		}
-		txProvider.doTransacted(new TxAction() {
-			public void execute() {
-				createRelationships(subject, inferenced);
-			}
-		});
-	}
-	
-	/**
-	 * Remove the association from the neo node.
-	 * @param neoNode The neo node.
-	 * @param assoc The corresponding association.
-	 * @return true if a relationship has been removed.
-	 */
-	public boolean removeAssociation(final Node neoNode, final Statement assoc) {
-		final Relationship relationship = findCorresponding(neoNode, assoc);
-		if (relationship != null) {
-			txProvider.doTransacted(new TxAction() {
-				public void execute() {
-					index.removeFromIndex(relationship);
-					logger.warn("Deleting: " + assoc);
-					relationship.delete();
-				}
-			});
-			return true;
-		} else {
-			logger.warn("Didn't find corresponding relationship to delete: " + assoc);
-			return false;	
-		}
-	}
-	
 	// -----------------------------------------------------
 	
 	/**
 	 * Create the given resource node in Neo4j DB.
 	 * @param node A not yet persisted node.
-	 * @param storeAssocs Flag indicating, if assocs of the node shall be persisted to.
 	 * @return The persisted ResourceNode.
 	 */
-	protected ResourceNode persist(final ResourceNode node, boolean storeAssocs) {
+	protected ResourceNode persist(final ResourceNode node) {
 		// 1st: create a corresponding Neo node.
 		final Node neoNode = gdbService.createNode();
-		mapper.toNeoNode(node, neoNode);
+		neoNode.setProperty(PROPERTY_URI, node.getQualifiedName().toURI());
 		
 		// 2nd: index the Neo node.
 		index.index(neoNode, node);
 		
-		// 3rd: attach the Resource with this store.
+		// 3rd: retain copy of current associations and attach the Resource with this store.
 		final Set<Association> copy = node.getAssociations();
-		final NeoAssociationKeeper keeper = new NeoAssociationKeeper(node, neoNode, this);
+		final NeoAssociationKeeper keeper = new NeoAssociationKeeper(node, neoNode, assocHandler);
 		AssocKeeperAccess.setAssociationKeeper(node, keeper);
 		
 		// 4th: store all associations.
-		if (storeAssocs) {
-			for (Association assoc : copy) {
+		for (Association assoc : copy) {
+			if (!assoc.isInferred()) {
 				keeper.add(assoc);
 			}
 		}
@@ -336,60 +301,4 @@ public class SemanticNetworkAccess implements NeoConstants, NeoResourceResolver 
 		return attached;
 	}
 	
-
-	/**
-	 * Assigns context information to a relationship.
-	 * @param relationship The relationship to be assigned to the contexts.
-	 * @param contexts The contexts.
-	 */
-	protected void assignContext(final Relationship relationship, final Context[] contexts) {
-		new ContextAccess(this).assignContext(relationship, contexts);
-	}
-	
-	protected Relationship findCorresponding(final Node neoNode, final Statement stmt) {
-		final String assocPredicate = stmt.getPredicate().getQualifiedName().toURI();
-		final String assocValue = SNOPS.string(stmt.getObject());
-		for(Relationship rel : neoNode.getRelationships(Direction.OUTGOING)) {
-			final String predicate = (String) rel.getProperty(PREDICATE_URI);
-			if (assocPredicate.equals(predicate)) {
-				if (stmt.getObject().isResourceNode()) {
-					final String uri = (String) rel.getEndNode().getProperty(PROPERTY_URI);
-					if (assocValue.equals(uri)) {
-						return rel;
-					}
-				} else {
-					final String value = (String) rel.getEndNode().getProperty(PROPERTY_VALUE);
-					if (assocValue.equals(value)) {
-						return rel;
-					}
-				}
-			}
-		}
-		return null;
-	}
-	
-	private void createRelationships(Node subject, Set<Statement> statments) {
-		for (Statement stmt : statments) {
-			resolve(stmt.getPredicate());
-			if (stmt.getObject().isResourceNode()){
-				final ResourceNode arasClient = resolve(stmt.getObject().asResource());
-				final Node neoClient = AssocKeeperAccess.getNeoNode(arasClient);
-				createRelationShip(subject, neoClient, stmt);
-			} else {
-				final Node neoClient = gdbService.createNode();
-				mapper.toNeoNode(stmt.getObject().asValue(), neoClient);
-				createRelationShip(subject, neoClient, stmt);
-			}
-			index.index(subject, stmt);
-		}
-	}
-	
-	private void createRelationShip(final Node subject, final Node object, final Statement stmt) {
-		final RelationshipType type = stmt.getObject().isResourceNode() ? ArasRelTypes.REFERENCE : ArasRelTypes.VALUE;
-		final Relationship relationship = subject.createRelationshipTo(object, type);
-		relationship.setProperty(PREDICATE_URI, SNOPS.uri(stmt.getPredicate()));
-		assignContext(relationship, stmt.getContexts());
-		logger.debug("added relationship--> " + relationship + " to node " + subject);
-	}
-
 }

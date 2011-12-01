@@ -19,23 +19,14 @@ import java.io.Serializable;
 import java.util.Collections;
 import java.util.Set;
 
-import org.arastreju.bindings.neo4j.ArasRelTypes;
 import org.arastreju.bindings.neo4j.NeoConstants;
-import org.arastreju.bindings.neo4j.impl.ContextAccess;
-import org.arastreju.bindings.neo4j.impl.NeoResourceResolver;
-import org.arastreju.bindings.neo4j.impl.SemanticNetworkAccess;
-import org.arastreju.sge.context.Context;
-import org.arastreju.sge.model.ResourceID;
+import org.arastreju.bindings.neo4j.impl.AssociationHandler;
 import org.arastreju.sge.model.associations.AbstractAssociationKeeper;
 import org.arastreju.sge.model.associations.Association;
 import org.arastreju.sge.model.associations.AssociationKeeper;
 import org.arastreju.sge.model.associations.DetachedAssociationKeeper;
 import org.arastreju.sge.model.nodes.ResourceNode;
-import org.arastreju.sge.model.nodes.SemanticNode;
-import org.arastreju.sge.naming.QualifiedName;
-import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
-import org.neo4j.graphdb.Relationship;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -53,9 +44,10 @@ import org.slf4j.LoggerFactory;
 public class NeoAssociationKeeper extends AbstractAssociationKeeper implements NeoConstants, Serializable {
 	
 	private final ResourceNode arasNode;
+	
 	private final Node neoNode;
-	private final SemanticNetworkAccess store;
-	private final NeoResourceResolver resolver;
+	
+	private final AssociationHandler handler;
 	
 	private final Logger logger = LoggerFactory.getLogger(NeoAssociationKeeper.class);
 	
@@ -66,11 +58,20 @@ public class NeoAssociationKeeper extends AbstractAssociationKeeper implements N
 	 * @param arasNode The aras node
 	 * @param neoNode The neo node.
 	 */
-	public NeoAssociationKeeper(final ResourceNode arasNode, final Node neoNode, final SemanticNetworkAccess store) {
+	public NeoAssociationKeeper(final ResourceNode arasNode, final Node neoNode, final AssociationHandler handler) {
 		this.arasNode = arasNode;
 		this.neoNode = neoNode;
-		this.store = store;
-		this.resolver = store;
+		this.handler = handler;
+	}
+	
+	// -----------------------------------------------------
+	
+	public Node getNeoNode() {
+		return neoNode;
+	}
+
+	public ResourceNode getArasNode() {
+		return arasNode;
 	}
 	
 	// -----------------------------------------------------
@@ -89,7 +90,7 @@ public class NeoAssociationKeeper extends AbstractAssociationKeeper implements N
 	public void add(final Association assoc) {
 		getResolvedAssociations().add(assoc);
 		logger.info("Added Association: " + assoc);
-		store.addAssociation(neoNode, assoc);
+		handler.addAssociation(this, assoc);
 	}
 	
 	/** 
@@ -99,20 +100,8 @@ public class NeoAssociationKeeper extends AbstractAssociationKeeper implements N
 	public boolean remove(final Association assoc) {
 		super.remove(assoc);
 		logger.info("Removed Association: " + assoc);
-		return store.removeAssociation(neoNode, assoc);
+		return handler.removeAssociation(this, assoc);
 	}
-	
-	// -----------------------------------------------------
-	
-	public Node getNeoNode() {
-		return neoNode;
-	}
-
-	public ResourceNode getArasNode() {
-		return arasNode;
-	}
-	
-	// -----------------------------------------------------
 	
 	/**
 	 * {@inheritDoc}
@@ -129,13 +118,13 @@ public class NeoAssociationKeeper extends AbstractAssociationKeeper implements N
 		return Collections.emptySet();
 	}
 	
+	// ----------------------------------------------------
+	
 	/**
-	 * {@inheritDoc}
+	 * Add the association directly to the associations.
 	 */
-	@Override
-	public void addResolvedAssociation(ResourceNode subject,
-			ResourceID predicate, SemanticNode object, Context... contexts) {
-		super.addResolvedAssociation(subject, predicate, object, contexts);
+	public void addAssociationDirectly(final Association assoc) {
+		super.add(assoc);
 	}
 	
 	/**
@@ -143,17 +132,7 @@ public class NeoAssociationKeeper extends AbstractAssociationKeeper implements N
 	 */
 	@Override
 	protected void resolveAssociations() {
-		for(Relationship rel : neoNode.getRelationships(Direction.OUTGOING)){
-			SemanticNode object = null;
-			if (rel.isType(ArasRelTypes.REFERENCE)){
-				object = resolver.resolve(rel.getEndNode());	
-			} else if (rel.isType(ArasRelTypes.VALUE)){
-				object = new SNValueNeo(rel.getEndNode());
-			}
-			final ResourceNode predicate = resolver.findResource(new QualifiedName(rel.getProperty(PREDICATE_URI).toString()));
-			final Context[] ctx = new ContextAccess(resolver).getContextInfo(rel);
-			addResolvedAssociation(arasNode, predicate, object, ctx);
-		}
+		handler.resolveAssociations(this);
 	}
 	
 	// ----------------------------------------------------

@@ -12,7 +12,7 @@ import de.lichtflut.infra.data.MultiMap;
 
 /**
  * <p>
- *  [DESCRIPTION]
+ *  Compound Inferencer.
  * </p>
  *
  * <p>
@@ -36,5 +36,11 @@ public class CompoundInferencer implements Inferencer {
 			current.addInferenced(stmt, target);
 		}
 	};
+	
+	// ----------------------------------------------------
+	
+	protected void addInferencer(final Inferencer inferencer, final ResourceID predicate) {
+		predicateMap.add(predicate, inferencer);
+	}
 	
 }

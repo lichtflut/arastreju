@@ -11,8 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.arastreju.bindings.neo4j.NeoConstants;
-import org.arastreju.bindings.neo4j.extensions.SNResourceNeo;
-import org.arastreju.bindings.neo4j.mapping.NodeMapper;
+import org.arastreju.bindings.neo4j.impl.NeoResourceResolver;
 import org.arastreju.bindings.neo4j.tx.TxProvider;
 import org.arastreju.sge.model.ResourceID;
 import org.arastreju.sge.model.Statement;
@@ -39,65 +38,36 @@ public class ResourceIndex implements NeoConstants {
 	
 	private final NeoIndex neoIndex;
 	
-	private final NodeMapper mapper;
-	
 	private final Map<QualifiedName, ResourceNode> register = new HashMap<QualifiedName, ResourceNode>();
+
+	private final NeoResourceResolver resolver;
 	
 	// -----------------------------------------------------
 	
 	/**
 	 * Constructor.
-	 * @param mapper The node mapper.
+	 * @param assocHandler The assoc handler.
 	 * @param neoIndex The index manager.
 	 * @param txProvider The tx provider.
 	 */
-	public ResourceIndex(final NodeMapper mapper, final IndexManager neoIndex, final TxProvider txProvider) {
+	public ResourceIndex(final NeoResourceResolver resolver, final IndexManager neoIndex, final TxProvider txProvider) {
+		this.resolver = resolver;
 		this.neoIndex = new NeoIndex(txProvider, neoIndex);
-		this.mapper = mapper;
 	}
 	
 	// -----------------------------------------------------
 	
 	/**
-	 * {@inheritDoc}
+	 * Find Arastreju node by qualified name.
 	 */
-	public ResourceNode findResource(final QualifiedName qn) {
-		if (register.containsKey(qn)){
-			return register.get(qn);
-		}
-		final Node neoNode = lookup(qn);
-		if (neoNode != null){
-			return createArasNode(neoNode, qn);
-		} else {
-			return null;
-		}
+	public ResourceNode findResourceNode(final QualifiedName qn) {
+		return register.get(qn);
 	}
-	
 	
 	/**
-	 * {@inheritDoc}
+	 * Find Neo node by qualified name.
 	 */
-	public ResourceNode resolveResource(final Node neoNode) {
-		final QualifiedName qn = new QualifiedName(neoNode.getProperty(PROPERTY_URI).toString());
-		if (register.containsKey(qn)){
-			return register.get(qn);
-		}
-		return createArasNode(neoNode, qn);
-	}
-
-	protected SNResourceNeo createArasNode(final Node neoNode, final QualifiedName qn) {
-		final SNResourceNeo arasNode = new SNResourceNeo(qn);
-		register(arasNode);
-		mapper.toArasNode(neoNode, arasNode);
-		return arasNode;
-	}
-	
-	// -- LOOKUP ------------------------------------------
-	
-	/**
-	 * Find in Index by key and value.
-	 */
-	public Node lookup(final QualifiedName qn) {
+	public Node findNeoNode(final QualifiedName qn) {
 		return neoIndex.lookup(qn);
 	}
 	
@@ -159,6 +129,10 @@ public class ResourceIndex implements NeoConstants {
 	
 	// -- CACHE/REGISTRY ----------------------------------
 	
+	public void register(final ResourceNode resource){
+		register.put(resource.getQualifiedName(), resource);
+	}
+	
 	/**
 	 * @param node
 	 */
@@ -172,10 +146,6 @@ public class ResourceIndex implements NeoConstants {
 	
 	// -----------------------------------------------------
 	
-	private void register(final ResourceNode resource){
-		register.put(resource.getQualifiedName(), resource);
-	}
-	
 	/**
 	 * Find in Index by key and value.
 	 */
@@ -186,7 +156,7 @@ public class ResourceIndex implements NeoConstants {
 	private List<ResourceNode> map(final List<Node> neoNodes) {
 		final List<ResourceNode> result = new ArrayList<ResourceNode>(neoNodes.size());
 		for (Node node : neoNodes) {
-			result.add(resolveResource(node));
+			result.add(resolver.resolve(node));
 		}
 		return result;
 	}

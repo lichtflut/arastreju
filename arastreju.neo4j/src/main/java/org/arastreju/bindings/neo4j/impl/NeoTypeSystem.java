@@ -19,7 +19,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.arastreju.bindings.neo4j.NeoConstants;
 import org.arastreju.sge.TypeSystem;
 import org.arastreju.sge.apriori.RDF;
 import org.arastreju.sge.apriori.RDFS;
@@ -37,7 +36,7 @@ import org.arastreju.sge.model.nodes.views.SNClass;
  *
  * @author Oliver Tigges
  */
-public class NeoTypeSystem implements TypeSystem, NeoConstants {
+public class NeoTypeSystem implements TypeSystem {
 	
 	private final SemanticNetworkAccess store;
 

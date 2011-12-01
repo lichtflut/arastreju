@@ -81,8 +81,9 @@ public abstract class AbstractStatement implements Statement {
 	
 	// -----------------------------------------------------
 
-	protected void setInferred(boolean inferred) {
+	protected Statement setInferred(boolean inferred) {
 		this.inferred = inferred;
+		return this;
 	}
 	
 	/**
@@ -139,9 +140,10 @@ public abstract class AbstractStatement implements Statement {
 
 	@Override
 	public String toString() {
-		return "DetachedStatement [subject=" + subject + ", predicate="
-				+ predicate + ", object=" + object + ", contexts="
-				+ Arrays.toString(contexts) + "]";
+		StringBuffer sb = new StringBuffer(subject.toString());
+		sb.append(" " + predicate + " ");
+		sb.append(object);
+		return sb.toString();
 	}
 
 }

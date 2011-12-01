@@ -82,7 +82,7 @@ public class Association extends AbstractStatement implements Serializable {
 	 * @param object The client.
 	 * @param context The context.
 	 */
-	Association(final ResourceNode subject, final ResourceID predicate, final SemanticNode object, final Context... contexts) {
+	protected Association(final ResourceNode subject, final ResourceID predicate, final SemanticNode object, final Context... contexts) {
 		if (subject == null || object == null || predicate == null){
 			throw new IllegalArgumentException("none of the three triple elements may be null:" +
 					" supplier = " + subject + "; client = " + object + "; predicate = " + predicate);
@@ -102,14 +102,4 @@ public class Association extends AbstractStatement implements Serializable {
 		return (ResourceNode) subject;
 	}
 	
-	// -----------------------------------------------------
-	
-	@Override
-	public String toString() {
-		StringBuffer sb = new StringBuffer(subject.toString());
-		sb.append(" " + predicate + " ");
-		sb.append(object);
-		return sb.toString();
-	}
-
 }

@@ -19,11 +19,6 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.arastreju.sge.context.Context;
-import org.arastreju.sge.model.ResourceID;
-import org.arastreju.sge.model.nodes.ResourceNode;
-import org.arastreju.sge.model.nodes.SemanticNode;
-
 /**
  * <p>
  *  Abstract base for an association keeper.
@@ -126,13 +121,6 @@ public abstract class AbstractAssociationKeeper implements AssociationKeeper {
 	protected AbstractAssociationKeeper markResolved(){
 		resolved = true;
 		return this;
-	}
-	
-	/**
-	 * Creates a new Association object for an existing association that has been resolved.
-	 */
-	protected void addResolvedAssociation(final ResourceNode subject, final ResourceID predicate, final SemanticNode object, final Context... contexts) {
-		associations.add(new Association(subject, predicate, object, contexts));
 	}
 	
 }

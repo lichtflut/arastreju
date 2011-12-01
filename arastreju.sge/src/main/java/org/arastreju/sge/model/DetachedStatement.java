@@ -36,5 +36,12 @@ public class DetachedStatement extends AbstractStatement {
 		this.object = object;
 		setContexts(contexts);
 	}
+	
+	// ----------------------------------------------------
+	
+	@Override
+	public DetachedStatement setInferred(boolean inferred) {
+		return (DetachedStatement) super.setInferred(inferred);
+	}
 
 }

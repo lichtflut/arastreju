@@ -21,7 +21,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.arastreju.bindings.neo4j.NeoConstants;
 import org.arastreju.bindings.neo4j.impl.NeoResourceResolver;
 import org.arastreju.bindings.neo4j.index.ResourceIndex;
 import org.arastreju.bindings.neo4j.mapping.RelationMapper;
@@ -47,7 +46,7 @@ import org.slf4j.LoggerFactory;
  *
  * @author Oliver Tigges
  */
-public class NeoQueryManager implements QueryManager, NeoConstants {
+public class NeoQueryManager implements QueryManager {
 
 	private final Logger logger = LoggerFactory.getLogger(NeoQueryManager.class);
 	
@@ -82,7 +81,7 @@ public class NeoQueryManager implements QueryManager, NeoConstants {
 	public Set<Statement> findIncomingStatements(final ResourceID resource) {
 		final Set<Statement> result = new HashSet<Statement>();
 		final RelationMapper mapper = new RelationMapper(resolver);
-		final Node node = index.lookup(resource.getQualifiedName());
+		final Node node = index.findNeoNode(resource.getQualifiedName());
 		if (node != null){
 			for (Relationship rel : node.getRelationships(Direction.INCOMING)) {
 				result.add(mapper.toArasStatement(rel));

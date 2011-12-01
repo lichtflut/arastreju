@@ -39,7 +39,9 @@ public class TypeInferencer implements Inferencer {
 		final SNClass clazz = stmt.getObject().asResource().asClass();
 		final Set<SNClass> allClasses = clazz.getSuperClasses();
 		for (SNClass current : allClasses) {
-			target.add(new DetachedStatement(stmt.getSubject(), RDF.TYPE, current, stmt.getContexts()));
+			target.add(
+					new DetachedStatement(stmt.getSubject(), RDF.TYPE, current, stmt.getContexts())
+						.setInferred(true));
 		}
 	}
 

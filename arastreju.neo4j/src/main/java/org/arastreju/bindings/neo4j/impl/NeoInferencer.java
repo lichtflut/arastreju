@@ -3,14 +3,13 @@
  */
 package org.arastreju.bindings.neo4j.impl;
 
-import java.util.Set;
-
-import org.arastreju.sge.inferencing.Inferencer;
-import org.arastreju.sge.model.Statement;
+import org.arastreju.sge.apriori.RDF;
+import org.arastreju.sge.inferencing.CompoundInferencer;
+import org.arastreju.sge.inferencing.implicit.TypeInferencer;
 
 /**
  * <p>
- *  [DESCRIPTION]
+ *  Inferencer for Neo 4j.
  * </p>
  *
  * <p>
@@ -19,12 +18,10 @@ import org.arastreju.sge.model.Statement;
  *
  * @author Oliver Tigges
  */
-public class NeoInferencer implements Inferencer {
+public class NeoInferencer extends CompoundInferencer {
 
-	/** 
-	 * {@inheritDoc}
-	 */
-	public void addInferenced(Statement stmt, Set<Statement> target) {
+	public NeoInferencer() {
+		addInferencer(new TypeInferencer(), RDF.TYPE);
 	}
-
+	
 }
