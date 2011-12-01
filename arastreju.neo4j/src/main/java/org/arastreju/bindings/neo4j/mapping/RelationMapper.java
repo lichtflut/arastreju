@@ -57,12 +57,12 @@ public class RelationMapper implements NeoConstants {
 	public Statement toArasStatement(final Relationship rel){
 		SemanticNode object = null;
 		if (rel.isType(ArasRelTypes.REFERENCE)){
-			object = resolver.resolveResource(rel.getEndNode());	
+			object = resolver.resolve(rel.getEndNode());	
 		} else if (rel.isType(ArasRelTypes.VALUE)){
 			object = new SNValueNeo(rel.getEndNode());
 		}
 		
-		final ResourceNode subject =  resolver.resolveResource(rel.getStartNode());	
+		final ResourceNode subject =  resolver.resolve(rel.getStartNode());	
 		final ResourceNode predicate = resolver.findResource(new QualifiedName(rel.getProperty(PREDICATE_URI).toString()));
 		final Context[] ctx = new ContextAccess(resolver).getContextInfo(rel);
 		

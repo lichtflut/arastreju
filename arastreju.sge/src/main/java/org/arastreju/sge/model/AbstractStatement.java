@@ -21,7 +21,7 @@ import de.lichtflut.infra.Infra;
  *
  * @author Oliver Tigges
  */
-public class AbstractStatement implements Statement {
+public abstract class AbstractStatement implements Statement {
 	
 	public static final Context[] NO_CTX = new Context[0];
 
@@ -30,6 +30,8 @@ public class AbstractStatement implements Statement {
 	protected SemanticNode object;
 	
 	private Context[] contexts = NO_CTX;
+	
+	private boolean inferred;
 	
 	// -----------------------------------------------------
 
@@ -70,7 +72,18 @@ public class AbstractStatement implements Statement {
 		return contexts;
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
+	public boolean isInferred() {
+		return inferred;
+	}
+	
 	// -----------------------------------------------------
+
+	protected void setInferred(boolean inferred) {
+		this.inferred = inferred;
+	}
 	
 	/**
 	 * @param contexts the contexts to set

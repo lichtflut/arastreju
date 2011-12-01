@@ -39,8 +39,6 @@ import org.arastreju.sge.model.nodes.views.SNClass;
  */
 public class NeoTypeSystem implements TypeSystem, NeoConstants {
 	
-	private final String RDFS_CLASS_URI = RDFS.CLASS.getQualifiedName().toURI();
-	
 	private final SemanticNetworkAccess store;
 
 	// -----------------------------------------------------
@@ -60,7 +58,7 @@ public class NeoTypeSystem implements TypeSystem, NeoConstants {
 	 */
 	public Set<SNClass> getAllClasses() {
 		final Set<SNClass> result = new HashSet<SNClass>();
-		final List<ResourceNode> nodes = store.getIndex().lookup(RDF.TYPE, RDFS_CLASS_URI);
+		final List<ResourceNode> nodes = store.getIndex().lookup(RDF.TYPE, RDFS.CLASS);
 		for (ResourceNode current : nodes) {
 			result.add(current.asClass());
 		}

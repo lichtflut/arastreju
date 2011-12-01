@@ -227,7 +227,7 @@ public class SNResource implements ResourceNode, Serializable {
 	 * {@inheritDoc}
 	 */
 	public void reset() {
-		associationKeeper.reset();
+		associationKeeper.clearAssociations();
 	}
 	
 	// -----------------------------------------------------

@@ -46,9 +46,9 @@ public class ShowCase {
 		
 		SNClass personClass = new SNResource(qn).asClass();
 		
-		SNEntity raphi = personClass.createInstance(new QualifiedName("http://lf.de/peaople#Raphi"), null);
+		SNEntity raphi = personClass.createInstance(new QualifiedName("http://lf.de/peaople#Raphi"));
 		
-		SNEntity ravi = personClass.createInstance(new QualifiedName("http://lf.de/peaople#Ravi"), null);
+		SNEntity ravi = personClass.createInstance(new QualifiedName("http://lf.de/peaople#Ravi"));
 		
 		mc.attach(raphi);
 		mc.attach(ravi);

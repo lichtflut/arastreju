@@ -45,6 +45,6 @@ public interface NeoResourceResolver extends ResourceResolver {
 	 * @param neoNode The neo node.
 	 * @return The resource node.
 	 */
-	ResourceNode resolveResource(Node neoNode);
+	ResourceNode resolve(Node neoNode);
 	
 }

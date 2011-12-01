@@ -38,8 +38,8 @@ import org.arastreju.sge.model.nodes.SemanticNode;
 public abstract class AbstractAssociationKeeper implements AssociationKeeper {
 
 	private final Set<Association> associations = new HashSet<Association>();
-	private final Set<Association> revokedAssociations = new HashSet<Association>();
-	private boolean resolved;
+	
+	private volatile boolean resolved;
 	
 	// -----------------------------------------------------
 
@@ -61,43 +61,27 @@ public abstract class AbstractAssociationKeeper implements AssociationKeeper {
 	
 	// -----------------------------------------------------
 
-	public void reset() {
-		associations.clear();
-		revokedAssociations.clear();
-		resolved = false;
-		throw new RuntimeException("RESET CALLED");
-	}
-	
 	public void add(final Association assoc) {
+		if (!resolved){
+			throw new IllegalArgumentException("Tried to add association to unresolved node: " + assoc);
+		}
 		associations.add(assoc);
 	}
 
-	public boolean revoke(final Association assoc) {
-		revokedAssociations.add(assoc);
-		return getAssociationsInternal().remove(assoc);
-	}
-
 	public boolean remove(final Association assoc) {
-		return getAssociationsInternal().remove(assoc);
+		return getResolvedAssociations().remove(assoc);
 	}
 
 	public synchronized Set<Association> getAssociations() {
-		return Collections.unmodifiableSet(getAssociationsInternal());
+		return Collections.unmodifiableSet(getResolvedAssociations());
 	}
 	
 	/**
 	 * {@inheritDoc}
 	 */
 	public boolean clearAssociations() {
-		getAssociationsInternal().clear();
+		getResolvedAssociations().clear();
 		return true;
-	}
-	
-	/**
-	 * @return the revokedAssociations
-	 */
-	public Set<Association> getAssociationsForRevocation() {
-		return revokedAssociations;
 	}
 	
 	// -----------------------------------------------------
@@ -124,6 +108,21 @@ public abstract class AbstractAssociationKeeper implements AssociationKeeper {
 	
 	// -----------------------------------------------------
 	
+	protected Set<Association> getAssociationsDirectly() {
+		return associations;
+	}
+	
+	protected synchronized Set<Association> getResolvedAssociations() {
+		if (!resolved){
+			if (!associations.isEmpty()){
+				throw new IllegalArgumentException("node has already an association attached: " + associations);
+			}
+			resolved = true;
+			resolveAssociations();
+		}
+		return associations;
+	}
+	
 	protected AbstractAssociationKeeper markResolved(){
 		resolved = true;
 		return this;
@@ -136,21 +135,4 @@ public abstract class AbstractAssociationKeeper implements AssociationKeeper {
 		associations.add(new Association(subject, predicate, object, contexts));
 	}
 	
-	protected Set<Association> getAssociationsDirectly() {
-		return associations;
-	}
-	
-	protected synchronized Set<Association> getAssociationsInternal() {
-		if (!resolved){
-			if (!associations.isEmpty()){
-				throw new IllegalArgumentException("node has already an association attached: " + associations);
-			}
-			resolved = true;
-			resolveAssociations();
-		}
-		return associations;
-	}
-	
-	
-
 }

@@ -28,4 +28,6 @@ public interface Statement {
 
 	Context[] getContexts();
 	
+	boolean isInferred();
+	
 }

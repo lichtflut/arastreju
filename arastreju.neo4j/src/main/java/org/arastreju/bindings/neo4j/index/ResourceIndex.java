@@ -12,12 +12,11 @@ import java.util.Map;
 
 import org.arastreju.bindings.neo4j.NeoConstants;
 import org.arastreju.bindings.neo4j.extensions.SNResourceNeo;
-import org.arastreju.bindings.neo4j.impl.SemanticNetworkAccess;
 import org.arastreju.bindings.neo4j.mapping.NodeMapper;
 import org.arastreju.bindings.neo4j.tx.TxProvider;
 import org.arastreju.sge.model.ResourceID;
+import org.arastreju.sge.model.Statement;
 import org.arastreju.sge.model.nodes.ResourceNode;
-import org.arastreju.sge.model.nodes.SemanticNode;
 import org.arastreju.sge.model.nodes.ValueNode;
 import org.arastreju.sge.naming.QualifiedName;
 import org.neo4j.graphdb.Node;
@@ -48,12 +47,13 @@ public class ResourceIndex implements NeoConstants {
 	
 	/**
 	 * Constructor.
-	 * @param store The neo data store.
+	 * @param mapper The node mapper.
+	 * @param neoIndex The index manager.
 	 * @param txProvider The tx provider.
 	 */
-	public ResourceIndex(final SemanticNetworkAccess store, final IndexManager service, final TxProvider txProvider) {
-		this.neoIndex = new NeoIndex(txProvider, service);
-		this.mapper = new NodeMapper(store);
+	public ResourceIndex(final NodeMapper mapper, final IndexManager neoIndex, final TxProvider txProvider) {
+		this.neoIndex = new NeoIndex(txProvider, neoIndex);
+		this.mapper = mapper;
 	}
 	
 	// -----------------------------------------------------
@@ -67,10 +67,7 @@ public class ResourceIndex implements NeoConstants {
 		}
 		final Node neoNode = lookup(qn);
 		if (neoNode != null){
-			final SNResourceNeo arasNode = new SNResourceNeo(qn);
-			register(arasNode);
-			mapper.toArasNode(neoNode, arasNode);
-			return arasNode;
+			return createArasNode(neoNode, qn);
 		} else {
 			return null;
 		}
@@ -85,6 +82,10 @@ public class ResourceIndex implements NeoConstants {
 		if (register.containsKey(qn)){
 			return register.get(qn);
 		}
+		return createArasNode(neoNode, qn);
+	}
+
+	protected SNResourceNeo createArasNode(final Node neoNode, final QualifiedName qn) {
 		final SNResourceNeo arasNode = new SNResourceNeo(qn);
 		register(arasNode);
 		mapper.toArasNode(neoNode, arasNode);
@@ -116,13 +117,6 @@ public class ResourceIndex implements NeoConstants {
 		return lookup(uri(predicate), value);
 	}
 	
-	/**
-	 * Find in Index by key and value.
-	 */
-	public List<ResourceNode> lookup(final String key, final String value) {
-		return map(neoIndex.lookup(key, value));
-	}
-	
 	// -- SEARCH ------------------------------------------
 	
 	public IndexHits<Node> search(final String query) {
@@ -131,22 +125,24 @@ public class ResourceIndex implements NeoConstants {
 	
 	// -- ADD TO INDEX ------------------------------------
 	
-	public void index(Node subject, ResourceID predicate, SemanticNode value) {
-		neoIndex.index(subject, predicate, value);
-	}
-	
-	public void index(Node subject, ValueNode value) {
-		neoIndex.index(subject, value);
+	public void index(final Node neoNode, final Statement stmt) {
+		if (stmt.getObject().isValueNode()) {
+			final ValueNode value = stmt.getObject().asValue();
+			neoIndex.index(neoNode, value);
+			neoIndex.index(neoNode, stmt.getPredicate(), value);
+		} else {
+			neoIndex.index(neoNode, stmt.getPredicate(), stmt.getObject().asResource());
+		}
 	}
 	
 	public void index(final Node neoNode, final ResourceNode resourceNode) {
-		neoIndex.index(neoNode, resourceNode);
+		neoIndex.index(neoNode, resourceNode.getQualifiedName());
 		register(resourceNode);
 	}
 	
 	// --REMOVE FROM INDEX --------------------------------
 	
-	public void remove(final Node node) {
+	public void removeFromIndex(final Node node) {
 		neoIndex.remove(node);
 		if (node.hasProperty(NeoConstants.PROPERTY_URI)) {
 			register.remove(new QualifiedName(node.getProperty(NeoConstants.PROPERTY_URI).toString()));
@@ -157,21 +153,20 @@ public class ResourceIndex implements NeoConstants {
 	 * Remove relationship from index.
 	 * @param rel The relationship to be removed.
 	 */
-	public void remove(final Relationship rel) {
+	public void removeFromIndex(final Relationship rel) {
 		neoIndex.remove(rel);
 	}
-	
 	
 	// -- CACHE/REGISTRY ----------------------------------
 	
 	/**
 	 * @param node
 	 */
-	public void onDetach(final ResourceNode node) {
+	public void removeFromRegister(final ResourceNode node) {
 		register.remove(node.getQualifiedName());
 	}
 	
-	public void clearCache(){
+	public void clearRegister(){
 		register.clear();
 	}
 	
@@ -179,6 +174,13 @@ public class ResourceIndex implements NeoConstants {
 	
 	private void register(final ResourceNode resource){
 		register.put(resource.getQualifiedName(), resource);
+	}
+	
+	/**
+	 * Find in Index by key and value.
+	 */
+	private List<ResourceNode> lookup(final String key, final String value) {
+		return map(neoIndex.lookup(key, value));
 	}
 	
 	private List<ResourceNode> map(final List<Node> neoNodes) {

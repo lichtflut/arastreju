@@ -101,7 +101,7 @@ public class Neo4jModellingConversationTest {
 		
 		Association.create(car, RDFS.SUB_CLASS_OF, vehicle);
 		
-		mc.getIndex().clearCache();
+		mc.getIndex().clearRegister();
 		
 		car = mc.findResource(qnCar);
 		vehicle = mc.findResource(qnVehicle);

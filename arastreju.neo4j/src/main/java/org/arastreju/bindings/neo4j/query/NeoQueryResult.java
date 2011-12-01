@@ -69,7 +69,7 @@ public class NeoQueryResult implements QueryResult {
 	public List<ResourceNode> toList() {
 		final List<ResourceNode> result = new ArrayList<ResourceNode>(size());
 		for (Node node : hits) {
-			result.add(resolver.resolveResource(node));
+			result.add(resolver.resolve(node));
 		}
 		return result;
 	}
@@ -101,7 +101,7 @@ public class NeoQueryResult implements QueryResult {
 		 * {@inheritDoc}
 		 */
 		public ResourceNode next() {
-			return resolver.resolveResource(hits.next());
+			return resolver.resolve(hits.next());
 		}
 
 		/** 

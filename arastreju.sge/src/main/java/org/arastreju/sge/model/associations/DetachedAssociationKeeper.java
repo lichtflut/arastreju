@@ -62,15 +62,6 @@ public class DetachedAssociationKeeper extends AbstractAssociationKeeper impleme
 	}
 	
 	/* (non-Javadoc)
-	 * @see org.arastreju.sge.model.associations.AbstractAssociationKeeper#reset()
-	 */
-	@Override
-	public void reset() {
-		super.reset();
-		removedAssociations.clear();
-	}
-
-	/* (non-Javadoc)
 	 * @see org.arastreju.sge.model.associations.AssociationKeeper#isAttached()
 	 */
 	public boolean isAttached() {

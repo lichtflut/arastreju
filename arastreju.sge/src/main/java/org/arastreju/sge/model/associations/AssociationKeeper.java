@@ -32,28 +32,19 @@ import org.arastreju.sge.model.nodes.SemanticNode;
  */
 public interface AssociationKeeper {
 	
-	boolean isAttached();
-
-	void reset();
-	
-	void add(Association assoc);
-
-	boolean revoke(Association assoc);
-
-	boolean remove(Association assoc);
-	
-	boolean clearAssociations();
-
 	/**
 	 * @return The active Associations.
 	 */
 	Set<Association> getAssociations();
 	
-	/**
-	 * @return The Associations to be revoked on attachment.
-	 */
-	Set<Association> getAssociationsForRevocation();
+	boolean isAttached();
 	
+	void add(Association assoc);
+
+	boolean remove(Association assoc);
+	
+	boolean clearAssociations();
+
 	/**
 	 * @return The Associations to be removed on attachment.
 	 */

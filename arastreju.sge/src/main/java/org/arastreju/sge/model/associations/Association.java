@@ -44,8 +44,6 @@ import org.arastreju.sge.model.nodes.SemanticNode;
  */
 public class Association extends AbstractStatement implements Serializable {
 	
-	private boolean inferred;
-	
 	// -- STATIC METHODS ----------------------------------
 	
 	/**
@@ -102,14 +100,6 @@ public class Association extends AbstractStatement implements Serializable {
 	 */
 	public ResourceNode getSubject() {
 		return (ResourceNode) subject;
-	}
-	
-	public boolean isInferred() {
-		return inferred;
-	}
-	
-	protected void setInferred(boolean inferred) {
-		this.inferred = inferred;
 	}
 	
 	// -----------------------------------------------------

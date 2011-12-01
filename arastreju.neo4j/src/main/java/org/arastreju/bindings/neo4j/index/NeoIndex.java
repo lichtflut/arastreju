@@ -13,7 +13,7 @@ import org.arastreju.bindings.neo4j.tx.TxAction;
 import org.arastreju.bindings.neo4j.tx.TxProvider;
 import org.arastreju.bindings.neo4j.tx.TxResultAction;
 import org.arastreju.sge.model.ResourceID;
-import org.arastreju.sge.model.nodes.SemanticNode;
+import org.arastreju.sge.model.nodes.ResourceNode;
 import org.arastreju.sge.model.nodes.ValueNode;
 import org.arastreju.sge.naming.QualifiedName;
 import org.neo4j.graphdb.Node;
@@ -145,20 +145,20 @@ public class NeoIndex implements NeoConstants {
 	
 	// -- ADD TO INDEX ------------------------------------
 	
-	public void index(Node subject, ResourceID predicate, SemanticNode value) {
-		if (value.isResourceNode()) {
-			resourceIndex().add(subject, uri(predicate), uri(value.asResource()));	
-		} else {
-			resourceIndex().add(subject, uri(predicate), value.asValue().getStringValue());
-		}
+	public void index(Node subject, ResourceID predicate, ValueNode value) {
+		resourceIndex().add(subject, uri(predicate), value.getStringValue());
+	}
+	
+	public void index(Node subject, ResourceID predicate, ResourceNode value) {
+		resourceIndex().add(subject, uri(predicate), uri(value));	
 	}
 	
 	public void index(Node subject, ValueNode value) {
 		resourceIndex().add(subject, INDEX_KEY_RESOURCE_VALUE, value.asValue().getStringValue());
 	}
 	
-	public void index(Node subject, ResourceID resourceID) {
-		resourceIndex().add(subject, INDEX_KEY_RESOURCE_URI, uri(resourceID));
+	public void index(Node subject, QualifiedName qn) {
+		resourceIndex().add(subject, INDEX_KEY_RESOURCE_URI, qn.toURI());
 	}
 	
 	// --REMOVE FROM INDEX --------------------------------

@@ -87,7 +87,7 @@ public class NeoAssociationKeeper extends AbstractAssociationKeeper implements N
 	 */
 	@Override
 	public void add(final Association assoc) {
-		super.add(assoc);
+		getResolvedAssociations().add(assoc);
 		logger.info("Added Association: " + assoc);
 		store.addAssociation(neoNode, assoc);
 	}
@@ -104,11 +104,12 @@ public class NeoAssociationKeeper extends AbstractAssociationKeeper implements N
 	
 	// -----------------------------------------------------
 	
-	/**
-	 * @return the neoNode
-	 */
 	public Node getNeoNode() {
 		return neoNode;
+	}
+
+	public ResourceNode getArasNode() {
+		return arasNode;
 	}
 	
 	// -----------------------------------------------------
@@ -145,7 +146,7 @@ public class NeoAssociationKeeper extends AbstractAssociationKeeper implements N
 		for(Relationship rel : neoNode.getRelationships(Direction.OUTGOING)){
 			SemanticNode object = null;
 			if (rel.isType(ArasRelTypes.REFERENCE)){
-				object = resolver.resolveResource(rel.getEndNode());	
+				object = resolver.resolve(rel.getEndNode());	
 			} else if (rel.isType(ArasRelTypes.VALUE)){
 				object = new SNValueNeo(rel.getEndNode());
 			}
@@ -165,5 +166,5 @@ public class NeoAssociationKeeper extends AbstractAssociationKeeper implements N
 		logger.debug("Serializing NeoAssociationKeeper --> Detaching");
 		return new DetachedAssociationKeeper(getAssociationsDirectly());
 	}
-	
+
 }

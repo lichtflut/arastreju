@@ -51,7 +51,16 @@ public class NodeMapper implements NeoConstants {
 	// -----------------------------------------------------
 
 	/**
-	 * Default constructor.
+	 * Constructor.
+	 * @param resolver
+	 */
+	public NodeMapper(final NeoResourceResolver resolver) {
+		this.resolver = resolver;
+		this.snAccess = null;
+	}
+	
+	/**
+	 * Constructor.
 	 * @param snAccess The sccess to the semantic network. 
 	 */
 	public NodeMapper(final SemanticNetworkAccess snAccess) {
@@ -81,7 +90,7 @@ public class NodeMapper implements NeoConstants {
 			final ResourceNode predicate = resolver.resolve(new SimpleResourceID(rel.getProperty(PREDICATE_URI).toString()));
 			if (neoClient.hasProperty(PROPERTY_URI)){
 				// Resource Relation
-				final ResourceNode object = resolver.resolveResource(rel.getEndNode());
+				final ResourceNode object = resolver.resolve(rel.getEndNode());
 				assocKeeper.addResolvedAssociation(arasNode, predicate, object,ctx);
 			} else if (neoClient.hasProperty(PROPERTY_VALUE)){
 				// Value assignment

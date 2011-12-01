@@ -95,9 +95,8 @@ public class NeoQueryManager implements QueryManager, NeoConstants {
 	 * {@inheritDoc}
 	 */
 	public List<ResourceNode> findByType(final ResourceID type) {
-		final String predicate = uri(RDF.TYPE);
 		final String typeURI = uri(type);
-		final List<ResourceNode> result = index.lookup(predicate, typeURI);
+		final List<ResourceNode> result = index.lookup(RDF.TYPE, typeURI);
 		logger.debug("found with rdf:type '" + typeURI + "': " + result);
 		return result;
 	}
