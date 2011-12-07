@@ -43,7 +43,7 @@ public abstract class AbstractOrganizer implements Organizer {
 		final SNResource node = new SNResource();
 		associate(node, RDF.TYPE, Aras.NAMESPACE);
 		associate(node, Aras.HAS_URI, new SNText(namespace.getUri()));
-		associate(node, Aras.HAS_PREFIX, new SNText(namespace.getDefaultPrefix()));
+		associate(node, Aras.HAS_PREFIX, new SNText(namespace.getPrefix()));
 		return node;
 	}
 	

@@ -89,7 +89,7 @@ public class NeoAssociationKeeper extends AbstractAssociationKeeper implements N
 	@Override
 	public void add(final Association assoc) {
 		getResolvedAssociations().add(assoc);
-		logger.info("Added Association: " + assoc);
+		logger.debug("Added Association: " + assoc);
 		handler.addAssociation(this, assoc);
 	}
 	
@@ -99,7 +99,7 @@ public class NeoAssociationKeeper extends AbstractAssociationKeeper implements N
 	@Override
 	public boolean remove(final Association assoc) {
 		super.remove(assoc);
-		logger.info("Removed Association: " + assoc);
+		logger.debug("Removed Association: " + assoc);
 		return handler.removeAssociation(this, assoc);
 	}
 	

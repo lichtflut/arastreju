@@ -16,6 +16,8 @@ import org.arastreju.sge.naming.QualifiedName;
 import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * <p>
@@ -29,6 +31,8 @@ import org.neo4j.graphdb.Relationship;
  * @author Oliver Tigges
  */
 public class NodeRemover {
+
+	private final Logger logger = LoggerFactory.getLogger(NodeRemover.class);
 	
 	private final ResourceIndex index;
 	
@@ -99,7 +103,11 @@ public class NodeRemover {
 		if (neoNode.hasProperty(NeoConstants.PROPERTY_URI)) {
 			final QualifiedName qn = new QualifiedName(neoNode.getProperty(NeoConstants.PROPERTY_URI).toString());
 			final ResourceNode arasNode = index.findResourceNode(qn);
-			AssocKeeperAccess.setAssociationKeeper(arasNode, new DetachedAssociationKeeper());
+			if (arasNode != null) {
+				AssocKeeperAccess.setAssociationKeeper(arasNode, new DetachedAssociationKeeper());	
+			} else {
+				logger.warn("No ArasNode in Register for " + qn);
+			}
 		} else if (neoNode.hasProperty(NeoConstants.PROPERTY_VALUE)) {
 			// everything O.K.
 		} else {

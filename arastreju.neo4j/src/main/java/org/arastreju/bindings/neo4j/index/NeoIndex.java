@@ -78,7 +78,7 @@ public class NeoIndex implements NeoConstants {
 	 * Find in Index by key and value.
 	 */
 	public Node lookup(final QualifiedName qn) {
-		return manager.forNodes(INDEX_RESOURCES).get(INDEX_KEY_RESOURCE_URI, qn.toURI()).getSingle();
+		return manager.forNodes(INDEX_RESOURCES).get(INDEX_KEY_RESOURCE_URI, normalize(qn.toURI())).getSingle();
 	}
 	
 	/**
@@ -102,7 +102,7 @@ public class NeoIndex implements NeoConstants {
 		final List<Node> result = new ArrayList<Node>();
 		txProvider.doTransacted(new TxAction() {
 			public void execute() {
-				toList(result, resourceIndex().get(key, value));
+				toList(result, resourceIndex().get(key, normalize(value)));
 			}
 		});
 		return result;
@@ -137,7 +137,7 @@ public class NeoIndex implements NeoConstants {
 		final List<Node> result = new ArrayList<Node>();
 		txProvider.doTransacted(new TxAction() {
 			public void execute() {
-				toList(result, resourceIndex().query(key, value));
+				toList(result, resourceIndex().query(key, normalize(value)));
 			}
 		});
 		return result;
@@ -146,19 +146,19 @@ public class NeoIndex implements NeoConstants {
 	// -- ADD TO INDEX ------------------------------------
 	
 	public void index(Node subject, ResourceID predicate, ValueNode value) {
-		resourceIndex().add(subject, uri(predicate), value.getStringValue());
+		indexResource(subject, uri(predicate), value.getStringValue());
 	}
 	
 	public void index(Node subject, ResourceID predicate, ResourceNode value) {
-		resourceIndex().add(subject, uri(predicate), uri(value));	
+		indexResource(subject, uri(predicate), uri(value));	
 	}
 	
 	public void index(Node subject, ValueNode value) {
-		resourceIndex().add(subject, INDEX_KEY_RESOURCE_VALUE, value.asValue().getStringValue());
+		indexResource(subject, INDEX_KEY_RESOURCE_VALUE, value.asValue().getStringValue());
 	}
 	
 	public void index(Node subject, QualifiedName qn) {
-		resourceIndex().add(subject, INDEX_KEY_RESOURCE_URI, qn.toURI());
+		indexResource(subject, INDEX_KEY_RESOURCE_URI, qn.toURI());
 	}
 	
 	// --REMOVE FROM INDEX --------------------------------
@@ -172,10 +172,15 @@ public class NeoIndex implements NeoConstants {
 	 * @param rel The relationship to be removed.
 	 */
 	public void remove(final Relationship rel) {
-		resourceIndex().remove(rel.getStartNode(), (String) rel.getProperty(PREDICATE_URI));
+		final String value = (String) rel.getProperty(PREDICATE_URI);
+		resourceIndex().remove(rel.getStartNode(), normalize(value));
 	}
 	
 	// -----------------------------------------------------
+	
+	private void indexResource(Node subject, String key, String value) {
+		resourceIndex().add(subject, key, normalize(value));
+	}
 	
 	/**
 	 * @param result
@@ -197,6 +202,12 @@ public class NeoIndex implements NeoConstants {
 	
 	private Index<Node> resourceIndex() {
 		return manager.forNodes(INDEX_RESOURCES);
+	}
+	
+	// ----------------------------------------------------
+	
+	private String normalize(final String s) {
+		return s.trim().toLowerCase();
 	}
 
 }

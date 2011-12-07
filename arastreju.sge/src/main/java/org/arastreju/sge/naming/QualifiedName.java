@@ -54,9 +54,14 @@ public class QualifiedName implements Comparable<QualifiedName>, Serializable {
 		return !isUri(name) && name.indexOf(PREFIX_DELIM) > -1;
 	}
 	
-	public static String retrieveNamePart(final String name) {
+	public static String getSimpleName(final String name) {
 		int pos = getSeperatorIndex(name);
 		return name.substring(pos +1);
+	}
+	
+	public static String getPrefix(final String qname) {
+		int pos = getSeperatorIndex(qname);
+		return qname.substring(0, pos);
 	}
 	
 	/**
@@ -64,32 +69,28 @@ public class QualifiedName implements Comparable<QualifiedName>, Serializable {
 	 * @param name A qualified or unqualified name.
 	 * @return The Namespace part.
 	 */
-	public static String retrieveNamespaceUri(final String name) {
+	public static String getNamespace(final String name) {
 		int pos = getSeperatorIndex(name);
 		return name.substring(0, pos + 1);
 	}
 	
-	//------------------------------------------------------
+	// -- FACTORY METHODS ---------------------------------
 	
-	/**
-	 * Creates a new qualified name.
-	 */
-	public QualifiedName(final Namespace namespace, final String prefix, final String name) {
-		if (namespace == null || prefix == null || name == null){
-			throw new IllegalStateException("got null value: namespace=" +
-					 namespace + "; prefix="+ prefix +"; name=" + name);
-		}
-		this.namespace = namespace;
-		this.prefix = prefix;
-		this.name = name;
+	public static QualifiedName forQname(final String qname) {
+		final int idx = getSeperatorIndex(qname);
+		final String prefix = qname.substring(0, idx);
+		final String name = qname.substring(idx +1);
+		return new QualifiedName(null, prefix, name);
 	}
+	
+	//------------------------------------------------------
 	
 	/**
 	 * Creates a new qualified name, where the prefix will be derived from managed namespace.
 	 */
 	public QualifiedName(final Namespace namespace, final String name) {
 		this.name = name;
-		this.prefix = namespace.getDefaultPrefix();
+		this.prefix = namespace.getPrefix();
 		this.namespace = namespace;
 	}
 	
@@ -106,16 +107,17 @@ public class QualifiedName implements Comparable<QualifiedName>, Serializable {
 	 * Creates a qualified name for resource reference.
 	 * @param ref The {@link ResourceID}.
 	 */
-	public QualifiedName(final ResourceID ref){
-		this(ref.getQualifiedName().getNamespace(), ref.getQualifiedName().getSimpleName());
+	public QualifiedName(final String uri){
+		this(QualifiedName.getNamespace(uri), QualifiedName.getSimpleName(uri));
 	}
 	
 	/**
-	 * Creates a qualified name for resource reference.
-	 * @param ref The {@link ResourceID}.
+	 * Creates a new qualified name.
 	 */
-	public QualifiedName(final String uri){
-		this(QualifiedName.retrieveNamespaceUri(uri), QualifiedName.retrieveNamePart(uri));
+	protected QualifiedName(final Namespace namespace, final String prefix, final String name) {
+		this.namespace = namespace;
+		this.prefix = prefix;
+		this.name = name;
 	}
 	
 	//------------------------------------------------------

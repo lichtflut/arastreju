@@ -79,6 +79,14 @@ public class NamespaceMap {
 		return namespaces;
 	}
 	
+	/** Check if there exists a namespace for given prefix.
+	 * @param prefix The prefix.
+	 * @return true if there is a namespace.
+	 */
+	public boolean containsPrefix(final String prefix){
+		return prefixMap.containsKey(prefix);
+	}
+	 
 	/**
 	 * Get the namespace for given prefix.
 	 * @param prefix The prefix.
@@ -120,9 +128,9 @@ public class NamespaceMap {
 	// -----------------------------------------------------
 	
 	private String prefix(final Namespace namespace){
-		final String defaultPrefix = namespace.getDefaultPrefix();
+		final String defaultPrefix = namespace.getPrefix();
 		if (defaultPrefix != null && !prefixMap.containsKey(defaultPrefix)){
-			return namespace.getDefaultPrefix();
+			return namespace.getPrefix();
 		} else {
 			return "ns" + nextId++;
 		}

@@ -17,6 +17,7 @@ package org.arastreju.sge.naming;
 
 import java.io.Serializable;
 
+
 /**
  * <p>
  * 	A globally unique namespace.
@@ -28,7 +29,7 @@ import java.io.Serializable;
  *
  * @author Oliver Tigges 
  */
-public interface Namespace extends Comparable<Namespace>, Serializable {
+public interface Namespace extends Serializable {
 
 	/**
 	 * The URI of this namespace.
@@ -40,13 +41,6 @@ public interface Namespace extends Comparable<Namespace>, Serializable {
 	 * Get the default prefix. This prefix is neither mandatory nor unique! 
 	 * @return The default prefix.
 	 */
-	String getDefaultPrefix();
+	String getPrefix();
 	
-	/**
-	 * Checks if this namespace is a namespace is registered and thus
-	 * is (or can be) persisted.
-	 * @return True if namespace is registered.
-	 */
-	boolean isRegistered();
-
 }

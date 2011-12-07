@@ -101,7 +101,7 @@ public class NeoQueryBuilder extends QueryBuilder {
 	private void appendLeaf(final QueryParam param, final StringBuilder sb) {
 		switch(param.getOperator()) {
 		case EQUALS:
-			sb.append(normalize(param.getName()) + ":");
+			sb.append(normalizeKey(param.getName()) + ":");
 			break;
 		case HAS_URI:
 			sb.append(NeoIndex.INDEX_KEY_RESOURCE_URI + ":");
@@ -112,11 +112,15 @@ public class NeoQueryBuilder extends QueryBuilder {
 		default:
 			throw new NotYetSupportedException(param.getOperator());
 		}
-		sb.append(normalize(param.getValue().toString()));
+		sb.append(normalizeValue(param.getValue().toString()));
 	}
 	
-	private String normalize(final String key) {
+	private String normalizeKey(final String key) {
 		return key.replaceAll(":", "\\\\:");
 	}
-
+	
+	private String normalizeValue(final String key) {
+		return key.trim().toLowerCase().replaceAll(":", "\\\\:");
+	}
+	
 }

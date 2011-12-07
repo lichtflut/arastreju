@@ -12,6 +12,8 @@ import org.arastreju.sge.model.nodes.ResourceNode;
 import org.arastreju.sge.model.nodes.views.SNContext;
 import org.neo4j.graphdb.Relationship;
 
+import scala.actors.threadpool.Arrays;
+
 /**
  * <p>
  *  Accessor for context information of relationships.
@@ -53,7 +55,7 @@ public class ContextAccess implements NeoConstants {
 			} else if (node != null) {
 				ctxs[i] = new SNContext(node);
 			} else {
-				throw new IllegalStateException("Could not find context: " + rel.getProperty(CONTEXT_URI));
+				throw new IllegalStateException("Could not find context(s): " + Arrays.toString(ctxUris));
 			}
 		}
 		return ctxs;

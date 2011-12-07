@@ -47,12 +47,12 @@ public class ResourceIndex implements NeoConstants {
 	/**
 	 * Constructor.
 	 * @param assocHandler The assoc handler.
-	 * @param neoIndex The index manager.
+	 * @param indexManager The index manager.
 	 * @param txProvider The tx provider.
 	 */
-	public ResourceIndex(final NeoResourceResolver resolver, final IndexManager neoIndex, final TxProvider txProvider) {
+	public ResourceIndex(final NeoResourceResolver resolver, final IndexManager indexManager, final TxProvider txProvider) {
 		this.resolver = resolver;
-		this.neoIndex = new NeoIndex(txProvider, neoIndex);
+		this.neoIndex = new NeoIndex(txProvider, indexManager);
 	}
 	
 	// -----------------------------------------------------

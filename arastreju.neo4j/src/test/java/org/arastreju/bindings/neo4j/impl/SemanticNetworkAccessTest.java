@@ -92,6 +92,19 @@ public class SemanticNetworkAccessTest {
 	// -----------------------------------------------------
 
 	@Test
+	public void testResolveAndFind() throws IOException {
+		ResourceNode found = store.findResource(qnVehicle);
+		assertNull(found);
+		
+		ResourceNode resolved = store.resolve(SNOPS.id(qnVehicle));
+		assertNotNull(resolved);
+		
+		found = store.findResource(qnVehicle);
+		assertNotNull(found);
+		
+	}
+	
+	@Test
 	public void testValueIndexing() throws IOException {
 		final ResourceIndex index = store.getIndex();
 		

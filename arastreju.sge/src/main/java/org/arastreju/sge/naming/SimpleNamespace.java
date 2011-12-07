@@ -38,7 +38,6 @@ public class SimpleNamespace implements Namespace, Comparable<Namespace>, Serial
 	private String prefix;
 	
 	// -----------------------------------------------------
-	
 
 	/**
 	 * Constructor.
@@ -70,7 +69,7 @@ public class SimpleNamespace implements Namespace, Comparable<Namespace>, Serial
 	/* (non-Javadoc)
 	 * @see org.arastreju.api.ontology.Namespace#getDefaultPrefix()
 	 */
-	public String getDefaultPrefix() {
+	public String getPrefix() {
 		return prefix;
 	}
 

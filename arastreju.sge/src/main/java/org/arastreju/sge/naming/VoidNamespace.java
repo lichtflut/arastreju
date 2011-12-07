@@ -30,7 +30,7 @@ import org.arastreju.sge.model.ResourceID;
  *
  * @author Oliver Tigges 
  */
-public class VoidNamespace implements Namespace, Serializable {
+public class VoidNamespace implements Namespace, Comparable<Namespace>, Serializable {
 	
 	/**
 	 * Constant for void namespace URI.
@@ -95,7 +95,7 @@ public class VoidNamespace implements Namespace, Serializable {
 	/* (non-Javadoc)
 	 * @see org.arastreju.api.ontology.Namespace#getDefaultPrefix()
 	 */
-	public String getDefaultPrefix() {
+	public String getPrefix() {
 		return "void";
 	}
 
