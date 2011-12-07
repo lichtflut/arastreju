@@ -45,7 +45,7 @@ public class AssociationHandler implements NeoConstants {
 
 	private final Logger logger = LoggerFactory.getLogger(AssociationHandler.class);
 	
-	private final Inferencer inferencer = new NeoInferencer();
+	private final Inferencer inferencer;
 	
 	private final NeoResourceResolver resolver;
 	
@@ -68,6 +68,7 @@ public class AssociationHandler implements NeoConstants {
 		this.txProvider = txProvider;
 		this.index = index;
 		this.ctxAccess = new ContextAccess(resolver);
+		this.inferencer = new NeoInferencer(resolver);
 	}
 	
 	// ----------------------------------------------------
@@ -90,21 +91,46 @@ public class AssociationHandler implements NeoConstants {
 		}
 	}
 	
+	// ----------------------------------------------------
+	
+	/**
+	 * Add a new Association to given Neo node, or rather create a corresponding Relation.
+	 * @param subject The neo node, which shall be the subject in the new Relation.
+	 * @param stmt The Association.
+	 */
+	public void addAssociations(final Statement... statements) {
+		for (Statement stmt : statements) {
+			ResourceNode subject = resolver.resolve(stmt.getSubject());
+			if (!subject.getAssociations().contains(stmt)) {
+				NeoAssociationKeeper keeper = AssocKeeperAccess.getNeoAssociationKeeper(subject);
+				addAssociation(keeper, stmt);
+			}
+		}
+	}
+	
 	/**
 	 * Add a new Association to given Neo node, or rather create a corresponding Relation.
 	 * @param subject The neo node, which shall be the subject in the new Relation.
 	 * @param stmt The Association.
 	 */
 	public void addAssociation(final NeoAssociationKeeper keeper, final Statement... statements) {
-		final Set<Statement> inferenced = new HashSet<Statement>();
-		for (Statement stmt : statements) {
-			inferencer.addInferenced(stmt, inferenced);
-		}
 		txProvider.doTransacted(new TxAction() {
 			public void execute() {
 				createRelationships(keeper.getNeoNode(), statements);
 			}
 		});
+		// Handle Inferences
+		final Set<Statement> inferenced = new HashSet<Statement>();
+		for (Statement stmt : statements) {
+			inferencer.addInferenced(stmt, inferenced);
+		}
+		for (Statement stmt : inferenced) {
+			if (stmt.isInferred()) {
+				// TODO
+			} else {
+				addAssociations(stmt);
+			}
+		}
 	}
 	
 	/**

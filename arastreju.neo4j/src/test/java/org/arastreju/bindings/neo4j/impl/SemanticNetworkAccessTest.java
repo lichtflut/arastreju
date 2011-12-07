@@ -16,12 +16,13 @@
 package org.arastreju.bindings.neo4j.impl;
 
 import static org.arastreju.sge.SNOPS.associate;
+import static org.arastreju.sge.SNOPS.qualify;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertNotSame;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 
@@ -74,6 +75,9 @@ public class SemanticNetworkAccessTest {
 	private final QualifiedName qnVehicle = new QualifiedName("http://q#", "Verhicle");
 	private final QualifiedName qnCar = new QualifiedName("http://q#", "Car");
 	private final QualifiedName qnBike = new QualifiedName("http://q#", "Bike");
+	
+	private final QualifiedName qnEmployedBy = new QualifiedName("http://q#", "employedBy");
+	private final QualifiedName qnHasEmployees = new QualifiedName("http://q#", "hasEmployees");
 	
 	private SemanticNetworkAccess store;
 	
@@ -398,6 +402,33 @@ public class SemanticNetworkAccessTest {
 		assertNotNull(store.findResource(RDF.TYPE.getQualifiedName()));
 		store.remove(bike, true);
 		assertNull(store.findResource(RDF.TYPE.getQualifiedName()));
+		
+	}
+	
+	@Test
+	public void testInferencing() {
+		final ResourceNode hasEmployees = new SNResource(qnHasEmployees);
+		final ResourceNode isEmployedBy = new SNResource(qnEmployedBy);
+		
+		associate(hasEmployees, Aras.INVERSE_OF, isEmployedBy);
+		associate(isEmployedBy, Aras.INVERSE_OF, hasEmployees);
+		
+		store.attach(hasEmployees);
+		
+		// preparation done.
+		
+		ResourceNode mike = new SNResource(qualify("http://q#Mike"));
+		ResourceNode corp = new SNResource(qualify("http://q#Corp"));
+		
+		store.attach(mike);
+		
+		associate(mike, isEmployedBy, corp);
+		
+		store.detach(corp);
+		
+		corp = store.findResource(corp.getQualifiedName());
+		
+		System.out.println(corp.getAssociations());
 		
 	}
 

@@ -3,6 +3,8 @@
  */
 package org.arastreju.sge.inferencing;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Set;
 
 import org.arastreju.sge.model.ResourceID;
@@ -25,6 +27,8 @@ public class CompoundInferencer implements Inferencer {
 	
 	private final MultiMap<ResourceID, Inferencer> predicateMap = new MultiMap<ResourceID, Inferencer>();
 	
+	private final Collection<Inferencer> common = new ArrayList<Inferencer>();
+	
 	// -----------------------------------------------------
 
 	/**
@@ -35,12 +39,19 @@ public class CompoundInferencer implements Inferencer {
 		for (Inferencer current : inferencers) {
 			current.addInferenced(stmt, target);
 		}
+		for (Inferencer current : common) {
+			current.addInferenced(stmt, target);
+		}
 	};
 	
 	// ----------------------------------------------------
 	
 	protected void addInferencer(final Inferencer inferencer, final ResourceID predicate) {
 		predicateMap.add(predicate, inferencer);
+	}
+	
+	protected void addInferencer(final Inferencer inferencer) {
+		common.add(inferencer);
 	}
 	
 }

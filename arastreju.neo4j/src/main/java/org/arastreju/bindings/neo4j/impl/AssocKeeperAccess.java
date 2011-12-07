@@ -58,6 +58,13 @@ public class AssocKeeperAccess {
 	}
 	
 	/**
+	 * Get the neo association keeper of given node.
+	 */
+	public static NeoAssociationKeeper getNeoAssociationKeeper(final ResourceNode node){
+		return (NeoAssociationKeeper) getAssociationKeeper(node);
+	}
+	
+	/**
 	 * Get the Neo4j node attached to the Arastreju node's association keeper.
 	 */
 	public static Node getNeoNode(final ResourceNode node){

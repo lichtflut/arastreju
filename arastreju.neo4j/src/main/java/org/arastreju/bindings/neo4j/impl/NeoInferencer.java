@@ -5,7 +5,9 @@ package org.arastreju.bindings.neo4j.impl;
 
 import org.arastreju.sge.apriori.RDF;
 import org.arastreju.sge.inferencing.CompoundInferencer;
+import org.arastreju.sge.inferencing.implicit.InverseOfInferencer;
 import org.arastreju.sge.inferencing.implicit.TypeInferencer;
+import org.arastreju.sge.persistence.ResourceResolver;
 
 /**
  * <p>
@@ -20,8 +22,9 @@ import org.arastreju.sge.inferencing.implicit.TypeInferencer;
  */
 public class NeoInferencer extends CompoundInferencer {
 
-	public NeoInferencer() {
+	public NeoInferencer(final ResourceResolver resolver) {
 		addInferencer(new TypeInferencer(), RDF.TYPE);
+		addInferencer(new InverseOfInferencer(resolver));
 	}
 	
 }

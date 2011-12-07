@@ -14,7 +14,7 @@
 	<description>Arastreju Semantic Graph Engine</description>
 	
 	<properties>
-		<sesame.version>2.3.2</sesame.version>
+		<sesame.version>2.6.1</sesame.version>
 	</properties>
 
 	<build>
@@ -61,6 +61,11 @@
 		<dependency>
 			<groupId>org.openrdf.sesame</groupId>
 			<artifactId>sesame-rio-rdfxml</artifactId>
+			<version>${sesame.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.openrdf.sesame</groupId>
+			<artifactId>sesame-rio-n3</artifactId>
 			<version>${sesame.version}</version>
 		</dependency>
 		<dependency>

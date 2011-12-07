@@ -17,46 +17,45 @@ package org.arastreju.sge.io;
 
 import org.openrdf.rio.RDFParserFactory;
 import org.openrdf.rio.RDFWriterFactory;
-import org.openrdf.rio.rdfxml.RDFXMLParserFactory;
-import org.openrdf.rio.rdfxml.RDFXMLWriterFactory;
+import org.openrdf.rio.n3.N3ParserFactory;
+import org.openrdf.rio.n3.N3WriterFactory;
 
 
 /**
  * <p>
- *     I/O binding for RDF XML. Based on Sesame RIO.
- * </p>
- * 
- * <p>
- *    Created: 09.06.2009
+ *  I/O binding for N3. Based on Sesame RIO.
  * </p>
  *
- * @author Oliver Tigges 
+ * <p>
+ * 	Created Dec 7, 2011
+ * </p>
+ *
+ * @author Oliver Tigges
  */
-public class RdfXmlBinding extends AbstractRioBinding {
+public class N3Binding extends AbstractRioBinding {
     
     /**
      * Creates a new RDF binding instance.
      */
-    public RdfXmlBinding() {
+    public N3Binding() {
     }
-    
     
     // ----------------------------------------------------
 
- 	/** 
- 	* {@inheritDoc}
- 	*/
- 	@Override
- 	protected RDFWriterFactory writerFactory() {
- 		return new RDFXMLWriterFactory();
- 	}
+	/** 
+	* {@inheritDoc}
+	*/
+	@Override
+	protected RDFWriterFactory writerFactory() {
+		return new N3WriterFactory();
+	}
 
- 	/** 
- 	* {@inheritDoc}
- 	*/
- 	@Override
- 	protected RDFParserFactory parserFactory() {
- 		return new RDFXMLParserFactory();
- 	}
+	/** 
+	* {@inheritDoc}
+	*/
+	@Override
+	protected RDFParserFactory parserFactory() {
+		return new N3ParserFactory();
+	}
     
 }
