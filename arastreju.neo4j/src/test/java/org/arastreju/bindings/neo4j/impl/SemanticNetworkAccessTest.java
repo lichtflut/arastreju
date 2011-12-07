@@ -17,6 +17,7 @@ package org.arastreju.bindings.neo4j.impl;
 
 import static org.arastreju.sge.SNOPS.associate;
 import static org.arastreju.sge.SNOPS.qualify;
+import static org.arastreju.sge.SNOPS.id;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -51,6 +52,7 @@ import org.arastreju.sge.model.nodes.ResourceNode;
 import org.arastreju.sge.model.nodes.SNResource;
 import org.arastreju.sge.model.nodes.ValueNode;
 import org.arastreju.sge.model.nodes.views.SNClass;
+import org.arastreju.sge.model.nodes.views.SNEntity;
 import org.arastreju.sge.model.nodes.views.SNText;
 import org.arastreju.sge.naming.QualifiedName;
 import org.junit.After;
@@ -406,7 +408,7 @@ public class SemanticNetworkAccessTest {
 	}
 	
 	@Test
-	public void testInferencing() {
+	public void testInferencingInverseOf() {
 		final ResourceNode hasEmployees = new SNResource(qnHasEmployees);
 		final ResourceNode isEmployedBy = new SNResource(qnEmployedBy);
 		
@@ -428,7 +430,24 @@ public class SemanticNetworkAccessTest {
 		
 		corp = store.findResource(corp.getQualifiedName());
 		
-		System.out.println(corp.getAssociations());
+	}
+	
+	@Test
+	public void testInferencingSubClasses() {
+		final SNClass vehicleClass = new SNResource(qnVehicle).asClass();
+		final SNClass carClass = new SNResource(qnCar).asClass();
+		Association.create(carClass, RDFS.SUB_CLASS_OF, vehicleClass);
+		
+		final SNEntity car = carClass.createInstance();
+		final SNEntity vehicle = vehicleClass.createInstance();
+		
+		store.attach(vehicle);
+		store.attach(car);
+		
+		List<ResourceNode> found = store.getIndex().lookup(RDF.TYPE, id(qnVehicle));
+		
+		System.out.println(found);
+		
 		
 	}
 

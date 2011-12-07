@@ -11,7 +11,9 @@ import org.arastreju.sge.eh.ErrorCodes;
 import org.arastreju.sge.inferencing.Inferencer;
 import org.arastreju.sge.model.DetachedStatement;
 import org.arastreju.sge.model.Statement;
+import org.arastreju.sge.model.nodes.ResourceNode;
 import org.arastreju.sge.model.nodes.views.SNClass;
+import org.arastreju.sge.persistence.ResourceResolver;
 
 /**
  * <p>
@@ -28,6 +30,20 @@ import org.arastreju.sge.model.nodes.views.SNClass;
  */
 public class TypeInferencer implements Inferencer {
 	
+	private final ResourceResolver resolver;
+	
+	// ----------------------------------------------------
+	
+	/**
+	 * Constructor.
+	 * @param resolver The resource resolver.
+	 */
+	public TypeInferencer(final ResourceResolver resolver) {
+		this.resolver = resolver;
+	}
+	
+	// ----------------------------------------------------
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -36,12 +52,14 @@ public class TypeInferencer implements Inferencer {
 			throw new ArastrejuRuntimeException(ErrorCodes.GENERAL_CONSISTENCY_FAILURE, 
 					"Expected rdf:type but was " + stmt.getPredicate());
 		}
-		final SNClass clazz = stmt.getObject().asResource().asClass();
-		final Set<SNClass> allClasses = clazz.getSuperClasses();
-		for (SNClass current : allClasses) {
-			target.add(
-					new DetachedStatement(stmt.getSubject(), RDF.TYPE, current, stmt.getContexts())
-						.setInferred(true));
+		if (stmt.getObject().isResourceNode()) {
+			final ResourceNode resolved = resolver.resolve(stmt.getObject().asResource());
+			final SNClass clazz = resolved.asClass();
+			final Set<SNClass> allClasses = clazz.getSuperClasses();
+			for (SNClass current : allClasses) {
+				target.add(new DetachedStatement(stmt.getSubject(), RDF.TYPE, current, stmt.getContexts())
+							.setInferred(true));
+			}
 		}
 	}
 

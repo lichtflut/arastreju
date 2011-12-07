@@ -19,6 +19,8 @@ import org.arastreju.sge.model.nodes.ResourceNode;
 import org.arastreju.sge.model.nodes.SemanticNode;
 import org.arastreju.sge.naming.QualifiedName;
 
+import de.lichtflut.infra.Infra;
+
 /**
  * <p>
  *  Utility class with static mehtods for Semantic Network OPerationS.
@@ -178,6 +180,31 @@ public class SNOPS {
 	}
 	
 	// -- MODIFICATIONS -----------------------------------
+	
+	/**
+	 * Assures that the subject has only this object for given predicate.
+	 * @param subject The subject.
+	 * @param predicate The predicate.
+	 * @param object The object to be set.
+	 * @param contexts The contexts.
+	 */
+	public static Association assure(final ResourceNode subject, final ResourceID predicate, final SemanticNode object, final Context... contexts){
+		final Set<Association> all = subject.getAssociations(predicate);
+		if (all.size() > 1) {
+			throw new IllegalStateException("replace not possible if more than one associations exists: " + all);
+		}
+		if (all.isEmpty()) {
+			return Association.create(subject, predicate, object, contexts);	
+		} else {
+			final Association existing = all.iterator().next();
+			if (!Infra.equals(existing.getObject(), object)) {
+				subject.remove(existing);
+				return Association.create(subject, predicate, object, contexts);
+			} else {
+				return existing;
+			}
+		}
+	}
 	
 	/**
 	 * Replaces all associations for given subject and predicate by the single new one.

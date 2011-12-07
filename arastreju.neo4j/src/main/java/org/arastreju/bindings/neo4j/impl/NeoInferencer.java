@@ -23,7 +23,7 @@ import org.arastreju.sge.persistence.ResourceResolver;
 public class NeoInferencer extends CompoundInferencer {
 
 	public NeoInferencer(final ResourceResolver resolver) {
-		addInferencer(new TypeInferencer(), RDF.TYPE);
+		addInferencer(new TypeInferencer(resolver), RDF.TYPE);
 		addInferencer(new InverseOfInferencer(resolver));
 	}
 	

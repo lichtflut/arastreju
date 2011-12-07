@@ -142,7 +142,6 @@ public class NeoAssociationKeeper extends AbstractAssociationKeeper implements N
 	 * @return A Detached Association Keeper.
 	 */
 	private Object writeReplace() {
-		logger.debug("Serializing NeoAssociationKeeper --> Detaching");
 		return new DetachedAssociationKeeper(getAssociationsDirectly());
 	}
 

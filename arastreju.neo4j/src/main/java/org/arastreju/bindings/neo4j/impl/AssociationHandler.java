@@ -117,22 +117,12 @@ public class AssociationHandler implements NeoConstants {
 		txProvider.doTransacted(new TxAction() {
 			public void execute() {
 				createRelationships(keeper.getNeoNode(), statements);
+				handleInferences(keeper, statements);
 			}
 		});
-		// Handle Inferences
-		final Set<Statement> inferenced = new HashSet<Statement>();
-		for (Statement stmt : statements) {
-			inferencer.addInferenced(stmt, inferenced);
-		}
-		for (Statement stmt : inferenced) {
-			if (stmt.isInferred()) {
-				// TODO
-			} else {
-				addAssociations(stmt);
-			}
-		}
+		
 	}
-	
+
 	/**
 	 * Remove the given association.
 	 * @param keeper The keeper.
@@ -157,6 +147,25 @@ public class AssociationHandler implements NeoConstants {
 	}
 	
 	// ----------------------------------------------------
+	
+	protected void handleInferences(final NeoAssociationKeeper keeper, final Statement... statements) {
+		// Handle Inferences
+		final Set<Statement> inferenced = new HashSet<Statement>();
+		for (Statement stmt : statements) {
+			inferencer.addInferenced(stmt, inferenced);
+		}
+		for (Statement stmt : inferenced) {
+			if (stmt.isInferred()) {
+				if (stmt.getSubject().equals(keeper.getArasNode())) {
+					index.index(keeper.getNeoNode(), stmt);
+				} else {
+					logger.warn("Inferred statement will not be indexed: " + stmt);
+				}
+			} else {
+				addAssociations(stmt);
+			}
+		}
+	}
 	
 	private void createRelationships(Node subject, Statement... statments) {
 		for (Statement stmt : statments) {
