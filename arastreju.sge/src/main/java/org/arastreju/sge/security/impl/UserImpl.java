@@ -36,7 +36,7 @@ public class UserImpl extends AbstractIdentity implements User {
 	 * {@inheritDoc}
 	 */
 	public String getEmail() {
-		return string(singleObject(getIdentityNode(), Aras.HAS_EMAIL));
+		return string(singleObject(getAssociatedResource(), Aras.HAS_EMAIL));
 	}
 
 }

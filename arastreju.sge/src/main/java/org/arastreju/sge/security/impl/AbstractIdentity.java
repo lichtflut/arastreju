@@ -3,6 +3,7 @@
  */
 package org.arastreju.sge.security.impl;
 
+import java.io.Serializable;
 import java.util.Set;
 
 import org.arastreju.sge.SNOPS;
@@ -27,7 +28,7 @@ import de.lichtflut.infra.exceptions.NotYetImplementedException;
  *
  * @author Oliver Tigges
  */
-public abstract class AbstractIdentity implements Identity {
+public abstract class AbstractIdentity implements Identity, Serializable {
 
 	private final ResourceNode identityNode;
 
@@ -44,15 +45,15 @@ public abstract class AbstractIdentity implements Identity {
 	
 	// -----------------------------------------------------
 	
-	/* (non-Javadoc)
-	 * @see org.arastreju.sge.security.Identity#getAssociatedResource()
+	/**
+	 * {@inheritDoc}
 	 */
 	public ResourceNode getAssociatedResource() {
 		return identityNode;
 	}
 
-	/* (non-Javadoc)
-	 * @see org.arastreju.sge.security.Identity#getName()
+	/**
+	 * {@inheritDoc}
 	 */
 	public String getName() {
 		final SemanticNode idNode = SNOPS.singleObject(identityNode, Aras.IDENTIFIED_BY);
@@ -64,29 +65,29 @@ public abstract class AbstractIdentity implements Identity {
 	
 	// ----------------------------------------------------- 
 
-	/* (non-Javadoc)
-	 * @see org.arastreju.sge.security.Identity#getRoles()
+	/**
+	 * {@inheritDoc}
 	 */
 	public Set<Role> getRoles() {
 		throw new NotYetImplementedException();
 	}
 
-	/* (non-Javadoc)
-	 * @see org.arastreju.sge.security.Identity#getPermissions()
+	/**
+	 * {@inheritDoc}
 	 */
 	public Set<Permission> getPermissions() {
 		throw new NotYetImplementedException();
 	}
 
-	/* (non-Javadoc)
-	 * @see org.arastreju.sge.security.Identity#isInRole(org.arastreju.sge.security.Role)
+	/**
+	 * {@inheritDoc}
 	 */
 	public boolean isInRole(Role role) {
 		throw new NotYetImplementedException();
 	}
 
-	/* (non-Javadoc)
-	 * @see org.arastreju.sge.security.Identity#hasPermission(org.arastreju.sge.security.Permission)
+	/**
+	 * {@inheritDoc}
 	 */
 	public boolean hasPermission(Permission permission) {
 		throw new NotYetImplementedException();
@@ -95,22 +96,15 @@ public abstract class AbstractIdentity implements Identity {
 	// -----------------------------------------------------
 	
 	/**
-	 * @return the identityNode
-	 */
-	public ResourceNode getIdentityNode() {
-		return identityNode;
-	}
-	
-	/* (non-Javadoc)
-	 * @see java.lang.Object#hashCode()
+	 * {@inheritDoc}
 	 */
 	@Override
 	public int hashCode() {
 		return identityNode.hashCode();
 	}
 	
-	/* (non-Javadoc)
-	 * @see java.lang.Object#equals(java.lang.Object)
+	/**
+	 * {@inheritDoc}
 	 */
 	@Override
 	public boolean equals(final Object obj) {
@@ -120,6 +114,5 @@ public abstract class AbstractIdentity implements Identity {
 		}
 		return super.equals(obj);
 	}
-	
 	
 }

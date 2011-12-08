@@ -75,6 +75,9 @@ public class NeoIdentityManagement implements IdentityManagement {
 	 */
 	public User login(final String name, final Credential credential) throws LoginException {
 		logger.debug("trying to login user '" + name + "'.");
+		if (name == null) {
+			throw new LoginException(ErrorCodes.LOGIN_INVALID_DATA, "No username given");	
+		}
 		
 		final List<ResourceNode> found = index.lookup(Aras.IDENTIFIED_BY, name);
 		if (found.size() > 1) {

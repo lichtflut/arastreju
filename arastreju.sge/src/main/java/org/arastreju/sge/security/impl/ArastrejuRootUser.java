@@ -3,6 +3,7 @@
  */
 package org.arastreju.sge.security.impl;
 
+import java.io.Serializable;
 import java.util.Set;
 
 import org.arastreju.sge.model.nodes.ResourceNode;
@@ -24,7 +25,7 @@ import de.lichtflut.infra.exceptions.NotYetImplementedException;
  *
  * @author Oliver Tigges
  */
-public class ArastrejuRootUser implements User {
+public class ArastrejuRootUser implements User, Serializable {
 
 	/**
 	 * {@inheritDoc}
@@ -72,7 +73,7 @@ public class ArastrejuRootUser implements User {
 	 * {@inheritDoc}
 	 */
 	public String getEmail() {
-		return null;
+		return "root@system";
 	}
 
 }
