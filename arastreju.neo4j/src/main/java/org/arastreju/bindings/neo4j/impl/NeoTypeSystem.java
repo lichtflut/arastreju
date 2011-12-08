@@ -57,7 +57,7 @@ public class NeoTypeSystem implements TypeSystem {
 	 */
 	public Set<SNClass> getAllClasses() {
 		final Set<SNClass> result = new HashSet<SNClass>();
-		final List<ResourceNode> nodes = store.getIndex().lookup(RDF.TYPE, RDFS.CLASS);
+		final List<ResourceNode> nodes = store.getIndex().lookupResourceNodes(RDF.TYPE, RDFS.CLASS);
 		for (ResourceNode current : nodes) {
 			result.add(current.asClass());
 		}

@@ -76,15 +76,29 @@ public class ResourceIndex implements NeoConstants {
 	/**
 	 * Find in Index by key and value.
 	 */
-	public List<ResourceNode> lookup(final ResourceID predicate, final ResourceID value) {
+	public IndexHits<Node> lookup(final ResourceID predicate, final ResourceID value) {
 		return lookup(uri(predicate), uri(value));
 	}
 	
 	/**
 	 * Find in Index by key and value.
 	 */
-	public List<ResourceNode> lookup(final ResourceID predicate, final String value) {
+	public IndexHits<Node> lookup(final ResourceID predicate, final String value) {
 		return lookup(uri(predicate), value);
+	}
+	
+	/**
+	 * Find in Index by key and value.
+	 */
+	public List<ResourceNode> lookupResourceNodes(final ResourceID predicate, final ResourceID value) {
+		return lookupResourceNodes(uri(predicate), uri(value));
+	}
+	
+	/**
+	 * Find in Index by key and value.
+	 */
+	public List<ResourceNode> lookupResourceNodes(final ResourceID predicate, final String value) {
+		return lookupResourceNodes(uri(predicate), value);
 	}
 	
 	// -- SEARCH ------------------------------------------
@@ -149,8 +163,15 @@ public class ResourceIndex implements NeoConstants {
 	/**
 	 * Find in Index by key and value.
 	 */
-	private List<ResourceNode> lookup(final String key, final String value) {
-		return map(neoIndex.lookup(key, value));
+	private List<ResourceNode> lookupResourceNodes(final String key, final String value) {
+		return map(neoIndex.lookupNodes(key, value));
+	}
+	
+	/**
+	 * Find in Index by key and value.
+	 */
+	private IndexHits<Node> lookup(final String key, final String value) {
+		return neoIndex.lookup(key, value);
 	}
 	
 	private List<ResourceNode> map(final List<Node> neoNodes) {

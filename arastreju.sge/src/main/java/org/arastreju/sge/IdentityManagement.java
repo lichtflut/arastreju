@@ -17,6 +17,7 @@ package org.arastreju.sge;
 
 import java.util.Set;
 
+import org.arastreju.sge.eh.ArastrejuException;
 import org.arastreju.sge.model.nodes.ResourceNode;
 import org.arastreju.sge.security.Credential;
 import org.arastreju.sge.security.LoginException;
@@ -57,8 +58,9 @@ public interface IdentityManagement {
 	 * @param uniqueName The unique name.
 	 * @param credential The credential.
 	 * @return The user.
+	 * @throws ArastrejuException 
 	 */
-	User register(String uniqueName, Credential credential);
+	User register(String uniqueName, Credential credential) throws ArastrejuException;
 	
 	/**
 	 * Register a user for an existing Resource. The Resource could be a person
@@ -67,8 +69,9 @@ public interface IdentityManagement {
 	 * @param credential The credential.
 	 * @param corresponding The corresponding Resource.
 	 * @return The user.
+	 * @throws ArastrejuException 
 	 */
-	User register(String uniqueName, Credential credential, ResourceNode corresponding);
+	User register(String uniqueName, Credential credential, ResourceNode corresponding) throws ArastrejuException;
 	
 	// -- ROLE MANAGEMENT ---------------------------------
 	

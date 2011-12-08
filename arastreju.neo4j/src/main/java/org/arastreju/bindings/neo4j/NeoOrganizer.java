@@ -52,7 +52,7 @@ public class NeoOrganizer extends AbstractOrganizer {
 	 */
 	public Collection<Namespace> getNamespaces() {
 		final List<Namespace> result = new ArrayList<Namespace>();
-		final List<ResourceNode> nodes = sna.getIndex().lookup(RDF.TYPE, Aras.NAMESPACE);
+		final List<ResourceNode> nodes = sna.getIndex().lookupResourceNodes(RDF.TYPE, Aras.NAMESPACE);
 		for (ResourceNode node : nodes) {
 			result.add(createNamespace(node));
 		}
@@ -83,7 +83,7 @@ public class NeoOrganizer extends AbstractOrganizer {
 	 */
 	public Collection<Context> getContexts() {
 		final List<Context> result = new ArrayList<Context>();
-		final List<ResourceNode> nodes = sna.getIndex().lookup(RDF.TYPE, Aras.CONTEXT);
+		final List<ResourceNode> nodes = sna.getIndex().lookupResourceNodes(RDF.TYPE, Aras.CONTEXT);
 		for (ResourceNode node : nodes) {
 			result.add(createContext(node));
 		}

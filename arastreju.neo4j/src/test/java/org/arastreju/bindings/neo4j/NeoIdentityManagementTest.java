@@ -9,8 +9,8 @@ import junit.framework.Assert;
 
 import org.arastreju.bindings.neo4j.impl.SemanticNetworkAccess;
 import org.arastreju.sge.apriori.Aras;
-import org.arastreju.sge.apriori.CTX;
 import org.arastreju.sge.context.Context;
+import org.arastreju.sge.eh.ArastrejuException;
 import org.arastreju.sge.eh.ArastrejuRuntimeException;
 import org.arastreju.sge.eh.ErrorCodes;
 import org.arastreju.sge.model.associations.Association;
@@ -66,7 +66,7 @@ public class NeoIdentityManagementTest {
 	
 	@Test
 	public void testLogin() {
-		final Context ctx = CTX.IDENT;
+		final Context ctx = Aras.IDENT;
 		final SNClass identity = store.resolve(Aras.IDENTITY).asClass();
 		final SNEntity user = identity.createInstance(ctx);
 		
@@ -99,7 +99,7 @@ public class NeoIdentityManagementTest {
 	}
 	
 	@Test
-	public void testRegistration() throws LoginException {
+	public void testRegistration() throws LoginException, ArastrejuException {
 		final User user = im.register("bud", new PasswordCredential("spencer"));
 		Assert.assertEquals("bud", user.getName());
 		Assert.assertTrue(user.getAssociatedResource().isAttached());

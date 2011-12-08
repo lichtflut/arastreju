@@ -59,7 +59,9 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.neo4j.graphdb.GraphDatabaseService;
+import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Transaction;
+import org.neo4j.graphdb.index.IndexHits;
 
 /**
  * <p>
@@ -122,7 +124,7 @@ public class SemanticNetworkAccessTest {
 		final GraphDatabaseService gdbService = store.getGdbService();
 		Transaction tx = gdbService.beginTx();
 		
-		List<ResourceNode> found = index.lookup(Aras.HAS_PROPER_NAME, "BMW");
+		final IndexHits<Node> found = index.lookup(Aras.HAS_PROPER_NAME, "BMW");
 		assertNotNull(found);
 		assertEquals(1, found.size());
 		
@@ -444,11 +446,9 @@ public class SemanticNetworkAccessTest {
 		store.attach(vehicle);
 		store.attach(car);
 		
-		List<ResourceNode> found = store.getIndex().lookup(RDF.TYPE, id(qnVehicle));
+		IndexHits<Node> found = store.getIndex().lookup(RDF.TYPE, id(qnVehicle));
 		
 		System.out.println(found);
-		
-		
 	}
 
 }

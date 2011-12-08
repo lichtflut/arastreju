@@ -3,10 +3,13 @@
  */
 package org.arastreju.sge.security.impl;
 
-import static org.arastreju.sge.SNOPS.*;
+import static org.arastreju.sge.SNOPS.assure;
+import static org.arastreju.sge.SNOPS.singleObject;
+import static org.arastreju.sge.SNOPS.string;
 
 import org.arastreju.sge.apriori.Aras;
 import org.arastreju.sge.model.nodes.ResourceNode;
+import org.arastreju.sge.model.nodes.views.SNText;
 import org.arastreju.sge.security.User;
 
 /**
@@ -37,6 +40,10 @@ public class UserImpl extends AbstractIdentity implements User {
 	 */
 	public String getEmail() {
 		return string(singleObject(getAssociatedResource(), Aras.HAS_EMAIL));
+	}
+	
+	public void setEmail(String email) {
+		assure(getAssociatedResource(), Aras.HAS_EMAIL, new SNText(email), Aras.IDENT);
 	}
 
 }

@@ -3,6 +3,10 @@
  */
 package org.arastreju.bindings.neo4j;
 
+import static org.arastreju.sge.SNOPS.associate;
+import static org.arastreju.sge.SNOPS.singleObject;
+import static org.arastreju.sge.SNOPS.string;
+
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -10,10 +14,9 @@ import java.util.Set;
 import org.arastreju.bindings.neo4j.impl.SemanticNetworkAccess;
 import org.arastreju.bindings.neo4j.index.ResourceIndex;
 import org.arastreju.sge.IdentityManagement;
-import static org.arastreju.sge.SNOPS.*;
 import org.arastreju.sge.apriori.Aras;
-import org.arastreju.sge.apriori.CTX;
 import org.arastreju.sge.apriori.RDF;
+import org.arastreju.sge.eh.ArastrejuException;
 import org.arastreju.sge.eh.ArastrejuRuntimeException;
 import org.arastreju.sge.eh.ErrorCodes;
 import org.arastreju.sge.model.ResourceID;
@@ -33,6 +36,8 @@ import org.arastreju.sge.security.impl.ArastrejuRootUser;
 import org.arastreju.sge.security.impl.PermissionImpl;
 import org.arastreju.sge.security.impl.RoleImpl;
 import org.arastreju.sge.security.impl.UserImpl;
+import org.neo4j.graphdb.Node;
+import org.neo4j.graphdb.index.IndexHits;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -79,7 +84,7 @@ public class NeoIdentityManagement implements IdentityManagement {
 			throw new LoginException(ErrorCodes.LOGIN_INVALID_DATA, "No username given");	
 		}
 		
-		final List<ResourceNode> found = index.lookup(Aras.IDENTIFIED_BY, name);
+		final List<ResourceNode> found = index.lookupResourceNodes(Aras.IDENTIFIED_BY, name);
 		if (found.size() > 1) {
 			logger.error("More than on user with name '" + name + "' found.");
 			throw new IllegalStateException("More than on user with name '" + name + "' found.");
@@ -105,18 +110,23 @@ public class NeoIdentityManagement implements IdentityManagement {
 	/**
 	 * {@inheritDoc}
 	 */
-	public User register(final String uniqueName, final Credential credential) {
+	public User register(final String uniqueName, final Credential credential) throws ArastrejuException {
 		return register(uniqueName, credential, new SNEntity());
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public User register(final String name, final Credential credential, final ResourceNode corresponding) {
-		assertUnique(Aras.USER, name);
-		associate(corresponding, Aras.IDENTIFIED_BY, new SNText(name), CTX.IDENT);
-		associate(corresponding, Aras.HAS_CREDENTIAL, new SNText(credential.stringRepesentation()), CTX.IDENT);
-		associate(corresponding, RDF.TYPE, Aras.USER, CTX.IDENT);
+	public User register(final String name, final Credential credential, final ResourceNode corresponding) throws ArastrejuException {
+		final IndexHits<Node> found = index.lookup(Aras.IDENTIFIED_BY, name);
+		if (found.size() > 0) {
+			logger.error("More than on user with name '" + name + "' found.");
+			throw new ArastrejuException(ErrorCodes.REGISTRATION_NAME_ALREADY_IN_USE, 
+					"More than on user with name '" + name + "' found.");
+		}
+		associate(corresponding, Aras.IDENTIFIED_BY, new SNText(name), Aras.IDENT);
+		associate(corresponding, Aras.HAS_CREDENTIAL, new SNText(credential.stringRepesentation()), Aras.IDENT);
+		associate(corresponding, RDF.TYPE, Aras.USER, Aras.IDENT);
 		store.attach(corresponding);
 		return new UserImpl(corresponding);
 	}
@@ -127,8 +137,8 @@ public class NeoIdentityManagement implements IdentityManagement {
 	public Role createRole(final String name) {
 		assertUnique(Aras.ROLE, name);
 		final SNResource role = new SNResource();
-		associate(role, Aras.HAS_UNIQUE_NAME, new SNText(name), CTX.IDENT);
-		associate(role, RDF.TYPE, Aras.ROLE, CTX.IDENT);
+		associate(role, Aras.HAS_UNIQUE_NAME, new SNText(name), Aras.IDENT);
+		associate(role, RDF.TYPE, Aras.ROLE, Aras.IDENT);
 		store.attach(role);
 		return new RoleImpl(role);
 	}
@@ -137,7 +147,7 @@ public class NeoIdentityManagement implements IdentityManagement {
 	 * {@inheritDoc}
 	 */
 	public Set<Role> getRoles() {
-		final List<ResourceNode> nodes = index.lookup(RDF.TYPE, Aras.ROLE);
+		final List<ResourceNode> nodes = index.lookupResourceNodes(RDF.TYPE, Aras.ROLE);
 		final Set<Role> roles = new HashSet<Role>(nodes.size());
 		for(ResourceNode current: nodes) {
 			roles.add(new RoleImpl(current));
@@ -152,7 +162,7 @@ public class NeoIdentityManagement implements IdentityManagement {
 		final ResourceNode userNode = user.getAssociatedResource();
 		store.attach(userNode);
 		for (Role role : roles) {
-			associate(userNode, Aras.HAS_ROLE, role.getAssociatedResource(), CTX.IDENT);
+			associate(userNode, Aras.HAS_ROLE, role.getAssociatedResource(), Aras.IDENT);
 		}
 	}
 
@@ -162,8 +172,8 @@ public class NeoIdentityManagement implements IdentityManagement {
 	public Permission createPermission(final String name) {
 		assertUnique(Aras.PERMISSION, name);
 		final SNResource permission = new SNResource();
-		associate(permission, Aras.HAS_UNIQUE_NAME, new SNText(name), CTX.IDENT);
-		associate(permission, RDF.TYPE, Aras.PERMISSION, CTX.IDENT);
+		associate(permission, Aras.HAS_UNIQUE_NAME, new SNText(name), Aras.IDENT);
+		associate(permission, RDF.TYPE, Aras.PERMISSION, Aras.IDENT);
 		store.attach(permission);
 		return new PermissionImpl(permission);
 	}
@@ -172,7 +182,7 @@ public class NeoIdentityManagement implements IdentityManagement {
 	 * {@inheritDoc}
 	 */
 	public Set<Permission> getPermissions() {
-		final List<ResourceNode> nodes = index.lookup(RDF.TYPE, Aras.PERMISSION);
+		final List<ResourceNode> nodes = index.lookupResourceNodes(RDF.TYPE, Aras.PERMISSION);
 		final Set<Permission> permissions = new HashSet<Permission>(nodes.size());
 		for(ResourceNode current: nodes) {
 			permissions.add(new PermissionImpl(current));
@@ -186,7 +196,7 @@ public class NeoIdentityManagement implements IdentityManagement {
 	 * TODO: improve lookup with query builder.
 	 */
 	private void assertUnique(final ResourceID type, final String name) {
-		final List<ResourceNode> all = index.lookup(RDF.TYPE, type);
+		final List<ResourceNode> all = index.lookupResourceNodes(RDF.TYPE, type);
 		for (ResourceNode current : all) {
 			final SemanticNode currentName = singleObject(current, Aras.HAS_UNIQUE_NAME);
 			if (Infra.equals(name, string(currentName))) {

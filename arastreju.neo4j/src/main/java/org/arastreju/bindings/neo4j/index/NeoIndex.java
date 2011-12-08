@@ -84,21 +84,46 @@ public class NeoIndex implements NeoConstants {
 	/**
 	 * Find in Index by key and value.
 	 */
-	public List<Node> lookup(final ResourceID predicate, final ResourceID value) {
+	public IndexHits<Node> lookup(final ResourceID predicate, final ResourceID value) {
 		return lookup(uri(predicate), uri(value));
 	}
 	
 	/**
 	 * Find in Index by key and value.
 	 */
-	public List<Node> lookup(final ResourceID predicate, final String value) {
+	public List<Node> lookupNodes(final ResourceID predicate, final ResourceID value) {
+		return lookupNodes(uri(predicate), uri(value));
+	}
+	
+	/**
+	 * Find in Index by key and value.
+	 */
+	public IndexHits<Node>  lookup(final ResourceID predicate, final String value) {
 		return lookup(uri(predicate), value);
 	}
 	
 	/**
 	 * Find in Index by key and value.
 	 */
-	public List<Node> lookup(final String key, final String value) {
+	public List<Node> lookupNodes(final ResourceID predicate, final String value) {
+		return lookupNodes(uri(predicate), value);
+	}
+	
+	/**
+	 * Find in Index by key and value.
+	 */
+	public IndexHits<Node> lookup(final String key, final String value) {
+		return txProvider.doTransacted(new TxResultAction<IndexHits<Node>>() {
+			public IndexHits<Node> execute() {
+				return resourceIndex().get(key, normalize(value));
+			}
+		});
+	}
+	
+	/**
+	 * Find in Index by key and value.
+	 */
+	public List<Node> lookupNodes(final String key, final String value) {
 		final List<Node> result = new ArrayList<Node>();
 		txProvider.doTransacted(new TxAction() {
 			public void execute() {

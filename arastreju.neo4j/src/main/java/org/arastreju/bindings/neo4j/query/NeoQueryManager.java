@@ -95,7 +95,7 @@ public class NeoQueryManager implements QueryManager {
 	 */
 	public List<ResourceNode> findByType(final ResourceID type) {
 		final String typeURI = uri(type);
-		final List<ResourceNode> result = index.lookup(RDF.TYPE, typeURI);
+		final List<ResourceNode> result = index.lookupResourceNodes(RDF.TYPE, typeURI);
 		logger.debug("found with rdf:type '" + typeURI + "': " + result);
 		return result;
 	}

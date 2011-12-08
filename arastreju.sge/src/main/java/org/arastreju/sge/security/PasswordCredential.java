@@ -40,8 +40,8 @@ public class PasswordCredential implements Credential {
 		this.password = password;
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.arastreju.sge.security.Credential#applies(org.arastreju.sge.model.nodes.SemanticNode)
+	/**
+	 * {@inheritDoc}
 	 */
 	public boolean applies(final SemanticNode node) {
 		return node != null && node.isValueNode() && 
@@ -50,15 +50,15 @@ public class PasswordCredential implements Credential {
 	
 	// -----------------------------------------------------
 
-	/* (non-Javadoc)
-	 * @see org.arastreju.sge.security.Credential#stringRepesentation()
+	/**
+	 * {@inheritDoc}
 	 */
 	public String stringRepesentation() {
 		return password;
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.arastreju.sge.security.Credential#isEmpty()
+	/**
+	 * {@inheritDoc}
 	 */
 	public boolean isEmpty() {
 		return password == null || password.length() == 0;
