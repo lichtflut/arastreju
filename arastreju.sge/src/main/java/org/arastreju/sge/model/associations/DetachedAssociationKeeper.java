@@ -20,6 +20,9 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.arastreju.sge.eh.ArastrejuRuntimeException;
+import org.arastreju.sge.eh.ErrorCodes;
+
 /**
  * <p>
  * 	AssociationKeeper for a detached Resource.
@@ -80,7 +83,8 @@ public class DetachedAssociationKeeper extends AbstractAssociationKeeper impleme
 	 */
 	@Override
 	protected void resolveAssociations() {
-		throw new UnsupportedOperationException("DetachedAssociationKeeper cannot resolve Associations: " + this);
+		throw new ArastrejuRuntimeException(ErrorCodes.GENERAL_CONSISTENCY_FAILURE, 
+				"DetachedAssociationKeeper cannot resolve Associations: " + this);
 	}
 	
 	// ----------------------------------------------------
