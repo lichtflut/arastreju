@@ -71,6 +71,7 @@ public class NeoIdentityManagementTest {
 		final SNEntity user = identity.createInstance(ctx);
 		
 		Association.create(user, Aras.IDENTIFIED_BY, new SNText("Bud Spencer"), ctx);
+		Association.create(user, Aras.HAS_UNIQUE_NAME, new SNText("Bud Spencer"), ctx);
 		Association.create(user, Aras.HAS_CREDENTIAL, new SNText("bud"), ctx);
 		Association.create(user, Aras.HAS_EMAIL, new SNText("BudSpencer@lichtflut.de"), ctx);
 		store.attach(user);

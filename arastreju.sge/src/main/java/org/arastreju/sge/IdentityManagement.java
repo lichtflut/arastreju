@@ -73,6 +73,15 @@ public interface IdentityManagement {
 	 */
 	User register(String uniqueName, Credential credential, ResourceNode corresponding) throws ArastrejuException;
 	
+	/**
+	 * Register a new user.
+	 * @param user An existing user.
+	 * @param uniqueName Another unique name.
+	 * @return The user.
+	 * @throws ArastrejuException 
+	 */
+	User registerAlternateID(User user, String uniqueName) throws ArastrejuException;
+	
 	// -- ROLE MANAGEMENT ---------------------------------
 	
 	Role createRole(String name);

@@ -52,8 +52,8 @@ public class DetachedAssociationKeeper extends AbstractAssociationKeeper impleme
 	
 	// -----------------------------------------------------
 	
-	/* (non-Javadoc)
-	 * @see org.arastreju.sge.model.associations.AbstractAssociationKeeper#remove(org.arastreju.sge.model.associations.Association)
+	/**
+	 * {@inheritDoc}
 	 */
 	@Override
 	public boolean remove(Association assoc) {
@@ -61,22 +61,22 @@ public class DetachedAssociationKeeper extends AbstractAssociationKeeper impleme
 		return super.remove(assoc);
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.arastreju.sge.model.associations.AssociationKeeper#isAttached()
+	/**
+	 * {@inheritDoc}
 	 */
 	public boolean isAttached() {
 		return false;
 	}
-	
-	/* (non-Javadoc)
-	 * @see org.arastreju.sge.model.associations.AssociationKeeper#getAssociationsForRemoval()
+
+	/**
+	 * {@inheritDoc}
 	 */
 	public Set<Association> getAssociationsForRemoval() {
 		return removedAssociations;
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.arastreju.sge.model.associations.AbstractAssociationKeeper#resolveAssociations()
+	/**
+	 * {@inheritDoc}
 	 */
 	@Override
 	protected void resolveAssociations() {

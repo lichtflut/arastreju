@@ -31,6 +31,8 @@ public class UserImpl extends AbstractIdentity implements User {
 	 */
 	public UserImpl(final ResourceNode userNode) {
 		super(userNode);
+		// trigger resolving of associations
+		userNode.getAssociations();
 	}
 	
 	// -----------------------------------------------------

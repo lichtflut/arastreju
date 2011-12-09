@@ -56,7 +56,7 @@ public abstract class AbstractIdentity implements Identity, Serializable {
 	 * {@inheritDoc}
 	 */
 	public String getName() {
-		final SemanticNode idNode = SNOPS.singleObject(identityNode, Aras.IDENTIFIED_BY);
+		final SemanticNode idNode = SNOPS.singleObject(identityNode, Aras.HAS_UNIQUE_NAME);
 		if (idNode == null) {
 			throw new IllegalStateException("Identity has no name!");
 		}

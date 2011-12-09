@@ -34,7 +34,7 @@ public abstract class AbstractAssociationKeeper implements AssociationKeeper {
 
 	private final Set<Association> associations = new HashSet<Association>();
 	
-	private volatile boolean resolved;
+	private boolean resolved;
 	
 	// -----------------------------------------------------
 

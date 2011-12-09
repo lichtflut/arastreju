@@ -79,11 +79,11 @@ public class NeoIdentityManagement implements IdentityManagement {
 	 * {@inheritDoc}
 	 */
 	public User login(final String name, final Credential credential) throws LoginException {
+		
 		logger.debug("trying to login user '" + name + "'.");
 		if (name == null) {
 			throw new LoginException(ErrorCodes.LOGIN_INVALID_DATA, "No username given");	
 		}
-		
 		final List<ResourceNode> found = index.lookupResourceNodes(Aras.IDENTIFIED_BY, name);
 		if (found.size() > 1) {
 			logger.error("More than on user with name '" + name + "' found.");
@@ -118,18 +118,26 @@ public class NeoIdentityManagement implements IdentityManagement {
 	 * {@inheritDoc}
 	 */
 	public User register(final String name, final Credential credential, final ResourceNode corresponding) throws ArastrejuException {
-		final IndexHits<Node> found = index.lookup(Aras.IDENTIFIED_BY, name);
-		if (found.size() > 0) {
-			logger.error("More than on user with name '" + name + "' found.");
-			throw new ArastrejuException(ErrorCodes.REGISTRATION_NAME_ALREADY_IN_USE, 
-					"More than on user with name '" + name + "' found.");
-		}
+		assertUniqueIdentity(name);
+		associate(corresponding, Aras.HAS_UNIQUE_NAME, new SNText(name), Aras.IDENT);
 		associate(corresponding, Aras.IDENTIFIED_BY, new SNText(name), Aras.IDENT);
 		associate(corresponding, Aras.HAS_CREDENTIAL, new SNText(credential.stringRepesentation()), Aras.IDENT);
 		associate(corresponding, RDF.TYPE, Aras.USER, Aras.IDENT);
 		store.attach(corresponding);
 		return new UserImpl(corresponding);
 	}
+	
+	/** 
+	* {@inheritDoc}
+	*/
+	public User registerAlternateID(User user, String uniqueName) throws ArastrejuException {
+		assertUniqueIdentity(uniqueName);
+		final ResourceNode node = store.resolve(user.getAssociatedResource());
+		associate(node, Aras.IDENTIFIED_BY, new SNText(uniqueName), Aras.IDENT);
+		return user;
+	}
+	
+	// ----------------------------------------------------
 
 	/**
 	 * {@inheritDoc}
@@ -205,5 +213,15 @@ public class NeoIdentityManagement implements IdentityManagement {
 			}
 		}
 	}
+	
 
+	protected void assertUniqueIdentity(final String name) throws ArastrejuException {
+		final IndexHits<Node> found = index.lookup(Aras.IDENTIFIED_BY, name);
+		if (found.size() > 0) {
+			logger.error("More than on user with name '" + name + "' found.");
+			throw new ArastrejuException(ErrorCodes.REGISTRATION_NAME_ALREADY_IN_USE, 
+					"More than on user with name '" + name + "' found.");
+		}
+	}
+	
 }
