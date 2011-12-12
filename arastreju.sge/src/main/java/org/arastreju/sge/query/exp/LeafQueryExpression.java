@@ -54,7 +54,7 @@ class LeafQueryExpression extends AbstractQueryExpression {
 	 */
 	@Override
 	public void add(final QueryExpression expr) {
-		throw new UnsupportedOperationException("Can't add a query expression to a leaf.");
+		throw new UnsupportedOperationException("Can't append a query expression to a leaf. Mayb you forget a 'and'?");
 	}
 	
 	// -----------------------------------------------------

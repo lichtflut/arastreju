@@ -59,36 +59,29 @@ public class SimpleNamespace implements Namespace, Comparable<Namespace>, Serial
 	
 	// -----------------------------------------------------
 
-	/* (non-Javadoc)
-	 * @see org.arastreju.api.model.semantic.Namespace#getUri()
+	/**
+	 * {@inheritDoc}
 	 */
 	public String getUri() {
 		return uri;
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.arastreju.api.ontology.Namespace#getDefaultPrefix()
+	/**
+	 * {@inheritDoc}
 	 */
 	public String getPrefix() {
 		return prefix;
 	}
 
-	/* (non-Javadoc)
-	 * @see org.arastreju.api.model.semantic.Namespace#isManaged()
+	/**
+	 * {@inheritDoc}
 	 */
-	public boolean isRegistered() {
-		return false;
-	}
-	
-	/* (non-Javadoc)
-	 * @see org.arastreju.api.ontology.namespace.MutableNamespace#setDefaultPrefix(java.lang.String)
-	 */
-	public void setDefaultPrefix(final String prefix) {
+	public void setPrefix(final String prefix) {
 		this.prefix = prefix;
 	}
-
-	/* (non-Javadoc)
-	 * @see org.arastreju.api.ontology.namespace.MutableNamespace#setUri(java.lang.String)
+	
+	/**
+	 * {@inheritDoc}
 	 */
 	public void setUri(final String uri) {
 		this.uri = uri;
@@ -96,16 +89,16 @@ public class SimpleNamespace implements Namespace, Comparable<Namespace>, Serial
 	
 	// -----------------------------------------------------
 
-	/* (non-Javadoc)
-	 * @see java.lang.Object#hashCode()
+	/**
+	 * {@inheritDoc}
 	 */
 	@Override
 	public int hashCode() {
 		return uri.hashCode();
 	}
 	
-	/* (non-Javadoc)
-	 * @see java.lang.Object#equals(java.lang.Object)
+	/**
+	 * {@inheritDoc}
 	 */
 	@Override
 	public boolean equals(Object obj) {
@@ -116,13 +109,16 @@ public class SimpleNamespace implements Namespace, Comparable<Namespace>, Serial
 		return super.equals(obj);
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public String toString() {
 		return uri;
 	}
 	
-	/* (non-Javadoc)
-	 * @see java.lang.Comparable#compareTo(java.lang.Object)
+	/**
+	 * {@inheritDoc}
 	 */
 	public int compareTo(final Namespace other) {
 		return Infra.compare(getUri(), other.getUri());

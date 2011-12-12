@@ -141,6 +141,21 @@ public class ResourceIndex implements NeoConstants {
 		neoIndex.remove(rel);
 	}
 	
+	/**
+	 * Remove relationship from index.
+	 * @param rel The relationship to be removed.
+	 */
+	public void removeFromIndex(final Node neoNode, final Statement stmt) {
+		final String key = stmt.getPredicate().getQualifiedName().toURI();
+		if (stmt.getObject().isValueNode()) {
+			final ValueNode value = stmt.getObject().asValue();
+			// TODO: Remove general value without predicate.
+			neoIndex.remove(neoNode,key, value.getStringValue());
+		} else {
+			neoIndex.remove(neoNode, key, stmt.getObject().asResource().getQualifiedName().toURI());
+		}
+	}
+	
 	// -- CACHE/REGISTRY ----------------------------------
 	
 	public void register(final ResourceNode resource){

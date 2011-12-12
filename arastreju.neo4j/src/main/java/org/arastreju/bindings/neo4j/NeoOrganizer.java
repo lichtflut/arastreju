@@ -3,18 +3,20 @@
  */
 package org.arastreju.bindings.neo4j;
 
+import static org.arastreju.sge.SNOPS.assure;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 import org.arastreju.bindings.neo4j.impl.SemanticNetworkAccess;
 import org.arastreju.bindings.neo4j.query.NeoQueryBuilder;
-import static org.arastreju.sge.SNOPS.*;
 import org.arastreju.sge.apriori.Aras;
 import org.arastreju.sge.apriori.RDF;
 import org.arastreju.sge.context.Context;
 import org.arastreju.sge.context.SimpleContextID;
 import org.arastreju.sge.model.nodes.ResourceNode;
+import org.arastreju.sge.model.nodes.views.SNText;
 import org.arastreju.sge.naming.Namespace;
 import org.arastreju.sge.naming.QualifiedName;
 import org.arastreju.sge.naming.SimpleNamespace;
@@ -71,8 +73,9 @@ public class NeoOrganizer extends AbstractOrganizer {
 				.addField(Aras.HAS_URI, uri);
 		final QueryResult result = query.getResult();
 		if (!result.isEmpty()) {
-			final ResourceNode node = result.iterator().next();
-			return new SimpleNamespace(uri, string(singleObject(node, Aras.HAS_PREFIX)));
+			final ResourceNode node = sna.resolve(result.iterator().next());
+			assure(node,  Aras.HAS_PREFIX, new SNText(prefix));
+			return new SimpleNamespace(uri, prefix);
 		} else {
 			final Namespace ns = new SimpleNamespace(uri, prefix);
 			final ResourceNode node = createNamespaceNode(ns);

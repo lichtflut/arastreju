@@ -195,10 +195,20 @@ public class NeoIndex implements NeoConstants {
 	/**
 	 * Remove relationship from index.
 	 * @param rel The relationship to be removed.
+	 * TODO: Check - seems to fail
 	 */
 	public void remove(final Relationship rel) {
 		final String value = (String) rel.getProperty(PREDICATE_URI);
 		resourceIndex().remove(rel.getStartNode(), normalize(value));
+	}
+	
+
+	/**
+	 * Remove relationship from index.
+	 * @param rel The relationship to be removed.
+	 */
+	public void remove(Node subject, String key, String value) {
+		resourceIndex().remove(subject, key, normalize(value));
 	}
 	
 	// -----------------------------------------------------

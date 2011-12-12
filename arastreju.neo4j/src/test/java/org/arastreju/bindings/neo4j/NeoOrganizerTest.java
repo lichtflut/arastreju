@@ -65,12 +65,7 @@ public class NeoOrganizerTest {
 	public void testNamespaceRegistration() {
 		organizer.registerNamespace(ns1, "a");
 		organizer.registerNamespace(ns2, "b");
-		try {
-			organizer.registerNamespace(ns2, "c");
-			Assert.fail();
-		} catch (IllegalStateException e) {
-			// as expected
-		}
+		organizer.registerNamespace(ns2, "c");
 		organizer.registerNamespace(ns3, "d");
 		
 		Collection<Namespace> result = organizer.getNamespaces();

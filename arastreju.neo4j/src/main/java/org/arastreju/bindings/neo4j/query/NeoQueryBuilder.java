@@ -59,7 +59,12 @@ public class NeoQueryBuilder extends QueryBuilder {
 	public ResourceNode getSingleNode() {
 		final String queryString = toQueryString();
 		final IndexHits<Node> result = index.search(queryString);
-		return resolver.resolve(result.getSingle());
+		final Node single = result.getSingle();
+		if (single != null) {
+			return resolver.resolve(single);	
+		} else {
+			return null;
+		}
 	}
 	
 	// -----------------------------------------------------
