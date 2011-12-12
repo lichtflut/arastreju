@@ -9,6 +9,7 @@ import java.util.List;
 
 import org.arastreju.bindings.neo4j.impl.SemanticNetworkAccess;
 import org.arastreju.bindings.neo4j.query.NeoQueryBuilder;
+import static org.arastreju.sge.SNOPS.*;
 import org.arastreju.sge.apriori.Aras;
 import org.arastreju.sge.apriori.RDF;
 import org.arastreju.sge.context.Context;
@@ -18,6 +19,7 @@ import org.arastreju.sge.naming.Namespace;
 import org.arastreju.sge.naming.QualifiedName;
 import org.arastreju.sge.naming.SimpleNamespace;
 import org.arastreju.sge.query.Query;
+import org.arastreju.sge.query.QueryResult;
 import org.arastreju.sge.spi.abstracts.AbstractOrganizer;
 
 /**
@@ -67,13 +69,16 @@ public class NeoOrganizer extends AbstractOrganizer {
 				.addField(RDF.TYPE, Aras.NAMESPACE)
 				.and()
 				.addField(Aras.HAS_URI, uri);
-		if (!query.getResult().isEmpty()) {
-			throw new IllegalStateException("Namespace with URI " + uri + " already exists.");
+		final QueryResult result = query.getResult();
+		if (!result.isEmpty()) {
+			final ResourceNode node = result.iterator().next();
+			return new SimpleNamespace(uri, string(singleObject(node, Aras.HAS_PREFIX)));
+		} else {
+			final Namespace ns = new SimpleNamespace(uri, prefix);
+			final ResourceNode node = createNamespaceNode(ns);
+			sna.attach(node);
+			return ns;
 		}
-		final Namespace ns = new SimpleNamespace(uri, prefix);
-		final ResourceNode node = createNamespaceNode(ns);
-		sna.attach(node);
-		return ns;
 	}
 	
 	// -----------------------------------------------------

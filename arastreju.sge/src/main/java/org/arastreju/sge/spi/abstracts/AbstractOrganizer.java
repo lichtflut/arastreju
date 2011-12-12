@@ -3,7 +3,7 @@
  */
 package org.arastreju.sge.spi.abstracts;
 
-import static org.arastreju.sge.SNOPS.associate;
+import static org.arastreju.sge.SNOPS.assure;
 import static org.arastreju.sge.SNOPS.singleObject;
 import static org.arastreju.sge.SNOPS.string;
 
@@ -41,9 +41,9 @@ public abstract class AbstractOrganizer implements Organizer {
 	
 	protected ResourceNode createNamespaceNode(final Namespace namespace) {
 		final SNResource node = new SNResource();
-		associate(node, RDF.TYPE, Aras.NAMESPACE);
-		associate(node, Aras.HAS_URI, new SNText(namespace.getUri()));
-		associate(node, Aras.HAS_PREFIX, new SNText(namespace.getPrefix()));
+		assure(node, RDF.TYPE, Aras.NAMESPACE);
+		assure(node, Aras.HAS_URI, new SNText(namespace.getUri()));
+		assure(node, Aras.HAS_PREFIX, new SNText(namespace.getPrefix()));
 		return node;
 	}
 	
@@ -57,7 +57,7 @@ public abstract class AbstractOrganizer implements Organizer {
 	
 	protected ResourceNode createContextNode(final QualifiedName qn) {
 		final SNResource node = new SNResource(qn);
-		associate(node, RDF.TYPE, Aras.CONTEXT);
+		assure(node, RDF.TYPE, Aras.CONTEXT);
 		return node;
 	}
 	

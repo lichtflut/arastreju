@@ -17,8 +17,6 @@ package org.arastreju.sge.apriori;
 
 import org.arastreju.sge.model.ResourceID;
 import org.arastreju.sge.model.SimpleResourceID;
-import org.arastreju.sge.naming.Namespace;
-import org.arastreju.sge.naming.SimpleNamespace;
 
 /**
  * URIs known a priori.
@@ -29,12 +27,12 @@ import org.arastreju.sge.naming.SimpleNamespace;
  */
 public final class RDF {
 	
-	public static final Namespace NAMESPACE_URI = new SimpleNamespace("http://www.w3.org/1999/02/22-rdf-syntax-ns#");
+	public static final String NAMESPACE_URI = "http://www.w3.org/1999/02/22-rdf-syntax-ns#";
 	
-	public static final ResourceID TYPE = new SimpleResourceID("http://www.w3.org/1999/02/22-rdf-syntax-ns#", "type");
-	public static final ResourceID SUBJECT = new SimpleResourceID("http://www.w3.org/1999/02/22-rdf-syntax-ns#", "subject");
-	public static final ResourceID PREDICATE = new SimpleResourceID("http://www.w3.org/1999/02/22-rdf-syntax-ns#", "predicate");
-	public static final ResourceID OBJECT = new SimpleResourceID("http://www.w3.org/1999/02/22-rdf-syntax-ns#", "object");
-	public static final ResourceID PROPERTY = new SimpleResourceID("http://www.w3.org/1999/02/22-rdf-syntax-ns#", "Property");
+	public static final ResourceID TYPE = new SimpleResourceID(NAMESPACE_URI, "type");
+	public static final ResourceID SUBJECT = new SimpleResourceID(NAMESPACE_URI, "subject");
+	public static final ResourceID PREDICATE = new SimpleResourceID(NAMESPACE_URI, "predicate");
+	public static final ResourceID OBJECT = new SimpleResourceID(NAMESPACE_URI, "object");
+	public static final ResourceID PROPERTY = new SimpleResourceID(NAMESPACE_URI, "Property");
 	
 }
