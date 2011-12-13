@@ -109,7 +109,6 @@ public abstract class AbstractStatement implements Statement {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + Arrays.hashCode(contexts);
 		result = prime * result + ((object == null) ? 0 : object.hashCode());
 		result = prime * result
 				+ ((predicate == null) ? 0 : predicate.hashCode());
@@ -130,9 +129,6 @@ public abstract class AbstractStatement implements Statement {
 			return false;
 		}
 		if (!Infra.equals(object, other.getObject())){
-			return false;
-		}
-		if (!Arrays.equals(contexts, other.getContexts())){
 			return false;
 		}
 		return true;

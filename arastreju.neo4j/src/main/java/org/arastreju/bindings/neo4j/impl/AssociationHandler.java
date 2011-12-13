@@ -101,10 +101,7 @@ public class AssociationHandler implements NeoConstants {
 	public void addAssociations(final Statement... statements) {
 		for (Statement stmt : statements) {
 			ResourceNode subject = resolver.resolve(stmt.getSubject());
-			if (!subject.getAssociations().contains(stmt)) {
-				NeoAssociationKeeper keeper = AssocKeeperAccess.getNeoAssociationKeeper(subject);
-				addAssociation(keeper, stmt);
-			}
+			Association.create(subject, stmt.getPredicate(), stmt.getObject(), stmt.getContexts());
 		}
 	}
 	
@@ -148,10 +145,10 @@ public class AssociationHandler implements NeoConstants {
 	
 	// ----------------------------------------------------
 	
-	protected void handleInferences(final NeoAssociationKeeper keeper, final Statement... statements) {
+	protected void handleInferences(final NeoAssociationKeeper keeper, final Statement... originals) {
 		// Handle Inferences
 		final Set<Statement> inferenced = new HashSet<Statement>();
-		for (Statement stmt : statements) {
+		for (Statement stmt : originals) {
 			inferencer.addInferenced(stmt, inferenced);
 		}
 		for (Statement stmt : inferenced) {
@@ -159,7 +156,7 @@ public class AssociationHandler implements NeoConstants {
 				if (stmt.getSubject().equals(keeper.getArasNode())) {
 					index.index(keeper.getNeoNode(), stmt);
 				} else {
-					logger.warn("Inferred statement will not be indexed: " + stmt);
+					logger.warn("Inferred statement can not be indexed: " + stmt);
 				}
 			} else {
 				addAssociations(stmt);
