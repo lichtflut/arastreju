@@ -25,6 +25,7 @@ import org.arastreju.sge.model.ResourceID;
 import org.arastreju.sge.model.associations.Association;
 import org.arastreju.sge.model.nodes.SNResource;
 import org.arastreju.sge.model.nodes.SemanticNode;
+import org.arastreju.sge.naming.QualifiedName;
 
 /**
  * <p>
@@ -43,6 +44,10 @@ public class SNProperty extends ResourceView {
 	private Set<SNProperty> inverseProperties;
 	
 	// ------------------------------------------------------
+	
+	public SNProperty(final QualifiedName qn) {
+		super(new SNResource(qn));
+	}
 	
 	/**
 	 * Creates a new Property view for given resource.

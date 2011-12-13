@@ -50,7 +50,7 @@ public class InverseOfInferencer implements Inferencer {
 	 */
 	public void addInferenced(final Statement stmt, final Set<Statement> target) {
 		final SNProperty property = resolver.resolve(stmt.getPredicate()).asProperty();
-		logger.info("Looking for inverse properties of: " + property);
+		logger.debug("Looking for inverse properties of: " + property);
 		for(SNProperty sp : property.getSuperProperties()) {
 			Set<SemanticNode> invertedPredicates = SNOPS.objects(sp, Aras.INVERSE_OF);
 			if (!invertedPredicates.isEmpty()) {
@@ -69,7 +69,7 @@ public class InverseOfInferencer implements Inferencer {
 				final DetachedStatement inverted = new DetachedStatement(stmt.getObject().asResource(), sn.asResource(), 
 						stmt.getSubject(), stmt.getContexts()).setInferred(false);
 				target.add(inverted);
-				logger.info("Added inverted Stmt: " + inverted);
+				logger.debug("Added inverted Stmt: " + inverted);
 			}
 		}
 	}

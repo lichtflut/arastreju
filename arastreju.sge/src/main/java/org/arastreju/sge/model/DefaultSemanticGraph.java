@@ -21,7 +21,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.arastreju.sge.SNOPS;
-import org.arastreju.sge.model.associations.Association;
 import org.arastreju.sge.model.nodes.ResourceNode;
 import org.arastreju.sge.model.nodes.SemanticNode;
 import org.arastreju.sge.naming.Namespace;
@@ -39,7 +38,7 @@ import org.arastreju.sge.naming.Namespace;
  */
 public class DefaultSemanticGraph implements SemanticGraph {
 	
-	private final Set<Association> associations = new HashSet<Association>();
+	private final Set<Statement> statements = new HashSet<Statement>();
 	
 	// -----------------------------------------------------
 	
@@ -52,8 +51,8 @@ public class DefaultSemanticGraph implements SemanticGraph {
 	/**
 	 * Constructor based on associations.
 	 */
-	public DefaultSemanticGraph(final Collection<Association> associations){
-		this.associations.addAll(associations);
+	public DefaultSemanticGraph(final Collection<Statement> stmts){
+		this.statements.addAll(stmts);
 	}
 	
 	/**
@@ -65,42 +64,42 @@ public class DefaultSemanticGraph implements SemanticGraph {
 	
 	// -----------------------------------------------------
 
-	/* (non-Javadoc)
-	 * @see org.arastreju.sge.model.SemanticGraph#getAssociations()
+	/**
+	 * {@inheritDoc}
 	 */
-	public Set<Association> getAssociations() {
-		return Collections.unmodifiableSet(associations);
+	public Set<Statement> getStatements() {
+		return Collections.unmodifiableSet(statements);
 	}
 
-	/* (non-Javadoc)
-	 * @see org.arastreju.sge.model.SemanticGraph#getNodes()
+	/**
+	 * {@inheritDoc}
 	 */
 	public Set<SemanticNode> getNodes() {
 		final Set<SemanticNode> nodes = new HashSet<SemanticNode>();
-		for(Association assoc : associations){
+		for(Statement assoc : statements){
 			nodes.add(assoc.getSubject());
 			nodes.add(assoc.getObject());
 		}
 		return nodes;
 	}
 
-	/* (non-Javadoc)
-	 * @see org.arastreju.sge.model.SemanticGraph#getSubjects()
+	/**
+	 * {@inheritDoc}
 	 */
 	public Set<ResourceNode> getSubjects() {
 		final Set<ResourceNode> subjects = new HashSet<ResourceNode>();
-		for(Association assoc : associations){
-			subjects.add(assoc.getSubject());
+		for(Statement assoc : statements){
+			subjects.add(assoc.getSubject().asResource());
 		}
 		return subjects;
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.arastreju.sge.model.SemanticGraph#getNamespaces()
+	/**
+	 * {@inheritDoc}
 	 */
 	public Collection<Namespace> getNamespaces() {
 		final Set<Namespace> namespaces = new HashSet<Namespace>();
-		for (Association assoc : associations) {
+		for (Statement assoc : statements) {
 			addNamespace(assoc.getSubject(), namespaces);
 			addNamespace(assoc.getPredicate(), namespaces);
 			addNamespace(assoc.getObject(), namespaces);
@@ -110,29 +109,29 @@ public class DefaultSemanticGraph implements SemanticGraph {
 	
 	// -----------------------------------------------------
 	
-	/* (non-Javadoc)
-	 * @see org.arastreju.sge.model.SemanticGraph#addAssociations(java.util.Collection)
+	/**
+	 * {@inheritDoc}
 	 */
-	public void addAssociations(final Collection<Association> associations) {
-		this.associations.addAll(associations);
+	public void addStatements(final Collection<Statement> stmts) {
+		this.statements.addAll(stmts);
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.arastreju.sge.model.SemanticGraph#merge(org.arastreju.sge.model.SemanticGraph)
+	/**
+	 * {@inheritDoc}
 	 */
 	public void merge(final SemanticGraph graph) {
-		addAssociations(graph.getAssociations());
+		addStatements(graph.getStatements());
 	}
 	
 	// -----------------------------------------------------
 	
-	/* (non-Javadoc)
-	 * @see java.lang.Object#toString()
+	/**
+	 * {@inheritDoc}
 	 */
 	@Override
 	public String toString() {
 		final StringBuilder sb = new StringBuilder();
-		for (Association assoc : associations) {
+		for (Statement assoc : statements) {
 			sb.append(" -- " + assoc.toString() + "\n");
 		}
 		return sb.toString();
@@ -148,7 +147,7 @@ public class DefaultSemanticGraph implements SemanticGraph {
 	
 	private void addCascading(final ResourceNode node, final Set<ResourceNode> visited) {
 		visited.add(node);
-		this.associations.addAll(node.getAssociations());
+		this.statements.addAll(node.getAssociations());
 		for (SemanticNode object : SNOPS.objects(node.getAssociations())) {
 			if (object.isResourceNode() && !visited.contains(object)) {
 				addCascading(object.asResource(), visited);

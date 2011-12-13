@@ -23,6 +23,7 @@ import junit.framework.Assert;
 import org.arastreju.sge.apriori.RDFS;
 import org.arastreju.sge.model.DefaultSemanticGraph;
 import org.arastreju.sge.model.SemanticGraph;
+import org.arastreju.sge.model.Statement;
 import org.arastreju.sge.model.associations.Association;
 import org.arastreju.sge.model.nodes.ResourceNode;
 import org.arastreju.sge.model.nodes.SNResource;
@@ -54,7 +55,7 @@ public class RdfXmlBindingTest {
 		final QualifiedName qnCar = new QualifiedName("http://q#", "Car");
 		final ResourceNode car = new SNResource(qnCar);
 		
-		final Association association = Association.create(car, RDFS.SUB_CLASS_OF, vehicle);
+		final Statement association = Association.create(car, RDFS.SUB_CLASS_OF, vehicle);
 		
 		SemanticGraph graph = new DefaultSemanticGraph(Arrays.asList(association));
 		Assert.assertNotNull(graph);

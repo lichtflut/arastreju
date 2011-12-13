@@ -8,7 +8,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 import org.arastreju.sge.model.SemanticGraph;
-import org.arastreju.sge.model.associations.Association;
+import org.arastreju.sge.model.Statement;
 import org.openrdf.rio.RDFHandlerException;
 import org.openrdf.rio.RDFParseException;
 import org.openrdf.rio.RDFParser;
@@ -68,8 +68,8 @@ public abstract class AbstractRioBinding implements SemanticGraphIO {
             }
             
             writer.startRDF();
-            for (Association assoc : graph.getAssociations()) {
-                writer.handleStatement(new RioStatement(assoc));
+            for (Statement stmt : graph.getStatements()) {
+                writer.handleStatement(new RioStatement(stmt));
             }
             writer.endRDF();
             

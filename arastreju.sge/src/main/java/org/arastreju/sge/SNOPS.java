@@ -248,4 +248,15 @@ public class SNOPS {
 		}
 	}
 
+	/**
+	 * Remove all associations of given predicate.
+	 * @param subject The subject.
+	 * @param predicate The predicate.
+	 */
+	public static void remove(final ResourceNode subject, ResourceID predicate) {
+		for(Association assoc: subject.getAssociations(predicate)) {
+			subject.remove(assoc);
+		}
+	}
+
 }

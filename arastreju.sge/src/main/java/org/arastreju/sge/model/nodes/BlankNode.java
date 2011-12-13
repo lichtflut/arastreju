@@ -39,8 +39,8 @@ public class BlankNode extends SNResource {
 		super(VoidNamespace.getInstance(), UUID.randomUUID().toString());
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.arastreju.sge.model.nodes.SNResource#isBlankNode()
+	/**
+	 * {@inheritDoc}
 	 */
 	@Override
 	public boolean isBlankNode() {

@@ -127,7 +127,7 @@ public class SNResource implements ResourceNode, Serializable {
 	 * {@inheritDoc}
 	 */
 	public boolean isBlankNode() {
-		return VoidNamespace.isInVoidNamespace(this);
+		return false;
 	}
 	
 	// -----------------------------------------------------

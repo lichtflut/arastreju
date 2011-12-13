@@ -18,7 +18,6 @@ package org.arastreju.sge.model;
 import java.util.Collection;
 import java.util.Set;
 
-import org.arastreju.sge.model.associations.Association;
 import org.arastreju.sge.model.nodes.ResourceNode;
 import org.arastreju.sge.model.nodes.SemanticNode;
 import org.arastreju.sge.naming.Namespace;
@@ -42,7 +41,7 @@ public interface SemanticGraph {
 	 * Get all associations of this graph.
 	 * @return The associations.
 	 */
-	Set<Association> getAssociations();
+	Set<Statement> getStatements();
 	
 	/**
 	 * Get all nodes of the graph.
@@ -65,9 +64,9 @@ public interface SemanticGraph {
 	// -----------------------------------------------------
 	
 	/**
-	 * Add some associations.
+	 * Add some statements.
 	 */
-	void addAssociations(Collection<Association> associations);
+	void addStatements(Collection<Statement> associations);
 	
 	/**
 	 * Merge all data from given graph into this graph. 

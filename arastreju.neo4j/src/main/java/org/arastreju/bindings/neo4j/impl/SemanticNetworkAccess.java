@@ -25,8 +25,10 @@ import org.arastreju.bindings.neo4j.index.ResourceIndex;
 import org.arastreju.bindings.neo4j.tx.TxAction;
 import org.arastreju.bindings.neo4j.tx.TxProvider;
 import org.arastreju.bindings.neo4j.tx.TxResultAction;
+import org.arastreju.sge.SNOPS;
 import org.arastreju.sge.model.ResourceID;
 import org.arastreju.sge.model.SemanticGraph;
+import org.arastreju.sge.model.Statement;
 import org.arastreju.sge.model.associations.Association;
 import org.arastreju.sge.model.associations.AssociationKeeper;
 import org.arastreju.sge.model.associations.DetachedAssociationKeeper;
@@ -222,8 +224,9 @@ public class SemanticNetworkAccess implements NeoConstants, NeoResourceResolver 
 	public SemanticGraph attach(final SemanticGraph graph){
 		return txProvider.doTransacted(new TxResultAction<SemanticGraph>() {
 			public SemanticGraph execute() {
-				for(ResourceNode node : graph.getSubjects()){
-					attach(node);
+				for(Statement stmt : graph.getStatements()) {
+					final ResourceNode subject = resolve(stmt.getSubject());
+					SNOPS.associate(subject, stmt.getPredicate(), stmt.getObject(), stmt.getContexts());
 				}
 				return graph;
 			}

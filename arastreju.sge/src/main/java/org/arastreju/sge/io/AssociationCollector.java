@@ -20,11 +20,12 @@ import java.util.List;
 
 import org.arastreju.sge.model.DefaultSemanticGraph;
 import org.arastreju.sge.model.SemanticGraph;
+import org.arastreju.sge.model.Statement;
 import org.arastreju.sge.model.associations.Association;
 
 /**
  * <p>
- *  [DESCRIPTION]
+ *  Collector for read statments.
  * </p>
  *
  * <p>
@@ -35,21 +36,23 @@ import org.arastreju.sge.model.associations.Association;
  */
 public class AssociationCollector implements ImportedAssociationListener {
 	
-	private final List<Association> associations = new ArrayList<Association>();
+	private final List<Statement> associations = new ArrayList<Statement>();
 
 	// -----------------------------------------------------
 	
-	/* (non-Javadoc)
-	 * @see org.arastreju.sge.io.ImportedAssociationListener#onNewAssociation(org.arastreju.sge.model.associations.Association)
+	/**
+	 * {@inheritDoc}
 	 */
 	public void onNewAssociation(final Association assoc) {
 		associations.add(assoc);
 	}
 	
+	// ----------------------------------------------------
+	
 	/**
 	 * @return the collected Associations.
 	 */
-	public List<Association> getAssociations() {
+	public List<Statement> getAssociations() {
 		return associations;
 	}
 

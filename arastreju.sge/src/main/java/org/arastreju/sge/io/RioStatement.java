@@ -15,11 +15,9 @@
  */
 package org.arastreju.sge.io;
 
-import org.arastreju.sge.model.associations.Association;
-import org.arastreju.sge.model.nodes.ResourceNode;
+import org.arastreju.sge.model.ResourceID;
 import org.arastreju.sge.model.nodes.SemanticNode;
 import org.openrdf.model.Resource;
-import org.openrdf.model.Statement;
 import org.openrdf.model.URI;
 import org.openrdf.model.Value;
 import org.openrdf.model.impl.BNodeImpl;
@@ -37,33 +35,33 @@ import org.openrdf.model.impl.URIImpl;
  *
  * @author Oliver Tigges
  */
-public class RioStatement implements Statement {
+public class RioStatement implements org.openrdf.model.Statement {
 
-	private final Association assoc;
+	private final org.arastreju.sge.model.Statement arasStmt;
 
 	// -----------------------------------------------------
 	
 	/**
-	 * @param assoc
+	 * @param stmt
 	 */
-	public RioStatement(final Association assoc) {
-		this.assoc = assoc;
+	public RioStatement(final org.arastreju.sge.model.Statement stmt) {
+		this.arasStmt = stmt;
 	}
 	
 	// -----------------------------------------------------
 
-	/* (non-Javadoc)
-	 * @see org.openrdf.model.Statement#getContext()
+	/**
+	 * {@inheritDoc}
 	 */
 	public Resource getContext() {
 		return null;
 	}
 
-	/* (non-Javadoc)
-	 * @see org.openrdf.model.Statement#getObject()
+	/**
+	 * {@inheritDoc}
 	 */
 	public Value getObject() {
-		final SemanticNode object = assoc.getObject();
+		final SemanticNode object = arasStmt.getObject();
 		if (object.isResourceNode()){
 			return new URIImpl(object.asResource().getQualifiedName().toURI());
 		} else {
@@ -71,19 +69,19 @@ public class RioStatement implements Statement {
 		}
 	}
 
-	/* (non-Javadoc)
-	 * @see org.openrdf.model.Statement#getPredicate()
+	/**
+	 * {@inheritDoc}
 	 */
 	public URI getPredicate() {
-		return new URIImpl(assoc.getPredicate().getQualifiedName().toURI());
+		return new URIImpl(arasStmt.getPredicate().getQualifiedName().toURI());
 	}
 
-	/* (non-Javadoc)
-	 * @see org.openrdf.model.Statement#getSubject()
+	/**
+	 * {@inheritDoc}
 	 */
 	public Resource getSubject() {
-		final ResourceNode subject = assoc.getSubject();
-		if (subject.isBlankNode()){
+		final ResourceID subject = arasStmt.getSubject();
+		if (subject.asResource().isBlankNode()){
 			return new BNodeImpl(subject.getQualifiedName().getSimpleName());
 		}
 		return new URIImpl(subject.getQualifiedName().toURI());
