@@ -7,6 +7,7 @@ import java.util.Set;
 
 import junit.framework.Assert;
 
+import org.arastreju.bindings.neo4j.impl.GraphDataStore;
 import org.arastreju.bindings.neo4j.impl.SemanticNetworkAccess;
 import org.arastreju.sge.apriori.Aras;
 import org.arastreju.sge.context.Context;
@@ -40,8 +41,9 @@ import org.junit.Test;
  */
 public class NeoIdentityManagementTest {
 
-	private SemanticNetworkAccess store;
+	private SemanticNetworkAccess sna;
 	private NeoIdentityManagement im;
+	private GraphDataStore store;
 	
 	// -----------------------------------------------------
 
@@ -50,8 +52,9 @@ public class NeoIdentityManagementTest {
 	 */
 	@Before
 	public void setUp() throws Exception {
-		store = new SemanticNetworkAccess();
-		im = new NeoIdentityManagement(store);
+		store = new GraphDataStore();
+		sna = new SemanticNetworkAccess(store);
+		im = new NeoIdentityManagement(sna);
 	}
 
 	/**
@@ -59,6 +62,7 @@ public class NeoIdentityManagementTest {
 	 */
 	@After
 	public void tearDown() throws Exception {
+		sna.close();
 		store.close();
 	}
 	
@@ -67,15 +71,15 @@ public class NeoIdentityManagementTest {
 	@Test
 	public void testLogin() {
 		final Context ctx = Aras.IDENT;
-		final SNClass identity = store.resolve(Aras.IDENTITY).asClass();
+		final SNClass identity = sna.resolve(Aras.IDENTITY).asClass();
 		final SNEntity user = identity.createInstance(ctx);
 		
 		Association.create(user, Aras.IDENTIFIED_BY, new SNText("Bud Spencer"), ctx);
 		Association.create(user, Aras.HAS_UNIQUE_NAME, new SNText("Bud Spencer"), ctx);
 		Association.create(user, Aras.HAS_CREDENTIAL, new SNText("bud"), ctx);
 		Association.create(user, Aras.HAS_EMAIL, new SNText("BudSpencer@lichtflut.de"), ctx);
-		store.attach(user);
-		store.detach(user);
+		sna.attach(user);
+		sna.detach(user);
 		
 		try {
 			im.login("Bud Spencer", new PasswordCredential("wrong password"));

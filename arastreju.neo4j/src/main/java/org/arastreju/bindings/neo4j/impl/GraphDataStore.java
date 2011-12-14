@@ -70,10 +70,14 @@ public class GraphDataStore implements ProfileCloseListener {
 	
 	// -----------------------------------------------------
 	
-	/* (non-Javadoc)
-	 * @see org.arastreju.sge.spi.ProfileCloseListener#onClosed(org.arastreju.sge.ArastrejuProfile)
+	/**
+	 * {@inheritDoc}
 	 */
 	public void onClosed(final ArastrejuProfile profile) {
+		close();
+	}
+	
+	public void close() {
 		gdbService.shutdown();
 	}
 	

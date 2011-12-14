@@ -16,8 +16,8 @@
 package org.arastreju.bindings.neo4j.impl;
 
 import static org.arastreju.sge.SNOPS.associate;
-import static org.arastreju.sge.SNOPS.qualify;
 import static org.arastreju.sge.SNOPS.id;
+import static org.arastreju.sge.SNOPS.qualify;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -32,7 +32,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.util.List;
 
 import org.arastreju.bindings.neo4j.index.ResourceIndex;
 import org.arastreju.sge.SNOPS;
@@ -83,17 +82,26 @@ public class SemanticNetworkAccessTest {
 	private final QualifiedName qnEmployedBy = new QualifiedName("http://q#", "employedBy");
 	private final QualifiedName qnHasEmployees = new QualifiedName("http://q#", "hasEmployees");
 	
-	private SemanticNetworkAccess store;
+	private SemanticNetworkAccess sna;
+	private GraphDataStore store;
 	
 	// -----------------------------------------------------
-	
+
+	/**
+	 * @throws java.lang.Exception
+	 */
 	@Before
-	public void setUp() throws IOException{
-		store = new SemanticNetworkAccess();	
+	public void setUp() throws Exception {
+		store = new GraphDataStore();
+		sna = new SemanticNetworkAccess(store);
 	}
-	
+
+	/**
+	 * @throws java.lang.Exception
+	 */
 	@After
-	public void tearDown(){
+	public void tearDown() throws Exception {
+		sna.close();
 		store.close();
 	}
 	
@@ -101,27 +109,27 @@ public class SemanticNetworkAccessTest {
 
 	@Test
 	public void testResolveAndFind() throws IOException {
-		ResourceNode found = store.findResource(qnVehicle);
+		ResourceNode found = sna.findResource(qnVehicle);
 		assertNull(found);
 		
-		ResourceNode resolved = store.resolve(SNOPS.id(qnVehicle));
+		ResourceNode resolved = sna.resolve(SNOPS.id(qnVehicle));
 		assertNotNull(resolved);
 		
-		found = store.findResource(qnVehicle);
+		found = sna.findResource(qnVehicle);
 		assertNotNull(found);
 		
 	}
 	
 	@Test
 	public void testValueIndexing() throws IOException {
-		final ResourceIndex index = store.getIndex();
+		final ResourceIndex index = sna.getIndex();
 		
 		final ResourceNode car = new SNResource(qnCar);
 		Association.create(car, Aras.HAS_PROPER_NAME, new SNText("BMW"));
 		
-		store.attach(car);
+		sna.attach(car);
 		
-		final GraphDatabaseService gdbService = store.getGdbService();
+		final GraphDatabaseService gdbService = sna.getGdbService();
 		Transaction tx = gdbService.beginTx();
 		
 		final IndexHits<Node> found = index.lookup(Aras.HAS_PROPER_NAME, "BMW");
@@ -135,15 +143,15 @@ public class SemanticNetworkAccessTest {
 	public void testDetaching() throws IOException{
 		final ResourceNode car = new SNResource(qnCar);
 		
-		final ResourceNode car2 = store.attach(car);
+		final ResourceNode car2 = sna.attach(car);
 		assertSame(car, car2);
 		
-		final ResourceNode car3 = store.findResource(qnCar);
+		final ResourceNode car3 = sna.findResource(qnCar);
 		assertSame(car, car3);
 		
-		store.detach(car);
+		sna.detach(car);
 
-		final ResourceNode car4 = store.findResource(qnCar);
+		final ResourceNode car4 = sna.findResource(qnCar);
 		assertNotSame(car, car4);
 	}
 	
@@ -151,12 +159,12 @@ public class SemanticNetworkAccessTest {
 	public void testDatatypes() throws IOException {
 		final ResourceNode car = new SNResource(qnCar);
 		
-		store.attach(car);
+		sna.attach(car);
 		
 		Association.create(car, Aras.HAS_PROPER_NAME, new SNText("BMW"));
-		store.detach(car);
+		sna.detach(car);
 		
-		final ResourceNode car2 = store.findResource(qnCar);
+		final ResourceNode car2 = sna.findResource(qnCar);
 		assertNotSame(car, car2);
 		final ValueNode value = SNOPS.singleObject(car2, Aras.HAS_PROPER_NAME).asValue();
 		
@@ -171,11 +179,11 @@ public class SemanticNetworkAccessTest {
 		Association.create(car, RDFS.SUB_CLASS_OF, vehicle);
 		Association.create(car, Aras.HAS_PROPER_NAME, new SNText("BMW"));
 		
-		store.attach(car);
+		sna.attach(car);
 		
 		// detach and find again
-		store.detach(car);
-		final ResourceNode car2 = store.findResource(qnCar);
+		sna.detach(car);
+		final ResourceNode car2 = sna.findResource(qnCar);
 		assertNotSame(car, car2);
 
 		final ResourceNode res = SNOPS.singleObject(car2, RDFS.SUB_CLASS_OF).asResource();
@@ -190,23 +198,23 @@ public class SemanticNetworkAccessTest {
 		final ResourceNode vehicle = new SNResource(qnVehicle);
 		final ResourceNode car1 = new SNResource(qnCar);
 		
-		store.attach(car1);
+		sna.attach(car1);
 		
 		Association.create(car1, Aras.HAS_BRAND_NAME, new SNText("BMW"));
 		
 		// detach 
-		store.detach(car1);
-		store.detach(vehicle);
+		sna.detach(car1);
+		sna.detach(vehicle);
 		
 		Association.create(car1, RDFS.SUB_CLASS_OF, vehicle);
 		Association.create(car1, Aras.HAS_PROPER_NAME, new SNText("Knut"));
 
 		// attach again
-		store.attach(car1);
+		sna.attach(car1);
 		
 		// detach and find again
-		store.detach(car1);
-		final ResourceNode car2 = store.findResource(qnCar);
+		sna.detach(car1);
+		final ResourceNode car2 = sna.findResource(qnCar);
 		assertNotSame(car1, car2);
 		
 		final ResourceNode subClasss = SNOPS.singleObject(car2, RDFS.SUB_CLASS_OF).asResource();
@@ -224,11 +232,11 @@ public class SemanticNetworkAccessTest {
 		final SemanticGraphIO io = new RdfXmlBinding();
 		final SemanticGraph graph = io.read(getClass().getClassLoader().getResourceAsStream("n04.aras.rdf"));
 		
-		store.attach(graph);
+		sna.attach(graph);
 		
 		final QualifiedName qn = new QualifiedName("http://arastreju.org/kernel#BrandName");
 		
-		final ResourceNode node = store.findResource(qn);
+		final ResourceNode node = sna.findResource(qn);
 		assertNotNull(node);
 	}
 	
@@ -236,9 +244,9 @@ public class SemanticNetworkAccessTest {
 	public void testSerialization() throws IOException, OntologyIOException, ClassNotFoundException {
 		final SemanticGraphIO io = new RdfXmlBinding();
 		final SemanticGraph graph = io.read(getClass().getClassLoader().getResourceAsStream("n04.aras.rdf"));
-		store.attach(graph);
+		sna.attach(graph);
 		final QualifiedName qn = new QualifiedName("http://arastreju.org/kernel#BrandName");
-		final ResourceNode node = store.findResource(qn);
+		final ResourceNode node = sna.findResource(qn);
 		
 		assertTrue(node.isAttached());
 		
@@ -264,10 +272,10 @@ public class SemanticNetworkAccessTest {
 		
 		SNOPS.associate(vehicle, pred1, car);
 		SNOPS.associate(car, pred2, vehicle);
-		store.attach(vehicle);
+		sna.attach(vehicle);
 		
-		final ResourceNode vehicleLoaded = store.findResource(qnVehicle);
-		final ResourceNode carLoaded = store.findResource(qnCar);
+		final ResourceNode vehicleLoaded = sna.findResource(qnVehicle);
+		final ResourceNode carLoaded = sna.findResource(qnCar);
 		
 		assertFalse(vehicleLoaded.getAssociations().isEmpty());
 		assertFalse(carLoaded.getAssociations().isEmpty());
@@ -285,7 +293,7 @@ public class SemanticNetworkAccessTest {
 		Association.create(car1, RDFS.SUB_CLASS_OF, vehicle);
 		Association.create(car1, Aras.HAS_PROPER_NAME, new SNText("Knut"));
 		
-		store.attach(car1);
+		sna.attach(car1);
 		
 		final Association stored = SNOPS.singleAssociation(car1, Aras.HAS_BRAND_NAME);
 		assertEquals(association.hashCode(), stored.hashCode());
@@ -307,14 +315,14 @@ public class SemanticNetworkAccessTest {
 		final ResourceNode vehicle = new SNResource(qnVehicle);
 		final ResourceNode car1 = new SNResource(qnCar);
 		
-		store.attach(car1);
+		sna.attach(car1);
 		
 		final Association association = Association.create(car1, Aras.HAS_BRAND_NAME, new SNText("BMW"));
 		Association.create(car1, RDFS.SUB_CLASS_OF, vehicle);
 		Association.create(car1, Aras.HAS_PROPER_NAME, new SNText("Knut"));
 		
 		// detach 
-		store.detach(car1);
+		sna.detach(car1);
 		
 		assertEquals(3, car1.getAssociations().size());
 		assertFalse(car1.getAssociations(Aras.HAS_BRAND_NAME).isEmpty());
@@ -323,9 +331,9 @@ public class SemanticNetworkAccessTest {
 		final boolean removedFlag = car1.remove(association);
 		assertTrue(removedFlag);
 		
-		store.attach(car1);
+		sna.attach(car1);
 		
-		final ResourceNode car2 = store.findResource(qnCar);
+		final ResourceNode car2 = sna.findResource(qnCar);
 		assertNotSame(car1, car2);
 		
 		assertEquals(2, car2.getAssociations().size());
@@ -343,16 +351,16 @@ public class SemanticNetworkAccessTest {
 		final SimpleContextID ctx2 = new SimpleContextID(ctxNamepsace, "ctx2");
 		final SimpleContextID ctx3 = new SimpleContextID(ctxNamepsace, "ctx3");
 		
-		store.attach(car1);
+		sna.attach(car1);
 		
 		associate(car1, Aras.HAS_BRAND_NAME, new SNText("BMW"), ctx1);
 		associate(car1, RDFS.SUB_CLASS_OF, vehicle, ctx1, ctx2);
 		associate(car1, Aras.HAS_PROPER_NAME, new SNText("Knut"), ctx1, ctx2, ctx3);
 		
 		// detach 
-		store.detach(car1);
+		sna.detach(car1);
 		
-		final ResourceNode car2 = store.findResource(qnCar);
+		final ResourceNode car2 = sna.findResource(qnCar);
 		assertNotSame(car1, car2);
 		
 		final Context[] cl1 = SNOPS.singleAssociation(car2, Aras.HAS_BRAND_NAME).getContexts();
@@ -377,17 +385,17 @@ public class SemanticNetworkAccessTest {
 		Association.create(car, RDFS.SUB_CLASS_OF, vehicle);
 		Association.create(bike, RDFS.SUB_CLASS_OF, vehicle);
 		
-		store.attach(vehicle);
-		store.attach(bike);
+		sna.attach(vehicle);
+		sna.attach(bike);
 		
 		Association.create(car1, Aras.HAS_BRAND_NAME, new SNText("BMW"));
 		Association.create(car1, Aras.HAS_PROPER_NAME, new SNText("Knut"));
 		
-		store.attach(car1);
+		sna.attach(car1);
 
-		store.remove(car, true);
-		assertNull(store.findResource(qnCar));
-		store.remove(car1, true);
+		sna.remove(car, true);
+		assertNull(sna.findResource(qnCar));
+		sna.remove(car1, true);
 		
 		assertTrue(car1.getAssociations().isEmpty());
 		assertFalse(car1.isAttached());
@@ -397,15 +405,15 @@ public class SemanticNetworkAccessTest {
 		assertFalse(vehicle.getAssociations().isEmpty());
 		assertTrue(vehicle.isAttached());
 		
-		store.detach(vehicle);
+		sna.detach(vehicle);
 		
-		ResourceNode found = store.findResource(qnVehicle);
+		ResourceNode found = sna.findResource(qnVehicle);
 		assertNotNull(found);
 		assertEquals(RDF.TYPE, SNOPS.singleObject(found, RDFS.SUB_CLASS_OF));
 		
-		assertNotNull(store.findResource(RDF.TYPE.getQualifiedName()));
-		store.remove(bike, true);
-		assertNull(store.findResource(RDF.TYPE.getQualifiedName()));
+		assertNotNull(sna.findResource(RDF.TYPE.getQualifiedName()));
+		sna.remove(bike, true);
+		assertNull(sna.findResource(RDF.TYPE.getQualifiedName()));
 		
 	}
 	
@@ -417,20 +425,20 @@ public class SemanticNetworkAccessTest {
 		associate(hasEmployees, Aras.INVERSE_OF, isEmployedBy);
 		associate(isEmployedBy, Aras.INVERSE_OF, hasEmployees);
 		
-		store.attach(hasEmployees);
+		sna.attach(hasEmployees);
 		
 		// preparation done.
 		
 		ResourceNode mike = new SNResource(qualify("http://q#Mike"));
 		ResourceNode corp = new SNResource(qualify("http://q#Corp"));
 		
-		store.attach(mike);
+		sna.attach(mike);
 		
 		associate(mike, isEmployedBy, corp);
 		
-		store.detach(corp);
+		sna.detach(corp);
 		
-		corp = store.findResource(corp.getQualifiedName());
+		corp = sna.findResource(corp.getQualifiedName());
 		
 	}
 	
@@ -443,10 +451,10 @@ public class SemanticNetworkAccessTest {
 		final SNEntity car = carClass.createInstance();
 		final SNEntity vehicle = vehicleClass.createInstance();
 		
-		store.attach(vehicle);
-		store.attach(car);
+		sna.attach(vehicle);
+		sna.attach(car);
 		
-		IndexHits<Node> found = store.getIndex().lookup(RDF.TYPE, id(qnVehicle));
+		IndexHits<Node> found = sna.getIndex().lookup(RDF.TYPE, id(qnVehicle));
 		
 		System.out.println(found);
 	}
