@@ -38,10 +38,17 @@ public interface ModelingConversation {
 	
 	/**
 	 * Adds a statement to the semantic model.
-	 * @param stmt The statment.
+	 * @param stmt The statement.
 	 * @return The attached association.
 	 */
 	Association addStatement(Statement stmt);
+	
+	/**
+	 * Removed a statement from the semantic model.
+	 * @param stmt The statement.
+	 * @return boolean indicating if a statement has been removed.
+	 */
+	boolean removeStatement(Statement stmt);
 	
 	// -- RESOURCE NODE -----------------------------------
 	

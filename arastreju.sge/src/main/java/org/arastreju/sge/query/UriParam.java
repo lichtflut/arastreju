@@ -49,5 +49,13 @@ public class UriParam implements QueryParam {
 	public Object getValue() {
 		return term;
 	}
+	
+	/** 
+	* {@inheritDoc}
+	*/
+	@Override
+	public String toString() {
+		return "URI=" + term;
+	}
 
 }

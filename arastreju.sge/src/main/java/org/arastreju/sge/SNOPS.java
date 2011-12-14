@@ -258,5 +258,23 @@ public class SNOPS {
 			subject.remove(assoc);
 		}
 	}
+	
+	/**
+	 * Remove all associations of given predicate.
+	 * @param subject The subject.
+	 * @param predicate The predicate.
+	 * @param object The object.
+	 * @return boolean indicating if a corresponding relation has been found and removed.
+	 */
+	public static boolean remove(final ResourceNode subject, ResourceID predicate, SemanticNode object) {
+		boolean removed = false;
+		for(Association assoc: subject.getAssociations(predicate)) {
+			if (assoc.getObject().equals(object)) {
+				subject.remove(assoc);	
+				removed = true;
+			}
+		}
+		return removed;
+	}
 
 }

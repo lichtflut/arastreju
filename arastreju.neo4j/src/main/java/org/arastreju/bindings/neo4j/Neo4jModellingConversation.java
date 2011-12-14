@@ -68,6 +68,14 @@ public class Neo4jModellingConversation implements ModelingConversation {
 		return SNOPS.associate(subject, stmt.getPredicate(), stmt.getObject(), stmt.getContexts());
 	}
 	
+	/** 
+	* {@inheritDoc}
+	*/
+	public boolean removeStatement(final Statement stmt) {
+		final ResourceNode subject = resolve(stmt.getSubject());
+		return SNOPS.remove(subject, stmt.getPredicate(), stmt.getObject());
+	}
+	
 	// ----------------------------------------------------
 
 	/**
