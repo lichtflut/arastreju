@@ -82,9 +82,9 @@ public class SNEntity extends ResourceView {
 		Association.create(this, RDF.TYPE, newClass, context);
 	}
 
-	public boolean isInstanceOf(final ResourceID classifier) {
+	public boolean isInstanceOf(final ResourceID type) {
 		for (SNClass clazz : getDirectClasses()) {
-			if (clazz.isSpecializationOf(classifier)){
+			if (clazz.isSpecializationOf(type)){
 				return true;
 			}
 		}
