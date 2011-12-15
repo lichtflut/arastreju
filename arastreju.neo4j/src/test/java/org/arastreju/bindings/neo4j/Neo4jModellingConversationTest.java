@@ -19,6 +19,7 @@ import static org.junit.Assert.assertNotNull;
 
 import java.io.IOException;
 
+import org.arastreju.bindings.neo4j.impl.GraphDataStore;
 import org.arastreju.bindings.neo4j.impl.SemanticNetworkAccess;
 import org.arastreju.sge.ModelingConversation;
 import org.arastreju.sge.apriori.RDFS;
@@ -27,7 +28,9 @@ import org.arastreju.sge.model.nodes.ResourceNode;
 import org.arastreju.sge.model.nodes.SNResource;
 import org.arastreju.sge.naming.QualifiedName;
 import org.arastreju.sge.naming.SimpleNamespace;
+import org.junit.After;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 
 
@@ -44,9 +47,34 @@ import org.junit.Test;
  */
 public class Neo4jModellingConversationTest {
 	
+	private SemanticNetworkAccess sna;
+	private GraphDataStore store;
+	
+	// -----------------------------------------------------
+
+	/**
+	 * @throws java.lang.Exception
+	 */
+	@Before
+	public void setUp() throws Exception {
+		store = new GraphDataStore();
+		sna = new SemanticNetworkAccess(store);
+	}
+
+	/**
+	 * @throws java.lang.Exception
+	 */
+	@After
+	public void tearDown() throws Exception {
+		sna.close();
+		store.close();
+	}
+	
+	// ----------------------------------------------------
+	
 	@Test
 	public void testInstantiation() throws IOException{
-		ModelingConversation mc = new Neo4jModellingConversation(new SemanticNetworkAccess());
+		ModelingConversation mc = new Neo4jModellingConversation(sna);
 		
 		ResourceNode node = new SNResource(new SimpleNamespace("http://q#"), "N1");
 		mc.attach(node);
@@ -55,7 +83,7 @@ public class Neo4jModellingConversationTest {
 	
 	@Test
 	public void testFind() throws IOException{
-		ModelingConversation mc = new Neo4jModellingConversation(new SemanticNetworkAccess());
+		ModelingConversation mc = new Neo4jModellingConversation(sna);
 		
 		QualifiedName qn = new QualifiedName("http://q#", "N1");
 		ResourceNode node = new SNResource(qn);
@@ -70,7 +98,7 @@ public class Neo4jModellingConversationTest {
 	
 	@Test
 	public void testMerge() throws IOException{
-		ModelingConversation mc = new Neo4jModellingConversation(new SemanticNetworkAccess());
+		ModelingConversation mc = new Neo4jModellingConversation(sna);
 		
 		QualifiedName qn = new QualifiedName("http://q#", "N1");
 		ResourceNode node = new SNResource(qn);
@@ -88,8 +116,7 @@ public class Neo4jModellingConversationTest {
 	
 	@Test
 	public void testSNViews() throws IOException {
-		final SemanticNetworkAccess store = new SemanticNetworkAccess();
-		final Neo4jModellingConversation mc = new Neo4jModellingConversation(store);
+		final Neo4jModellingConversation mc = new Neo4jModellingConversation(sna);
 		
 		final QualifiedName qnVehicle = new QualifiedName("http://q#", "Verhicle");
 		ResourceNode vehicle = new SNResource(qnVehicle);

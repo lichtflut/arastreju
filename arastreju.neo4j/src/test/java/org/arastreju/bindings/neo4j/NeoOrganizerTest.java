@@ -7,6 +7,7 @@ import java.util.Collection;
 
 import junit.framework.Assert;
 
+import org.arastreju.bindings.neo4j.impl.GraphDataStore;
 import org.arastreju.bindings.neo4j.impl.SemanticNetworkAccess;
 import org.arastreju.sge.Organizer;
 import org.arastreju.sge.context.Context;
@@ -37,25 +38,28 @@ public class NeoOrganizerTest {
 	private static final QualifiedName ctx2 = new QualifiedName("http://test.lf.de#", "Ctx2");
 	private static final QualifiedName ctx3 = new QualifiedName("http://test.lf.de#", "Ctx3");
 	
-	private SemanticNetworkAccess store;
 	private Organizer organizer;
+	private SemanticNetworkAccess sna;
+	private GraphDataStore store;
 	
-	// ----------------------------------------------------
-	
+	// -----------------------------------------------------
+
 	/**
 	 * @throws java.lang.Exception
 	 */
 	@Before
 	public void setUp() throws Exception {
-		store = new SemanticNetworkAccess();
-		organizer = new NeoOrganizer(store);
+		store = new GraphDataStore();
+		sna = new SemanticNetworkAccess(store);
+		organizer = new NeoOrganizer(sna);
 	}
-
+	
 	/**
 	 * @throws java.lang.Exception
 	 */
 	@After
 	public void tearDown() throws Exception {
+		sna.close();
 		store.close();
 	}
 	

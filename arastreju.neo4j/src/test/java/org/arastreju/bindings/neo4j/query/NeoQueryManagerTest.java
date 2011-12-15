@@ -21,8 +21,8 @@ import java.util.Set;
 
 import junit.framework.Assert;
 
+import org.arastreju.bindings.neo4j.impl.GraphDataStore;
 import org.arastreju.bindings.neo4j.impl.SemanticNetworkAccess;
-import org.arastreju.bindings.neo4j.query.NeoQueryBuilder;
 import org.arastreju.sge.apriori.Aras;
 import org.arastreju.sge.apriori.RDF;
 import org.arastreju.sge.apriori.RDFS;
@@ -62,7 +62,8 @@ public class NeoQueryManagerTest {
 	private final QualifiedName qnCar = new QualifiedName("http://q#", "Car");
 	private final QualifiedName qnBike = new QualifiedName("http://q#", "Bike");
 	
-	private SemanticNetworkAccess store;
+	private GraphDataStore store;
+	private SemanticNetworkAccess sna;
 	private NeoQueryManager qm;
 	
 	// -----------------------------------------------------
@@ -72,8 +73,9 @@ public class NeoQueryManagerTest {
 	 */
 	@Before
 	public void setUp() throws Exception {
-		store = new SemanticNetworkAccess();
-		qm = new NeoQueryManager(store, store.getIndex());
+		store = new GraphDataStore();
+		sna = new SemanticNetworkAccess(store);
+		qm = new NeoQueryManager(sna, sna.getIndex());
 	}
 
 	/**
@@ -81,6 +83,7 @@ public class NeoQueryManagerTest {
 	 */
 	@After
 	public void tearDown() throws Exception {
+		sna.close();
 		store.close();
 	}
 	
@@ -112,7 +115,7 @@ public class NeoQueryManagerTest {
 		final ResourceNode car = new SNResource(qnCar);
 		Association.create(car, Aras.HAS_PROPER_NAME, new SNText("BMW"));
 		Association.create(car, RDFS.LABEL, new SNText("Automobil"));
-		store.attach(car);
+		sna.attach(car);
 		
 		final Query query = qm.buildQuery().add(new ValueParam("BMW"));
 		final QueryResult result = query.getResult();
@@ -127,7 +130,7 @@ public class NeoQueryManagerTest {
 		final ResourceNode car = new SNResource(qnCar);
 		Association.create(car, Aras.HAS_PROPER_NAME, new SNText("BMW"));
 		Association.create(car, RDFS.LABEL, new SNText("Automobil"));
-		store.attach(car);
+		sna.attach(car);
 		
 		final Query query = qm.buildQuery().add(new FieldParam(RDFS.LABEL, "Automobil"));
 		final QueryResult result = query.getResult();
@@ -142,17 +145,17 @@ public class NeoQueryManagerTest {
 		final Context ctx = null;
 		final ResourceNode car = new SNResource(qnCar);
 		Association.create(car, RDF.TYPE, RDFS.CLASS, ctx);
-		store.attach(car);
+		sna.attach(car);
 		
 		final ResourceNode bike = new SNResource(qnBike);
 		Association.create(bike, RDF.TYPE, RDFS.CLASS, ctx);
-		store.attach(bike);
+		sna.attach(bike);
 		
 		final SNEntity aCar = car.asClass().createInstance(ctx);
-		store.attach(aCar);
+		sna.attach(aCar);
 		
 		final SNEntity aBike = bike.asClass().createInstance(ctx);
-		store.attach(aBike);
+		sna.attach(aBike);
 		
 		final Query query = qm.buildQuery().add(new UriParam("*Car"));
 		final QueryResult result = query.getResult();
@@ -167,17 +170,17 @@ public class NeoQueryManagerTest {
 		final Context ctx = null;
 		final ResourceNode car = new SNResource(qnCar);
 		Association.create(car, RDF.TYPE, RDFS.CLASS, ctx);
-		store.attach(car);
+		sna.attach(car);
 		
 		final ResourceNode bike = new SNResource(qnBike);
 		Association.create(bike, RDF.TYPE, RDFS.CLASS, ctx);
-		store.attach(bike);
+		sna.attach(bike);
 		
 		final SNEntity aCar = car.asClass().createInstance(ctx);
-		store.attach(aCar);
+		sna.attach(aCar);
 		
 		final SNEntity aBike = bike.asClass().createInstance(ctx);
-		store.attach(aBike);
+		sna.attach(aBike);
 		
 		final List<ResourceNode> result = qm.findByType(new SimpleResourceID(qnCar));
 		Assert.assertEquals(1, result.size());
@@ -198,22 +201,22 @@ public class NeoQueryManagerTest {
 		final Context ctx = null;
 		final ResourceNode car = new SNResource(qnCar);
 		Association.create(car, RDF.TYPE, RDFS.CLASS);
-		store.attach(car);
+		sna.attach(car);
 		
 		final ResourceNode bike = new SNResource(qnBike);
 		Association.create(bike, RDF.TYPE, RDFS.CLASS);
-		store.attach(bike);
+		sna.attach(bike);
 
 		final SNEntity car1 = car.asClass().createInstance(ctx);
-		store.attach(car1);
+		sna.attach(car1);
 
 		final SNEntity car2 = car.asClass().createInstance(ctx);
-		store.attach(car2);
+		sna.attach(car2);
 		
-		store.detach(car1);
-		store.detach(car2);
-		store.detach(car);
-		store.detach(bike);
+		sna.detach(car1);
+		sna.detach(car2);
+		sna.detach(car);
+		sna.detach(bike);
 
 		final Set<Statement> result = qm.findIncomingStatements(RDFS.CLASS);
 		Assert.assertNotNull(result);
