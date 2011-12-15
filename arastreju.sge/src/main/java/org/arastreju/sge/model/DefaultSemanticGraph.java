@@ -112,7 +112,7 @@ public class DefaultSemanticGraph implements SemanticGraph {
 	/**
 	 * {@inheritDoc}
 	 */
-	public void addStatements(final Collection<Statement> stmts) {
+	public void addStatements(final Collection<? extends Statement> stmts) {
 		this.statements.addAll(stmts);
 	}
 	
