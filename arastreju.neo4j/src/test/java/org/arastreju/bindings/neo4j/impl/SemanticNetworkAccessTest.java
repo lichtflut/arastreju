@@ -81,6 +81,7 @@ public class SemanticNetworkAccessTest {
 	
 	private final QualifiedName qnEmployedBy = new QualifiedName("http://q#", "employedBy");
 	private final QualifiedName qnHasEmployees = new QualifiedName("http://q#", "hasEmployees");
+	private final QualifiedName qnKnows = new QualifiedName("http://q#", "knows");
 	
 	private SemanticNetworkAccess sna;
 	private GraphDataStore store;
@@ -230,22 +231,29 @@ public class SemanticNetworkAccessTest {
 	@Test
 	public void testGraphImport() throws IOException, OntologyIOException{
 		final SemanticGraphIO io = new RdfXmlBinding();
-		final SemanticGraph graph = io.read(getClass().getClassLoader().getResourceAsStream("n04.aras.rdf"));
+		final SemanticGraph graph = io.read(getClass().getClassLoader().getResourceAsStream("test-statements.rdf.xml"));
 		
 		sna.attach(graph);
 		
-		final QualifiedName qn = new QualifiedName("http://arastreju.org/kernel#BrandName");
-		
+		final QualifiedName qn = new QualifiedName("http://test.arastreju.org/common#Person");
 		final ResourceNode node = sna.findResource(qn);
 		assertNotNull(node);
+		
+		final ResourceNode hasChild = sna.findResource(SNOPS.qualify("http://test.arastreju.org/common#hasChild"));
+		assertNotNull(hasChild);
+		assertEquals(new SimpleResourceID("http://test.arastreju.org/common#hasParent"), SNOPS.objects(hasChild, Aras.INVERSE_OF).iterator().next());
+		
+		final ResourceNode marriedTo = sna.findResource(SNOPS.qualify("http://test.arastreju.org/common#isMarriedTo"));
+		assertNotNull(marriedTo);
+		assertEquals(marriedTo, SNOPS.objects(marriedTo, Aras.INVERSE_OF).iterator().next());
 	}
 	
 	@Test
 	public void testSerialization() throws IOException, OntologyIOException, ClassNotFoundException {
 		final SemanticGraphIO io = new RdfXmlBinding();
-		final SemanticGraph graph = io.read(getClass().getClassLoader().getResourceAsStream("n04.aras.rdf"));
+		final SemanticGraph graph = io.read(getClass().getClassLoader().getResourceAsStream("test-statements.rdf.xml"));
 		sna.attach(graph);
-		final QualifiedName qn = new QualifiedName("http://arastreju.org/kernel#BrandName");
+		final QualifiedName qn = new QualifiedName("http://test.arastreju.org/common#Person");
 		final ResourceNode node = sna.findResource(qn);
 		
 		assertTrue(node.isAttached());
@@ -418,6 +426,35 @@ public class SemanticNetworkAccessTest {
 	}
 	
 	@Test
+	public void testInferencingInverseOfBidirectional() {
+		final ResourceNode knows = new SNResource(qnKnows);
+		
+		associate(knows, Aras.INVERSE_OF, knows);
+		
+		sna.attach(knows);
+		
+		assertTrue(SNOPS.objects(knows, Aras.INVERSE_OF).contains(knows));
+		
+		sna.detach(knows);
+		
+		// preparation done.
+		
+		ResourceNode mike = new SNResource(qualify("http://q#Mike"));
+		ResourceNode kent = new SNResource(qualify("http://q#Kent"));
+		
+		sna.attach(mike);
+		
+		associate(mike, knows, kent);
+		
+		sna.detach(kent);
+		
+		kent = sna.findResource(kent.getQualifiedName());
+		
+		assertTrue(SNOPS.objects(kent, knows).contains(mike));
+		
+	}
+	
+	@Test
 	public void testInferencingInverseOf() {
 		final ResourceNode hasEmployees = new SNResource(qnHasEmployees);
 		final ResourceNode isEmployedBy = new SNResource(qnEmployedBy);
@@ -439,6 +476,8 @@ public class SemanticNetworkAccessTest {
 		sna.detach(corp);
 		
 		corp = sna.findResource(corp.getQualifiedName());
+		
+		assertTrue(SNOPS.objects(corp, hasEmployees).contains(mike));
 		
 	}
 	

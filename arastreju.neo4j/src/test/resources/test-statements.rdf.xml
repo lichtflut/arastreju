@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rdf:RDF
+	xmlns:common="http://test.arastreju.org/common#"
+	xmlns:aras="http://arastreju.org/kernel#"
+	xmlns:owl="http://www.w3.org/2002/07/owl#"
+	xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+	xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">
+	
+	<!-- COMMON TYPES -->
+	
+	<rdf:Description rdf:about="http://test.arastreju.org/common#ConceptualPerson">
+		<rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+	</rdf:Description>
+	
+	<rdf:Description rdf:about="http://test.arastreju.org/common#Person">
+		<rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+		<rdfs:subClassOf rdf:resource="http://test.arastreju.org/common#ConceptualPerson"/>
+	</rdf:Description>
+	
+	<!-- COMMON PROPERTIES -->
+	
+	<rdf:Description rdf:about="http://test.arastreju.org/common#isMarriedTo">
+		<rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+		<aras:inverseOf rdf:resource="http://test.arastreju.org/common#isMarriedTo"/>
+		<rdfs:label>married to</rdfs:label>
+	</rdf:Description>
+	
+	<rdf:Description rdf:about="http://test.arastreju.org/common#hasChild">
+		<rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+		<aras:inverseOf rdf:resource="http://test.arastreju.org/common#hasParent"/>
+		<rdfs:label>has child</rdfs:label>
+	</rdf:Description>
+	
+	<rdf:Description rdf:about="http://test.arastreju.org/common#hasParent">
+		<rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+		<aras:inverseOf rdf:resource="http://test.arastreju.org/common#hasChild"/>
+		<rdfs:label>has parent</rdfs:label>
+	</rdf:Description>
+	
+</rdf:RDF>

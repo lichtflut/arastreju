@@ -18,6 +18,7 @@ package org.arastreju.sge.model.nodes.views;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.arastreju.sge.apriori.Aras;
 import org.arastreju.sge.apriori.Owl;
 import org.arastreju.sge.apriori.RDF;
 import org.arastreju.sge.apriori.RDFS;
@@ -101,7 +102,7 @@ public class SNProperty extends ResourceView {
 	public Set<SNProperty> getInverseProperties() {
 		if (inverseProperties == null){
 			inverseProperties = new HashSet<SNProperty>();
-			Set<Association> assocs = getAssociations(Owl.INVERSE_OF);
+			Set<Association> assocs = getAssociations(Aras.INVERSE_OF);
 			for (Association current : assocs) {
 				SNProperty property = current.getObject().asResource().asProperty();
 				inverseProperties.add(property);
