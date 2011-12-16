@@ -56,53 +56,60 @@ public abstract class ValueView implements ValueNode, Serializable {
 	// -----------------------------------------------------
 	
 
-	/* (non-Javadoc)
-	 * @see org.arastreju.api.ontology.model.INode#isAttached()
-	 */
+	/** 
+	* {@inheritDoc}
+	*/
 	public boolean isAttached() {
 		return value.isAttached();
 	}
 
-	/* (non-Javadoc)
-	 * @see org.arastreju.api.ontology.model.INode#isResourceNode()
-	 */
+	/** 
+	* {@inheritDoc}
+	*/
 	public boolean isResourceNode() {
 		return false;
 	}
 
-	/* (non-Javadoc)
-	 * @see org.arastreju.api.ontology.model.INode#isValueNode()
-	 */
+	/** 
+	* {@inheritDoc}
+	*/
 	public boolean isValueNode() {
 		return true;
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.arastreju.sge.model.nodes.ValueNode#getDecimalValue()
-	 */
+	/** 
+	* {@inheritDoc}
+	*/
 	public BigDecimal getDecimalValue() {
 		return value.getDecimalValue();
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.arastreju.sge.model.nodes.ValueNode#getIntegerValue()
-	 */
+	/** 
+	* {@inheritDoc}
+	*/
 	public BigInteger getIntegerValue() {
 		return value.getIntegerValue();
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.arastreju.sge.model.nodes.ValueNode#getStringValue()
-	 */
+	/** 
+	* {@inheritDoc}
+	*/
 	public String getStringValue() {
 		return value.getStringValue();
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.arastreju.sge.model.nodes.ValueNode#getTimeValue()
-	 */
+	/** 
+	* {@inheritDoc}
+	*/
 	public Date getTimeValue() {
 		return value.getTimeValue();
+	}
+	
+	/** 
+	* {@inheritDoc}
+	*/
+	public Boolean getBooleanValue() {
+		return value.getBooleanValue();
 	}
 	
 	// -----------------------------------------------------
