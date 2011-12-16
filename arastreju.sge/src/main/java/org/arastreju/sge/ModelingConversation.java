@@ -21,6 +21,7 @@ import org.arastreju.sge.model.Statement;
 import org.arastreju.sge.model.associations.Association;
 import org.arastreju.sge.model.nodes.ResourceNode;
 import org.arastreju.sge.naming.QualifiedName;
+import org.arastreju.sge.persistence.ResourceResolver;
 import org.arastreju.sge.persistence.TransactionControl;
 
 /**
@@ -34,7 +35,7 @@ import org.arastreju.sge.persistence.TransactionControl;
  *
  * @author Oliver Tigges
  */
-public interface ModelingConversation {
+public interface ModelingConversation extends ResourceResolver {
 	
 	/**
 	 * Adds a statement to the semantic model.
