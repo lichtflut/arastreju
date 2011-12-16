@@ -122,6 +122,7 @@ public class SNValue implements ValueNode, Serializable {
 	public Object getValue(){
 		switch (datatype) {
 		case BOOLEAN:
+			return getBooleanValue();
 		case URI:
 		case STRING:
 			return getStringValue();
@@ -151,6 +152,8 @@ public class SNValue implements ValueNode, Serializable {
 		case TIME_OF_DAY:
 		case TIMESTAMP:
 			return DATE_FORMAT.format(getTimeValue());
+		case BOOLEAN:
+			return value.toString();
 		default:
 			return value.toString();
 		}
@@ -181,6 +184,13 @@ public class SNValue implements ValueNode, Serializable {
 	 */
 	public Date getTimeValue() {
 		return (Date) value;
+	}
+	
+	/** 
+	* {@inheritDoc}
+	*/
+	public Boolean getBooleanValue() {
+		return (Boolean) value;
 	}
 	
 	// -----------------------------------------------------
@@ -270,6 +280,8 @@ public class SNValue implements ValueNode, Serializable {
 		case TIME_OF_DAY:
 		case TIMESTAMP:
 			return DATE_FORMAT.parse(sVal);
+		case BOOLEAN:
+			return Boolean.parseBoolean(sVal);
 
 		default:
 			return sVal;

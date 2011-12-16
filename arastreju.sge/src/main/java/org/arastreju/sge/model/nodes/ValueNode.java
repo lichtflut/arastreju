@@ -46,6 +46,8 @@ public interface ValueNode extends SemanticNode {
 
 	String getStringValue();
 	
+	Boolean getBooleanValue();
+	
 	BigInteger getIntegerValue();
 	
 	BigDecimal getDecimalValue();
