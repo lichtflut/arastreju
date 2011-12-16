@@ -40,20 +40,28 @@ import org.junit.Test;
  * @author Oliver Tigges
  */
 public class NeoTypeSystemTest {
-	
-	private SemanticNetworkAccess store;
+
+	private GraphDataStore store;
+	private SemanticNetworkAccess sna;
 	private NeoTypeSystem typeSystem;
 	
 	// -----------------------------------------------------
-	
+
+	/**
+	 * @throws java.lang.Exception
+	 */
 	@Before
-	public void setUp() throws IOException{
-		store = new SemanticNetworkAccess();	
-		typeSystem = new NeoTypeSystem(store);
+	public void setUp() throws Exception {
+		store = new GraphDataStore();
+		sna = new SemanticNetworkAccess(store);
+		typeSystem = new NeoTypeSystem(sna);
 	}
+	
+	// -----------------------------------------------------
 	
 	@After
 	public void tearDown(){
+		sna.close();
 		store.close();
 	}
 	
@@ -64,14 +72,11 @@ public class NeoTypeSystemTest {
 	public void testFindClasses() throws IOException, OntologyIOException{
 		final SemanticGraphIO io = new RdfXmlBinding();
 		
-		store.attach(io.read(getClass().getClassLoader().getResourceAsStream("n01.rdf.rdf")));
-		store.attach(io.read(getClass().getClassLoader().getResourceAsStream("n02.rdfs.rdf")));
-		store.attach(io.read(getClass().getClassLoader().getResourceAsStream("n03.owl.rdf")));
-		store.attach(io.read(getClass().getClassLoader().getResourceAsStream("n04.aras.rdf")));
+		sna.attach(io.read(getClass().getClassLoader().getResourceAsStream("test-statements.rdf.xml")));
 		
 		Set<SNClass> classes = typeSystem.getAllClasses();
 		
-		Assert.assertNotNull(classes);
+		Assert.assertEquals(2, classes.size());
 		
 	}
 

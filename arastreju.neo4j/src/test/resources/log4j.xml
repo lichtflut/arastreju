@@ -27,7 +27,7 @@
 	</appender>
 
 	<logger name="org.arastreju">
-		<level value="debug" />
+		<level value="info" />
 	</logger>
 
 	<root>
