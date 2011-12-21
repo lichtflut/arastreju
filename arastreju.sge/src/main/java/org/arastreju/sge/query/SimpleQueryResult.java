@@ -3,6 +3,7 @@
  */
 package org.arastreju.sge.query;
 
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -20,6 +21,8 @@ import org.arastreju.sge.model.nodes.ResourceNode;
  * @author Oliver Tigges
  */
 public class SimpleQueryResult implements QueryResult {
+	
+	public static QueryResult EMPTY = new SimpleQueryResult(Collections.<ResourceNode>emptyList());
 
 	private List<ResourceNode> list;
 	
