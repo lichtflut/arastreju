@@ -79,18 +79,10 @@ public class NeoAssociationKeeper extends AbstractAssociationKeeper implements N
 	/**
 	 * {@inheritDoc}
 	 */
-	public boolean isAttached() {
-		return true;
-	}
-	
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public void add(final Association assoc) {
-		getResolvedAssociations().add(assoc);
-		logger.debug("Added Association: " + assoc);
 		handler.addAssociation(this, assoc);
+		logger.debug("Added Association: " + assoc);
 	}
 	
 	/** 
@@ -103,19 +95,20 @@ public class NeoAssociationKeeper extends AbstractAssociationKeeper implements N
 		return handler.removeAssociation(this, assoc);
 	}
 	
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public AbstractAssociationKeeper markResolved() {
-		return super.markResolved();
-	}
+	// ----------------------------------------------------
 	
 	/**
 	 * {@inheritDoc}
 	 */
 	public Set<Association> getAssociationsForRemoval() {
 		return Collections.emptySet();
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	public boolean isAttached() {
+		return true;
 	}
 	
 	// ----------------------------------------------------

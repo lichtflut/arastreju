@@ -26,8 +26,6 @@ import org.arastreju.sge.model.associations.Association;
 import org.arastreju.sge.model.nodes.ResourceNode;
 import org.arastreju.sge.naming.QualifiedName;
 import org.arastreju.sge.persistence.TransactionControl;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import de.lichtflut.infra.exceptions.NotYetImplementedException;
 
@@ -45,9 +43,6 @@ import de.lichtflut.infra.exceptions.NotYetImplementedException;
 public class Neo4jModellingConversation implements ModelingConversation {
 	
 	private final SemanticNetworkAccess store;
-	
-	@SuppressWarnings("unused")
-	private final Logger logger = LoggerFactory.getLogger(Neo4jModellingConversation.class);
 	
 	// -----------------------------------------------------
 
@@ -150,7 +145,7 @@ public class Neo4jModellingConversation implements ModelingConversation {
 	 * {@inheritDoc}
 	 */
 	public void close() {
-		store.close();
+		// do nothing yet.
 	}
 	
 	// -----------------------------------------------------

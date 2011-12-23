@@ -33,9 +33,16 @@ import org.arastreju.sge.model.nodes.SemanticNode;
 public interface AssociationKeeper {
 	
 	/**
-	 * @return The active Associations.
+	 * @return The resolved association set.
 	 */
 	Set<Association> getAssociations();
+	
+	// ----------------------------------------------------
+	
+	/**
+	 * @return The Associations to be removed on attachment.
+	 */
+	Set<Association> getAssociationsForRemoval();
 	
 	boolean isAttached();
 	
@@ -43,11 +50,6 @@ public interface AssociationKeeper {
 
 	boolean remove(Association assoc);
 	
-	boolean clearAssociations();
-
-	/**
-	 * @return The Associations to be removed on attachment.
-	 */
-	Set<Association> getAssociationsForRemoval();
+	
 
 }

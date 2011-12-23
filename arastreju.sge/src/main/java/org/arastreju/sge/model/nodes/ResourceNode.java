@@ -75,14 +75,9 @@ public interface ResourceNode extends SemanticNode, ResourceID {
 	 * Removes the association from this resource object. This will have no effect on the database when this node isn't
 	 * attached!
 	 * @param assoc The association to be removed.
-	 * @return TODO
+	 * @return true if association has been removed.
 	 */
 	boolean remove(Association assoc);
-	
-	/**
-	 * Revert all transient changes made to this node.
-	 */
-	void reset();
 	
 	// -----------------------------------------------------
 

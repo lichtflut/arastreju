@@ -16,6 +16,7 @@
 package org.arastreju.sge.model.nodes;
 
 import java.io.Serializable;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
@@ -181,8 +182,8 @@ public class SNResource implements ResourceNode, Serializable {
 	/**
 	 * {@inheritDoc}
 	 */
-	public synchronized Set<Association> getAssociations() {
-		return associationKeeper.getAssociations();
+	public Set<Association> getAssociations() {
+		return Collections.unmodifiableSet(associationKeeper.getAssociations());
 	}
 	
 	/**
@@ -221,13 +222,6 @@ public class SNResource implements ResourceNode, Serializable {
 	 */
 	public boolean remove(final Association assoc){
 		return associationKeeper.remove(assoc);
-	}
-	
-	/**
-	 * {@inheritDoc}
-	 */
-	public void reset() {
-		associationKeeper.clearAssociations();
 	}
 	
 	// -----------------------------------------------------

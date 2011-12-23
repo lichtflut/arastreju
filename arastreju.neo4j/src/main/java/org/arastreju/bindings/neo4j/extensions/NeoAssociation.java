@@ -11,7 +11,7 @@ import org.arastreju.sge.model.nodes.SemanticNode;
 
 /**
  * <p>
- *  [DESCRIPTION]
+ *  Neo extension of association.
  * </p>
  *
  * <p>

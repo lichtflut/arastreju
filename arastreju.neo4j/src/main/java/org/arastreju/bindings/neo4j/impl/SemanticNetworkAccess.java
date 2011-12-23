@@ -157,14 +157,6 @@ public class SemanticNetworkAccess implements NeoConstants, NeoResourceResolver 
 		return createArasNode(neoNode, qn);
 	}
 
-	protected SNResourceNeo createArasNode(final Node neoNode, final QualifiedName qn) {
-		final SNResourceNeo arasNode = new SNResourceNeo(qn);
-		index.register(arasNode);
-		final NeoAssociationKeeper assocKeeper = new NeoAssociationKeeper(arasNode, neoNode, assocHandler);
-		AssocKeeperAccess.setAssociationKeeper(arasNode, assocKeeper);
-		return arasNode;
-	}
-	
 	// -----------------------------------------------------
 	
 	/**
@@ -208,7 +200,7 @@ public class SemanticNetworkAccess implements NeoConstants, NeoResourceResolver 
 	 */
 	public void remove(final ResourceID id, final boolean cascade) {
 		final ResourceNode node = resolve(id);
-		AssocKeeperAccess.getAssociationKeeper(node).clearAssociations();
+		AssocKeeperAccess.getAssociationKeeper(node).getAssociations().clear();
 		txProvider.doTransacted(new TxAction() {
 			public void execute() {
 				new NodeRemover(index).remove(node, cascade);
@@ -255,6 +247,20 @@ public class SemanticNetworkAccess implements NeoConstants, NeoResourceResolver 
 	}
 
 	// -----------------------------------------------------
+	
+	/**
+	 * Create a new Arastreju node for Neo node.
+	 * @param neoNode The Neo node.
+	 * @param qn The qualified name.
+	 * @return The Arastreju node.
+	 */
+	protected SNResourceNeo createArasNode(final Node neoNode, final QualifiedName qn) {
+		final SNResourceNeo arasNode = new SNResourceNeo(qn);
+		index.register(arasNode);
+		final NeoAssociationKeeper assocKeeper = new NeoAssociationKeeper(arasNode, neoNode, assocHandler);
+		AssocKeeperAccess.setAssociationKeeper(arasNode, assocKeeper);
+		return arasNode;
+	}
 	
 	/**
 	 * Create the given resource node in Neo4j DB.

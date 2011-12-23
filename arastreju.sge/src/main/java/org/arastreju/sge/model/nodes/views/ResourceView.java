@@ -108,38 +108,31 @@ public abstract class ResourceView implements ResourceNode, Serializable {
 		resource.addToAssociations(assoc);
 	}
 
-	/* (non-Javadoc)
-	 * @see org.arastreju.api.ontology.model.sn.ResourceNode#removeDirectly(org.arastreju.api.ontology.model.Association)
+	/**
+	 * {@inheritDoc}
 	 */
 	public boolean remove(final Association assoc) {
 		return resource.remove(assoc);
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.arastreju.api.ontology.model.sn.ResourceNode#reset()
-	 */
-	public void reset() {
-		resource.reset();
-	}
-	
 	// ------------------------------------------------------
 
-	/* (non-Javadoc)
-	 * @see org.arastreju.api.ontology.model.sn.IResource#isValueNode()
+	/**
+	 * {@inheritDoc}
 	 */
 	public boolean isValueNode() {
 		return false;
 	}
 
-	/* (non-Javadoc)
-	 * @see org.arastreju.api.ontology.model.sn.IResource#isResourceNode()
+	/**
+	 * {@inheritDoc}
 	 */
 	public boolean isResourceNode() {
 		return true;
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.arastreju.api.ontology.model.sn.ResourceNode#isAttached()
+	/**
+	 * {@inheritDoc}
 	 */
 	public boolean isAttached() {
 		return resource.isAttached();
@@ -147,36 +140,36 @@ public abstract class ResourceView implements ResourceNode, Serializable {
 
 	// -----------------------------------------------------
 
-	/* (non-Javadoc)
-	 * @see org.arastreju.api.ontology.model.sn.ResourceNode#asClass()
+	/**
+	 * {@inheritDoc}
 	 */
 	public SNClass asClass() {
 		return resource.asClass();
 	}
 
-	/* (non-Javadoc)
-	 * @see org.arastreju.api.ontology.model.sn.ResourceNode#asEntity()
+	/**
+	 * {@inheritDoc}
 	 */
 	public SNEntity asEntity() {
 		return resource.asEntity();
 	}
 
-	/* (non-Javadoc)
-	 * @see org.arastreju.api.ontology.model.sn.ResourceNode#asProperty()
+	/**
+	 * {@inheritDoc}
 	 */
 	public SNProperty asProperty() {
 		return resource.asProperty();
 	}
 
-	/* (non-Javadoc)
-	 * @see org.arastreju.api.ontology.model.SemanticNode#asResource()
+	/**
+	 * {@inheritDoc}
 	 */
 	public ResourceNode asResource() {
 		return resource;
 	}
 
-	/* (non-Javadoc)
-	 * @see org.arastreju.api.ontology.model.SemanticNode#asValue()
+	/**
+	 * {@inheritDoc}
 	 */
 	public ValueNode asValue() {
 		throw new IllegalStateException("Cannot convert a resource to a value node");

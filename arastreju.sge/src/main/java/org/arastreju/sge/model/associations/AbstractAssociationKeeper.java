@@ -15,7 +15,6 @@
  */
 package org.arastreju.sge.model.associations;
 
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -55,34 +54,30 @@ public abstract class AbstractAssociationKeeper implements AssociationKeeper {
 	}
 	
 	// -----------------------------------------------------
+	
+	public synchronized Set<Association> getAssociations() {
+		if (!resolved){
+			if (!associations.isEmpty()){
+				throw new IllegalArgumentException("node has already an association attached: " + associations);
+			}
+			resolved = true;
+			resolveAssociations();
+		}
+		return associations;
+	}
 
 	public void add(final Association assoc) {
-		if (!resolved){
-			throw new IllegalArgumentException("Tried to add association to unresolved node: " + assoc);
-		}
-		associations.add(assoc);
+		getAssociations().add(assoc);
 	}
 
 	public boolean remove(final Association assoc) {
-		return getResolvedAssociations().remove(assoc);
+		return getAssociations().remove(assoc);
 	}
 
-	public synchronized Set<Association> getAssociations() {
-		return Collections.unmodifiableSet(getResolvedAssociations());
-	}
+	// -----------------------------------------------------
 	
 	/**
 	 * {@inheritDoc}
-	 */
-	public boolean clearAssociations() {
-		getResolvedAssociations().clear();
-		return true;
-	}
-	
-	// -----------------------------------------------------
-	
-	/* (non-Javadoc)
-	 * @see java.lang.Object#toString()
 	 */
 	@Override
 	public String toString() {
@@ -90,7 +85,7 @@ public abstract class AbstractAssociationKeeper implements AssociationKeeper {
 		if (resolved) {
 			sb.append(" resolved ");
 		}
-		sb.append(getAssociationsDirectly());
+		sb.append(associations);
 		return sb.toString();
 	}
 	
@@ -100,21 +95,10 @@ public abstract class AbstractAssociationKeeper implements AssociationKeeper {
 	 * To be overridden by sub classes.
 	 */
 	protected abstract void resolveAssociations();
-	
+
 	// -----------------------------------------------------
 	
 	protected Set<Association> getAssociationsDirectly() {
-		return associations;
-	}
-	
-	protected synchronized Set<Association> getResolvedAssociations() {
-		if (!resolved){
-			if (!associations.isEmpty()){
-				throw new IllegalArgumentException("node has already an association attached: " + associations);
-			}
-			resolved = true;
-			resolveAssociations();
-		}
 		return associations;
 	}
 	

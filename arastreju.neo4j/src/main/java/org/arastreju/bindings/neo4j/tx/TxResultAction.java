@@ -17,7 +17,7 @@ package org.arastreju.bindings.neo4j.tx;
 
 /**
  * <p>
- *  [DESCRIPTION]
+ *  A transaction returning a result.
  * </p>
  *
  * <p>

@@ -5,13 +5,13 @@ package org.arastreju.bindings.neo4j.impl;
 
 import org.arastreju.sge.apriori.RDF;
 import org.arastreju.sge.inferencing.CompoundInferencer;
-import org.arastreju.sge.inferencing.implicit.InverseOfInferencer;
 import org.arastreju.sge.inferencing.implicit.TypeInferencer;
 import org.arastreju.sge.persistence.ResourceResolver;
 
 /**
  * <p>
- *  Inferencer for Neo 4j.
+ *  Inferencer for Neo 4j for soft inferences, i.e. inferences that will only be put in the index,
+ *  but not to the database.
  * </p>
  *
  * <p>
@@ -20,11 +20,10 @@ import org.arastreju.sge.persistence.ResourceResolver;
  *
  * @author Oliver Tigges
  */
-public class NeoInferencer extends CompoundInferencer {
+public class NeoSoftInferencer extends CompoundInferencer {
 
-	public NeoInferencer(final ResourceResolver resolver) {
+	public NeoSoftInferencer(final ResourceResolver resolver) {
 		addInferencer(new TypeInferencer(resolver), RDF.TYPE);
-		addInferencer(new InverseOfInferencer(resolver));
 	}
 	
 }

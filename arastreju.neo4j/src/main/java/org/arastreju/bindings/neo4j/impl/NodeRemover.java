@@ -80,7 +80,6 @@ public class NodeRemover {
 		final List<Node> cascading = new ArrayList<Node>();
 		for (Relationship rel : neoNode.getRelationships()) {
 			cascading.add(rel.getEndNode());
-			index.removeFromIndex(rel);
 			rel.delete();
 		}
 		

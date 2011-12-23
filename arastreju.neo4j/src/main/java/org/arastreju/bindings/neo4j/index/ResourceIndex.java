@@ -6,9 +6,7 @@ package org.arastreju.bindings.neo4j.index;
 import static org.arastreju.sge.SNOPS.uri;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.arastreju.bindings.neo4j.NeoConstants;
 import org.arastreju.bindings.neo4j.impl.NeoResourceResolver;
@@ -19,7 +17,6 @@ import org.arastreju.sge.model.nodes.ResourceNode;
 import org.arastreju.sge.model.nodes.ValueNode;
 import org.arastreju.sge.naming.QualifiedName;
 import org.neo4j.graphdb.Node;
-import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.index.IndexHits;
 import org.neo4j.graphdb.index.IndexManager;
 
@@ -38,7 +35,7 @@ public class ResourceIndex implements NeoConstants {
 	
 	private final NeoIndex neoIndex;
 	
-	private final Map<QualifiedName, ResourceNode> register = new HashMap<QualifiedName, ResourceNode>();
+	private final AttachedResourcesCache cache = new AttachedResourcesCache();
 
 	private final NeoResourceResolver resolver;
 	
@@ -61,7 +58,7 @@ public class ResourceIndex implements NeoConstants {
 	 * Find Arastreju node by qualified name.
 	 */
 	public ResourceNode findResourceNode(final QualifiedName qn) {
-		return register.get(qn);
+		return cache.get(qn);
 	}
 	
 	/**
@@ -124,23 +121,28 @@ public class ResourceIndex implements NeoConstants {
 		register(resourceNode);
 	}
 	
+	/**
+	 * Re-index a node.
+	 * @param neoNode The Neo node.
+	 * @param resourceNode The corresponding Arastreju node.
+	 */
+	public void reindex(final Node neoNode, final ResourceNode resourceNode) {
+		removeFromIndex(neoNode);
+		neoIndex.index(neoNode, resourceNode.getQualifiedName());
+		for (Statement stmt : resourceNode.getAssociations()) {
+			index(neoNode, stmt);
+		}
+	}
+	
 	// --REMOVE FROM INDEX --------------------------------
 	
 	public void removeFromIndex(final Node node) {
 		neoIndex.remove(node);
 		if (node.hasProperty(NeoConstants.PROPERTY_URI)) {
-			register.remove(new QualifiedName(node.getProperty(NeoConstants.PROPERTY_URI).toString()));
+			cache.remove(new QualifiedName(node.getProperty(NeoConstants.PROPERTY_URI).toString()));
 		}
 	}
 
-	/**
-	 * Remove relationship from index.
-	 * @param rel The relationship to be removed.
-	 */
-	public void removeFromIndex(final Relationship rel) {
-		neoIndex.remove(rel);
-	}
-	
 	/**
 	 * Remove relationship from index.
 	 * @param rel The relationship to be removed.
@@ -156,21 +158,21 @@ public class ResourceIndex implements NeoConstants {
 		}
 	}
 	
-	// -- CACHE/REGISTRY ----------------------------------
+	// -- REGISTER ----------------------------------
 	
 	public void register(final ResourceNode resource){
-		register.put(resource.getQualifiedName(), resource);
+		cache.put(resource.getQualifiedName(), resource);
 	}
 	
 	/**
 	 * @param node
 	 */
 	public void removeFromRegister(final ResourceNode node) {
-		register.remove(node.getQualifiedName());
+		cache.remove(node.getQualifiedName());
 	}
 	
 	public void clearRegister(){
-		register.clear();
+		cache.clear();
 	}
 	
 	// -----------------------------------------------------

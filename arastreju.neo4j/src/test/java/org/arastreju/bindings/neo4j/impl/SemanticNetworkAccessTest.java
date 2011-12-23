@@ -478,6 +478,14 @@ public class SemanticNetworkAccessTest {
 		corp = sna.findResource(corp.getQualifiedName());
 		
 		assertTrue(SNOPS.objects(corp, hasEmployees).contains(mike));
+		assertTrue(SNOPS.objects(mike, isEmployedBy).contains(corp));
+		
+		SNOPS.remove(corp, hasEmployees);
+		
+		assertFalse(SNOPS.objects(corp, hasEmployees).contains(mike));
+		
+		mike = sna.findResource(mike.getQualifiedName());
+		assertFalse(SNOPS.objects(mike, isEmployedBy).contains(corp));
 		
 	}
 	
@@ -493,9 +501,13 @@ public class SemanticNetworkAccessTest {
 		sna.attach(vehicle);
 		sna.attach(car);
 		
-		IndexHits<Node> found = sna.getIndex().lookup(RDF.TYPE, id(qnVehicle));
+		IndexHits<Node> hits = sna.getIndex().lookup(RDF.TYPE, id(qnVehicle));
+		assertEquals(2, hits.size());
 		
-		System.out.println(found);
+		SNOPS.remove(car, RDF.TYPE);
+		
+		hits = sna.getIndex().lookup(RDF.TYPE, id(qnVehicle));
+		assertEquals(1, hits.size());
 	}
 
 }
