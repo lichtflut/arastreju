@@ -70,7 +70,7 @@ public class AttachedResourcesCache {
 	// ----------------------------------------------------
 	
 	private synchronized Map<QualifiedName, ResourceNode> getMap() {
-		if (registerReference == null) {
+		if (registerReference == null || registerReference.get() == null) {
 			final Map<QualifiedName, ResourceNode> map = new HashMap<QualifiedName, ResourceNode>(1000);
 			registerReference = new SoftReference<Map<QualifiedName, ResourceNode>>(map);
 		}
