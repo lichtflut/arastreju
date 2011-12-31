@@ -9,13 +9,14 @@ import java.util.List;
 
 import org.arastreju.bindings.neo4j.impl.NeoResourceResolver;
 import org.arastreju.sge.model.nodes.ResourceNode;
+import org.arastreju.sge.query.Query;
 import org.arastreju.sge.query.QueryResult;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.index.IndexHits;
 
 /**
  * <p>
- *  [DESCRIPTION]
+ *  Result for a {@link Query}.
  * </p>
  *
  * <p>
@@ -79,6 +80,19 @@ public class NeoQueryResult implements QueryResult {
 	 */
 	public boolean isEmpty() {
 		return hits.size() <= 0;
+	}
+	
+	/** 
+	* {@inheritDoc}
+	*/
+	public ResourceNode getSingleNode() {
+		if (isEmpty()) {
+			return null;
+		} else if (size() > 1) {
+			throw new IllegalStateException("More than one result found.");
+		} else {
+			return toList().get(0);
+		}
 	}
 	
 	@Override

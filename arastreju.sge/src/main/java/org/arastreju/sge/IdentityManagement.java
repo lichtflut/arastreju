@@ -84,7 +84,7 @@ public interface IdentityManagement {
 	
 	// -- ROLE MANAGEMENT ---------------------------------
 	
-	Role createRole(String name);
+	Role registerRole(String name);
 	
 	Set<Role> getRoles();
 	
@@ -92,7 +92,7 @@ public interface IdentityManagement {
 	
 	// -- PERMISSION MANAGEMENT ---------------------------
 	
-	Permission createPermission(String name);
+	Permission registerPermission(String name);
 	
 	Set<Permission> getPermissions();
 

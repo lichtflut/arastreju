@@ -5,7 +5,6 @@ package org.arastreju.bindings.neo4j;
 
 import static org.arastreju.sge.SNOPS.associate;
 import static org.arastreju.sge.SNOPS.singleObject;
-import static org.arastreju.sge.SNOPS.string;
 
 import java.util.HashSet;
 import java.util.List;
@@ -13,6 +12,7 @@ import java.util.Set;
 
 import org.arastreju.bindings.neo4j.impl.SemanticNetworkAccess;
 import org.arastreju.bindings.neo4j.index.ResourceIndex;
+import org.arastreju.bindings.neo4j.query.NeoQueryBuilder;
 import org.arastreju.sge.IdentityManagement;
 import org.arastreju.sge.apriori.Aras;
 import org.arastreju.sge.apriori.RDF;
@@ -22,9 +22,10 @@ import org.arastreju.sge.eh.ErrorCodes;
 import org.arastreju.sge.model.ResourceID;
 import org.arastreju.sge.model.nodes.ResourceNode;
 import org.arastreju.sge.model.nodes.SNResource;
-import org.arastreju.sge.model.nodes.SemanticNode;
 import org.arastreju.sge.model.nodes.views.SNEntity;
 import org.arastreju.sge.model.nodes.views.SNText;
+import org.arastreju.sge.query.Query;
+import org.arastreju.sge.query.QueryResult;
 import org.arastreju.sge.security.Credential;
 import org.arastreju.sge.security.Identity;
 import org.arastreju.sge.security.LoginException;
@@ -40,8 +41,6 @@ import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.index.IndexHits;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import de.lichtflut.infra.Infra;
 
 /**
  * <p>
@@ -142,8 +141,11 @@ public class NeoIdentityManagement implements IdentityManagement {
 	/**
 	 * {@inheritDoc}
 	 */
-	public Role createRole(final String name) {
-		assertUnique(Aras.ROLE, name);
+	public Role registerRole(final String name) {
+		final ResourceNode existing = findItem(Aras.ROLE, name);
+		if (existing != null) {
+			return new RoleImpl(existing);
+		}
 		final SNResource role = new SNResource();
 		associate(role, Aras.HAS_UNIQUE_NAME, new SNText(name), Aras.IDENT);
 		associate(role, RDF.TYPE, Aras.ROLE, Aras.IDENT);
@@ -177,8 +179,11 @@ public class NeoIdentityManagement implements IdentityManagement {
 	/**
 	 * {@inheritDoc}
 	 */
-	public Permission createPermission(final String name) {
-		assertUnique(Aras.PERMISSION, name);
+	public Permission registerPermission(final String name) {
+		final ResourceNode existing = findItem(Aras.PERMISSION, name);
+		if (existing != null) {
+			return new PermissionImpl(existing);
+		}
 		final SNResource permission = new SNResource();
 		associate(permission, Aras.HAS_UNIQUE_NAME, new SNText(name), Aras.IDENT);
 		associate(permission, RDF.TYPE, Aras.PERMISSION, Aras.IDENT);
@@ -200,21 +205,20 @@ public class NeoIdentityManagement implements IdentityManagement {
 	
 	// -----------------------------------------------------
 	
-	/**
-	 * TODO: improve lookup with query builder.
-	 */
-	private void assertUnique(final ResourceID type, final String name) {
-		final List<ResourceNode> all = index.lookupResourceNodes(RDF.TYPE, type);
-		for (ResourceNode current : all) {
-			final SemanticNode currentName = singleObject(current, Aras.HAS_UNIQUE_NAME);
-			if (Infra.equals(name, string(currentName))) {
-				throw new ArastrejuRuntimeException(ErrorCodes.GENERAL_CONSISTENCY_FAILURE, 
-						"Name already used for type " + type + ": " + name);
-			}
+	private ResourceNode findItem(final ResourceID type, final String name) {
+		final Query query = new NeoQueryBuilder(index, store);
+		query.addField(RDF.TYPE, type);
+		query.and();
+		query.addField(Aras.HAS_UNIQUE_NAME, name);
+		final QueryResult result = query.getResult();
+		if (result.size() > 1) {
+			throw new ArastrejuRuntimeException(ErrorCodes.GENERAL_CONSISTENCY_FAILURE, 
+					"Unique name is not unique for " + type + ": " + name);
+		} else {
+			return result.getSingleNode();
 		}
 	}
 	
-
 	protected void assertUniqueIdentity(final String name) throws ArastrejuException {
 		final IndexHits<Node> found = index.lookup(Aras.IDENTIFIED_BY, name);
 		if (found.size() > 0) {

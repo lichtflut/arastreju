@@ -4,6 +4,7 @@
 package org.arastreju.sge.security.impl;
 
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Set;
 
 import org.arastreju.sge.SNOPS;
@@ -17,7 +18,6 @@ import org.arastreju.sge.security.Permission;
 import org.arastreju.sge.security.Role;
 
 import de.lichtflut.infra.Infra;
-import de.lichtflut.infra.exceptions.NotYetImplementedException;
 
 /**
  * <p>
@@ -71,28 +71,48 @@ public abstract class AbstractIdentity implements Identity, Serializable {
 	 * {@inheritDoc}
 	 */
 	public Set<Role> getRoles() {
-		throw new NotYetImplementedException();
+		final Set<SemanticNode> roleNodes = SNOPS.objects(identityNode, Aras.HAS_ROLE);
+		final Set<Role> roles = new HashSet<Role>(roleNodes.size());
+		for (SemanticNode node : roleNodes) {
+			roles.add(new RoleImpl(node.asResource()));
+		}
+		return roles;
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	public Set<Permission> getPermissions() {
-		throw new NotYetImplementedException();
+		final Set<SemanticNode> permissionNodes = SNOPS.objects(identityNode, Aras.HAS_PERMISSION);
+		final Set<Permission> permissions = new HashSet<Permission>(permissionNodes.size());
+		for (SemanticNode node : permissionNodes) {
+			permissions.add(new PermissionImpl(node.asResource()));
+		}
+		return permissions;
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public boolean isInRole(Role role) {
-		throw new NotYetImplementedException();
+	public boolean isInRole(String role) {
+		for(Role current : getRoles()) {
+			if (current.getName().equals(role)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public boolean hasPermission(Permission permission) {
-		throw new NotYetImplementedException();
+	public boolean hasPermission(String permission) {
+		for(Permission current : getPermissions()) {
+			if (current.getName().equals(permission)) {
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	// -----------------------------------------------------

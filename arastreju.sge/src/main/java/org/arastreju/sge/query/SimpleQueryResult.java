@@ -66,6 +66,19 @@ public class SimpleQueryResult implements QueryResult {
 	}
 	
 	/** 
+	* {@inheritDoc}
+	*/
+	public ResourceNode getSingleNode() {
+		if (list.isEmpty()) {
+			return null;
+		} else if (list.size() > 1) {
+			throw new IllegalStateException("More than one result found.");
+		} else {
+			return list.get(0);
+		}
+	}
+	
+	/** 
 	 * {@inheritDoc}
 	 */
 	public void close() {

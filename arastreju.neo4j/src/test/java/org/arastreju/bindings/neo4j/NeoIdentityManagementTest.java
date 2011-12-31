@@ -12,7 +12,6 @@ import org.arastreju.bindings.neo4j.impl.SemanticNetworkAccess;
 import org.arastreju.sge.apriori.Aras;
 import org.arastreju.sge.context.Context;
 import org.arastreju.sge.eh.ArastrejuException;
-import org.arastreju.sge.eh.ArastrejuRuntimeException;
 import org.arastreju.sge.eh.ErrorCodes;
 import org.arastreju.sge.model.associations.Association;
 import org.arastreju.sge.model.nodes.views.SNClass;
@@ -126,8 +125,8 @@ public class NeoIdentityManagementTest {
 	
 	@Test
 	public void testRoles() {
-		Role anything = im.createRole("anything");
-		Role nothing = im.createRole("nothing");
+		Role anything = im.registerRole("anything");
+		Role nothing = im.registerRole("nothing");
 		
 		Assert.assertEquals("anything", anything.getName());
 		Assert.assertNotNull(anything.getAssociatedResource());
@@ -140,18 +139,14 @@ public class NeoIdentityManagementTest {
 		Assert.assertTrue(roles.contains(anything));
 		Assert.assertTrue(roles.contains(nothing));
 		
-		im.createPermission("anything");
-		try {
-			im.createRole("anything");	
-		} catch (ArastrejuRuntimeException asExpected) {
-		}
-		
+		im.registerPermission("anything");
+		im.registerRole("anything");	
 	}
 	
 	@Test
 	public void testPermissions() {
-		Permission anything = im.createPermission("anything");
-		Permission nothing = im.createPermission("nothing");
+		Permission anything = im.registerPermission("anything");
+		Permission nothing = im.registerPermission("nothing");
 		
 		Assert.assertEquals("anything", anything.getName());
 		Assert.assertNotNull(anything.getAssociatedResource());
@@ -164,11 +159,8 @@ public class NeoIdentityManagementTest {
 		Assert.assertTrue(permissions.contains(anything));
 		Assert.assertTrue(permissions.contains(nothing));
 		
-		im.createRole("anything");
-		try {
-			im.createPermission("anything");	
-		} catch (ArastrejuRuntimeException asExpected) {
-		}
+		im.registerRole("anything");
+		im.registerPermission("anything");	
 	}
 	
 }

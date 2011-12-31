@@ -56,14 +56,14 @@ public class AnonymousUser implements User {
 	/** 
 	 * {@inheritDoc}
 	 */
-	public boolean isInRole(Role role) {
+	public boolean isInRole(String rolename) {
 		return false;
 	}
 
 	/** 
 	 * {@inheritDoc}
 	 */
-	public boolean hasPermission(Permission permission) {
+	public boolean hasPermission(String permission) {
 		return false;
 	}
 

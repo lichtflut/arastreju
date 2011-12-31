@@ -58,14 +58,14 @@ public class ArastrejuRootUser implements User, Serializable {
 	/**
 	 * {@inheritDoc}
 	 */
-	public boolean isInRole(Role role) {
+	public boolean isInRole(String rolename) {
 		return true;
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public boolean hasPermission(Permission permission) {
+	public boolean hasPermission(String permission) {
 		return true;
 	}
 

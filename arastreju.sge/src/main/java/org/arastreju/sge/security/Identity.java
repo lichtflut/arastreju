@@ -47,7 +47,7 @@ public interface Identity extends Serializable {
 	
 	Set<Permission> getPermissions();
 	
-	boolean isInRole(Role role);
+	boolean isInRole(String rolename);
 	
-	boolean hasPermission(Permission permission);
+	boolean hasPermission(String permission);
 }

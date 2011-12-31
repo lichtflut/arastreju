@@ -95,6 +95,4 @@ public interface Query {
 
 	QueryResult getResult();
 	
-	ResourceNode getSingleNode();
-
 }

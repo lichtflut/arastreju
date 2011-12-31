@@ -46,5 +46,11 @@ public interface QueryResult extends Iterable<ResourceNode> {
 	 * @return true if the result is empty.
 	 */
 	boolean isEmpty();
+	
+	/**
+	 * Get the only result or null. If there is more than one result an {@link IllegalStateException} is thrown.
+	 * @return The single node or null.
+	 */
+	ResourceNode getSingleNode();
 
 }
