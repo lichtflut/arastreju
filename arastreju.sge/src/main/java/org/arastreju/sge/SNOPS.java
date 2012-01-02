@@ -232,23 +232,6 @@ public class SNOPS {
 	}
 	
 	/**
-	 * Replaces all associations for given subject and predicate by the single new one.
-	 * @param subject The subject.
-	 * @param predicate The predicate.
-	 * @param object The object to be set.
-	 * @param contexts The contexts.
-	 */
-	public static Association replace(final ResourceNode subject, final ResourceID predicate, final SemanticNode object, final Context... contexts){
-		final Set<Association> existing = subject.getAssociations(predicate);
-		if (existing.size() == 1) {
-			subject.remove(existing.iterator().next());
-		} else if (existing.size() > 1) {
-			throw new IllegalStateException("replace not possible if more than one associations exists: " + existing);
-		}
-		return Association.create(subject, predicate, object, contexts);
-	}
-	
-	/**
 	 * Remove all associations of given predicate.
 	 * @param subject The subject.
 	 * @param predicate The predicate.
