@@ -91,8 +91,6 @@ public class SimpleResourceID implements ResourceID, Serializable {
 		this(new QualifiedName(uri));
 	}
 	
-	// --- ResourceID -------------------------------------
-	
 	public QualifiedName getQualifiedName() {
 		return qualifiedName;
 	}
@@ -101,39 +99,36 @@ public class SimpleResourceID implements ResourceID, Serializable {
 		return qualifiedName.equals(ref.getQualifiedName());
 	}
 	
-	// -- INode -------------------------------------------
-	
-	/* (non-Javadoc)
-	 * @see org.arastreju.api.ontology.model.INode#isResourceNode()
+	/**
+	 * {@inheritDoc}
 	 */
 	public boolean isResourceNode() {
 		return true;
 	}
 
-	/* (non-Javadoc)
-	 * @see org.arastreju.api.ontology.model.INode#isValueNode()
+	/**
+	 * {@inheritDoc}
 	 */
 	public boolean isValueNode() {
 		return false;
 	}
-	
 
-	/* (non-Javadoc)
-	 * @see org.arastreju.api.ontology.model.INode#isAttached()
+	/**
+	 * {@inheritDoc}
 	 */
 	public boolean isAttached() {
 		return false;
 	}
 
-	/* (non-Javadoc)
-	 * @see org.arastreju.api.ontology.model.INode#asResource()
+	/**
+	 * {@inheritDoc}
 	 */
 	public ResourceNode asResource() {
-		return new SNResource(qualifiedName.getNamespace(), qualifiedName.getSimpleName());
+		return new SNResource(qualifiedName);
 	}
 
-	/* (non-Javadoc)
-	 * @see org.arastreju.api.ontology.model.INode#asValue()
+	/**
+	 * {@inheritDoc}
 	 */
 	public ValueNode asValue() {
 		throw new UnsupportedOperationException();

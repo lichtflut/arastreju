@@ -17,6 +17,7 @@ package org.arastreju.bindings.neo4j;
 
 import org.arastreju.bindings.neo4j.impl.SemanticNetworkAccess;
 import org.arastreju.bindings.neo4j.index.ResourceIndex;
+import org.arastreju.bindings.neo4j.tx.TxResultAction;
 import org.arastreju.sge.ModelingConversation;
 import org.arastreju.sge.SNOPS;
 import org.arastreju.sge.model.ResourceID;
@@ -24,6 +25,7 @@ import org.arastreju.sge.model.SemanticGraph;
 import org.arastreju.sge.model.Statement;
 import org.arastreju.sge.model.associations.Association;
 import org.arastreju.sge.model.nodes.ResourceNode;
+import org.arastreju.sge.model.nodes.SemanticNode;
 import org.arastreju.sge.naming.QualifiedName;
 import org.arastreju.sge.persistence.TransactionControl;
 
@@ -121,14 +123,26 @@ public class Neo4jModellingConversation implements ModelingConversation {
 	 * {@inheritDoc}
 	 */
 	public SemanticGraph attach(final SemanticGraph graph) {
-		return store.attach(graph);
+		return store.getTxProvider().doTransacted(new TxResultAction<SemanticGraph>() {
+			public SemanticGraph execute() {
+				for(Statement stmt : graph.getStatements()) {
+					final ResourceNode subject = resolve(stmt.getSubject());
+					SNOPS.associate(subject, stmt.getPredicate(), stmt.getObject(), stmt.getContexts());
+				}
+				return graph;
+			}
+		});
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	public void detach(final SemanticGraph graph) {
-		store.detach(graph);
+		for(SemanticNode node : graph.getNodes()){
+			if (node.isResourceNode() && node.asResource().isAttached()){
+				store.detach(node.asResource());
+			}
+		}
 	}
 
 	

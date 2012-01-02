@@ -95,11 +95,4 @@ public class Association extends AbstractStatement implements Serializable {
 	
 	//-----------------------------------------------------
 	
-	/**
-	 * {@inheritDoc}
-	 */
-	public ResourceNode getSubject() {
-		return (ResourceNode) subject;
-	}
-	
 }

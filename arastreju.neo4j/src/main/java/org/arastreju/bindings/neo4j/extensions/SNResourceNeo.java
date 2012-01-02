@@ -16,7 +16,6 @@
 package org.arastreju.bindings.neo4j.extensions;
 
 import org.arastreju.sge.model.nodes.SNResource;
-import org.arastreju.sge.naming.Namespace;
 import org.arastreju.sge.naming.QualifiedName;
 
 /**
@@ -32,16 +31,6 @@ import org.arastreju.sge.naming.QualifiedName;
  */
 public class SNResourceNeo extends SNResource {
 
-	/**
-	 * Constructor.
-	 * @param name
-	 * @param namespace
-	 * @param associationKeeper
-	 */
-	public SNResourceNeo(final String name, final Namespace namespace, final NeoAssociationKeeper associationKeeper) {
-		super(namespace, name, associationKeeper);
-	}
-	
 	/**
 	 * Constructor.
 	 */

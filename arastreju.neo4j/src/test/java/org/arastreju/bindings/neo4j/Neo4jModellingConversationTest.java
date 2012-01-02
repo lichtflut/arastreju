@@ -15,14 +15,27 @@
  */
 package org.arastreju.bindings.neo4j;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 
 import org.arastreju.bindings.neo4j.impl.GraphDataStore;
 import org.arastreju.bindings.neo4j.impl.SemanticNetworkAccess;
-import org.arastreju.sge.ModelingConversation;
+import org.arastreju.sge.SNOPS;
+import org.arastreju.sge.apriori.Aras;
 import org.arastreju.sge.apriori.RDFS;
+import org.arastreju.sge.io.OntologyIOException;
+import org.arastreju.sge.io.RdfXmlBinding;
+import org.arastreju.sge.io.SemanticGraphIO;
+import org.arastreju.sge.model.SemanticGraph;
+import org.arastreju.sge.model.SimpleResourceID;
 import org.arastreju.sge.model.associations.Association;
 import org.arastreju.sge.model.nodes.ResourceNode;
 import org.arastreju.sge.model.nodes.SNResource;
@@ -49,6 +62,7 @@ public class Neo4jModellingConversationTest {
 	
 	private SemanticNetworkAccess sna;
 	private GraphDataStore store;
+	private Neo4jModellingConversation mc;
 	
 	// -----------------------------------------------------
 
@@ -59,6 +73,7 @@ public class Neo4jModellingConversationTest {
 	public void setUp() throws Exception {
 		store = new GraphDataStore();
 		sna = new SemanticNetworkAccess(store);
+		mc = new Neo4jModellingConversation(sna);
 	}
 
 	/**
@@ -66,6 +81,7 @@ public class Neo4jModellingConversationTest {
 	 */
 	@After
 	public void tearDown() throws Exception {
+		mc.close();
 		sna.close();
 		store.close();
 	}
@@ -74,17 +90,12 @@ public class Neo4jModellingConversationTest {
 	
 	@Test
 	public void testInstantiation() throws IOException{
-		ModelingConversation mc = new Neo4jModellingConversation(sna);
-		
-		ResourceNode node = new SNResource(new SimpleNamespace("http://q#"), "N1");
+		ResourceNode node = new SNResource(new QualifiedName("http://q#", "N1"));
 		mc.attach(node);
-		mc.close();
 	}
 	
 	@Test
 	public void testFind() throws IOException{
-		ModelingConversation mc = new Neo4jModellingConversation(sna);
-		
 		QualifiedName qn = new QualifiedName("http://q#", "N1");
 		ResourceNode node = new SNResource(qn);
 		mc.attach(node);
@@ -92,14 +103,10 @@ public class Neo4jModellingConversationTest {
 		ResourceNode node2 = mc.findResource(qn);
 		
 		assertNotNull(node2);
-		
-		mc.close();
 	}
 	
 	@Test
 	public void testMerge() throws IOException{
-		ModelingConversation mc = new Neo4jModellingConversation(sna);
-		
 		QualifiedName qn = new QualifiedName("http://q#", "N1");
 		ResourceNode node = new SNResource(qn);
 		node = mc.attach(node);
@@ -109,15 +116,11 @@ public class Neo4jModellingConversationTest {
 		ResourceNode node2 = mc.findResource(qn);
 		
 		assertNotNull(node2);
-		
-		mc.close();
 	}
 	
 	
 	@Test
 	public void testSNViews() throws IOException {
-		final Neo4jModellingConversation mc = new Neo4jModellingConversation(sna);
-		
 		final QualifiedName qnVehicle = new QualifiedName("http://q#", "Verhicle");
 		ResourceNode vehicle = new SNResource(qnVehicle);
 		vehicle = mc.attach(vehicle);
@@ -134,8 +137,49 @@ public class Neo4jModellingConversationTest {
 		vehicle = mc.findResource(qnVehicle);
 		
 		Assert.assertTrue(car.asClass().isSpecializationOf(vehicle));
+	}
+	
+	@Test
+	public void testGraphImport() throws IOException, OntologyIOException{
+		final SemanticGraphIO io = new RdfXmlBinding();
+		final SemanticGraph graph = io.read(getClass().getClassLoader().getResourceAsStream("test-statements.rdf.xml"));
 		
-		mc.close();
+		mc.attach(graph);
+		
+		final QualifiedName qn = new QualifiedName("http://test.arastreju.org/common#Person");
+		final ResourceNode node = mc.findResource(qn);
+		assertNotNull(node);
+		
+		final ResourceNode hasChild = mc.findResource(SNOPS.qualify("http://test.arastreju.org/common#hasChild"));
+		assertNotNull(hasChild);
+		assertEquals(new SimpleResourceID("http://test.arastreju.org/common#hasParent"), SNOPS.objects(hasChild, Aras.INVERSE_OF).iterator().next());
+		
+		final ResourceNode marriedTo = mc.findResource(SNOPS.qualify("http://test.arastreju.org/common#isMarriedTo"));
+		assertNotNull(marriedTo);
+		assertEquals(marriedTo, SNOPS.objects(marriedTo, Aras.INVERSE_OF).iterator().next());
+	}
+	
+	@Test
+	public void testSerialization() throws IOException, OntologyIOException, ClassNotFoundException {
+		final SemanticGraphIO io = new RdfXmlBinding();
+		final SemanticGraph graph = io.read(getClass().getClassLoader().getResourceAsStream("test-statements.rdf.xml"));
+		mc.attach(graph);
+		
+		final QualifiedName qn = new QualifiedName("http://test.arastreju.org/common#Person");
+		final ResourceNode node = mc.findResource(qn);
+		
+		assertTrue(node.isAttached());
+		
+		final ByteArrayOutputStream out = new ByteArrayOutputStream();
+		new ObjectOutputStream(out).writeObject(node);
+		
+		byte[] bytes = out.toByteArray();
+		out.close();
+		
+		final ObjectInputStream in = new ObjectInputStream(new ByteArrayInputStream(bytes));
+		
+		final ResourceNode read = (ResourceNode) in.readObject();
+		assertFalse(read.isAttached());
 	}
 	
 }

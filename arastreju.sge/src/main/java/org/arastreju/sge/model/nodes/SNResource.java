@@ -48,9 +48,7 @@ import org.arastreju.sge.naming.VoidNamespace;
  */
 public class SNResource implements ResourceNode, Serializable {
 	
-	private String name;
-	
-	private Namespace namespace;
+	private QualifiedName qn;
 	
 	private AssociationKeeper associationKeeper;
 	
@@ -70,13 +68,6 @@ public class SNResource implements ResourceNode, Serializable {
 		this(qn.getNamespace(), qn.getSimpleName(), new DetachedAssociationKeeper());
 	}
 	
-	/**
-	 * Default constructor for new unattached resource.
-	 */
-	public SNResource(final Namespace namespace, final String name) {
-		this(namespace, name, new DetachedAssociationKeeper());
-	}
-	
 	// -- PROTECTED CONSTRUCTORS --------------------------
 	
 	/**
@@ -86,7 +77,15 @@ public class SNResource implements ResourceNode, Serializable {
 	 * @param associationKeeper
 	 */
 	protected SNResource(final QualifiedName qn, final AssociationKeeper associationKeeper) {
-		this(qn.getNamespace(), qn.getSimpleName(), associationKeeper);
+		this.qn = qn;
+		this.associationKeeper = associationKeeper;
+	}
+	
+	/**
+	 * Default constructor for new unattached resource.
+	 */
+	protected SNResource(final Namespace namespace, final String name) {
+		this(namespace, name, new DetachedAssociationKeeper());
 	}
 	
 	/**
@@ -96,9 +95,7 @@ public class SNResource implements ResourceNode, Serializable {
 	 * @param associationKeeper
 	 */
 	protected SNResource(final Namespace namespace, final String name, final AssociationKeeper associationKeeper) {
-		this.name = name;
-		this.namespace = namespace;
-		this.associationKeeper = associationKeeper;
+		this(new QualifiedName(namespace, name), associationKeeper);
 	}
 	
 	// ------------------------------------------------------
@@ -106,22 +103,8 @@ public class SNResource implements ResourceNode, Serializable {
 	/**
 	 * {@inheritDoc}
 	 */
-	public String getName() {
-		return name;
-	}
-	
-	/**
-	 * {@inheritDoc}
-	 */
-	public Namespace getNamespace() {
-		return namespace;
-	}
-	
-	/**
-	 * {@inheritDoc}
-	 */
 	public QualifiedName getQualifiedName() {
-		return new QualifiedName(namespace, name);
+		return qn;
 	}
 	
 	/**

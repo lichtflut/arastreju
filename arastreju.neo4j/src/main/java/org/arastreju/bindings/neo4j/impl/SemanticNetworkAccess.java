@@ -25,15 +25,11 @@ import org.arastreju.bindings.neo4j.index.ResourceIndex;
 import org.arastreju.bindings.neo4j.tx.TxAction;
 import org.arastreju.bindings.neo4j.tx.TxProvider;
 import org.arastreju.bindings.neo4j.tx.TxResultAction;
-import org.arastreju.sge.SNOPS;
 import org.arastreju.sge.model.ResourceID;
-import org.arastreju.sge.model.SemanticGraph;
-import org.arastreju.sge.model.Statement;
 import org.arastreju.sge.model.associations.Association;
 import org.arastreju.sge.model.associations.AssociationKeeper;
 import org.arastreju.sge.model.associations.DetachedAssociationKeeper;
 import org.arastreju.sge.model.nodes.ResourceNode;
-import org.arastreju.sge.model.nodes.SemanticNode;
 import org.arastreju.sge.naming.QualifiedName;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Node;
@@ -186,10 +182,10 @@ public class SemanticNetworkAccess implements NeoConstants, NeoResourceResolver 
 	
 	/**
 	 * Unregister the node from the registry and detach the {@link AssociationKeeper}
-	 * @param node
+	 * @param node The node to detach.
 	 */
 	public void detach(final ResourceNode node){
-		index.removeFromRegister(node);
+		index.uncache(node);
 		AssocKeeperAccess.setAssociationKeeper(node, new DetachedAssociationKeeper(node.getAssociations()));
 	}
 	
@@ -210,35 +206,6 @@ public class SemanticNetworkAccess implements NeoConstants, NeoResourceResolver 
 	
 	// -----------------------------------------------------
 
-	/**
-	 * {@inheritDoc}
-	 */
-	public SemanticGraph attach(final SemanticGraph graph){
-		return txProvider.doTransacted(new TxResultAction<SemanticGraph>() {
-			public SemanticGraph execute() {
-				for(Statement stmt : graph.getStatements()) {
-					final ResourceNode subject = resolve(stmt.getSubject());
-					SNOPS.associate(subject, stmt.getPredicate(), stmt.getObject(), stmt.getContexts());
-				}
-				return graph;
-			}
-		});
-	}
-	
-	
-	/**
-	 * {@inheritDoc}
-	 */
-	public void detach(final SemanticGraph graph){
-		for(SemanticNode node : graph.getNodes()){
-			if (node.isResourceNode() && node.asResource().isAttached()){
-				detach(node.asResource());
-			}
-		}
-	}
-	
-	// -----------------------------------------------------
-	
 	/**
 	 * Close the graph database;
 	 */

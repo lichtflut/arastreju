@@ -143,7 +143,7 @@ public class SNOPS {
 		}
 	}
 	
-	public static Set<ResourceNode> subjects(final ResourceNode subject, final ResourceID predicate){
+	public static Set<ResourceID> subjects(final ResourceNode subject, final ResourceID predicate){
 		return subjects(subject.getAssociations(predicate));
 	}
 	
@@ -155,8 +155,8 @@ public class SNOPS {
 		return predicates(subject.getAssociations(predicate));
 	}
 	
-	public static Set<ResourceNode> subjects(final Collection<Association> assocs){
-		final Set<ResourceNode> result = new HashSet<ResourceNode>(assocs.size());
+	public static Set<ResourceID> subjects(final Collection<Association> assocs){
+		final Set<ResourceID> result = new HashSet<ResourceID>(assocs.size());
 		for (Association assoc : assocs) {
 			result.add(assoc.getSubject());
 		}

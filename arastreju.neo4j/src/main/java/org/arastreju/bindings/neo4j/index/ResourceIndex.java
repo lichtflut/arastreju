@@ -151,10 +151,7 @@ public class ResourceIndex implements NeoConstants {
 		cache.put(resource.getQualifiedName(), resource);
 	}
 	
-	/**
-	 * @param node
-	 */
-	public void removeFromRegister(final ResourceNode node) {
+	public void uncache(final ResourceNode node) {
 		cache.remove(node.getQualifiedName());
 	}
 	

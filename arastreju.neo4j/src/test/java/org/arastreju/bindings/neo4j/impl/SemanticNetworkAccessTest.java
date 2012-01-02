@@ -27,11 +27,7 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 
 import org.arastreju.bindings.neo4j.index.ResourceIndex;
 import org.arastreju.sge.SNOPS;
@@ -40,11 +36,7 @@ import org.arastreju.sge.apriori.RDF;
 import org.arastreju.sge.apriori.RDFS;
 import org.arastreju.sge.context.Context;
 import org.arastreju.sge.context.SimpleContextID;
-import org.arastreju.sge.io.OntologyIOException;
-import org.arastreju.sge.io.RdfXmlBinding;
-import org.arastreju.sge.io.SemanticGraphIO;
 import org.arastreju.sge.model.ResourceID;
-import org.arastreju.sge.model.SemanticGraph;
 import org.arastreju.sge.model.SimpleResourceID;
 import org.arastreju.sge.model.associations.Association;
 import org.arastreju.sge.model.nodes.ResourceNode;
@@ -227,48 +219,6 @@ public class SemanticNetworkAccessTest {
 		assertEquals(propername.getStringValue(), "Knut");
 	}
 
-	@Test
-	public void testGraphImport() throws IOException, OntologyIOException{
-		final SemanticGraphIO io = new RdfXmlBinding();
-		final SemanticGraph graph = io.read(getClass().getClassLoader().getResourceAsStream("test-statements.rdf.xml"));
-		
-		sna.attach(graph);
-		
-		final QualifiedName qn = new QualifiedName("http://test.arastreju.org/common#Person");
-		final ResourceNode node = sna.findResource(qn);
-		assertNotNull(node);
-		
-		final ResourceNode hasChild = sna.findResource(SNOPS.qualify("http://test.arastreju.org/common#hasChild"));
-		assertNotNull(hasChild);
-		assertEquals(new SimpleResourceID("http://test.arastreju.org/common#hasParent"), SNOPS.objects(hasChild, Aras.INVERSE_OF).iterator().next());
-		
-		final ResourceNode marriedTo = sna.findResource(SNOPS.qualify("http://test.arastreju.org/common#isMarriedTo"));
-		assertNotNull(marriedTo);
-		assertEquals(marriedTo, SNOPS.objects(marriedTo, Aras.INVERSE_OF).iterator().next());
-	}
-	
-	@Test
-	public void testSerialization() throws IOException, OntologyIOException, ClassNotFoundException {
-		final SemanticGraphIO io = new RdfXmlBinding();
-		final SemanticGraph graph = io.read(getClass().getClassLoader().getResourceAsStream("test-statements.rdf.xml"));
-		sna.attach(graph);
-		final QualifiedName qn = new QualifiedName("http://test.arastreju.org/common#Person");
-		final ResourceNode node = sna.findResource(qn);
-		
-		assertTrue(node.isAttached());
-		
-		final ByteArrayOutputStream out = new ByteArrayOutputStream();
-		new ObjectOutputStream(out).writeObject(node);
-		
-		byte[] bytes = out.toByteArray();
-		out.close();
-		
-		final ObjectInputStream in = new ObjectInputStream(new ByteArrayInputStream(bytes));
-		
-		final ResourceNode read = (ResourceNode) in.readObject();
-		assertFalse(read.isAttached());
-	}
-	
 	@Test
 	public void testBidirectionalAssociations() {
 		final ResourceNode vehicle = new SNResource(qnVehicle);
