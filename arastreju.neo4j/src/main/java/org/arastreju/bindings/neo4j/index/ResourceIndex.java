@@ -5,17 +5,16 @@ package org.arastreju.bindings.neo4j.index;
 
 import static org.arastreju.sge.SNOPS.uri;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.arastreju.bindings.neo4j.NeoConstants;
 import org.arastreju.bindings.neo4j.impl.NeoResourceResolver;
+import org.arastreju.bindings.neo4j.query.NeoQueryResult;
 import org.arastreju.bindings.neo4j.tx.TxProvider;
 import org.arastreju.sge.model.ResourceID;
 import org.arastreju.sge.model.Statement;
 import org.arastreju.sge.model.nodes.ResourceNode;
 import org.arastreju.sge.model.nodes.ValueNode;
 import org.arastreju.sge.naming.QualifiedName;
+import org.arastreju.sge.query.QueryResult;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.index.IndexHits;
 import org.neo4j.graphdb.index.IndexManager;
@@ -73,35 +72,23 @@ public class ResourceIndex implements NeoConstants {
 	/**
 	 * Find in Index by key and value.
 	 */
-	public IndexHits<Node> lookup(final ResourceID predicate, final ResourceID value) {
-		return lookup(uri(predicate), uri(value));
+	public QueryResult lookup(final ResourceID predicate, final ResourceID value) {
+		final IndexHits<Node> hits = lookup(uri(predicate), uri(value));
+		return new NeoQueryResult(hits, resolver);
 	}
 	
 	/**
 	 * Find in Index by key and value.
 	 */
-	public IndexHits<Node> lookup(final ResourceID predicate, final String value) {
-		return lookup(uri(predicate), value);
-	}
-	
-	/**
-	 * Find in Index by key and value.
-	 */
-	public List<ResourceNode> lookupResourceNodes(final ResourceID predicate, final ResourceID value) {
-		return lookupResourceNodes(uri(predicate), uri(value));
-	}
-	
-	/**
-	 * Find in Index by key and value.
-	 */
-	public List<ResourceNode> lookupResourceNodes(final ResourceID predicate, final String value) {
-		return lookupResourceNodes(uri(predicate), value);
+	public QueryResult lookup(final ResourceID predicate, final String value) {
+		final IndexHits<Node> hits = lookup(uri(predicate), value);
+		return new NeoQueryResult(hits, resolver);
 	}
 	
 	// -- SEARCH ------------------------------------------
 	
-	public IndexHits<Node> search(final String query) {
-		return neoIndex.search(query);
+	public QueryResult search(final String query) {
+		return new NeoQueryResult(neoIndex.search(query), resolver);
 	}
 	
 	// -- ADD TO INDEX ------------------------------------
@@ -180,23 +167,8 @@ public class ResourceIndex implements NeoConstants {
 	/**
 	 * Find in Index by key and value.
 	 */
-	private List<ResourceNode> lookupResourceNodes(final String key, final String value) {
-		return map(neoIndex.lookupNodes(key, value));
-	}
-	
-	/**
-	 * Find in Index by key and value.
-	 */
 	private IndexHits<Node> lookup(final String key, final String value) {
 		return neoIndex.lookup(key, value);
 	}
 	
-	private List<ResourceNode> map(final List<Node> neoNodes) {
-		final List<ResourceNode> result = new ArrayList<ResourceNode>(neoNodes.size());
-		for (Node node : neoNodes) {
-			result.add(resolver.resolve(node));
-		}
-		return result;
-	}
-
 }

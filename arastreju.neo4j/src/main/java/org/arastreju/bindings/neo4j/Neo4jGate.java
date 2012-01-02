@@ -18,7 +18,6 @@ package org.arastreju.bindings.neo4j;
 import java.io.IOException;
 
 import org.arastreju.bindings.neo4j.impl.GraphDataStore;
-import org.arastreju.bindings.neo4j.impl.NeoTypeSystem;
 import org.arastreju.bindings.neo4j.impl.SemanticNetworkAccess;
 import org.arastreju.bindings.neo4j.query.NeoQueryManager;
 import org.arastreju.sge.ArastrejuGate;
@@ -26,7 +25,6 @@ import org.arastreju.sge.ArastrejuProfile;
 import org.arastreju.sge.IdentityManagement;
 import org.arastreju.sge.ModelingConversation;
 import org.arastreju.sge.Organizer;
-import org.arastreju.sge.TypeSystem;
 import org.arastreju.sge.query.QueryManager;
 import org.arastreju.sge.security.LoginException;
 import org.arastreju.sge.spi.GateContext;
@@ -84,13 +82,6 @@ public class Neo4jGate implements ArastrejuGate {
 	 */
 	public QueryManager createQueryManager() {
 		return new NeoQueryManager(sna, sna.getIndex());
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public TypeSystem getTypeSystem() {
-		return new NeoTypeSystem(sna);
 	}
 
 	/**

@@ -3,7 +3,6 @@
  */
 package org.arastreju.bindings.neo4j.query;
 
-import org.arastreju.bindings.neo4j.impl.NeoResourceResolver;
 import org.arastreju.bindings.neo4j.index.NeoIndex;
 import org.arastreju.bindings.neo4j.index.ResourceIndex;
 import org.arastreju.sge.model.nodes.ResourceNode;
@@ -11,8 +10,6 @@ import org.arastreju.sge.query.QueryBuilder;
 import org.arastreju.sge.query.QueryExpression;
 import org.arastreju.sge.query.QueryParam;
 import org.arastreju.sge.query.QueryResult;
-import org.neo4j.graphdb.Node;
-import org.neo4j.graphdb.index.IndexHits;
 
 import de.lichtflut.infra.exceptions.NotYetSupportedException;
 
@@ -31,16 +28,13 @@ public class NeoQueryBuilder extends QueryBuilder {
 	
 	private final ResourceIndex index;
 	
-	private final NeoResourceResolver resolver;
-	
 	// -----------------------------------------------------
 	
 	/**
 	 * @param index
 	 */
-	public NeoQueryBuilder(final ResourceIndex index, final NeoResourceResolver resolver) {
+	public NeoQueryBuilder(final ResourceIndex index) {
 		this.index = index;
-		this.resolver = resolver;
 	}
 	
 	// -----------------------------------------------------
@@ -50,7 +44,7 @@ public class NeoQueryBuilder extends QueryBuilder {
 	 */
 	public QueryResult getResult() {
 		final String queryString = toQueryString();
-		return new NeoQueryResult(index.search(queryString), resolver);
+		return index.search(queryString);
 	}
 
 	/** 
@@ -58,13 +52,8 @@ public class NeoQueryBuilder extends QueryBuilder {
 	 */
 	public ResourceNode getSingleNode() {
 		final String queryString = toQueryString();
-		final IndexHits<Node> result = index.search(queryString);
-		final Node single = result.getSingle();
-		if (single != null) {
-			return resolver.resolve(single);	
-		} else {
-			return null;
-		}
+		final QueryResult result = index.search(queryString);
+		return result.getSingleNode();
 	}
 	
 	// -----------------------------------------------------

@@ -40,6 +40,8 @@ import org.arastreju.sge.security.User;
  */
 public interface IdentityManagement {
 	
+	User findUser(String identity);
+	
 	// -- LOGIN -------------------------------------------
 	
 	/**

@@ -4,7 +4,6 @@
 package org.arastreju.sge.query;
 
 import org.arastreju.sge.model.ResourceID;
-import org.arastreju.sge.model.nodes.ResourceNode;
 import org.arastreju.sge.naming.QualifiedName;
 
 /**

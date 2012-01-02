@@ -37,8 +37,6 @@ import org.arastreju.sge.security.impl.ArastrejuRootUser;
 import org.arastreju.sge.security.impl.PermissionImpl;
 import org.arastreju.sge.security.impl.RoleImpl;
 import org.arastreju.sge.security.impl.UserImpl;
-import org.neo4j.graphdb.Node;
-import org.neo4j.graphdb.index.IndexHits;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -73,6 +71,21 @@ public class NeoIdentityManagement implements IdentityManagement {
 	}
 	
 	// -----------------------------------------------------
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	public User findUser(final String identity) {
+		final QueryResult result = index.lookup(Aras.IDENTIFIED_BY, identity);
+		if (result.size() > 1) {
+			logger.error("More than on user with name '" + identity + "' found.");
+			throw new IllegalStateException("More than on user with name '" + identity + "' found.");
+		} else if (result.isEmpty()) {
+			return null;
+		} else {
+			return new UserImpl(result.getSingleNode());
+		}
+	};
 
 	/**
 	 * {@inheritDoc}
@@ -83,7 +96,7 @@ public class NeoIdentityManagement implements IdentityManagement {
 		if (name == null) {
 			throw new LoginException(ErrorCodes.LOGIN_INVALID_DATA, "No username given");	
 		}
-		final List<ResourceNode> found = index.lookupResourceNodes(Aras.IDENTIFIED_BY, name);
+		final QueryResult found = index.lookup(Aras.IDENTIFIED_BY, name);
 		if (found.size() > 1) {
 			logger.error("More than on user with name '" + name + "' found.");
 			throw new IllegalStateException("More than on user with name '" + name + "' found.");
@@ -98,7 +111,7 @@ public class NeoIdentityManagement implements IdentityManagement {
 			}
 		}
 		
-		final SNEntity user = found.get(0).asEntity();
+		final SNEntity user = found.getSingleNode().asEntity();
 		if (!credential.applies(singleObject(user, Aras.HAS_CREDENTIAL))){
 			throw new LoginException(ErrorCodes.LOGIN_USER_CREDENTIAL_NOT_MATCH, "Wrong credential");
 		}
@@ -157,7 +170,7 @@ public class NeoIdentityManagement implements IdentityManagement {
 	 * {@inheritDoc}
 	 */
 	public Set<Role> getRoles() {
-		final List<ResourceNode> nodes = index.lookupResourceNodes(RDF.TYPE, Aras.ROLE);
+		final List<ResourceNode> nodes = index.lookup(RDF.TYPE, Aras.ROLE).toList();
 		final Set<Role> roles = new HashSet<Role>(nodes.size());
 		for(ResourceNode current: nodes) {
 			roles.add(new RoleImpl(current));
@@ -195,7 +208,7 @@ public class NeoIdentityManagement implements IdentityManagement {
 	 * {@inheritDoc}
 	 */
 	public Set<Permission> getPermissions() {
-		final List<ResourceNode> nodes = index.lookupResourceNodes(RDF.TYPE, Aras.PERMISSION);
+		final List<ResourceNode> nodes = index.lookup(RDF.TYPE, Aras.PERMISSION).toList();
 		final Set<Permission> permissions = new HashSet<Permission>(nodes.size());
 		for(ResourceNode current: nodes) {
 			permissions.add(new PermissionImpl(current));
@@ -206,7 +219,7 @@ public class NeoIdentityManagement implements IdentityManagement {
 	// -----------------------------------------------------
 	
 	private ResourceNode findItem(final ResourceID type, final String name) {
-		final Query query = new NeoQueryBuilder(index, store);
+		final Query query = new NeoQueryBuilder(index);
 		query.addField(RDF.TYPE, type);
 		query.and();
 		query.addField(Aras.HAS_UNIQUE_NAME, name);
@@ -220,7 +233,7 @@ public class NeoIdentityManagement implements IdentityManagement {
 	}
 	
 	protected void assertUniqueIdentity(final String name) throws ArastrejuException {
-		final IndexHits<Node> found = index.lookup(Aras.IDENTIFIED_BY, name);
+		final QueryResult found = index.lookup(Aras.IDENTIFIED_BY, name);
 		if (found.size() > 0) {
 			logger.error("More than on user with name '" + name + "' found.");
 			throw new ArastrejuException(ErrorCodes.REGISTRATION_NAME_ALREADY_IN_USE, 

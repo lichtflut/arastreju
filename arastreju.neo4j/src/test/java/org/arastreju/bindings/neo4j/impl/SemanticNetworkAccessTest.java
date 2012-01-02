@@ -54,13 +54,12 @@ import org.arastreju.sge.model.nodes.views.SNClass;
 import org.arastreju.sge.model.nodes.views.SNEntity;
 import org.arastreju.sge.model.nodes.views.SNText;
 import org.arastreju.sge.naming.QualifiedName;
+import org.arastreju.sge.query.QueryResult;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.neo4j.graphdb.GraphDatabaseService;
-import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Transaction;
-import org.neo4j.graphdb.index.IndexHits;
 
 /**
  * <p>
@@ -133,7 +132,7 @@ public class SemanticNetworkAccessTest {
 		final GraphDatabaseService gdbService = sna.getGdbService();
 		Transaction tx = gdbService.beginTx();
 		
-		final IndexHits<Node> found = index.lookup(Aras.HAS_PROPER_NAME, "BMW");
+		final QueryResult found = index.lookup(Aras.HAS_PROPER_NAME, "BMW");
 		assertNotNull(found);
 		assertEquals(1, found.size());
 		
@@ -501,7 +500,7 @@ public class SemanticNetworkAccessTest {
 		sna.attach(vehicle);
 		sna.attach(car);
 		
-		IndexHits<Node> hits = sna.getIndex().lookup(RDF.TYPE, id(qnVehicle));
+		QueryResult hits = sna.getIndex().lookup(RDF.TYPE, id(qnVehicle));
 		assertEquals(2, hits.size());
 		
 		SNOPS.remove(car, RDF.TYPE);
