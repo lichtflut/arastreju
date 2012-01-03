@@ -21,6 +21,7 @@ import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.index.Index;
 import org.neo4j.graphdb.index.IndexHits;
 import org.neo4j.graphdb.index.IndexManager;
+import org.neo4j.index.lucene.QueryContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -148,6 +149,19 @@ public class NeoIndex implements NeoConstants {
 	 * @return The resulting index hits.
 	 */
 	public IndexHits<Node> search(final String query) {
+		return txProvider.doTransacted(new TxResultAction<IndexHits<Node>>() {
+			public IndexHits<Node> execute() {
+				return resourceIndex().query(query);
+			}
+		});
+	}
+	
+	/**
+	 * Execute the query.
+	 * @param query The query.
+	 * @return The resulting index hits.
+	 */
+	public IndexHits<Node> search(final QueryContext query) {
 		return txProvider.doTransacted(new TxResultAction<IndexHits<Node>>() {
 			public IndexHits<Node> execute() {
 				return resourceIndex().query(query);

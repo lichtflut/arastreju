@@ -74,6 +74,19 @@ public class NeoQueryResult implements QueryResult {
 		}
 		return result;
 	}
+	
+	/** 
+	* {@inheritDoc}
+	*/
+	public List<ResourceNode> toList(int max) {
+		int absMax = Math.min(hits.size(), max);
+		final List<ResourceNode> result = new ArrayList<ResourceNode>(absMax);
+		for (int i=0; i < absMax; i++) {
+			result.add(resolver.resolve(hits.next()));
+		}
+		hits.close();
+		return result;
+	}
 
 	/** 
 	 * {@inheritDoc}

@@ -24,6 +24,8 @@ import org.arastreju.sge.query.exp.AbstractQueryExpression;
 public abstract class QueryBuilder implements Query {
 	
 	private Stack<QueryExpression> stack = new Stack<QueryExpression>();
+	
+	private SortCriteria criteria;
 
 	// -----------------------------------------------------
 	
@@ -133,6 +135,13 @@ public abstract class QueryBuilder implements Query {
 		return this;
 	}
 	
+	// ----------------------------------------------------
+	
+	public QueryBuilder setSortCriteria(final SortCriteria sortCriteria) {
+		this.criteria = sortCriteria;
+		return this;
+	}
+	
 	// -----------------------------------------------------
 	
 	/** 
@@ -151,6 +160,10 @@ public abstract class QueryBuilder implements Query {
 	
 	protected QueryExpression getRoot() {
 		return stack.firstElement();
+	}
+	
+	protected SortCriteria getSortCriteria() {
+		return criteria;
 	}
 	
 	protected QueryBuilder append(final QueryParam param) {

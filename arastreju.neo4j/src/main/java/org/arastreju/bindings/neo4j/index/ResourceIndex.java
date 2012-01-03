@@ -18,6 +18,7 @@ import org.arastreju.sge.query.QueryResult;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.index.IndexHits;
 import org.neo4j.graphdb.index.IndexManager;
+import org.neo4j.index.lucene.QueryContext;
 
 /**
  * <p>
@@ -87,7 +88,7 @@ public class ResourceIndex implements NeoConstants {
 	
 	// -- SEARCH ------------------------------------------
 	
-	public QueryResult search(final String query) {
+	public QueryResult search(final QueryContext query) {
 		return new NeoQueryResult(neoIndex.search(query), resolver);
 	}
 	
@@ -105,7 +106,7 @@ public class ResourceIndex implements NeoConstants {
 	
 	public void index(final Node neoNode, final ResourceNode resourceNode) {
 		neoIndex.index(neoNode, resourceNode.getQualifiedName());
-		register(resourceNode);
+		cache(resourceNode);
 	}
 	
 	/**
@@ -145,9 +146,9 @@ public class ResourceIndex implements NeoConstants {
 		}
 	}
 	
-	// -- REGISTER ----------------------------------
+	// -- CACHE ----------------------------------
 	
-	public void register(final ResourceNode resource){
+	public void cache(final ResourceNode resource){
 		cache.put(resource.getQualifiedName(), resource);
 	}
 	
@@ -155,7 +156,7 @@ public class ResourceIndex implements NeoConstants {
 		cache.remove(node.getQualifiedName());
 	}
 	
-	public void clearRegister(){
+	public void clearCache(){
 		cache.clear();
 	}
 	

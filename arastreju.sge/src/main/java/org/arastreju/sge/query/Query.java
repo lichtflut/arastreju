@@ -90,8 +90,18 @@ public interface Query {
 	 */
 	Query end();
 	
+	// ----------------------------------------------------
+	
+	/**
+	 * Set criteria for sorting.
+	 * @param sortCriteria The sort criteria.
+	 * @return This.
+	 */
+	QueryBuilder setSortCriteria(SortCriteria sortCriteria);
+	
 	// -----------------------------------------------------
 
 	QueryResult getResult();
+
 	
 }

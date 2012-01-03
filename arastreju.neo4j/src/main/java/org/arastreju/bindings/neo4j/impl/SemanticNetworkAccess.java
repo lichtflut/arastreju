@@ -210,7 +210,7 @@ public class SemanticNetworkAccess implements NeoConstants, NeoResourceResolver 
 	 * Close the graph database;
 	 */
 	public void close() {
-		index.clearRegister();
+		index.clearCache();
 	}
 
 	// -----------------------------------------------------
@@ -223,7 +223,7 @@ public class SemanticNetworkAccess implements NeoConstants, NeoResourceResolver 
 	 */
 	protected SNResourceNeo createArasNode(final Node neoNode, final QualifiedName qn) {
 		final SNResourceNeo arasNode = new SNResourceNeo(qn);
-		index.register(arasNode);
+		index.cache(arasNode);
 		final NeoAssociationKeeper assocKeeper = new NeoAssociationKeeper(arasNode, neoNode, assocHandler);
 		AssocKeeperAccess.setAssociationKeeper(arasNode, assocKeeper);
 		return arasNode;

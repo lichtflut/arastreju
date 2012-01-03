@@ -3,6 +3,8 @@
  */
 package org.arastreju.bindings.neo4j.query;
 
+import java.util.Arrays;
+
 import org.arastreju.bindings.neo4j.index.NeoIndex;
 import org.arastreju.bindings.neo4j.index.ResourceIndex;
 import org.arastreju.sge.model.nodes.ResourceNode;
@@ -10,6 +12,7 @@ import org.arastreju.sge.query.QueryBuilder;
 import org.arastreju.sge.query.QueryExpression;
 import org.arastreju.sge.query.QueryParam;
 import org.arastreju.sge.query.QueryResult;
+import org.neo4j.index.lucene.QueryContext;
 
 import de.lichtflut.infra.exceptions.NotYetSupportedException;
 
@@ -43,20 +46,32 @@ public class NeoQueryBuilder extends QueryBuilder {
 	 * {@inheritDoc}
 	 */
 	public QueryResult getResult() {
-		final String queryString = toQueryString();
-		return index.search(queryString);
+		return index.search(toQueryContext());
 	}
 
 	/** 
 	 * {@inheritDoc}
 	 */
 	public ResourceNode getSingleNode() {
-		final String queryString = toQueryString();
-		final QueryResult result = index.search(queryString);
+		final QueryResult result = index.search(toQueryContext());
 		return result.getSingleNode();
 	}
 	
 	// -----------------------------------------------------
+	
+	protected QueryContext toQueryContext() {
+		final QueryContext qctx = new QueryContext(toQueryString());
+		qctx.tradeCorrectnessForSpeed();
+		if (getSortCriteria() != null) {
+			String[] columns = getSortCriteria().getColumns();
+			if (columns.length > 1) {
+				qctx.sort(columns[0], Arrays.copyOfRange(columns, 1, columns.length -1));
+			} else if (columns.length > 0) {
+				qctx.sort(columns[0]);
+			}
+		}
+		return qctx;
+	}
 	
 	protected String toQueryString() {
 		final StringBuilder sb = new StringBuilder();
