@@ -31,7 +31,7 @@ public class JsonBinding implements SemanticGraphIO {
 	 * @see org.arastreju.sge.io.SemanticGraphIO#read(java.io.InputStream)
 	 */
 	public SemanticGraph read(final InputStream in) throws IOException,
-			OntologyIOException {
+			SemanticIOException {
 		throw new NotYetImplementedException();
 	}
 
@@ -39,7 +39,7 @@ public class JsonBinding implements SemanticGraphIO {
 	 * @see org.arastreju.sge.io.SemanticGraphIO#write(org.arastreju.sge.model.SemanticGraph, java.io.OutputStream)
 	 */
 	public void write(final SemanticGraph graph, final OutputStream out)
-			throws IOException, OntologyIOException {
+			throws IOException, SemanticIOException {
 		
 		boolean first = true;
 		for (final ResourceNode subject : graph.getSubjects()) {

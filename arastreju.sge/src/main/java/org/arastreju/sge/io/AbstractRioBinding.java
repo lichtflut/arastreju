@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import org.arastreju.sge.eh.ErrorCodes;
 import org.arastreju.sge.model.SemanticGraph;
 import org.arastreju.sge.model.Statement;
 import org.openrdf.rio.RDFHandlerException;
@@ -38,7 +39,7 @@ public abstract class AbstractRioBinding implements SemanticGraphIO {
    /**
     * {@inheritDoc}
     */
-    public SemanticGraph read(final InputStream in) throws IOException, OntologyIOException {
+    public SemanticGraph read(final InputStream in) throws IOException, SemanticIOException {
         final AssociationCollector collector = new AssociationCollector();
         RDFParser parser = parserFactory().getParser();
         try {
@@ -47,9 +48,9 @@ public abstract class AbstractRioBinding implements SemanticGraphIO {
             parser.parse(in, "void");
             return collector.toSemanticGraph();
         } catch (RDFParseException e) {
-            throw new OntologyIOException("error while reading RDF", e);
+            throw new SemanticIOException(ErrorCodes.GRAPH_READ_ERROR, "error while reading RDF", e);
         } catch (RDFHandlerException e) {
-            throw new OntologyIOException("error while reading RDF", e);
+            throw new SemanticIOException(ErrorCodes.GRAPH_READ_ERROR, "error while reading RDF", e);
         }
     }
     
@@ -57,10 +58,9 @@ public abstract class AbstractRioBinding implements SemanticGraphIO {
      * {@inheritDoc}
      */
     public void write(final SemanticGraph graph, final OutputStream out)
-            throws IOException, OntologyIOException {
+            throws IOException, SemanticIOException {
         try {
             final RDFWriter writer = writerFactory().getWriter(out);
-            
             final NamespaceMap nsMap = new NamespaceMap(graph.getNamespaces());
             logger.debug("PrefixMap: \n" + nsMap);
             for(String prefix : nsMap.getPrefixes()){
@@ -74,9 +74,9 @@ public abstract class AbstractRioBinding implements SemanticGraphIO {
             writer.endRDF();
             
         } catch(IllegalArgumentException e){
-            throw new OntologyIOException("associations couldn't be written", e);
+            throw new SemanticIOException(ErrorCodes.GRAPH_WRITE_ERROR, "associations couldn't be written", e);
         } catch(RDFHandlerException e){
-            throw new OntologyIOException("associations couldn't be written", e);
+            throw new SemanticIOException(ErrorCodes.GRAPH_WRITE_ERROR, "associations couldn't be written", e);
         }
     }
     

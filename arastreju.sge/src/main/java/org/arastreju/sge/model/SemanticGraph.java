@@ -41,7 +41,7 @@ public interface SemanticGraph {
 	 * Get all associations of this graph.
 	 * @return The associations.
 	 */
-	Set<Statement> getStatements();
+	Collection<Statement> getStatements();
 	
 	/**
 	 * Get all nodes of the graph.

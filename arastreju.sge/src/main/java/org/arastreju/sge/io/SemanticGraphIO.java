@@ -23,7 +23,7 @@ import org.arastreju.sge.model.SemanticGraph;
 
 /**
  * <p>
- *  [DESCRIPTION]
+ *  Base interface for input and output of semantic graphs.
  * </p>
  *
  * <p>
@@ -39,15 +39,17 @@ public interface SemanticGraphIO {
 	 * @param in The input stream containing the model.
 	 * @return The model extract read from inpuit stream.
 	 * @throws IOException
-	 * @throws OntologyIOException
+	 * @throws SemanticIOException
 	 */
 	SemanticGraph read(final InputStream in) throws IOException,
-			OntologyIOException;
+			SemanticIOException;
 
 	/**
 	 * Writes the extract as RDF to given stream.
+	 * @param graph The graph to write.
+	 * @param The output stream.
 	 */
 	void write(final SemanticGraph graph, final OutputStream out)
-			throws IOException, OntologyIOException;
+			throws IOException, SemanticIOException;
 
 }

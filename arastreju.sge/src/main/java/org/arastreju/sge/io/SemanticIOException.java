@@ -15,9 +15,12 @@
  */
 package org.arastreju.sge.io;
 
+import org.arastreju.sge.eh.ArastrejuException;
+import org.arastreju.sge.eh.ErrorCodes;
+
 /**
  * <p>
- *  [DESCRIPTION]
+ *  Exception for input and output of semantic data.
  * </p>
  *
  * <p>
@@ -26,14 +29,39 @@ package org.arastreju.sge.io;
  *
  * @author Oliver Tigges
  */
-public class OntologyIOException extends Exception {
+public class SemanticIOException extends ArastrejuException {
 
-	public OntologyIOException(final String msg, final Throwable t) {
-		super(msg, t);
+	/**
+	 * @param errCode
+	 */
+	public SemanticIOException(String msg) {
+		super(ErrorCodes.GRAPH_IO_ERROR, msg);
+	}
+	
+	/**
+	 * @param errCode
+	 * @param msg
+	 */
+	public SemanticIOException(Long errCode, String msg) {
+		super(errCode, msg);
 	}
 
-	public OntologyIOException(final String msg) {
-		super(msg);
+	/**
+	 * @param errCode
+	 */
+	public SemanticIOException(Long errCode) {
+		super(errCode);
 	}
+
+	/**
+	 * @param errCode
+	 * @param msg
+	 * @param cause
+	 */
+	public SemanticIOException(Long errCode, String msg, Throwable cause) {
+		super(errCode, msg, cause);
+	}
+
+	
 
 }

@@ -83,10 +83,12 @@ public abstract class AbstractIdentity implements Identity, Serializable {
 	 * {@inheritDoc}
 	 */
 	public Set<Permission> getPermissions() {
-		final Set<SemanticNode> permissionNodes = SNOPS.objects(identityNode, Aras.HAS_PERMISSION);
-		final Set<Permission> permissions = new HashSet<Permission>(permissionNodes.size());
-		for (SemanticNode node : permissionNodes) {
-			permissions.add(new PermissionImpl(node.asResource()));
+		final Set<Permission> permissions = new HashSet<Permission>();
+		for(Role role : getRoles()) {
+			final Set<SemanticNode> permissionNodes = SNOPS.objects(role.getAssociatedResource(), Aras.CONTAINS);
+			for (SemanticNode node : permissionNodes) {
+				permissions.add(new PermissionImpl(node.asResource()));
+			}
 		}
 		return permissions;
 	}

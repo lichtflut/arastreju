@@ -92,6 +92,13 @@ public interface IdentityManagement {
 	
 	void addUserToRoles(User user, Role... roles);
 	
+	/**
+	 * Add permissions to a role.
+	 * @param role The role. 
+	 * @param permissions The permissions to be added.
+	 */
+	void addPermissionsToRole(Role role, Permission... permissions);
+	
 	// -- PERMISSION MANAGEMENT ---------------------------
 	
 	Permission registerPermission(String name);

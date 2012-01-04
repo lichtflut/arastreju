@@ -188,6 +188,17 @@ public class NeoIdentityManagement implements IdentityManagement {
 			associate(userNode, Aras.HAS_ROLE, role.getAssociatedResource(), Aras.IDENT);
 		}
 	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	public void addPermissionsToRole(final Role role, final Permission... permissions) {
+		final ResourceNode roleNode = role.getAssociatedResource();
+		store.attach(roleNode);
+		for (Permission permission : permissions) {
+			associate(roleNode, Aras.CONTAINS, permission.getAssociatedResource(), Aras.IDENT);
+		}
+	}
 
 	/**
 	 * {@inheritDoc}

@@ -5,7 +5,8 @@ package org.arastreju.sge.eh;
 
 /**
  * <p>
- *  [DESCRIPTION]
+ *  Checked Arastreju exception.
+ *  @see ErrorCodes
  * </p>
  *
  * <p>

@@ -17,12 +17,15 @@ package org.arastreju.sge.model;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.TreeSet;
 
 import org.arastreju.sge.SNOPS;
 import org.arastreju.sge.model.nodes.ResourceNode;
 import org.arastreju.sge.model.nodes.SemanticNode;
+import org.arastreju.sge.model.nodes.ValueNode;
 import org.arastreju.sge.naming.Namespace;
 
 /**
@@ -38,7 +41,7 @@ import org.arastreju.sge.naming.Namespace;
  */
 public class DefaultSemanticGraph implements SemanticGraph {
 	
-	private final Set<Statement> statements = new HashSet<Statement>();
+	private final Set<Statement> statements = new TreeSet<Statement>(new StmtComparator());
 	
 	// -----------------------------------------------------
 	
@@ -153,6 +156,48 @@ public class DefaultSemanticGraph implements SemanticGraph {
 				addCascading(object.asResource(), visited);
 			}
 		}
+	}
+	
+	private static class StmtComparator implements Comparator<Statement> {
+
+		/** 
+		* {@inheritDoc}
+		*/
+		public int compare(Statement stmt1, Statement stmt2) {
+			int c = compare(stmt1.getSubject(), stmt2.getSubject());
+			if (c == 0) {
+				c = compare(stmt1.getPredicate(), stmt2.getPredicate());
+			} 
+			if (c == 0) {
+				c = compare(stmt1.getObject(), stmt2.getObject());
+			}
+			return c;
+		}
+		
+		private int compare(SemanticNode sn1, SemanticNode sn2) {
+			if (sn1.isResourceNode()) {
+				if (sn2.isResourceNode()) {
+					return compare(sn1.asResource(), sn2.asResource());
+				} else {
+					return -1;
+				}
+			} else {
+				if (sn2.isResourceNode()) {
+					return 1;
+				} else {
+					return compare(sn1.asValue(), sn2.asValue());
+				}
+			}
+		}
+		
+		private int compare(ResourceNode rn1, ResourceNode rn2) {
+			return rn1.getQualifiedName().compareTo(rn2.getQualifiedName());
+		}
+		
+		private int compare(ValueNode v1, ValueNode v2) {
+			return v1.getStringValue().compareTo(v2.getStringValue());
+		}
+		
 	}
 
 }

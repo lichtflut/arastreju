@@ -31,7 +31,7 @@ import org.arastreju.bindings.neo4j.impl.SemanticNetworkAccess;
 import org.arastreju.sge.SNOPS;
 import org.arastreju.sge.apriori.Aras;
 import org.arastreju.sge.apriori.RDFS;
-import org.arastreju.sge.io.OntologyIOException;
+import org.arastreju.sge.io.SemanticIOException;
 import org.arastreju.sge.io.RdfXmlBinding;
 import org.arastreju.sge.io.SemanticGraphIO;
 import org.arastreju.sge.model.SemanticGraph;
@@ -140,7 +140,7 @@ public class Neo4jModellingConversationTest {
 	}
 	
 	@Test
-	public void testGraphImport() throws IOException, OntologyIOException{
+	public void testGraphImport() throws IOException, SemanticIOException{
 		final SemanticGraphIO io = new RdfXmlBinding();
 		final SemanticGraph graph = io.read(getClass().getClassLoader().getResourceAsStream("test-statements.rdf.xml"));
 		
@@ -160,7 +160,7 @@ public class Neo4jModellingConversationTest {
 	}
 	
 	@Test
-	public void testSerialization() throws IOException, OntologyIOException, ClassNotFoundException {
+	public void testSerialization() throws IOException, SemanticIOException, ClassNotFoundException {
 		final SemanticGraphIO io = new RdfXmlBinding();
 		final SemanticGraph graph = io.read(getClass().getClassLoader().getResourceAsStream("test-statements.rdf.xml"));
 		mc.attach(graph);

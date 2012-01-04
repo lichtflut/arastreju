@@ -37,7 +37,7 @@ import org.openrdf.rio.RDFHandlerException;
 public class JsonBindingTest {
 	
 	@Test
-	public void testJsonWriter() throws RDFHandlerException, IOException, OntologyIOException{
+	public void testJsonWriter() throws RDFHandlerException, IOException, SemanticIOException{
 		final SemanticGraph graph = new RdfXmlBinding().read(getClass().getClassLoader().getResourceAsStream("n04.aras.rdf"));
 		Assert.assertNotNull(graph);
 	}
