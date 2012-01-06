@@ -160,22 +160,21 @@ public class SemanticNetworkAccess implements NeoConstants, NeoResourceResolver 
 	 * @param resource The node to attach.
 	 * @return A node attached by guaranty.
 	 */
-	public ResourceNode attach(final ResourceNode resource) {
+	public void attach(final ResourceNode resource) {
 		// 1st: check if node is already attached.
 		if (resource.isAttached()){
-			return resource;
+			return;
 		}
-		return txProvider.doTransacted(new TxResultAction<ResourceNode>() {
-			public ResourceNode execute() {
+		txProvider.doTransacted(new TxAction() {
+			public void execute() {
 				// 2nd: check if node for qualified name exists and has to be merged
-				ResourceNode attached = findResource(resource.getQualifiedName());
-				if (attached != null){
-					attached = merge(attached, resource);
+				final AssociationKeeper attachedKeeper = findAssociationKeeper(resource.getQualifiedName());
+				if (attachedKeeper != null){
+					merge(attachedKeeper, resource);
 				} else {
 					// 3rd: if resource is really new, create a new Neo node.
-					attached = persist(resource);
+					persist(resource);
 				}
-				return attached;
 			}
 		});
 	}
@@ -210,14 +209,13 @@ public class SemanticNetworkAccess implements NeoConstants, NeoResourceResolver 
 	/**
 	 * Remove the node.
 	 * @param id The ID.
-	 * @param cascade The cascade flag.
 	 */
-	public void remove(final ResourceID id, final boolean cascade) {
+	public void remove(final ResourceID id) {
 		final ResourceNode node = resolve(id);
 		AssocKeeperAccess.getAssociationKeeper(node).getAssociations().clear();
 		txProvider.doTransacted(new TxAction() {
 			public void execute() {
-				new NodeRemover(index).remove(node, cascade);
+				new NodeRemover(index).remove(node, false);
 			}
 		});
 		detach(node);
@@ -302,23 +300,23 @@ public class SemanticNetworkAccess implements NeoConstants, NeoResourceResolver 
 	}
 	
 	/**
-	 * Merges all associations from the 'changed' node to the 'attached' node.
-	 * @param attached The currently attached node.
+	 * Merges all associations from the 'changed' node to the 'attached' keeper and put's keeper in 'changed'.
+	 * @param attached The currently attached keeper for this resource.
 	 * @param changed An unattached node referencing the same resource.
 	 * @return The merged {@link ResourceNode}.
 	 */
-	protected ResourceNode merge(final ResourceNode attached, final ResourceNode changed) {
-		final AssociationKeeper ak = AssocKeeperAccess.getAssociationKeeper(changed);
-		for (Statement toBeRemoved : ak.getAssociationsForRemoval()) {
+	protected void merge(final AssociationKeeper attached, final ResourceNode changed) {
+		final AssociationKeeper detached = AssocKeeperAccess.getAssociationKeeper(changed);
+		for (Statement toBeRemoved : detached.getAssociationsForRemoval()) {
 			attached.removeAssociation(toBeRemoved);
 		}
 		final Set<Statement> currentAssocs = attached.getAssociations();
-		for(Statement assoc : ak.getAssociations()){
+		for(Statement assoc : detached.getAssociations()){
 			if (!currentAssocs.contains(assoc)){
-				SNOPS.associate(attached, assoc.getPredicate(), assoc.getObject(), assoc.getContexts());
+				attached.addAssociation(assoc);
 			}
 		}
-		return attached;
+		AssocKeeperAccess.setAssociationKeeper(changed, attached);
 	}
 	
 }

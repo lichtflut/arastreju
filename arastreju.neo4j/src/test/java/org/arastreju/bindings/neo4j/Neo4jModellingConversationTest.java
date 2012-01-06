@@ -107,9 +107,9 @@ public class Neo4jModellingConversationTest {
 	public void testMerge() throws IOException{
 		QualifiedName qn = new QualifiedName("http://q#", "N1");
 		ResourceNode node = new SNResource(qn);
-		node = mc.attach(node);
+		mc.attach(node);
 		
-		node = mc.attach(node);
+		mc.attach(node);
 		
 		ResourceNode node2 = mc.findResource(qn);
 		
@@ -121,11 +121,11 @@ public class Neo4jModellingConversationTest {
 	public void testSNViews() throws IOException {
 		final QualifiedName qnVehicle = new QualifiedName("http://q#", "Verhicle");
 		ResourceNode vehicle = new SNResource(qnVehicle);
-		vehicle = mc.attach(vehicle);
+		mc.attach(vehicle);
 		
 		final QualifiedName qnCar = new QualifiedName("http://q#", "Car");
 		ResourceNode car = new SNResource(qnCar);
-		car = mc.attach(car);
+		mc.attach(car);
 		
 		SNOPS.associate(car, RDFS.SUB_CLASS_OF, vehicle);
 		

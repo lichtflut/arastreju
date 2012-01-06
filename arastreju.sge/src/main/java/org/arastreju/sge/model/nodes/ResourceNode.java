@@ -35,7 +35,7 @@ import org.arastreju.sge.model.nodes.views.SNProperty;
  *
  * @author Oliver Tigges
  */
-public interface ResourceNode extends SemanticNode, ResourceID {
+public interface ResourceNode extends ResourceID {
 	
 	/**
 	 * Check if this node is a blank node.

@@ -75,7 +75,7 @@ public interface ModelingConversation extends ResourceResolver {
 	 * @param node The node to be attached.
 	 * @return The attached node.
 	 */
-	ResourceNode attach(ResourceNode node);
+	void attach(ResourceNode node);
 	
 	/**
 	 * Detach the given node from the conversation.
@@ -97,9 +97,8 @@ public interface ModelingConversation extends ResourceResolver {
 	 * If 'cascade' is <code>true</code> all resources will be removed cascading that 
 	 * have been associated only by the removed and have no incoming associations thereafter.
 	 * @param id The ID of the resource to be removed.
-	 * @param cascade Flag denoting if remove shall be cascaded.
 	 */
-	void remove(ResourceID id, boolean cascade);
+	void remove(ResourceID id);
 	
 	// -- SEMANTIC GRAPH ----------------------------------
 	

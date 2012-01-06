@@ -89,8 +89,8 @@ public class Neo4jModellingConversation implements ModelingConversation {
 	/**
 	 * {@inheritDoc}
 	 */
-	public ResourceNode attach(final ResourceNode node) {
-		return store.attach(node);
+	public void attach(final ResourceNode node) {
+		store.attach(node);
 	}
 	
 	/** 
@@ -110,8 +110,8 @@ public class Neo4jModellingConversation implements ModelingConversation {
 	/**
 	 * {@inheritDoc}
 	 */
-	public void remove(final ResourceID id, final boolean cascade) {
-		store.remove(id, cascade);
+	public void remove(final ResourceID id) {
+		store.remove(id);
 	}
 	
 	// -----------------------------------------------------

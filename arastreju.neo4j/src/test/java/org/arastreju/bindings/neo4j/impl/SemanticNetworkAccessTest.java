@@ -24,7 +24,6 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
@@ -134,9 +133,7 @@ public class SemanticNetworkAccessTest {
 	@Test
 	public void testDetaching() throws IOException{
 		final ResourceNode car = new SNResource(qnCar);
-		
-		final ResourceNode car2 = sna.attach(car);
-		assertSame(car, car2);
+		sna.attach(car);
 		
 		final ResourceNode car3 = sna.findResource(qnCar);
 		assertEquals(car, car3);
@@ -207,6 +204,7 @@ public class SemanticNetworkAccessTest {
 		// detach and find again
 		sna.detach(car1);
 		final ResourceNode car2 = sna.findResource(qnCar);
+		assertNotNull(car2);
 		assertNotSame(car1, car2);
 		
 		final ResourceNode subClasss = SNOPS.singleObject(car2, RDFS.SUB_CLASS_OF).asResource();
@@ -350,9 +348,9 @@ public class SemanticNetworkAccessTest {
 		
 		sna.attach(car1);
 
-		sna.remove(car, true);
+		sna.remove(car);
 		assertNull(sna.findResource(qnCar));
-		sna.remove(car1, true);
+		sna.remove(car1);
 		
 		assertTrue(car1.getAssociations().isEmpty());
 		assertFalse(car1.isAttached());
@@ -367,11 +365,6 @@ public class SemanticNetworkAccessTest {
 		ResourceNode found = sna.findResource(qnVehicle);
 		assertNotNull(found);
 		assertEquals(RDF.TYPE, SNOPS.singleObject(found, RDFS.SUB_CLASS_OF));
-		
-		assertNotNull(sna.findResource(RDF.TYPE.getQualifiedName()));
-		sna.remove(bike, true);
-		assertNull(sna.findResource(RDF.TYPE.getQualifiedName()));
-		
 	}
 	
 	@Test

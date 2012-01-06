@@ -17,6 +17,7 @@ import org.neo4j.graphdb.Relationship;
 /**
  * <p>
  *  Remover of Neo Nodes from datastore.
+ *  TODO: always remove value nodes
  * </p>
  *
  * <p>
