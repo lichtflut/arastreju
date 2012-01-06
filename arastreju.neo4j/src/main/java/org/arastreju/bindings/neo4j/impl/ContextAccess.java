@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 lichtflut Forschungs- und Entwicklungsgesellschaft mbH
+ * Copyright (C) 2012 lichtflut Forschungs- und Entwicklungsgesellschaft mbH
  */
 package org.arastreju.bindings.neo4j.impl;
 

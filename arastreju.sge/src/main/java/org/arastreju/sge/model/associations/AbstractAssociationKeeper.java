@@ -18,6 +18,8 @@ package org.arastreju.sge.model.associations;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.arastreju.sge.model.Statement;
+
 /**
  * <p>
  *  Abstract base for an association keeper.
@@ -31,7 +33,7 @@ import java.util.Set;
  */
 public abstract class AbstractAssociationKeeper implements AssociationKeeper {
 
-	private final Set<Association> associations = new HashSet<Association>();
+	private final Set<Statement> associations = new HashSet<Statement>();
 	
 	private boolean resolved;
 	
@@ -48,14 +50,14 @@ public abstract class AbstractAssociationKeeper implements AssociationKeeper {
 	 * Creates a new instance.
 	 * @param associations The associations to be kept.
 	 */
-	public AbstractAssociationKeeper(final Set<Association> associations) {
+	public AbstractAssociationKeeper(final Set<Statement> associations) {
 		this.associations.addAll(associations);
 		this.resolved = true;
 	}
 	
 	// -----------------------------------------------------
 	
-	public synchronized Set<Association> getAssociations() {
+	public synchronized Set<Statement> getAssociations() {
 		if (!resolved){
 			if (!associations.isEmpty()){
 				throw new IllegalArgumentException("node has already an association attached: " + associations);
@@ -66,11 +68,11 @@ public abstract class AbstractAssociationKeeper implements AssociationKeeper {
 		return associations;
 	}
 
-	public void add(final Association assoc) {
+	public void addAssociation(final Statement assoc) {
 		getAssociations().add(assoc);
 	}
 
-	public boolean remove(final Association assoc) {
+	public boolean removeAssociation(final Statement assoc) {
 		return getAssociations().remove(assoc);
 	}
 
@@ -98,7 +100,7 @@ public abstract class AbstractAssociationKeeper implements AssociationKeeper {
 
 	// -----------------------------------------------------
 	
-	protected Set<Association> getAssociationsDirectly() {
+	protected Set<Statement> getAssociationsDirectly() {
 		return associations;
 	}
 	

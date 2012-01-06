@@ -31,16 +31,14 @@ import org.arastreju.bindings.neo4j.impl.SemanticNetworkAccess;
 import org.arastreju.sge.SNOPS;
 import org.arastreju.sge.apriori.Aras;
 import org.arastreju.sge.apriori.RDFS;
-import org.arastreju.sge.io.SemanticIOException;
 import org.arastreju.sge.io.RdfXmlBinding;
 import org.arastreju.sge.io.SemanticGraphIO;
+import org.arastreju.sge.io.SemanticIOException;
 import org.arastreju.sge.model.SemanticGraph;
 import org.arastreju.sge.model.SimpleResourceID;
-import org.arastreju.sge.model.associations.Association;
 import org.arastreju.sge.model.nodes.ResourceNode;
 import org.arastreju.sge.model.nodes.SNResource;
 import org.arastreju.sge.naming.QualifiedName;
-import org.arastreju.sge.naming.SimpleNamespace;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -129,7 +127,7 @@ public class Neo4jModellingConversationTest {
 		ResourceNode car = new SNResource(qnCar);
 		car = mc.attach(car);
 		
-		Association.create(car, RDFS.SUB_CLASS_OF, vehicle);
+		SNOPS.associate(car, RDFS.SUB_CLASS_OF, vehicle);
 		
 		mc.getIndex().clearCache();
 		

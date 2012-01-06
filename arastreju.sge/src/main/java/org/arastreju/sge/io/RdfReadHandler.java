@@ -15,9 +15,9 @@
  */
 package org.arastreju.sge.io;
 
+import org.arastreju.sge.SNOPS;
 import org.arastreju.sge.model.ResourceID;
 import org.arastreju.sge.model.SimpleResourceID;
-import org.arastreju.sge.model.associations.Association;
 import org.arastreju.sge.model.nodes.BlankNode;
 import org.arastreju.sge.model.nodes.ResourceNode;
 import org.arastreju.sge.model.nodes.SNResource;
@@ -53,14 +53,14 @@ public class RdfReadHandler implements RDFHandler {
 	
 	private final Logger logger = LoggerFactory.getLogger(RdfReadHandler.class);
 	
-	private final ImportedAssociationListener listener;
+	private final ImportedStatementListener listener;
 	
 	// -----------------------------------------------------
 	
 	/**
 	 * Constructor.
 	 */
-	public RdfReadHandler(final ImportedAssociationListener listener) {
+	public RdfReadHandler(final ImportedStatementListener listener) {
 		this.listener = listener;
 		
 	}
@@ -93,8 +93,8 @@ public class RdfReadHandler implements RDFHandler {
 		URI predicate = stmt.getPredicate();
 		Value object = stmt.getObject();
 		
-		Association assoc = Association.create(toResourceNode(subject), toResourceRef(predicate), toNode(object));
-		listener.onNewAssociation(assoc);	
+		listener.onNewStatement(
+				SNOPS.associate(toResourceNode(subject), toResourceRef(predicate), toNode(object)));	
 	}
 	
 	// -----------------------------------------------------

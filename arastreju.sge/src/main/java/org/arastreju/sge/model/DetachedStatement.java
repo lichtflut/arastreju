@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 lichtflut Forschungs- und Entwicklungsgesellschaft mbH
+ * Copyright (C) 2012 lichtflut Forschungs- und Entwicklungsgesellschaft mbH
  */
 package org.arastreju.sge.model;
 
@@ -10,8 +10,7 @@ import org.arastreju.sge.model.nodes.SemanticNode;
 
 /**
  * <p>
- *  A detached Statement. This means, the statement and it's parts need not to be
- *  attached to any datastore.
+ *  A detached Statement. This means the statement needs not to be added to the subject's associations.
  * </p>
  *
  * <p>
@@ -35,13 +34,6 @@ public class DetachedStatement extends AbstractStatement {
 		this.predicate = predicate;
 		this.object = object;
 		setContexts(contexts);
-	}
-	
-	// ----------------------------------------------------
-	
-	@Override
-	public DetachedStatement setInferred(boolean inferred) {
-		return (DetachedStatement) super.setInferred(inferred);
 	}
 
 }

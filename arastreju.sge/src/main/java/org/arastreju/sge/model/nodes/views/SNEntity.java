@@ -20,11 +20,12 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.arastreju.sge.SNOPS;
 import org.arastreju.sge.apriori.Aras;
 import org.arastreju.sge.apriori.RDF;
 import org.arastreju.sge.context.Context;
 import org.arastreju.sge.model.ResourceID;
-import org.arastreju.sge.model.associations.Association;
+import org.arastreju.sge.model.Statement;
 import org.arastreju.sge.model.nodes.ResourceNode;
 import org.arastreju.sge.model.nodes.SNResource;
 import org.arastreju.sge.naming.QualifiedName;
@@ -64,7 +65,7 @@ public class SNEntity extends ResourceView {
 	 */
 	public Set<SNClass> getDirectClasses() {
 		Set<SNClass> result = new HashSet<SNClass>();
-		for(Association assoc: getAssociations(RDF.TYPE)){
+		for(Statement assoc: getAssociations(RDF.TYPE)){
 			result.add(assoc.getObject().asResource().asClass());
 		}
 		return result;
@@ -79,7 +80,7 @@ public class SNEntity extends ResourceView {
 	}
 	
 	public void addToClass(SNClass newClass, Context context) {
-		Association.create(this, RDF.TYPE, newClass, context);
+		SNOPS.associate(this, RDF.TYPE, newClass, context);
 	}
 
 	public boolean isInstanceOf(final ResourceID type) {
@@ -99,15 +100,15 @@ public class SNEntity extends ResourceView {
 	
 	public List<SNText> getNames(){
 		List<SNText> result = new ArrayList<SNText>();
-		Set<Association> assocs = getAssociations(Aras.HAS_PROPER_NAME);
-		for (Association current : assocs) {
+		Set<? extends Statement> assocs = getAssociations(Aras.HAS_PROPER_NAME);
+		for (Statement current : assocs) {
 			result.add(current.getObject().asValue().asText());
 		}
 		return result;
 	}
 
 	public void addName(SNText name, ResourceID type, Context context) {
-		Association.create(this, type, name, context);
+		SNOPS.associate(this, type, name, context);
 	}
 	
 }

@@ -1,7 +1,7 @@
 /*
  * Copyright (C) 2011 lichtflut Forschungs- und Entwicklungsgesellschaft mbH
  */
-package org.arastreju.bindings.neo4j.index;
+package org.arastreju.bindings.neo4j.util.test;
 
 import java.io.File;
 import java.io.IOException;

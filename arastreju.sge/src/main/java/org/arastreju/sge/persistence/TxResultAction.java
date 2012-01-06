@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2010 lichtflut Forschungs- und Entwicklungsgesellschaft mbH
+ * Copyright (C) 2012 lichtflut Forschungs- und Entwicklungsgesellschaft mbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,23 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.arastreju.sge.io;
-
-import org.arastreju.sge.model.associations.Association;
+package org.arastreju.sge.persistence;
 
 /**
  * <p>
- *  [DESCRIPTION]
+ *  A transaction returning a result.
  * </p>
  *
  * <p>
- * 	Created Jan 14, 2011
+ * 	Created Nov 5, 2010
  * </p>
  *
  * @author Oliver Tigges
  */
-public interface ImportedAssociationListener {
+public interface TxResultAction<T> {
 
-	void onNewAssociation(Association assoc);
-	
+	/**
+	 * Execute.
+	 */
+	public T execute();
+
 }

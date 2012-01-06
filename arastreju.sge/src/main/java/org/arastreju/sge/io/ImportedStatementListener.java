@@ -13,24 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.arastreju.bindings.neo4j.tx;
+package org.arastreju.sge.io;
+
+import org.arastreju.sge.model.Statement;
 
 /**
  * <p>
- *  A transaction returning a result.
+ *  Listener for imported statements.
  * </p>
  *
  * <p>
- * 	Created Nov 5, 2010
+ * 	Created Jan 14, 2011
  * </p>
  *
  * @author Oliver Tigges
  */
-public interface TxResultAction<T> {
+public interface ImportedStatementListener {
 
-	/**
-	 * Execute.
-	 */
-	public T execute();
-
+	void onNewStatement(Statement stmt);
+	
 }

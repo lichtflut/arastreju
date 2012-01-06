@@ -9,13 +9,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.arastreju.bindings.neo4j.NeoConstants;
-import org.arastreju.bindings.neo4j.tx.TxAction;
 import org.arastreju.bindings.neo4j.tx.TxProvider;
-import org.arastreju.bindings.neo4j.tx.TxResultAction;
 import org.arastreju.sge.model.ResourceID;
 import org.arastreju.sge.model.nodes.ResourceNode;
 import org.arastreju.sge.model.nodes.ValueNode;
 import org.arastreju.sge.naming.QualifiedName;
+import org.arastreju.sge.persistence.TxAction;
+import org.arastreju.sge.persistence.TxResultAction;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.index.Index;

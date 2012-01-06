@@ -21,7 +21,6 @@ import java.util.List;
 import org.arastreju.sge.model.DefaultSemanticGraph;
 import org.arastreju.sge.model.SemanticGraph;
 import org.arastreju.sge.model.Statement;
-import org.arastreju.sge.model.associations.Association;
 
 /**
  * <p>
@@ -34,17 +33,17 @@ import org.arastreju.sge.model.associations.Association;
  *
  * @author Oliver Tigges
  */
-public class AssociationCollector implements ImportedAssociationListener {
+public class AssociationCollector implements ImportedStatementListener {
 	
-	private final List<Statement> associations = new ArrayList<Statement>();
+	private final List<Statement> statements = new ArrayList<Statement>();
 
 	// -----------------------------------------------------
 	
 	/**
 	 * {@inheritDoc}
 	 */
-	public void onNewAssociation(final Association assoc) {
-		associations.add(assoc);
+	public void onNewStatement(final Statement stmt) {
+		statements.add(stmt);
 	}
 	
 	// ----------------------------------------------------
@@ -52,15 +51,15 @@ public class AssociationCollector implements ImportedAssociationListener {
 	/**
 	 * @return the collected Associations.
 	 */
-	public List<Statement> getAssociations() {
-		return associations;
+	public List<Statement> getStatements() {
+		return statements;
 	}
 
 	/**
 	 * @return
 	 */
 	public SemanticGraph toSemanticGraph() {
-		return new DefaultSemanticGraph(associations);
+		return new DefaultSemanticGraph(statements);
 	}
 
 }

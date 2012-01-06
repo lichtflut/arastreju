@@ -20,22 +20,20 @@ import java.util.Arrays;
 
 import junit.framework.Assert;
 
+import org.arastreju.sge.SNOPS;
 import org.arastreju.sge.apriori.RDFS;
 import org.arastreju.sge.model.DefaultSemanticGraph;
 import org.arastreju.sge.model.SemanticGraph;
 import org.arastreju.sge.model.Statement;
-import org.arastreju.sge.model.associations.Association;
 import org.arastreju.sge.model.nodes.ResourceNode;
 import org.arastreju.sge.model.nodes.SNResource;
 import org.arastreju.sge.naming.QualifiedName;
 import org.junit.Test;
 import org.openrdf.rio.RDFHandlerException;
 
-
-
 /**
  * <p>
- *  [DESCRIPTION]
+ *  Test case for rdf xml binding.
  * </p>
  *
  * <p>
@@ -55,7 +53,7 @@ public class RdfXmlBindingTest {
 		final QualifiedName qnCar = new QualifiedName("http://q#", "Car");
 		final ResourceNode car = new SNResource(qnCar);
 		
-		final Statement association = Association.create(car, RDFS.SUB_CLASS_OF, vehicle);
+		final Statement association = SNOPS.associate(car, RDFS.SUB_CLASS_OF, vehicle);
 		
 		SemanticGraph graph = new DefaultSemanticGraph(Arrays.asList(association));
 		Assert.assertNotNull(graph);

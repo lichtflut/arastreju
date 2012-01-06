@@ -22,8 +22,10 @@ import java.util.Set;
 import java.util.UUID;
 
 import org.arastreju.sge.apriori.RDFS;
+import org.arastreju.sge.context.Context;
+import org.arastreju.sge.model.DetachedStatement;
 import org.arastreju.sge.model.ResourceID;
-import org.arastreju.sge.model.associations.Association;
+import org.arastreju.sge.model.Statement;
 import org.arastreju.sge.model.associations.AssociationKeeper;
 import org.arastreju.sge.model.associations.DetachedAssociationKeeper;
 import org.arastreju.sge.model.nodes.views.SNClass;
@@ -165,16 +167,16 @@ public class SNResource implements ResourceNode, Serializable {
 	/**
 	 * {@inheritDoc}
 	 */
-	public Set<Association> getAssociations() {
+	public Set<Statement> getAssociations() {
 		return Collections.unmodifiableSet(associationKeeper.getAssociations());
 	}
 	
 	/**
 	 * {@inheritDoc}
 	 */
-	public Set<Association> getAssociations(final ResourceID predicate) {
-		Set<Association> result = new HashSet<Association>();
-		for (Association assoc : getAssociations()) {
+	public Set<Statement> getAssociations(final ResourceID predicate) {
+		final Set<Statement> result = new HashSet<Statement>();
+		for (Statement assoc : getAssociations()) {
 			final ResourceID assocPred = assoc.getPredicate();
 			final SNProperty property = assocPred.asResource().asProperty();
 			if (!RDFS.SUB_PROPERTY_OF.equals(predicate) && property.isAttached()){
@@ -191,11 +193,21 @@ public class SNResource implements ResourceNode, Serializable {
 	/**
 	 * {@inheritDoc}
 	 */
-	public void addToAssociations(final Association assoc) {
-		if (!assoc.getSubject().equals(this)){
-			throw new IllegalArgumentException();
+	public void addAssociation(Statement statement) {
+		if (!statement.getSubject().equals(this)){
+			throw new IllegalArgumentException("This node is not the statement's subject.");
 		}
-		associationKeeper.add(assoc);
+		associationKeeper.addAssociation(statement);
+	}
+	
+	/** 
+	 * {@inheritDoc}
+	 * @return 
+	 */
+	public Statement addAssociation(ResourceID predicate, SemanticNode object, Context... ctx) {
+		final Statement statement = new DetachedStatement(this, predicate, object, ctx);
+		associationKeeper.addAssociation(statement);
+		return statement;
 	}
 	
 	// -- DENY ASSOC --------------------------------------
@@ -203,8 +215,8 @@ public class SNResource implements ResourceNode, Serializable {
 	/**
 	 * {@inheritDoc}
 	 */
-	public boolean remove(final Association assoc){
-		return associationKeeper.remove(assoc);
+	public boolean removeAssociation(final Statement stmt){
+		return associationKeeper.removeAssociation(stmt);
 	}
 	
 	// -----------------------------------------------------

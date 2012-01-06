@@ -43,8 +43,8 @@ public class Neo4jGateFactory extends ArastrejuGateFactory {
 	
 	// -----------------------------------------------------
 	
-	/* (non-Javadoc)
-	 * @see org.arastreju.sge.spi.AbstractSpiGateFactory#create()
+	/**
+	 * {@inheritDoc}
 	 */
 	@Override
 	public ArastrejuGate create(final GateContext ctx) throws GateInitializationException {

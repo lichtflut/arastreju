@@ -22,15 +22,19 @@ import org.arastreju.bindings.neo4j.NeoConstants;
 import org.arastreju.bindings.neo4j.extensions.NeoAssociationKeeper;
 import org.arastreju.bindings.neo4j.extensions.SNResourceNeo;
 import org.arastreju.bindings.neo4j.index.ResourceIndex;
-import org.arastreju.bindings.neo4j.tx.TxAction;
 import org.arastreju.bindings.neo4j.tx.TxProvider;
-import org.arastreju.bindings.neo4j.tx.TxResultAction;
+import org.arastreju.sge.SNOPS;
+import org.arastreju.sge.eh.ArastrejuRuntimeException;
+import org.arastreju.sge.eh.ErrorCodes;
 import org.arastreju.sge.model.ResourceID;
-import org.arastreju.sge.model.associations.Association;
+import org.arastreju.sge.model.Statement;
 import org.arastreju.sge.model.associations.AssociationKeeper;
 import org.arastreju.sge.model.associations.DetachedAssociationKeeper;
 import org.arastreju.sge.model.nodes.ResourceNode;
+import org.arastreju.sge.model.nodes.SNResource;
 import org.arastreju.sge.naming.QualifiedName;
+import org.arastreju.sge.persistence.TxAction;
+import org.arastreju.sge.persistence.TxResultAction;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Node;
 
@@ -108,13 +112,9 @@ public class SemanticNetworkAccess implements NeoConstants, NeoResourceResolver 
 	 * {@inheritDoc}
 	 */
 	public ResourceNode findResource(final QualifiedName qn) {
-		final ResourceNode registered = index.findResourceNode(qn);
-		if (registered != null) {
-			return registered;
-		}
-		final Node neoNode = index.findNeoNode(qn);
-		if (neoNode != null){
-			return createArasNode(neoNode, qn);
+		final AssociationKeeper keeper = findAssociationKeeper(qn);
+		if (keeper != null) {
+			return createArasNode(keeper, qn);
 		} else {
 			return null;
 		}
@@ -146,11 +146,11 @@ public class SemanticNetworkAccess implements NeoConstants, NeoResourceResolver 
 	 */
 	public ResourceNode resolve(final Node neoNode) {
 		final QualifiedName qn = new QualifiedName(neoNode.getProperty(PROPERTY_URI).toString());
-		final ResourceNode found = index.findResourceNode(qn);
-		if (found != null){
-			return found;
+		AssociationKeeper keeper = index.findAssociationKeeper(qn);
+		if (keeper == null){
+			keeper = new NeoAssociationKeeper(SNOPS.id(qn), neoNode, assocHandler);
 		}
-		return createArasNode(neoNode, qn);
+		return createArasNode(keeper, qn);
 	}
 
 	// -----------------------------------------------------
@@ -185,8 +185,26 @@ public class SemanticNetworkAccess implements NeoConstants, NeoResourceResolver 
 	 * @param node The node to detach.
 	 */
 	public void detach(final ResourceNode node){
-		index.uncache(node);
+		index.uncache(node.getQualifiedName());
 		AssocKeeperAccess.setAssociationKeeper(node, new DetachedAssociationKeeper(node.getAssociations()));
+	}
+	
+	/**
+	 * Reset the given node if it is detached.
+	 * @param node The node to be reseted.
+	 */
+	public void reset(final ResourceNode node) {
+		// 1st: check if node is detached.
+		if (!node.isAttached()){
+			return;
+		}
+		final AssociationKeeper keeper = findAssociationKeeper(node.getQualifiedName());
+		if (keeper != null) {
+			AssocKeeperAccess.setAssociationKeeper(node, keeper);
+		} else {
+			throw new ArastrejuRuntimeException(ErrorCodes.GENERAL_CONSISTENCY_FAILURE, 
+					"Can't find node/keeper for attached node " + node.getQualifiedName());
+		}
 	}
 	
 	/**
@@ -202,6 +220,7 @@ public class SemanticNetworkAccess implements NeoConstants, NeoResourceResolver 
 				new NodeRemover(index).remove(node, cascade);
 			}
 		});
+		detach(node);
 	}
 	
 	// -----------------------------------------------------
@@ -216,16 +235,43 @@ public class SemanticNetworkAccess implements NeoConstants, NeoResourceResolver 
 	// -----------------------------------------------------
 	
 	/**
+	 * Find the keeper for a qualified name.
+	 * @param qn The qualified name.
+	 * @return The keeper or null.
+	 */
+	protected AssociationKeeper findAssociationKeeper(final QualifiedName qn) {
+		final AssociationKeeper registered = index.findAssociationKeeper(qn);
+		if (registered != null) {
+			return registered;
+		}
+		final Node neoNode = index.findNeoNode(qn);
+		if (neoNode != null) {
+			return new NeoAssociationKeeper(SNOPS.id(qn), neoNode, assocHandler);
+		} else {
+			return null;
+		}
+	}
+	
+	/**
 	 * Create a new Arastreju node for Neo node.
 	 * @param neoNode The Neo node.
 	 * @param qn The qualified name.
 	 * @return The Arastreju node.
 	 */
-	protected SNResourceNeo createArasNode(final Node neoNode, final QualifiedName qn) {
-		final SNResourceNeo arasNode = new SNResourceNeo(qn);
+	protected SNResource createArasNode(final Node neoNode, final QualifiedName qn) {
+		final NeoAssociationKeeper keeper = new NeoAssociationKeeper(SNOPS.id(qn), neoNode, assocHandler);
+		return createArasNode(keeper, qn);
+	}
+	
+	/**
+	 * Create a new Arastreju node 'around' given association keeper.
+	 * @param keeper The association keeper.
+	 * @param qn The qualified name.
+	 * @return The Arastreju node.
+	 */
+	protected SNResourceNeo createArasNode(final AssociationKeeper keeper, final QualifiedName qn) {
+		final SNResourceNeo arasNode = new SNResourceNeo(qn, keeper);
 		index.cache(arasNode);
-		final NeoAssociationKeeper assocKeeper = new NeoAssociationKeeper(arasNode, neoNode, assocHandler);
-		AssocKeeperAccess.setAssociationKeeper(arasNode, assocKeeper);
 		return arasNode;
 	}
 	
@@ -239,19 +285,17 @@ public class SemanticNetworkAccess implements NeoConstants, NeoResourceResolver 
 		final Node neoNode = gdbService.createNode();
 		neoNode.setProperty(PROPERTY_URI, node.getQualifiedName().toURI());
 		
-		// 2nd: index the Neo node.
-		index.index(neoNode, node);
-		
-		// 3rd: retain copy of current associations and attach the Resource with this store.
-		final Set<Association> copy = node.getAssociations();
+		// 2nd: retain copy of current associations and attach the Resource with this store.
+		final Set<Statement> copy = node.getAssociations();
 		final NeoAssociationKeeper keeper = new NeoAssociationKeeper(node, neoNode, assocHandler);
 		AssocKeeperAccess.setAssociationKeeper(node, keeper);
 		
+		// 3rd: index the Neo node.
+		index.index(neoNode, node);
+		
 		// 4th: store all associations.
-		for (Association assoc : copy) {
-			if (!assoc.isInferred()) {
-				keeper.add(assoc);
-			}
+		for (Statement assoc : copy) {
+			keeper.addAssociation(assoc);
 		}
 		
 		return node;
@@ -265,13 +309,13 @@ public class SemanticNetworkAccess implements NeoConstants, NeoResourceResolver 
 	 */
 	protected ResourceNode merge(final ResourceNode attached, final ResourceNode changed) {
 		final AssociationKeeper ak = AssocKeeperAccess.getAssociationKeeper(changed);
-		for (Association toBeRemoved : ak.getAssociationsForRemoval()) {
-			attached.remove(toBeRemoved);
+		for (Statement toBeRemoved : ak.getAssociationsForRemoval()) {
+			attached.removeAssociation(toBeRemoved);
 		}
-		final Set<Association> currentAssocs = attached.getAssociations();
-		for(Association assoc : ak.getAssociations()){
+		final Set<Statement> currentAssocs = attached.getAssociations();
+		for(Statement assoc : ak.getAssociations()){
 			if (!currentAssocs.contains(assoc)){
-				Association.create(attached, assoc.getPredicate(), assoc.getObject(), assoc.getContexts());
+				SNOPS.associate(attached, assoc.getPredicate(), assoc.getObject(), assoc.getContexts());
 			}
 		}
 		return attached;

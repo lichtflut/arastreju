@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 lichtflut Forschungs- und Entwicklungsgesellschaft mbH
+ * Copyright (C) 2012 lichtflut Forschungs- und Entwicklungsgesellschaft mbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,7 +30,7 @@ import org.neo4j.graphdb.Relationship;
  *
  * @author Oliver Tigges
  */
-public class Dumper implements NeoConstants {
+public class NeoGraphDumper implements NeoConstants {
 	
 	/**
 	 * Dumps just the given Neo node.

@@ -9,7 +9,7 @@ import java.io.OutputStream;
 import java.util.Set;
 
 import org.arastreju.sge.model.SemanticGraph;
-import org.arastreju.sge.model.associations.Association;
+import org.arastreju.sge.model.Statement;
 import org.arastreju.sge.model.nodes.ResourceNode;
 
 import de.lichtflut.infra.exceptions.NotYetImplementedException;
@@ -60,9 +60,9 @@ public class JsonBinding implements SemanticGraphIO {
 		}
 	}
 	
-	protected void renderEdges(final StringBuilder sb, final Set<Association> assocs) {
+	protected void renderEdges(final StringBuilder sb, final Set<? extends Statement> assocs) {
 		boolean first = true;
-		for (Association assoc : assocs) {
+		for (Statement assoc : assocs) {
 			if (assoc.getObject().isResourceNode()){
 				if (first){
 					first = false;

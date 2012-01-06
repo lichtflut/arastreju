@@ -17,11 +17,12 @@ package org.arastreju.sge.model.associations;
 
 import java.util.Set;
 
-import org.arastreju.sge.model.nodes.SemanticNode;
+import org.arastreju.sge.model.Statement;
+import org.arastreju.sge.model.nodes.ResourceNode;
 
 /**
  * <p>
- * 	Generalized interface for resolving of a {@link SemanticNode}'s associations.
+ * 	Generalized interface for keeping a {@link ResourceNode}'s associations.
  * </p>
  *
  * <p>
@@ -35,21 +36,23 @@ public interface AssociationKeeper {
 	/**
 	 * @return The resolved association set.
 	 */
-	Set<Association> getAssociations();
+	Set<Statement> getAssociations();
+	
+	void addAssociation(Statement assoc);
+
+	boolean removeAssociation(Statement stmt);
 	
 	// ----------------------------------------------------
 	
 	/**
 	 * @return The Associations to be removed on attachment.
 	 */
-	Set<Association> getAssociationsForRemoval();
+	Set<Statement> getAssociationsForRemoval();
 	
+	/**
+	 * Check if this keeper is attached or detached.
+	 * @return true when the keeper is detached.
+	 */
 	boolean isAttached();
-	
-	void add(Association assoc);
-
-	boolean remove(Association assoc);
-	
-	
 
 }

@@ -18,7 +18,6 @@ package org.arastreju.sge;
 import org.arastreju.sge.model.ResourceID;
 import org.arastreju.sge.model.SemanticGraph;
 import org.arastreju.sge.model.Statement;
-import org.arastreju.sge.model.associations.Association;
 import org.arastreju.sge.model.nodes.ResourceNode;
 import org.arastreju.sge.naming.QualifiedName;
 import org.arastreju.sge.persistence.ResourceResolver;
@@ -42,7 +41,7 @@ public interface ModelingConversation extends ResourceResolver {
 	 * @param stmt The statement.
 	 * @return The attached association.
 	 */
-	Association addStatement(Statement stmt);
+	void addStatement(Statement stmt);
 	
 	/**
 	 * Removed a statement from the semantic model.
@@ -86,6 +85,13 @@ public interface ModelingConversation extends ResourceResolver {
 	void detach(ResourceNode node);
 	
 	/**
+	 * Reset a detached node to the state in the persisted state.
+	 * If the node is attached this call will have no effect.
+	 * @param node The node to be reseted.
+	 */
+	void reset(ResourceNode node);
+	
+	/**
 	 * Removes the resource identified by given ID and all of it's incoming
 	 * and outgoing associations. 
 	 * If 'cascade' is <code>true</code> all resources will be removed cascading that 
@@ -96,8 +102,6 @@ public interface ModelingConversation extends ResourceResolver {
 	void remove(ResourceID id, boolean cascade);
 	
 	// -- SEMANTIC GRAPH ----------------------------------
-	
-	SemanticGraph findGraph(QualifiedName qn);
 	
 	SemanticGraph attach(SemanticGraph graph);
 	

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2010 lichtflut Forschungs- und Entwicklungsgesellschaft mbH
+ * Copyright (C) 2012 lichtflut Forschungs- und Entwicklungsgesellschaft mbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,8 +17,9 @@ package org.arastreju.sge.model.nodes;
 
 import java.util.Set;
 
+import org.arastreju.sge.context.Context;
 import org.arastreju.sge.model.ResourceID;
-import org.arastreju.sge.model.associations.Association;
+import org.arastreju.sge.model.Statement;
 import org.arastreju.sge.model.nodes.views.SNClass;
 import org.arastreju.sge.model.nodes.views.SNEntity;
 import org.arastreju.sge.model.nodes.views.SNProperty;
@@ -54,30 +55,31 @@ public interface ResourceNode extends SemanticNode, ResourceID {
 	 * Get all associations.
 	 * @return Set of all associations.
 	 */
-	Set<Association> getAssociations();
+	Set<Statement> getAssociations();
 
 	/**
 	 * Selects all associations with the given predicate.
 	 * @param predicate The relevant predicate.
 	 * @return Set of matching associations.
 	 */
-	Set<Association> getAssociations(final ResourceID predicate);
+	Set<Statement> getAssociations(final ResourceID predicate);
 	
 	// -----------------------------------------------------
 
 	/**
 	 * Add an association.
-	 * @param assoc The association to add.
+	 * @param statement The association to add.
+	 * @return The created statement.
 	 */
-	void addToAssociations(final Association assoc);
+	Statement addAssociation(ResourceID predicate, SemanticNode object, Context... ctx);
 	
 	/**
 	 * Removes the association from this resource object. This will have no effect on the database when this node isn't
 	 * attached!
-	 * @param assoc The association to be removed.
+	 * @param stmt The association to be removed.
 	 * @return true if association has been removed.
 	 */
-	boolean remove(Association assoc);
+	boolean removeAssociation(Statement stmt);
 	
 	// -----------------------------------------------------
 

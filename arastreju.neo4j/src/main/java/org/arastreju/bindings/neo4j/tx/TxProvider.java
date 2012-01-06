@@ -1,14 +1,16 @@
 /*
- * Copyright (C) 2011 lichtflut Forschungs- und Entwicklungsgesellschaft mbH
+ * Copyright (C) 2012 lichtflut Forschungs- und Entwicklungsgesellschaft mbH
  */
 package org.arastreju.bindings.neo4j.tx;
 
 import org.arastreju.sge.persistence.TransactionControl;
+import org.arastreju.sge.persistence.TxAction;
+import org.arastreju.sge.persistence.TxResultAction;
 import org.neo4j.graphdb.GraphDatabaseService;
 
 /**
  * <p>
- *  [DESCRIPTION]
+ *  Transaction provider based on neo4j {@link GraphDatabaseService} transactions.
  * </p>
  *
  * <p>

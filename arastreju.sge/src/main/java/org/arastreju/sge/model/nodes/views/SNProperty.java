@@ -23,7 +23,7 @@ import org.arastreju.sge.apriori.Owl;
 import org.arastreju.sge.apriori.RDF;
 import org.arastreju.sge.apriori.RDFS;
 import org.arastreju.sge.model.ResourceID;
-import org.arastreju.sge.model.associations.Association;
+import org.arastreju.sge.model.Statement;
 import org.arastreju.sge.model.nodes.SNResource;
 import org.arastreju.sge.model.nodes.SemanticNode;
 import org.arastreju.sge.naming.QualifiedName;
@@ -72,8 +72,8 @@ public class SNProperty extends ResourceView {
 	public Set<SNProperty> getSuperProperties() {
 		final Set<SNProperty> superProperties = new HashSet<SNProperty>();
 		superProperties.add(this);
-		final Set<Association> extensions = getAssociations(RDFS.SUB_PROPERTY_OF);
-		for (Association current : extensions) {
+		final Set<? extends Statement> extensions = getAssociations(RDFS.SUB_PROPERTY_OF);
+		for (Statement current : extensions) {
 			final SNProperty directSuperProperty = current.getObject().asResource().asProperty();
 			superProperties.add(directSuperProperty);
 			superProperties.addAll(directSuperProperty.getSuperProperties());
@@ -87,8 +87,8 @@ public class SNProperty extends ResourceView {
 	 */
 	public Set<SNProperty> getDirectSuperProperties() {
 		final Set<SNProperty> result = new HashSet<SNProperty>();
-		final Set<Association> extensions = getAssociations(RDFS.SUB_PROPERTY_OF);
-		for (Association current : extensions) {
+		final Set<? extends Statement> extensions = getAssociations(RDFS.SUB_PROPERTY_OF);
+		for (Statement current : extensions) {
 			final SNProperty directSuperProperty = current.getObject().asResource().asProperty();
 			result.add(directSuperProperty);
 		}
@@ -102,8 +102,8 @@ public class SNProperty extends ResourceView {
 	public Set<SNProperty> getInverseProperties() {
 		if (inverseProperties == null){
 			inverseProperties = new HashSet<SNProperty>();
-			Set<Association> assocs = getAssociations(Aras.INVERSE_OF);
-			for (Association current : assocs) {
+			Set<? extends Statement> assocs = getAssociations(Aras.INVERSE_OF);
+			for (Statement current : assocs) {
 				SNProperty property = current.getObject().asResource().asProperty();
 				inverseProperties.add(property);
 			}
@@ -160,8 +160,7 @@ public class SNProperty extends ResourceView {
 	 * Checks if this property has a rdf:type association to given type.
 	 */
 	protected boolean isOfType(final ResourceID type){
-		Set<Association> assocs = getAssociations(RDF.TYPE);
-		for (Association association : assocs) {
+		for (Statement association : getAssociations(RDF.TYPE)) {
 			final SemanticNode client = association.getObject();
 			if (client.isResourceNode() && client.asResource().equals(type)){
 				return true;

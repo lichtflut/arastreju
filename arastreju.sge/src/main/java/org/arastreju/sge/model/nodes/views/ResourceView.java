@@ -18,10 +18,12 @@ package org.arastreju.sge.model.nodes.views;
 import java.io.Serializable;
 import java.util.Set;
 
+import org.arastreju.sge.context.Context;
 import org.arastreju.sge.model.ResourceID;
-import org.arastreju.sge.model.associations.Association;
+import org.arastreju.sge.model.Statement;
 import org.arastreju.sge.model.nodes.ResourceNode;
 import org.arastreju.sge.model.nodes.SNResource;
+import org.arastreju.sge.model.nodes.SemanticNode;
 import org.arastreju.sge.model.nodes.ValueNode;
 import org.arastreju.sge.naming.QualifiedName;
 
@@ -81,38 +83,29 @@ public abstract class ResourceView implements ResourceNode, Serializable {
 	/**
 	 * {@inheritDoc}
 	 */
-	public Set<Association> getAssociations() {
+	public Set<Statement> getAssociations() {
 		return resource.getAssociations();
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public Set<Association> getAssociations(final ResourceID predicate) {
+	public Set<Statement> getAssociations(final ResourceID predicate) {
 		return resource.getAssociations(predicate);
 	}
 
-	/**
+	/** 
 	 * {@inheritDoc}
 	 */
-	public void removeAssociations(final ResourceID predicate){
-		for (Association assoc : getAssociations(predicate)) {
-			remove(assoc);
-		}
-	}
-	
-	/**
-	 * {@inheritDoc}
-	 */
-	public void addToAssociations(final Association assoc) {
-		resource.addToAssociations(assoc);
+	public Statement addAssociation(ResourceID predicate, SemanticNode object, Context... ctx) {
+		return resource.addAssociation(predicate, object, ctx);
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public boolean remove(final Association assoc) {
-		return resource.remove(assoc);
+	public boolean removeAssociation(final Statement stmt) {
+		return resource.removeAssociation(stmt);
 	}
 	
 	// ------------------------------------------------------

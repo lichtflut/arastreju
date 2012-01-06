@@ -20,11 +20,12 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.arastreju.sge.SNOPS;
 import org.arastreju.sge.apriori.RDF;
 import org.arastreju.sge.apriori.RDFS;
 import org.arastreju.sge.context.Context;
 import org.arastreju.sge.model.ResourceID;
-import org.arastreju.sge.model.associations.Association;
+import org.arastreju.sge.model.Statement;
 import org.arastreju.sge.model.nodes.SNResource;
 import org.arastreju.sge.naming.QualifiedName;
 
@@ -54,8 +55,8 @@ public class SNClass extends ResourceView {
 	
 	public Set<SNClass> getSuperClasses() {
 		final Set<SNClass> allSuperClasses = new HashSet<SNClass>();
-		Set<Association> extensions = getAssociations(RDFS.SUB_CLASS_OF);
-		for (Association current : extensions) {
+		Set<? extends Statement> extensions = getAssociations(RDFS.SUB_CLASS_OF);
+		for (Statement current : extensions) {
 			SNClass directSuperClass = current.getObject().asResource().asClass();
 			allSuperClasses.add(directSuperClass);
 			allSuperClasses.addAll(directSuperClass.getSuperClasses());
@@ -65,7 +66,7 @@ public class SNClass extends ResourceView {
 	
 	public Set<SNClass> getDirectSuperClasses() {
 		final Set<SNClass> superClasses = new HashSet<SNClass>();
-		for (Association current : getAssociations(RDFS.SUB_CLASS_OF)) {
+		for (Statement current : getAssociations(RDFS.SUB_CLASS_OF)) {
 			final SNClass directImplementedClass = current.getObject().asResource().asClass();
 			superClasses.add(directImplementedClass);
 		}
@@ -80,13 +81,13 @@ public class SNClass extends ResourceView {
 	
 	public SNEntity createInstance(final Context... contexts){
 		final SNEntity instance = new SNEntity();
-		Association.create(instance, RDF.TYPE, this, contexts);
+		SNOPS.associate(instance, RDF.TYPE, this, contexts);
 		return instance;
 	}
 	
 	public SNEntity createInstance(final QualifiedName qn, final Context... contexts){
 		final SNEntity instance = new SNEntity(qn);
-		Association.create(instance, RDF.TYPE, this, contexts);
+		SNOPS.associate(instance, RDF.TYPE, this, contexts);
 		return instance;
 	}
 	
@@ -97,9 +98,9 @@ public class SNClass extends ResourceView {
 	// -- INTENSIONS --------------------------------------
 	
 	public List<SNText> getTerms(){
-		Set<Association> intensions = getAssociations(RDFS.LABEL);
+		Set<? extends Statement> intensions = getAssociations(RDFS.LABEL);
 		List<SNText> terms = new ArrayList<SNText>(intensions.size());
-		for (Association assoc : intensions) {
+		for (Statement assoc : intensions) {
 			terms.add(assoc.getObject().asValue().asText());
 		}
 		return terms;

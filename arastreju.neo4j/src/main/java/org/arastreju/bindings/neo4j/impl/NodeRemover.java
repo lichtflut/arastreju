@@ -8,16 +8,11 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.arastreju.bindings.neo4j.NeoConstants;
 import org.arastreju.bindings.neo4j.index.ResourceIndex;
-import org.arastreju.sge.model.associations.DetachedAssociationKeeper;
 import org.arastreju.sge.model.nodes.ResourceNode;
-import org.arastreju.sge.naming.QualifiedName;
 import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * <p>
@@ -32,8 +27,6 @@ import org.slf4j.LoggerFactory;
  */
 public class NodeRemover {
 
-	private final Logger logger = LoggerFactory.getLogger(NodeRemover.class);
-	
 	private final ResourceIndex index;
 	
 	// -----------------------------------------------------
@@ -73,9 +66,6 @@ public class NodeRemover {
 	}
 	
 	private void remove(final Node neoNode, final Set<Node> deleted, final boolean cascade) {
-		// 1st: detach Arastreju Node
-		detachArastrejuNode(neoNode);
-		
 		// 2nd: delete relations
 		final List<Node> cascading = new ArrayList<Node>();
 		for (Relationship rel : neoNode.getRelationships()) {
@@ -95,22 +85,6 @@ public class NodeRemover {
 					remove(c, deleted, cascade);
 				}
 			}
-		}
-	}
-	
-	private void detachArastrejuNode(final Node neoNode) {
-		if (neoNode.hasProperty(NeoConstants.PROPERTY_URI)) {
-			final QualifiedName qn = new QualifiedName(neoNode.getProperty(NeoConstants.PROPERTY_URI).toString());
-			final ResourceNode arasNode = index.findResourceNode(qn);
-			if (arasNode != null) {
-				AssocKeeperAccess.setAssociationKeeper(arasNode, new DetachedAssociationKeeper());	
-			} else {
-				logger.warn("No ArasNode in Register for " + qn);
-			}
-		} else if (neoNode.hasProperty(NeoConstants.PROPERTY_VALUE)) {
-			// everything O.K.
-		} else {
-			throw new IllegalStateException("Neo node ha neither URI not value");
 		}
 	}
 

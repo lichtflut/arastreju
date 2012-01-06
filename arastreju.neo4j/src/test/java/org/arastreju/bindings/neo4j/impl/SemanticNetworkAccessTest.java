@@ -38,7 +38,7 @@ import org.arastreju.sge.context.Context;
 import org.arastreju.sge.context.SimpleContextID;
 import org.arastreju.sge.model.ResourceID;
 import org.arastreju.sge.model.SimpleResourceID;
-import org.arastreju.sge.model.associations.Association;
+import org.arastreju.sge.model.Statement;
 import org.arastreju.sge.model.nodes.ResourceNode;
 import org.arastreju.sge.model.nodes.SNResource;
 import org.arastreju.sge.model.nodes.ValueNode;
@@ -117,7 +117,7 @@ public class SemanticNetworkAccessTest {
 		final ResourceIndex index = sna.getIndex();
 		
 		final ResourceNode car = new SNResource(qnCar);
-		Association.create(car, Aras.HAS_PROPER_NAME, new SNText("BMW"));
+		SNOPS.associate(car, Aras.HAS_PROPER_NAME, new SNText("BMW"));
 		
 		sna.attach(car);
 		
@@ -139,7 +139,7 @@ public class SemanticNetworkAccessTest {
 		assertSame(car, car2);
 		
 		final ResourceNode car3 = sna.findResource(qnCar);
-		assertSame(car, car3);
+		assertEquals(car, car3);
 		
 		sna.detach(car);
 
@@ -153,7 +153,7 @@ public class SemanticNetworkAccessTest {
 		
 		sna.attach(car);
 		
-		Association.create(car, Aras.HAS_PROPER_NAME, new SNText("BMW"));
+		SNOPS.associate(car, Aras.HAS_PROPER_NAME, new SNText("BMW"));
 		sna.detach(car);
 		
 		final ResourceNode car2 = sna.findResource(qnCar);
@@ -168,8 +168,8 @@ public class SemanticNetworkAccessTest {
 		final ResourceNode vehicle = new SNResource(qnVehicle);
 		final ResourceNode car = new SNResource(qnCar);
 		
-		Association.create(car, RDFS.SUB_CLASS_OF, vehicle);
-		Association.create(car, Aras.HAS_PROPER_NAME, new SNText("BMW"));
+		SNOPS.associate(car, RDFS.SUB_CLASS_OF, vehicle);
+		SNOPS.associate(car, Aras.HAS_PROPER_NAME, new SNText("BMW"));
 		
 		sna.attach(car);
 		
@@ -192,14 +192,14 @@ public class SemanticNetworkAccessTest {
 		
 		sna.attach(car1);
 		
-		Association.create(car1, Aras.HAS_BRAND_NAME, new SNText("BMW"));
+		SNOPS.associate(car1, Aras.HAS_BRAND_NAME, new SNText("BMW"));
 		
 		// detach 
 		sna.detach(car1);
 		sna.detach(vehicle);
 		
-		Association.create(car1, RDFS.SUB_CLASS_OF, vehicle);
-		Association.create(car1, Aras.HAS_PROPER_NAME, new SNText("Knut"));
+		SNOPS.associate(car1, RDFS.SUB_CLASS_OF, vehicle);
+		SNOPS.associate(car1, Aras.HAS_PROPER_NAME, new SNText("Knut"));
 
 		// attach again
 		sna.attach(car1);
@@ -246,20 +246,20 @@ public class SemanticNetworkAccessTest {
 		final ResourceNode vehicle = new SNResource(qnVehicle);
 		final ResourceNode car1 = new SNResource(qnCar);
 		
-		final Association association = Association.create(car1, Aras.HAS_BRAND_NAME, new SNText("BMW"));
-		Association.create(car1, RDFS.SUB_CLASS_OF, vehicle);
-		Association.create(car1, Aras.HAS_PROPER_NAME, new SNText("Knut"));
+		final Statement association = SNOPS.associate(car1, Aras.HAS_BRAND_NAME, new SNText("BMW"));
+		SNOPS.associate(car1, RDFS.SUB_CLASS_OF, vehicle);
+		SNOPS.associate(car1, Aras.HAS_PROPER_NAME, new SNText("Knut"));
 		
 		sna.attach(car1);
 		
-		final Association stored = SNOPS.singleAssociation(car1, Aras.HAS_BRAND_NAME);
+		final Statement stored = SNOPS.singleAssociation(car1, Aras.HAS_BRAND_NAME);
 		assertEquals(association.hashCode(), stored.hashCode());
 		
 		assertEquals(3, car1.getAssociations().size());
 		assertFalse(car1.getAssociations(Aras.HAS_BRAND_NAME).isEmpty());
 		assertTrue("Association not present", car1.getAssociations().contains(association));
 		
-		final boolean removedFlag = car1.remove(association);
+		final boolean removedFlag = car1.removeAssociation(association);
 		assertTrue(removedFlag);
 		
 		assertEquals(2, car1.getAssociations().size());
@@ -274,9 +274,9 @@ public class SemanticNetworkAccessTest {
 		
 		sna.attach(car1);
 		
-		final Association association = Association.create(car1, Aras.HAS_BRAND_NAME, new SNText("BMW"));
-		Association.create(car1, RDFS.SUB_CLASS_OF, vehicle);
-		Association.create(car1, Aras.HAS_PROPER_NAME, new SNText("Knut"));
+		final Statement association = SNOPS.associate(car1, Aras.HAS_BRAND_NAME, new SNText("BMW"));
+		SNOPS.associate(car1, RDFS.SUB_CLASS_OF, vehicle);
+		SNOPS.associate(car1, Aras.HAS_PROPER_NAME, new SNText("Knut"));
 		
 		// detach 
 		sna.detach(car1);
@@ -285,7 +285,7 @@ public class SemanticNetworkAccessTest {
 		assertFalse(car1.getAssociations(Aras.HAS_BRAND_NAME).isEmpty());
 		assertTrue("Association not present", car1.getAssociations().contains(association));
 		
-		final boolean removedFlag = car1.remove(association);
+		final boolean removedFlag = car1.removeAssociation(association);
 		assertTrue(removedFlag);
 		
 		sna.attach(car1);
@@ -338,15 +338,15 @@ public class SemanticNetworkAccessTest {
 		
 		final ResourceNode car1 = car.createInstance();
 		
-		Association.create(vehicle, RDFS.SUB_CLASS_OF, RDF.TYPE);
-		Association.create(car, RDFS.SUB_CLASS_OF, vehicle);
-		Association.create(bike, RDFS.SUB_CLASS_OF, vehicle);
+		SNOPS.associate(vehicle, RDFS.SUB_CLASS_OF, RDF.TYPE);
+		SNOPS.associate(car, RDFS.SUB_CLASS_OF, vehicle);
+		SNOPS.associate(bike, RDFS.SUB_CLASS_OF, vehicle);
 		
 		sna.attach(vehicle);
 		sna.attach(bike);
 		
-		Association.create(car1, Aras.HAS_BRAND_NAME, new SNText("BMW"));
-		Association.create(car1, Aras.HAS_PROPER_NAME, new SNText("Knut"));
+		SNOPS.associate(car1, Aras.HAS_BRAND_NAME, new SNText("BMW"));
+		SNOPS.associate(car1, Aras.HAS_PROPER_NAME, new SNText("Knut"));
 		
 		sna.attach(car1);
 
@@ -442,7 +442,7 @@ public class SemanticNetworkAccessTest {
 	public void testInferencingSubClasses() {
 		final SNClass vehicleClass = new SNResource(qnVehicle).asClass();
 		final SNClass carClass = new SNResource(qnCar).asClass();
-		Association.create(carClass, RDFS.SUB_CLASS_OF, vehicleClass);
+		SNOPS.associate(carClass, RDFS.SUB_CLASS_OF, vehicleClass);
 		
 		final SNEntity car = carClass.createInstance();
 		final SNEntity vehicle = vehicleClass.createInstance();

@@ -23,6 +23,7 @@ import junit.framework.Assert;
 
 import org.arastreju.bindings.neo4j.impl.GraphDataStore;
 import org.arastreju.bindings.neo4j.impl.SemanticNetworkAccess;
+import org.arastreju.sge.SNOPS;
 import org.arastreju.sge.apriori.Aras;
 import org.arastreju.sge.apriori.RDF;
 import org.arastreju.sge.apriori.RDFS;
@@ -30,7 +31,6 @@ import org.arastreju.sge.context.Context;
 import org.arastreju.sge.model.DetachedStatement;
 import org.arastreju.sge.model.SimpleResourceID;
 import org.arastreju.sge.model.Statement;
-import org.arastreju.sge.model.associations.Association;
 import org.arastreju.sge.model.nodes.ResourceNode;
 import org.arastreju.sge.model.nodes.SNResource;
 import org.arastreju.sge.model.nodes.views.SNEntity;
@@ -113,8 +113,8 @@ public class NeoQueryManagerTest {
 	@Test
 	public void testFindByTag(){
 		final ResourceNode car = new SNResource(qnCar);
-		Association.create(car, Aras.HAS_PROPER_NAME, new SNText("BMW"));
-		Association.create(car, RDFS.LABEL, new SNText("Automobil"));
+		SNOPS.associate(car, Aras.HAS_PROPER_NAME, new SNText("BMW"));
+		SNOPS.associate(car, RDFS.LABEL, new SNText("Automobil"));
 		sna.attach(car);
 		
 		final Query query = qm.buildQuery().add(new ValueParam("BMW"));
@@ -128,8 +128,8 @@ public class NeoQueryManagerTest {
 	@Test
 	public void testFindByPredicateAndTag(){
 		final ResourceNode car = new SNResource(qnCar);
-		Association.create(car, Aras.HAS_PROPER_NAME, new SNText("BMW"));
-		Association.create(car, RDFS.LABEL, new SNText("Automobil"));
+		SNOPS.associate(car, Aras.HAS_PROPER_NAME, new SNText("BMW"));
+		SNOPS.associate(car, RDFS.LABEL, new SNText("Automobil"));
 		sna.attach(car);
 		
 		final Query query = qm.buildQuery().add(new FieldParam(RDFS.LABEL, "Automobil"));
@@ -144,11 +144,11 @@ public class NeoQueryManagerTest {
 	public void testFindByQuery(){
 		final Context ctx = null;
 		final ResourceNode car = new SNResource(qnCar);
-		Association.create(car, RDF.TYPE, RDFS.CLASS, ctx);
+		SNOPS.associate(car, RDF.TYPE, RDFS.CLASS, ctx);
 		sna.attach(car);
 		
 		final ResourceNode bike = new SNResource(qnBike);
-		Association.create(bike, RDF.TYPE, RDFS.CLASS, ctx);
+		SNOPS.associate(bike, RDF.TYPE, RDFS.CLASS, ctx);
 		sna.attach(bike);
 		
 		final SNEntity aCar = car.asClass().createInstance(ctx);
@@ -169,11 +169,11 @@ public class NeoQueryManagerTest {
 	public void testFindByType(){
 		final Context ctx = null;
 		final ResourceNode car = new SNResource(qnCar);
-		Association.create(car, RDF.TYPE, RDFS.CLASS, ctx);
+		SNOPS.associate(car, RDF.TYPE, RDFS.CLASS, ctx);
 		sna.attach(car);
 		
 		final ResourceNode bike = new SNResource(qnBike);
-		Association.create(bike, RDF.TYPE, RDFS.CLASS, ctx);
+		SNOPS.associate(bike, RDF.TYPE, RDFS.CLASS, ctx);
 		sna.attach(bike);
 		
 		final SNEntity aCar = car.asClass().createInstance(ctx);
@@ -200,11 +200,11 @@ public class NeoQueryManagerTest {
 	public void testFindIncomingAssociations() {
 		final Context ctx = null;
 		final ResourceNode car = new SNResource(qnCar);
-		Association.create(car, RDF.TYPE, RDFS.CLASS);
+		SNOPS.associate(car, RDF.TYPE, RDFS.CLASS);
 		sna.attach(car);
 		
 		final ResourceNode bike = new SNResource(qnBike);
-		Association.create(bike, RDF.TYPE, RDFS.CLASS);
+		SNOPS.associate(bike, RDF.TYPE, RDFS.CLASS);
 		sna.attach(bike);
 
 		final SNEntity car1 = car.asClass().createInstance(ctx);

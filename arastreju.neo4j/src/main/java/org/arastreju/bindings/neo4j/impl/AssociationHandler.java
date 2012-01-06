@@ -11,21 +11,20 @@ import java.util.Set;
 
 import org.arastreju.bindings.neo4j.ArasRelTypes;
 import org.arastreju.bindings.neo4j.NeoConstants;
-import org.arastreju.bindings.neo4j.extensions.NeoAssociation;
 import org.arastreju.bindings.neo4j.extensions.NeoAssociationKeeper;
 import org.arastreju.bindings.neo4j.extensions.SNValueNeo;
 import org.arastreju.bindings.neo4j.index.ResourceIndex;
-import org.arastreju.bindings.neo4j.tx.TxAction;
 import org.arastreju.bindings.neo4j.tx.TxProvider;
 import org.arastreju.sge.SNOPS;
 import org.arastreju.sge.context.Context;
 import org.arastreju.sge.inferencing.Inferencer;
+import org.arastreju.sge.model.DetachedStatement;
 import org.arastreju.sge.model.Statement;
-import org.arastreju.sge.model.associations.Association;
 import org.arastreju.sge.model.nodes.ResourceNode;
 import org.arastreju.sge.model.nodes.SemanticNode;
 import org.arastreju.sge.model.nodes.ValueNode;
 import org.arastreju.sge.naming.QualifiedName;
+import org.arastreju.sge.persistence.TxAction;
 import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
@@ -93,7 +92,7 @@ public class AssociationHandler implements NeoConstants {
 			}
 			final ResourceNode predicate = resolver.findResource(new QualifiedName(rel.getProperty(PREDICATE_URI).toString()));
 			final Context[] ctx = ctxAccess.getContextInfo(rel);
-			keeper.addAssociationDirectly(new NeoAssociation(keeper.getArasNode(), predicate, object, ctx));
+			keeper.addAssociationDirectly(new DetachedStatement(keeper.getID(), predicate, object, ctx));
 		}
 	}
 	
@@ -110,7 +109,7 @@ public class AssociationHandler implements NeoConstants {
 				
 				final ResourceNode predicate = resolver.resolve(stmt.getPredicate());
 				final SemanticNode object = resolve(stmt.getObject());
-				final NeoAssociation assoc = new NeoAssociation(keeper.getArasNode(), predicate, object, stmt.getContexts());
+				final Statement assoc = new DetachedStatement(keeper.getID(), predicate, object, stmt.getContexts());
 				keeper.getAssociations().add(assoc);
 				
 				createRelationships(keeper.getNeoNode(), stmt);
@@ -129,7 +128,7 @@ public class AssociationHandler implements NeoConstants {
 	 * @param assoc The association.
 	 * @return true if the association has been removed.
 	 */
-	public boolean removeAssociation(final NeoAssociationKeeper keeper, final Association assoc) {
+	public boolean removeAssociation(final NeoAssociationKeeper keeper, final Statement assoc) {
 		final Relationship relationship = findCorresponding(keeper.getNeoNode(), assoc);
 		if (relationship != null) {
 			txProvider.doTransacted(new TxAction() {
@@ -138,7 +137,7 @@ public class AssociationHandler implements NeoConstants {
 					relationship.delete();
 					//index.removeFromIndex(keeper.getNeoNode(), assoc);
 					removeHardInferences(keeper, Collections.singleton(assoc));
-					index.reindex(keeper.getNeoNode(), keeper.getArasNode());
+					index.reindex(keeper.getNeoNode(), keeper.getQualifiedName(), keeper.getAssociations());
 					addSoftInferences(keeper, keeper.getAssociations());
 				}
 			});
@@ -157,7 +156,7 @@ public class AssociationHandler implements NeoConstants {
 			softInferencer.addInferenced(stmt, inferenced);
 		}
 		for (Statement stmt : inferenced) {
-			if (stmt.getSubject().equals(keeper.getArasNode())) {
+			if (stmt.getSubject().getQualifiedName().equals(keeper.getQualifiedName())) {
 				index.index(keeper.getNeoNode(), stmt);
 			} else {
 				logger.warn("Inferred statement can not be indexed: " + stmt);
@@ -190,7 +189,7 @@ public class AssociationHandler implements NeoConstants {
 	private void addStatements(final Statement... statements) {
 		for (Statement stmt : statements) {
 			ResourceNode subject = resolver.resolve(stmt.getSubject());
-			Association.create(subject, stmt.getPredicate(), stmt.getObject(), stmt.getContexts());
+			SNOPS.associate(subject, stmt.getPredicate(), stmt.getObject(), stmt.getContexts());
 		}
 	}
 	

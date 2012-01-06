@@ -9,11 +9,11 @@ import junit.framework.Assert;
 
 import org.arastreju.bindings.neo4j.impl.GraphDataStore;
 import org.arastreju.bindings.neo4j.impl.SemanticNetworkAccess;
+import org.arastreju.sge.SNOPS;
 import org.arastreju.sge.apriori.Aras;
 import org.arastreju.sge.context.Context;
 import org.arastreju.sge.eh.ArastrejuException;
 import org.arastreju.sge.eh.ErrorCodes;
-import org.arastreju.sge.model.associations.Association;
 import org.arastreju.sge.model.nodes.views.SNClass;
 import org.arastreju.sge.model.nodes.views.SNEntity;
 import org.arastreju.sge.model.nodes.views.SNText;
@@ -73,10 +73,10 @@ public class NeoIdentityManagementTest {
 		final SNClass identity = sna.resolve(Aras.IDENTITY).asClass();
 		final SNEntity user = identity.createInstance(ctx);
 		
-		Association.create(user, Aras.IDENTIFIED_BY, new SNText("Bud Spencer"), ctx);
-		Association.create(user, Aras.HAS_UNIQUE_NAME, new SNText("Bud Spencer"), ctx);
-		Association.create(user, Aras.HAS_CREDENTIAL, new SNText("bud"), ctx);
-		Association.create(user, Aras.HAS_EMAIL, new SNText("BudSpencer@lichtflut.de"), ctx);
+		SNOPS.associate(user, Aras.IDENTIFIED_BY, new SNText("Bud Spencer"), ctx);
+		SNOPS.associate(user, Aras.HAS_UNIQUE_NAME, new SNText("Bud Spencer"), ctx);
+		SNOPS.associate(user, Aras.HAS_CREDENTIAL, new SNText("bud"), ctx);
+		SNOPS.associate(user, Aras.HAS_EMAIL, new SNText("BudSpencer@lichtflut.de"), ctx);
 		sna.attach(user);
 		sna.detach(user);
 		

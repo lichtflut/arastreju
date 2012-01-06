@@ -5,12 +5,15 @@ package org.arastreju.bindings.neo4j.index;
 
 import static org.arastreju.sge.SNOPS.uri;
 
+import java.util.Collection;
+
 import org.arastreju.bindings.neo4j.NeoConstants;
 import org.arastreju.bindings.neo4j.impl.NeoResourceResolver;
 import org.arastreju.bindings.neo4j.query.NeoQueryResult;
 import org.arastreju.bindings.neo4j.tx.TxProvider;
 import org.arastreju.sge.model.ResourceID;
 import org.arastreju.sge.model.Statement;
+import org.arastreju.sge.model.associations.AssociationKeeper;
 import org.arastreju.sge.model.nodes.ResourceNode;
 import org.arastreju.sge.model.nodes.ValueNode;
 import org.arastreju.sge.naming.QualifiedName;
@@ -58,7 +61,14 @@ public class ResourceIndex implements NeoConstants {
 	 * Find Arastreju node by qualified name.
 	 */
 	public ResourceNode findResourceNode(final QualifiedName qn) {
-		return cache.get(qn);
+		return cache.getNode(qn);
+	}
+	
+	/**
+	 * Find Arastreju node by qualified name.
+	 */
+	public AssociationKeeper findAssociationKeeper(final QualifiedName qn) {
+		return cache.getAssociationKeeper(qn);
 	}
 	
 	/**
@@ -112,12 +122,13 @@ public class ResourceIndex implements NeoConstants {
 	/**
 	 * Re-index a node.
 	 * @param neoNode The Neo node.
-	 * @param resourceNode The corresponding Arastreju node.
+	 * @param qn The corresponding Arastreju node.
+	 * @param statements The statements to be indexed.
 	 */
-	public void reindex(final Node neoNode, final ResourceNode resourceNode) {
+	public void reindex(final Node neoNode, final QualifiedName qn, final Collection<? extends Statement> statements) {
 		removeFromIndex(neoNode);
-		neoIndex.index(neoNode, resourceNode.getQualifiedName());
-		for (Statement stmt : resourceNode.getAssociations()) {
+		neoIndex.index(neoNode, qn);
+		for (Statement stmt : statements) {
 			index(neoNode, stmt);
 		}
 	}
@@ -127,7 +138,7 @@ public class ResourceIndex implements NeoConstants {
 	public void removeFromIndex(final Node node) {
 		neoIndex.remove(node);
 		if (node.hasProperty(NeoConstants.PROPERTY_URI)) {
-			cache.remove(new QualifiedName(node.getProperty(NeoConstants.PROPERTY_URI).toString()));
+			uncache(new QualifiedName(node.getProperty(NeoConstants.PROPERTY_URI).toString()));
 		}
 	}
 
@@ -152,8 +163,8 @@ public class ResourceIndex implements NeoConstants {
 		cache.put(resource.getQualifiedName(), resource);
 	}
 	
-	public void uncache(final ResourceNode node) {
-		cache.remove(node.getQualifiedName());
+	public void uncache(final QualifiedName qn) {
+		cache.remove(qn);
 	}
 	
 	public void clearCache(){

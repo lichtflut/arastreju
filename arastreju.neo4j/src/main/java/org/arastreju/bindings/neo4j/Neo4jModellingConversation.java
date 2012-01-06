@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2010 lichtflut Forschungs- und Entwicklungsgesellschaft mbH
+ * Copyright (C) 2012 lichtflut Forschungs- und Entwicklungsgesellschaft mbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,19 +17,16 @@ package org.arastreju.bindings.neo4j;
 
 import org.arastreju.bindings.neo4j.impl.SemanticNetworkAccess;
 import org.arastreju.bindings.neo4j.index.ResourceIndex;
-import org.arastreju.bindings.neo4j.tx.TxResultAction;
 import org.arastreju.sge.ModelingConversation;
 import org.arastreju.sge.SNOPS;
 import org.arastreju.sge.model.ResourceID;
 import org.arastreju.sge.model.SemanticGraph;
 import org.arastreju.sge.model.Statement;
-import org.arastreju.sge.model.associations.Association;
 import org.arastreju.sge.model.nodes.ResourceNode;
 import org.arastreju.sge.model.nodes.SemanticNode;
 import org.arastreju.sge.naming.QualifiedName;
 import org.arastreju.sge.persistence.TransactionControl;
-
-import de.lichtflut.infra.exceptions.NotYetImplementedException;
+import org.arastreju.sge.persistence.TxResultAction;
 
 /**
  * <p>
@@ -60,9 +57,9 @@ public class Neo4jModellingConversation implements ModelingConversation {
 	/**
 	 * {@inheritDoc}
 	 */
-	public Association addStatement(final Statement stmt) {
+	public void addStatement(final Statement stmt) {
 		final ResourceNode subject = resolve(stmt.getSubject());
-		return SNOPS.associate(subject, stmt.getPredicate(), stmt.getObject(), stmt.getContexts());
+		SNOPS.associate(subject, stmt.getPredicate(), stmt.getObject(), stmt.getContexts());
 	}
 	
 	/** 
@@ -96,6 +93,13 @@ public class Neo4jModellingConversation implements ModelingConversation {
 		return store.attach(node);
 	}
 	
+	/** 
+	 * {@inheritDoc}
+	 */
+	public void reset(final ResourceNode node) {
+		store.reset(node);
+	}
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -112,13 +116,6 @@ public class Neo4jModellingConversation implements ModelingConversation {
 	
 	// -----------------------------------------------------
 
-	/**
-	 * {@inheritDoc}
-	 */
-	public SemanticGraph findGraph(final QualifiedName qn) {
-		throw new NotYetImplementedException();
-	}
-	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -144,7 +141,6 @@ public class Neo4jModellingConversation implements ModelingConversation {
 			}
 		}
 	}
-
 	
 	// -----------------------------------------------------
 

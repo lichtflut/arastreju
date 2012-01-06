@@ -22,6 +22,7 @@ import java.util.Set;
 
 import org.arastreju.sge.eh.ArastrejuRuntimeException;
 import org.arastreju.sge.eh.ErrorCodes;
+import org.arastreju.sge.model.Statement;
 
 /**
  * <p>
@@ -36,7 +37,7 @@ import org.arastreju.sge.eh.ErrorCodes;
  */
 public class DetachedAssociationKeeper extends AbstractAssociationKeeper implements Serializable {
 	
-	private final Set<Association> removedAssociations = new HashSet<Association>();
+	private final Set<Statement> removedAssociations = new HashSet<Statement>();
 	
 	// -----------------------------------------------------
 
@@ -48,7 +49,7 @@ public class DetachedAssociationKeeper extends AbstractAssociationKeeper impleme
 		markResolved();
 	}
 	
-	public DetachedAssociationKeeper(final Set<Association> associations){
+	public DetachedAssociationKeeper(final Set<Statement> associations){
 		super(associations);
 		markResolved();
 	}
@@ -59,9 +60,9 @@ public class DetachedAssociationKeeper extends AbstractAssociationKeeper impleme
 	 * {@inheritDoc}
 	 */
 	@Override
-	public boolean remove(Association assoc) {
+	public boolean removeAssociation(Statement assoc) {
 		removedAssociations.add(assoc);
-		return super.remove(assoc);
+		return super.removeAssociation(assoc);
 	}
 	
 	/**
@@ -74,7 +75,7 @@ public class DetachedAssociationKeeper extends AbstractAssociationKeeper impleme
 	/**
 	 * {@inheritDoc}
 	 */
-	public Set<Association> getAssociationsForRemoval() {
+	public Set<Statement> getAssociationsForRemoval() {
 		return removedAssociations;
 	}
 	

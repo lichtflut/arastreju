@@ -9,7 +9,7 @@ import org.arastreju.sge.model.Statement;
 
 /**
  * <p>
- *  [DESCRIPTION]
+ *  Base interface for inferencers.
  * </p>
  *
  * <p>

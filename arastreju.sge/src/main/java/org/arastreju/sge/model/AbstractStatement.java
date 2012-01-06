@@ -21,7 +21,7 @@ import de.lichtflut.infra.Infra;
  *
  * @author Oliver Tigges
  */
-public abstract class AbstractStatement implements Statement {
+public class AbstractStatement implements Statement {
 	
 	public static final Context[] NO_CTX = new Context[0];
 
@@ -35,6 +35,21 @@ public abstract class AbstractStatement implements Statement {
 	
 	// -----------------------------------------------------
 
+	/**
+	 * Creates a new Statement.
+	 * @param subject The subject.
+	 * @param predicate The predicate.
+	 * @param object The object.
+	 * @param contexts The contexts of this statement.
+	 */
+	public AbstractStatement(final ResourceID subject, final ResourceID predicate,
+			final SemanticNode object, final Context... contexts) {
+		this.subject = subject;
+		this.predicate = predicate;
+		this.object = object;
+		setContexts(contexts);
+	}
+	
 	/**
 	 * Constructor.
 	 */
