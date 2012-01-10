@@ -52,13 +52,15 @@ public class ArastrejuProfile implements GateLifecycleListener {
 	
 	public static final String ARAS_STORE_DIRECTORY = "org.arastreju.store.directory";
 	
-	public static final String FILE_SUFFIX = ".profile";
+	// ----------------------------------------------------
 	
-	public static final String STANDARD_DIR = "META-INF";
+	private static final String FILE_SUFFIX = ".profile";
 	
-	public static final String STANDARD_APP_PROFILE = "arastreju.profile";
+	private static final String STANDARD_DIR = "META-INF";
 	
-	public static final String DEFAULT_PROFILE = "arastreju.default.profile";
+	private static final String STANDARD_APP_PROFILE = "arastreju.profile";
+	
+	private static final String DEFAULT_PROFILE = "arastreju.default.profile";
 	
 	// -----------------------------------------------------
 	
@@ -233,15 +235,15 @@ public class ArastrejuProfile implements GateLifecycleListener {
 	// -- GATE LIFECYCLE -----------------------------------
 	
 
-	/* (non-Javadoc)
-	 * @see org.arastreju.sge.spi.GateLifecycleListener#gateOpened(org.arastreju.sge.ArastrejuGate)
+	/**
+	 * {@inheritDoc}
 	 */
 	public void onOpen(final ArastrejuGate gate) {
 		openGates.add(gate);
 	}
 
-	/* (non-Javadoc)
-	 * @see org.arastreju.sge.spi.GateLifecycleListener#gateClosed(org.arastreju.sge.ArastrejuGate)
+	/**
+	 * {@inheritDoc}
 	 */
 	public void onClose(final ArastrejuGate gate) {
 		if (!openGates.contains(gate)) {
@@ -252,8 +254,8 @@ public class ArastrejuProfile implements GateLifecycleListener {
 	
 	// -----------------------------------------------------
 	
-	/* (non-Javadoc)
-	 * @see java.lang.Object#toString()
+	/**
+	 * {@inheritDoc}
 	 */
 	@Override
 	public String toString() {

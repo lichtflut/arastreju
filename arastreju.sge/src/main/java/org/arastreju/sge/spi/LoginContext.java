@@ -17,6 +17,8 @@ package org.arastreju.sge.spi;
 
 import org.arastreju.sge.ArastrejuGate;
 import org.arastreju.sge.ArastrejuProfile;
+import org.arastreju.sge.security.Credential;
+import org.arastreju.sge.security.PasswordCredential;
 
 /**
  * <p>
@@ -29,55 +31,58 @@ import org.arastreju.sge.ArastrejuProfile;
  *
  * @author Oliver Tigges
  */
-public class GateContext {
+public class LoginContext extends GateContext {
 	
-	public static final String ROOT_DOMAIN = "root";
-
-	private final ArastrejuProfile profile;
+	private String username;
 	
-	private String domain;
+	private Credential credential;
 	
 	// -----------------------------------------------------
 	
 	/**
 	 * Constructor for username/credential.
 	 */
-	public GateContext(final ArastrejuProfile profile) {
-		this.profile = profile;
+	public LoginContext(final ArastrejuProfile profile) {
+		super(profile);
 	}
 	
 	// -----------------------------------------------------
 
 	/**
-	 * @return the profile
+	 * @return the username
 	 */
-	public ArastrejuProfile getProfile() {
-		return profile;
+	public String getUsername() {
+		return username;
+	}
+
+	/**
+	 * @param username the username to set
+	 */
+	public LoginContext setUsername(String username) {
+		this.username = username;
+		return this;
+	}
+
+	/**
+	 * @return the credential
+	 */
+	public Credential getCredential() {
+		return credential;
+	}
+
+	/**
+	 * @param credential the credentials to set
+	 */
+	public LoginContext setCredential(final String credential) {
+		setCredential(new PasswordCredential(credential));
+		return this;
 	}
 	
 	/**
-	 * @return the domain
+	 * @param credential the credentials to set
 	 */
-	public String getDomain() {
-		return domain;
-	}
-	
-	/**
-	 * @return the domain if set, other wise the defaultDomain
-	 */
-	public String getDomain(String defaultDomain) {
-		if (domain != null) {
-			return domain;
-		} else {
-			return defaultDomain;
-		}
-	}
-	
-	/**
-	 * @param domain the domain to set
-	 */
-	public GateContext setDomain(String domain) {
-		this.domain = domain;
+	public LoginContext setCredential(final Credential credential) {
+		this.credential = credential;
 		return this;
 	}
 	

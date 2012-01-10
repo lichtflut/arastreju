@@ -99,6 +99,8 @@ public interface Aras {
 	ResourceID HAS_ROLE = new SimpleResourceID(NAMESPACE_URI, "hasRole");
 	ResourceID HAS_PERMISSION = new SimpleResourceID(NAMESPACE_URI, "hasPermission");
 	
+	ResourceID BELONGS_TO_DOMAIN = new SimpleResourceID(NAMESPACE_URI, "belongsToDomain");
+	
 	// -- SCHEMAS -----------------------------------------
 	
 	ResourceID ACTIVITY_SCHEMA = new SimpleResourceID(NAMESPACE_URI, "ActivitySchema");

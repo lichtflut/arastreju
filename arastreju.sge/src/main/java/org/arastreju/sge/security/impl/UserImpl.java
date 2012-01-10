@@ -59,5 +59,24 @@ public class UserImpl extends AbstractIdentity implements User {
 	public void setEmail(String email) {
 		assure(getAssociatedResource(), Aras.HAS_EMAIL, new SNText(email), Aras.IDENT);
 	}
-
+	
+	/** 
+	 * {@inheritDoc}
+	 */
+	public String getDomain() {
+		return string(singleObject(getAssociatedResource(), Aras.BELONGS_TO_DOMAIN));
+	}
+	
+	public void setDomain(String domain) {
+		assure(getAssociatedResource(), Aras.BELONGS_TO_DOMAIN, new SNText(domain), Aras.IDENT);
+	}
+	
+	/** 
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String toString() {
+		return getName();
+	}
+	
 }

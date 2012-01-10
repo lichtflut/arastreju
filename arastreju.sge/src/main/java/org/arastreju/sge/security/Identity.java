@@ -35,8 +35,6 @@ public interface Identity extends Serializable {
 	
 	public static final String ROOT = "root";
 	
-	public static final String ANONYMOUS = "anonymous";
-	
 	// -----------------------------------------------------
 
 	ResourceNode getAssociatedResource();

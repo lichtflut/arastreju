@@ -21,6 +21,7 @@ import java.util.Properties;
 import org.arastreju.sge.security.Identity;
 import org.arastreju.sge.spi.ArastrejuGateFactory;
 import org.arastreju.sge.spi.GateContext;
+import org.arastreju.sge.spi.LoginContext;
 
 /**
  * <p>
@@ -92,13 +93,24 @@ public final class Arastreju {
 	// -----------------------------------------------------
 
 	/**
-	 * Login into the Gate using given username and credentials.
+	 * Login into default domain using username and credentials.
 	 * @param username The unique username.
 	 * @param credential The user's credential.
 	 * @return The corresponding {@link ArastrejuGate}.
 	 */
-	public ArastrejuGate login(final String username, final String credential) {
-		final GateContext ctx = createGateContext(username, credential);
+	public ArastrejuGate login(String username, String credential) {
+		return login(username, credential, GateContext.ROOT_DOMAIN);
+	}
+	
+	/**
+	 * Login into a given domain using username and credentials.
+	 * @param username The unique username.
+	 * @param credential The user's credential.
+	 * @param domain The domain.
+	 * @return The corresponding {@link ArastrejuGate}.
+	 */
+	public ArastrejuGate login(String username, String credential, String domain) {
+		final GateContext ctx = createLoginContext(username, credential, domain);
 		return factory.create(ctx);
 	}
 
@@ -114,20 +126,7 @@ public final class Arastreju {
 	 * @return The ArastrejuGate for the root context.
 	 */
 	public ArastrejuGate rootContext() {
-		return rootContext(null);
-	}
-	
-	/**
-	 * Obtain an anonymous context for unidentified (guest) users.
-	 * 
-	 * <p>
-	 *  Specific providers can deny anonymous access.
-	 * </p>
-	 * 
-	 * @return The ArastrejuGate for the root context.
-	 */
-	public ArastrejuGate anonymousContext() {
-		return login(Identity.ANONYMOUS, null);
+		return rootContext(GateContext.ROOT_DOMAIN);
 	}
 	
 	/**
@@ -140,8 +139,8 @@ public final class Arastreju {
 	 * @param credential The credential of user 'root'.
 	 * @return The ArastrejuGate for the root context.
 	 */
-	public ArastrejuGate rootContext(final String credential) {
-		return login(Identity.ROOT, credential);
+	public ArastrejuGate rootContext(String domain) {
+		return login(Identity.ROOT, null, domain);
 	}
 
 	// -----------------------------------------------------
@@ -149,8 +148,8 @@ public final class Arastreju {
 	/**
 	 * Create and initialize the Gate Context.
 	 */
-	private GateContext createGateContext(final String user, final String credential) {
-		return new GateContext(profile).setUsername(user).setCredential(credential);
+	private GateContext createLoginContext(String user, String credential, String domain) {
+		return new LoginContext(profile).setUsername(user).setCredential(credential).setDomain(domain);
 	}
 	
 	// -- PRIVATE CONSTRUCTORS -----------------------------

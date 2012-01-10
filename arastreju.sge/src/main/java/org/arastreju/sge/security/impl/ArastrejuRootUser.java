@@ -23,6 +23,7 @@ import org.arastreju.sge.security.Identity;
 import org.arastreju.sge.security.Permission;
 import org.arastreju.sge.security.Role;
 import org.arastreju.sge.security.User;
+import org.arastreju.sge.spi.GateContext;
 
 import de.lichtflut.infra.exceptions.NotYetImplementedException;
 
@@ -39,6 +40,26 @@ import de.lichtflut.infra.exceptions.NotYetImplementedException;
  */
 public class ArastrejuRootUser implements User, Serializable {
 
+	private String domain = GateContext.ROOT_DOMAIN;
+	
+	// ----------------------------------------------------
+	
+	/**
+	 * Default constructor for default domain.
+	 */
+	public ArastrejuRootUser() {
+	}
+	
+	/**
+	 * @param domain
+	 */
+	public ArastrejuRootUser(String domain) {
+		this.domain = domain;
+	}
+	
+	// ----------------------------------------------------
+	
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -86,6 +107,13 @@ public class ArastrejuRootUser implements User, Serializable {
 	 */
 	public String getEmail() {
 		return "root@system";
+	}
+	
+	/** 
+	 * {@inheritDoc}
+	 */
+	public String getDomain() {
+		return domain;
 	}
 
 }
