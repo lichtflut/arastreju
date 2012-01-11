@@ -91,15 +91,19 @@ public interface Aras {
 	ResourceID CREDENTIAL = new SimpleResourceID(NAMESPACE_URI, "Credential");
 	ResourceID ROLE = new SimpleResourceID(NAMESPACE_URI, "Role");
 	ResourceID PERMISSION = new SimpleResourceID(NAMESPACE_URI, "Permission");
+	ResourceID DOMAIN = new SimpleResourceID(NAMESPACE_URI, "Domain");
 	
 	ResourceID IDENTIFIED_BY = new SimpleResourceID(NAMESPACE_URI, "isIdentifiedBy");
 	ResourceID HAS_CREDENTIAL = new SimpleResourceID(NAMESPACE_URI, "hasCredential");
 	ResourceID HAS_EMAIL = new SimpleResourceID(NAMESPACE_URI, "hasEmail");
 	ResourceID HAS_UNIQUE_NAME = new SimpleResourceID(NAMESPACE_URI, "hasUniqueName");
+	ResourceID HAS_TITLE = new SimpleResourceID(NAMESPACE_URI, "hasTitle");
+	ResourceID HAS_DESCRIPTION = new SimpleResourceID(NAMESPACE_URI, "hasDescription");
 	ResourceID HAS_ROLE = new SimpleResourceID(NAMESPACE_URI, "hasRole");
 	ResourceID HAS_PERMISSION = new SimpleResourceID(NAMESPACE_URI, "hasPermission");
 	
 	ResourceID BELONGS_TO_DOMAIN = new SimpleResourceID(NAMESPACE_URI, "belongsToDomain");
+	ResourceID IS_MASTER_DOMAIN = new SimpleResourceID(NAMESPACE_URI, "isMasterDomain");
 	
 	// -- SCHEMAS -----------------------------------------
 	
