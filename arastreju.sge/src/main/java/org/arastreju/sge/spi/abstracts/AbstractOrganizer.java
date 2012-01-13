@@ -84,14 +84,20 @@ public abstract class AbstractOrganizer implements Organizer {
 		final ResourceNode node = new SNResource();
 		node.addAssociation(Aras.HAS_UNIQUE_NAME, new SNText(name), Aras.IDENT);
 		node.addAssociation(Aras.IS_MASTER_DOMAIN, new SNBoolean(true), Aras.IDENT);
+		node.addAssociation(RDF.TYPE, Aras.DOMAIN, Aras.IDENT);
 		return node;
 	}
 	
 	protected ResourceNode createDomainNode(String name, String title, String description) {
 		final ResourceNode node = new SNResource();
 		node.addAssociation(Aras.HAS_UNIQUE_NAME, new SNText(name), Aras.IDENT);
-		node.addAssociation(Aras.HAS_TITLE, new SNText(title), Aras.IDENT);
-		node.addAssociation(Aras.HAS_DESCRIPTION, new SNText(description), Aras.IDENT);
+		if (title != null) {
+			node.addAssociation(Aras.HAS_TITLE, new SNText(title), Aras.IDENT);
+		}
+		if (description != null) {
+			node.addAssociation(Aras.HAS_DESCRIPTION, new SNText(description), Aras.IDENT);
+		}
+		node.addAssociation(RDF.TYPE, Aras.DOMAIN, Aras.IDENT);
 		return node;
 	}
 }

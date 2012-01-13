@@ -6,12 +6,13 @@ package org.arastreju.sge.security.impl;
 import static org.arastreju.sge.SNOPS.singleObject;
 import static org.arastreju.sge.SNOPS.string;
 
+import java.io.Serializable;
+
 import org.arastreju.sge.SNOPS;
 import org.arastreju.sge.apriori.Aras;
-import org.arastreju.sge.eh.ArastrejuRuntimeException;
-import org.arastreju.sge.eh.ErrorCodes;
 import org.arastreju.sge.model.nodes.ResourceNode;
 import org.arastreju.sge.model.nodes.SemanticNode;
+import org.arastreju.sge.model.nodes.views.SNText;
 import org.arastreju.sge.security.Domain;
 
 /**
@@ -25,7 +26,7 @@ import org.arastreju.sge.security.Domain;
  *
  * @author Oliver Tigges
  */
-public class DomainImpl implements Domain {
+public class DomainImpl implements Domain, Serializable {
 	
 	private final ResourceNode node;
 	
@@ -52,11 +53,7 @@ public class DomainImpl implements Domain {
 	 * {@inheritDoc}
 	 */
 	public String getUniqueName() {
-		final SemanticNode idNode = SNOPS.singleObject(node, Aras.HAS_UNIQUE_NAME);
-		if (idNode == null) {
-			throw new ArastrejuRuntimeException(ErrorCodes.GENERAL_CONSISTENCY_FAILURE, "Domain has no name!");
-		}
-		return idNode.asValue().getStringValue();
+		return string(singleObject(node, Aras.HAS_UNIQUE_NAME));
 	}
 
 	/** 
@@ -65,12 +62,28 @@ public class DomainImpl implements Domain {
 	public String getTitle() {
 		return string(singleObject(node, Aras.HAS_TITLE));
 	}
+	
+	/**
+	 * Set the title.
+	 * @param title The title
+	 */
+	public void setTitle(final String title) {
+		SNOPS.assure(node, Aras.HAS_TITLE, new SNText(title), Aras.IDENT);
+	}
 
 	/** 
 	 * {@inheritDoc}
 	 */
 	public String getDescription() {
 		return string(singleObject(node, Aras.HAS_DESCRIPTION));
+	}
+	
+	/**
+	 * Set the description.
+	 * @param desc The description
+	 */
+	public void setDescription(final String desc) {
+		SNOPS.assure(node, Aras.HAS_DESCRIPTION, new SNText(desc), Aras.IDENT);
 	}
 
 	/** 

@@ -75,6 +75,12 @@ public interface Organizer {
 	 */
 	Domain registerDomain(String name, String title, String description);
 
+	/**
+	 * Update info for given domain.
+	 * @param domain The domain info.
+	 */
+	void updateDomain(Domain domain);
+
 	
 	
 }

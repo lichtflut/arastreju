@@ -20,7 +20,7 @@ import org.arastreju.sge.naming.QualifiedName;
 
 /**
  * <p>
- *  Query object.
+ *  Query object to dynamically create a complex query and retrieve it's result.
  * </p>
  *
  * <p>
@@ -32,73 +32,85 @@ import org.arastreju.sge.naming.QualifiedName;
 public interface Query {
 	
 	/**
-	 * @param param
+	 * Add a common query param.
+	 * @param param The param.
 	 * @return This.
 	 */
 	Query add(QueryParam param);
 	
 	/**
-	 * @param name
-	 * @param value
+	 * Add a param querying a field, i.e. a property.
+	 * @param name The name.
+	 * @param value The value.
 	 * @return This.
 	 */
 	Query addField(String name, Object value);
 	
 	/**
-	 * Constructor.
-	 * @param name
-	 * @param value
+	 * Add a param querying a field, i.e. a property.
+	 * @param name The name.
+	 * @param value The value.
 	 * @return This.
 	 */
 	Query addField(ResourceID name, Object value);
 	
 	/**
-	 * @param name
-	 * @param value
+	 * Add a param querying a field, i.e. a property.
+	 * @param name The name.
+	 * @param value The value.
+	 * @return This.
 	 */
 	Query addField(QualifiedName name, Object value);
 	
 	/**
-	 * @param name
-	 * @param value
+	 * Add a parameter for the URI.
+	 * @param term The term to match the URI. 
+	 * @return This.
 	 */
 	Query addURI(String term);
 	
 	/**
-	 * @param name
-	 * @param value
+	 * Add a global parameter for all fields.
+	 * @param name The name.
+	 * @param term The term.
 	 */
 	Query addValue(String term);
 
 	// ----------------------------------------------------
 	
 	/**
-	 * @return
+	 * Connect the previous and the next parameter with AND. 
+	 * @return This.
 	 */
 	Query and();
 
 	/**
-	 * @return
+	 * Connect the previous and the next parameter with OR. 
+	 * @return This.
 	 */
 	Query or();
 
 	/**
-	 * @return
+	 * Invert the next parameter or expression.
+	 * @return This.
 	 */
 	Query not();
 
 	/**
-	 * @return
+	 * Begin a block in which all parameters are AND-conjuncted. 
+	 * @return This
 	 */
 	Query beginAnd();
 
 	/**
-	 * @return
+	 * Begin a block in which all parameters are OR-conjuncted.
+	 * @return This.
 	 */
 	Query beginOr();
 
 	/**
-	 * @return
+	 * Close the block that has been opened with beginAnd() or beginOr().
+	 * @return This.
 	 */
 	Query end();
 	
@@ -113,6 +125,10 @@ public interface Query {
 	
 	// -----------------------------------------------------
 
+	/**
+	 * Execute the query and retrieve the result.
+	 * @return The query result.
+	 */
 	QueryResult getResult();
 
 	

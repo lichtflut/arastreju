@@ -118,4 +118,17 @@ public class QueryBuilderTest {
 		
 	}
 	
+	@Test
+	public void testSimpleNot() {
+		final QueryBuilder query = new TestQueryBuilder();
+		
+		query.add(new FieldParam("a", 1)).and().not().add(new FieldParam("b", 2));
+		
+		final QueryExpression root = query.getRoot();
+		System.err.println(root);
+		Assert.assertTrue(root != null);
+		Assert.assertEquals(2, root.getChildren().size());
+		
+	}
+	
 }

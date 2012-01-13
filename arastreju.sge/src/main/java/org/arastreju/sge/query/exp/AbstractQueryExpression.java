@@ -109,9 +109,6 @@ public abstract class AbstractQueryExpression implements QueryExpression {
 		public Not() {
 			super(QueryOperator.NOT);
 		}
-		public Not(final AbstractQueryExpression expr) {
-			super(QueryOperator.NOT, expr);
-		}
 	}
 
 }
