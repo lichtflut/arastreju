@@ -102,7 +102,11 @@ public interface ModelingConversation extends ResourceResolver {
 	
 	// -- SEMANTIC GRAPH ----------------------------------
 	
-	SemanticGraph attach(SemanticGraph graph);
+	/**
+	 * Attach all statements of the graph.
+	 * @param graph The graph to be attached.
+	 */
+	void attach(SemanticGraph graph);
 	
 	void detach(SemanticGraph graph);
 	
