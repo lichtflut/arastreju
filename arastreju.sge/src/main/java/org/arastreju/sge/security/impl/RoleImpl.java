@@ -17,7 +17,7 @@ package org.arastreju.sge.security.impl;
 
 import java.util.Set;
 
-import org.arastreju.sge.SNOPS;
+import static org.arastreju.sge.SNOPS.*;
 import org.arastreju.sge.apriori.Aras;
 import org.arastreju.sge.model.nodes.ResourceNode;
 import org.arastreju.sge.security.Permission;
@@ -65,8 +65,7 @@ public class RoleImpl implements Role {
 	 * @see org.arastreju.sge.security.Role#getName()
 	 */
 	public String getName() {
-		return SNOPS.singleObject(node, Aras.HAS_UNIQUE_NAME)
-			.asValue().getStringValue();
+		return string(singleObject(node, Aras.HAS_UNIQUE_NAME));
 	}
 
 	/* (non-Javadoc)
