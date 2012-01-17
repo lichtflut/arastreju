@@ -70,15 +70,9 @@ public class SNProperty extends ResourceView {
 	 * @return A set with all super properties.
 	 */
 	public Set<SNProperty> getSuperProperties() {
-		final Set<SNProperty> superProperties = new HashSet<SNProperty>();
-		superProperties.add(this);
-		final Set<? extends Statement> extensions = getAssociations(RDFS.SUB_PROPERTY_OF);
-		for (Statement current : extensions) {
-			final SNProperty directSuperProperty = current.getObject().asResource().asProperty();
-			superProperties.add(directSuperProperty);
-			superProperties.addAll(directSuperProperty.getSuperProperties());
-		}
-		return superProperties;
+		final Set<SNProperty> targetSet = new HashSet<SNProperty>();
+		addSuperProperties(targetSet);
+		return targetSet;
 	}
 	
 	/**
@@ -87,7 +81,7 @@ public class SNProperty extends ResourceView {
 	 */
 	public Set<SNProperty> getDirectSuperProperties() {
 		final Set<SNProperty> result = new HashSet<SNProperty>();
-		final Set<? extends Statement> extensions = getAssociations(RDFS.SUB_PROPERTY_OF);
+		final Set<Statement> extensions = getAssociations(RDFS.SUB_PROPERTY_OF);
 		for (Statement current : extensions) {
 			final SNProperty directSuperProperty = current.getObject().asResource().asProperty();
 			result.add(directSuperProperty);
@@ -167,6 +161,20 @@ public class SNProperty extends ResourceView {
 			}
 		}
 		return false;
+	}
+	
+	/**
+	 * Add super properties to target set.
+	 */
+	protected void addSuperProperties(Set<SNProperty> targetSet) {
+		targetSet.add(this);
+		final Set<? extends Statement> extensions = getAssociations(RDFS.SUB_PROPERTY_OF);
+		for (Statement current : extensions) {
+			final SNProperty directSuperProperty = current.getObject().asResource().asProperty();
+			if (!targetSet.contains(directSuperProperty)) {
+				directSuperProperty.addSuperProperties(targetSet);
+			}
+		}
 	}
 	
 }
