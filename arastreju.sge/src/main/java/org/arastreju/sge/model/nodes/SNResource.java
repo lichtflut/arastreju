@@ -109,6 +109,13 @@ public class SNResource implements ResourceNode, Serializable {
 		return qn;
 	}
 	
+	/** 
+	 * {@inheritDoc}
+	 */
+	public String toURI() {
+		return qn.toURI();
+	}
+	
 	/**
 	 * {@inheritDoc}
 	 */

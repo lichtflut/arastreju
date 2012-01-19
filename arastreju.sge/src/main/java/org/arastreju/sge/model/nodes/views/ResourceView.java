@@ -70,6 +70,13 @@ public abstract class ResourceView implements ResourceNode, Serializable {
 	public QualifiedName getQualifiedName() {
 		return resource.getQualifiedName();
 	}
+	
+	/** 
+	 * {@inheritDoc}
+	 */
+	public String toURI() {
+		return resource.toURI();
+	}
 
 	/**
 	 * {@inheritDoc}

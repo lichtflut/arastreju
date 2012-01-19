@@ -9,6 +9,7 @@
 	<packaging>pom</packaging>
 	<modules>
 		<module>arastreju.sge</module>
+		<module>arastreju.ogm</module>
 	</modules>
 	<build>
 		<pluginManagement>

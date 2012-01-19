@@ -38,4 +38,10 @@ public interface ResourceID extends SemanticNode {
 	 */
 	QualifiedName getQualifiedName();
 	
+	/**
+	 * Return the URI of the Resource. Just a shortcut for getQualifiedName().toURI().
+	 * @return The URI.
+	 */
+	String toURI();
+	
 }

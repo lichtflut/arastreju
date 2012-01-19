@@ -91,13 +91,20 @@ public class SimpleResourceID implements ResourceID, Serializable {
 		this(new QualifiedName(uri));
 	}
 	
+	// ----------------------------------------------------
+	
 	public QualifiedName getQualifiedName() {
 		return qualifiedName;
 	}
 	
-	public boolean references(final ResourceID ref) {
-		return qualifiedName.equals(ref.getQualifiedName());
+	/** 
+	 * {@inheritDoc}
+	 */
+	public String toURI() {
+		return qualifiedName.toURI();
 	}
+	
+	// ----------------------------------------------------
 	
 	/**
 	 * {@inheritDoc}
