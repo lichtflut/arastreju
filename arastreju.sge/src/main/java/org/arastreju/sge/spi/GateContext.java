@@ -31,7 +31,7 @@ import org.arastreju.sge.ArastrejuProfile;
  */
 public class GateContext {
 	
-	public static final String ROOT_DOMAIN = "root";
+	public static final String MASTER_DOMAIN = "root";
 
 	private final ArastrejuProfile profile;
 	
@@ -63,20 +63,19 @@ public class GateContext {
 	}
 	
 	/**
-	 * @return the domain if set, other wise the defaultDomain
+	 * Check if this context's domain is the master domain.
+	 * @return true if this is the master domain.
 	 */
-	public String getDomain(String defaultDomain) {
-		if (domain != null) {
-			return domain;
-		} else {
-			return defaultDomain;
-		}
+	public boolean isMasterDomain() {
+		return GateContext.MASTER_DOMAIN.equals(domain);
 	}
+	
+	// ----------------------------------------------------
 	
 	/**
 	 * @param domain the domain to set
 	 */
-	public GateContext setDomain(String domain) {
+	protected GateContext setDomain(String domain) {
 		this.domain = domain;
 		return this;
 	}

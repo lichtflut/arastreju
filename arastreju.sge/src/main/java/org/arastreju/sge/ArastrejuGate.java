@@ -16,6 +16,7 @@
 package org.arastreju.sge;
 
 import org.arastreju.sge.query.QueryManager;
+import org.arastreju.sge.spi.GateContext;
 
 /**
  * <p>
@@ -55,6 +56,12 @@ public interface ArastrejuGate {
 	IdentityManagement getIdentityManagement();
 	
 	// ----------------------------------------------------
+	
+	/**
+	 * Get the context of this gate.
+	 * @return The gate context.
+	 */
+	GateContext getContext();
 	
 	/**
 	 * Close the gate and free all resources.

@@ -89,8 +89,8 @@ public class DomainImpl implements Domain, Serializable {
 	/** 
 	 * {@inheritDoc}
 	 */
-	public boolean isMasterDomain() {
-		final SemanticNode mdNode = singleObject(node, Aras.IS_MASTER_DOMAIN);
+	public boolean isDomesticDomain() {
+		final SemanticNode mdNode = singleObject(node, Aras.IS_DOMESTIC_DOMAIN);
 		if (mdNode != null && mdNode.isValueNode()) {
 			return mdNode.asValue().getBooleanValue();
 		} else {

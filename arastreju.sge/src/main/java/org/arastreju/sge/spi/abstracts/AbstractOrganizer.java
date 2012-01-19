@@ -80,10 +80,10 @@ public abstract class AbstractOrganizer implements Organizer {
 		return new DomainImpl(node);
 	}
 	
-	protected ResourceNode createMasterDomainNode(String name) {
+	protected ResourceNode createDomesticDomainNode(String name) {
 		final ResourceNode node = new SNResource();
 		node.addAssociation(Aras.HAS_UNIQUE_NAME, new SNText(name), Aras.IDENT);
-		node.addAssociation(Aras.IS_MASTER_DOMAIN, new SNBoolean(true), Aras.IDENT);
+		node.addAssociation(Aras.IS_DOMESTIC_DOMAIN, new SNBoolean(true), Aras.IDENT);
 		node.addAssociation(RDF.TYPE, Aras.DOMAIN, Aras.IDENT);
 		return node;
 	}

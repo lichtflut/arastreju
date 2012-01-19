@@ -44,6 +44,7 @@ public class LoginContext extends GateContext {
 	 */
 	public LoginContext(final ArastrejuProfile profile) {
 		super(profile);
+		setDomain(MASTER_DOMAIN);
 	}
 	
 	// -----------------------------------------------------
@@ -84,6 +85,14 @@ public class LoginContext extends GateContext {
 	public LoginContext setCredential(final Credential credential) {
 		this.credential = credential;
 		return this;
+	}
+	
+	/** 
+	 * {@inheritDoc}
+	 */
+	@Override
+	public GateContext setDomain(String domain) {
+		return super.setDomain(domain);
 	}
 	
 }

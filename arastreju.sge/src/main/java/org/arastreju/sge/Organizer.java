@@ -49,10 +49,17 @@ public interface Organizer {
 	// ----------------------------------------------------
 	
 	/**
+	 * Find a domain by it's name.
+	 * @param name The name of the domain
+	 * @return The domain.
+	 */
+	Domain findDomain(String name);
+	
+	/**
 	 * Get the master domain or null if not initialized.
 	 * @return The master domain or null.
 	 */
-	Domain getMasterDomain();
+	Domain getDomesticDomain();
 	
 	/**
 	 * Get all registered domains.
@@ -64,7 +71,7 @@ public interface Organizer {
 	 * Initialize and set this domain. 
 	 * @param name The unique domain name.
 	 */
-	Domain initMasterDomain(String name);
+	Domain initDomesticDomain(String name);
 	
 	/**
 	 * Register a new domain, known by this domain.
@@ -81,6 +88,4 @@ public interface Organizer {
 	 */
 	void updateDomain(Domain domain);
 
-	
-	
 }

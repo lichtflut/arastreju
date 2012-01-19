@@ -40,7 +40,7 @@ import de.lichtflut.infra.exceptions.NotYetImplementedException;
  */
 public class ArastrejuRootUser implements User, Serializable {
 
-	private String domain = GateContext.ROOT_DOMAIN;
+	private String domain = GateContext.MASTER_DOMAIN;
 	
 	// ----------------------------------------------------
 	

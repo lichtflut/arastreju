@@ -28,10 +28,10 @@ public class DomainInitializer {
 	
 	public void run(ArastrejuGate gate, String domain) {
 		logger.info("Initializing domain " + domain);
-		final Domain masterDomain = gate.getOrganizer().getMasterDomain();
-		if (masterDomain == null) {
-			logger.info("Creating master domain object for " + domain);
-			gate.getOrganizer().initMasterDomain(domain);
+		final Domain domestic = gate.getOrganizer().getDomesticDomain();
+		if (domestic == null) {
+			logger.info("Creating domestic domain object for " + domain);
+			gate.getOrganizer().initDomesticDomain(domain);
 		}
 		final ModelingConversation mc = gate.startConversation();
 		mc.close();

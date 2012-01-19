@@ -26,5 +26,5 @@ public interface Domain {
 	
 	String getDescription();
 
-	boolean isMasterDomain();
+	boolean isDomesticDomain();
 }

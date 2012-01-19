@@ -67,10 +67,6 @@ public class UserImpl extends AbstractIdentity implements User {
 		return string(singleObject(getAssociatedResource(), Aras.BELONGS_TO_DOMAIN));
 	}
 	
-	public void setDomain(String domain) {
-		assure(getAssociatedResource(), Aras.BELONGS_TO_DOMAIN, new SNText(domain), Aras.IDENT);
-	}
-	
 	/** 
 	 * {@inheritDoc}
 	 */

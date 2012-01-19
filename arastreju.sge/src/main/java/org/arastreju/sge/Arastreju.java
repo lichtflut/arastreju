@@ -99,7 +99,7 @@ public final class Arastreju {
 	 * @return The corresponding {@link ArastrejuGate}.
 	 */
 	public ArastrejuGate login(String username, String credential) {
-		return login(username, credential, GateContext.ROOT_DOMAIN);
+		return login(username, credential, GateContext.MASTER_DOMAIN);
 	}
 	
 	/**
@@ -126,7 +126,7 @@ public final class Arastreju {
 	 * @return The ArastrejuGate for the root context.
 	 */
 	public ArastrejuGate rootContext() {
-		return rootContext(GateContext.ROOT_DOMAIN);
+		return rootContext(GateContext.MASTER_DOMAIN);
 	}
 	
 	/**
