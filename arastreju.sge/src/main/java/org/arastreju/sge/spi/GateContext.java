@@ -35,7 +35,7 @@ public class GateContext {
 
 	private final ArastrejuProfile profile;
 	
-	private String domain;
+	private String domain = MASTER_DOMAIN;
 	
 	// -----------------------------------------------------
 	
