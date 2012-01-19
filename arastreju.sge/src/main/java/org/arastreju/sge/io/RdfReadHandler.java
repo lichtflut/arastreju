@@ -36,7 +36,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import de.lichtflut.infra.exceptions.NotYetSupportedException;
-import de.lichtflut.infra.logging.Log;
 
 /**
  * <p>
@@ -134,7 +133,7 @@ public class RdfReadHandler implements RDFHandler {
 		} else if (value instanceof LiteralImpl){
 			String content = value.stringValue();
 			if (content.length() > 200){
-				Log.warn(this, "chopping content: " + content);
+				logger.warn("chopping content: " + content);
 				content = content.substring(0,200);
 			}
 			return new SNText(content);
