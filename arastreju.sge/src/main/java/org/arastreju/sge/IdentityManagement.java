@@ -92,6 +92,8 @@ public interface IdentityManagement {
 	
 	void addUserToRoles(User user, Role... roles);
 	
+	void removeUserFromRoles(User user, Role... roles);
+	
 	/**
 	 * Add permissions to a role.
 	 * @param role The role. 

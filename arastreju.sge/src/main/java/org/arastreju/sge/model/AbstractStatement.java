@@ -15,6 +15,7 @@
  */
 package org.arastreju.sge.model;
 
+import java.io.Serializable;
 import java.util.Arrays;
 
 import org.arastreju.sge.context.Context;
@@ -33,7 +34,7 @@ import de.lichtflut.infra.Infra;
  *
  * @author Oliver Tigges
  */
-public class AbstractStatement implements Statement {
+public class AbstractStatement implements Statement, Serializable {
 	
 	public static final Context[] NO_CTX = new Context[0];
 
