@@ -29,6 +29,7 @@ import org.arastreju.sge.model.SimpleResourceID;
 import org.arastreju.sge.model.Statement;
 import org.arastreju.sge.model.nodes.ResourceNode;
 import org.arastreju.sge.model.nodes.SemanticNode;
+import org.arastreju.sge.model.nodes.views.SNText;
 import org.arastreju.sge.naming.QualifiedName;
 
 import de.lichtflut.infra.Infra;
@@ -219,6 +220,25 @@ public class SNOPS {
 				return existing;
 			}
 		}
+	}
+	
+	/**
+	 * Assures that the subject has only this object for given predicate.
+	 * @param subject The subject.
+	 * @param predicate The predicate.
+	 * @param object The object to be set.
+	 * @param contexts The contexts.
+	 */
+	public static Statement assure(final ResourceNode subject, final ResourceID predicate, final Object object, final Context... contexts){
+		final SemanticNode node;
+		if (object instanceof SemanticNode) {
+			node = (SemanticNode) object;
+		} else if (object instanceof String) {
+			node = new SNText((String) object);
+		} else {
+			throw new IllegalArgumentException("Unsupported value: " + object);
+		}
+		return assure(subject, predicate, node, contexts);
 	}
 	
 	/**

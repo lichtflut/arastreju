@@ -18,6 +18,7 @@ package org.arastreju.sge.model.nodes.views;
 import java.io.Serializable;
 import java.util.Set;
 
+import org.arastreju.sge.SNOPS;
 import org.arastreju.sge.context.Context;
 import org.arastreju.sge.model.ResourceID;
 import org.arastreju.sge.model.Statement;
@@ -183,6 +184,14 @@ public abstract class ResourceView implements ResourceNode, Serializable {
 	 */
 	protected ResourceNode getResource() {
 		return resource;
+	}
+	
+	protected String stringValue(ResourceID attribute) {
+		return SNOPS.string(SNOPS.fetchObject(this, attribute));
+	}
+	
+	protected void setValue(ResourceID attribute, Object value) {
+		SNOPS.assure(this, attribute, value);
 	}
 	
 	// -----------------------------------------------------
