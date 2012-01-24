@@ -23,7 +23,6 @@ import org.arastreju.sge.model.ElementaryDataType;
 import org.arastreju.sge.model.nodes.views.SNScalar;
 import org.arastreju.sge.model.nodes.views.SNText;
 import org.arastreju.sge.model.nodes.views.SNTimeSpec;
-import org.arastreju.sge.model.nodes.views.SNUri;
 
 /**
  * <p>
@@ -36,7 +35,7 @@ import org.arastreju.sge.model.nodes.views.SNUri;
  *
  * @author Oliver Tigges
  */
-public interface ValueNode extends SemanticNode {
+public interface ValueNode extends SemanticNode, Comparable<ValueNode> {
 
 	ElementaryDataType getDataType();
 
@@ -44,12 +43,24 @@ public interface ValueNode extends SemanticNode {
 	
 	// ------------------------------------------------------
 
+	/**
+	 * @return The string value.
+	 */
 	String getStringValue();
 	
+	/**
+	 * @return The boolean value.
+	 */
 	Boolean getBooleanValue();
 	
+	/**
+	 * @return The integer value.
+	 */
 	BigInteger getIntegerValue();
 	
+	/**
+	 * @return The decimal value.
+	 */
 	BigDecimal getDecimalValue();
 	
 	/**
@@ -59,8 +70,6 @@ public interface ValueNode extends SemanticNode {
 	
 	// ------------------------------------------------------
 	
-	SNUri asUri();
-
 	SNTimeSpec asTimeSpec();
 
 	SNScalar asScalar();

@@ -114,60 +114,53 @@ public abstract class ValueView implements ValueNode, Serializable {
 	
 	// -----------------------------------------------------
 
-	/* (non-Javadoc)
-	 * @see org.arastreju.api.ontology.model.sn.ValueNode#asScalar()
-	 */
+	/** 
+	* {@inheritDoc}
+	*/
 	public SNScalar asScalar() {
 		return value.asScalar();
 	}
 
-	/* (non-Javadoc)
-	 * @see org.arastreju.api.ontology.model.sn.ValueNode#asText()
-	 */
+	/** 
+	* {@inheritDoc}
+	*/
 	public SNText asText() {
 		return value.asText();
 	}
 
-	/* (non-Javadoc)
-	 * @see org.arastreju.api.ontology.model.sn.ValueNode#asTimeSpec()
-	 */
+	/** 
+	* {@inheritDoc}
+	*/
 	public SNTimeSpec asTimeSpec() {
 		return value.asTimeSpec();
 	}
 
-	/* (non-Javadoc)
-	 * @see org.arastreju.api.ontology.model.sn.ValueNode#asUri()
-	 */
-	public SNUri asUri() {
-		return value.asUri();
-	}
-
-	/* (non-Javadoc)
-	 * @see org.arastreju.api.ontology.model.sn.ValueNode#getDataType()
-	 */
+	/** 
+	* {@inheritDoc}
+	*/
 	public ElementaryDataType getDataType() {
 		return value.getDataType();
 	}
 
-	/* (non-Javadoc)
-	 * @see org.arastreju.api.ontology.model.sn.ValueNode#getValue()
-	 */
+	/** 
+	* {@inheritDoc}
+	*/
 	public Object getValue() {
 		return value.getValue();
 	}
-
-	/* (non-Javadoc)
-	 * @see org.arastreju.api.ontology.model.SemanticNode#asResource()
-	 */
+	
+	/** 
+	* {@inheritDoc}
+	*/
 	public ResourceNode asResource() {
 		throw new IllegalStateException("Cannot convert a value to a resource node");
 	}
 
-	/* (non-Javadoc)
-	 * @see org.arastreju.api.ontology.model.SemanticNode#asValue()
-	 */
+	/** 
+	* {@inheritDoc}
+	*/
 	public ValueNode asValue() {
-		return value;
+		return this;
 	}
 	
 	// -----------------------------------------------------
@@ -185,6 +178,13 @@ public abstract class ValueView implements ValueNode, Serializable {
 	@Override
 	public int hashCode() {
 		return value.hashCode();
+	}
+	
+	/** 
+	 * {@inheritDoc}
+	 */
+	public int compareTo(ValueNode other) {
+		return value.compareTo(other);
 	}
 	
 }

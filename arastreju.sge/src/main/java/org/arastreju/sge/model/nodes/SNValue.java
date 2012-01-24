@@ -27,7 +27,6 @@ import org.arastreju.sge.model.ElementaryDataType;
 import org.arastreju.sge.model.nodes.views.SNScalar;
 import org.arastreju.sge.model.nodes.views.SNText;
 import org.arastreju.sge.model.nodes.views.SNTimeSpec;
-import org.arastreju.sge.model.nodes.views.SNUri;
 
 import de.lichtflut.infra.Infra;
 
@@ -198,13 +197,6 @@ public class SNValue implements ValueNode, Serializable {
 	/**
 	 * {@inheritDoc}
 	 */
-	public SNUri asUri() {
-		return new SNUri(this);
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
 	public SNTimeSpec asTimeSpec() {
 		return new SNTimeSpec(this);
 	}
@@ -285,6 +277,29 @@ public class SNValue implements ValueNode, Serializable {
 
 		default:
 			return sVal;
+		}
+	}
+
+	/** 
+	 * {@inheritDoc}
+	 */
+	public int compareTo(ValueNode other) {
+		switch (datatype) {
+		case BOOLEAN:
+			return getBooleanValue().compareTo(other.getBooleanValue());
+		case URI:
+		case STRING:
+			return getStringValue().compareTo(other.getStringValue());
+		case DECIMAL:
+			return getDecimalValue().compareTo(other.getDecimalValue());
+		case INTEGER:
+			return getIntegerValue().compareTo(other.getIntegerValue());
+		case DATE:
+		case TIME_OF_DAY:
+		case TIMESTAMP:
+			return getTimeValue().compareTo(other.getTimeValue());
+		default:
+			throw new IllegalStateException("Cannot determine type of value: " + value + " (" + datatype + ")");
 		}
 	}
 	

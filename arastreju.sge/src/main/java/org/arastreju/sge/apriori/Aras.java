@@ -132,6 +132,10 @@ public interface Aras {
 	
 	ResourceID IS_PREDECESSOR_OF = new SimpleResourceID(NAMESPACE_URI, "isPredecessorOf");
 	ResourceID IS_SUCCESSOR_OF = new SimpleResourceID(NAMESPACE_URI, "isSuccessorOf");
+	
+	ResourceID HAS_SERIAL_NUMBER = new SimpleResourceID(NAMESPACE_URI, "hasSerialNumber");
+
+	ResourceID IS_NATURALLY_ORDERED_BY = new SimpleResourceID(NAMESPACE_URI, "isNaturallyOrderedBy");
 
 	// -- INFERENCES --------------------------------------
 	
