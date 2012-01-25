@@ -42,10 +42,7 @@ public class DetachedStatement extends AbstractStatement {
 	 */
 	public DetachedStatement(final ResourceID subject, final ResourceID predicate,
 			final SemanticNode object, final Context... contexts) {
-		this.subject = subject;
-		this.predicate = predicate;
-		this.object = object;
-		setContexts(contexts);
+		super(subject, predicate, object, contexts);
 	}
 
 }

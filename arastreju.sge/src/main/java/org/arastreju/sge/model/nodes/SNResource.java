@@ -21,7 +21,6 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
-import org.arastreju.sge.apriori.RDFS;
 import org.arastreju.sge.context.Context;
 import org.arastreju.sge.model.DetachedStatement;
 import org.arastreju.sge.model.ResourceID;
@@ -50,7 +49,9 @@ import org.arastreju.sge.naming.VoidNamespace;
  */
 public class SNResource implements ResourceNode, Serializable {
 	
-	private QualifiedName qn;
+	private final QualifiedName qn;
+	
+	private final int hash; 
 	
 	private AssociationKeeper associationKeeper;
 	
@@ -81,6 +82,7 @@ public class SNResource implements ResourceNode, Serializable {
 	protected SNResource(final QualifiedName qn, final AssociationKeeper associationKeeper) {
 		this.qn = qn;
 		this.associationKeeper = associationKeeper;
+		this.hash = qn.hashCode();
 	}
 	
 	/**
@@ -184,13 +186,7 @@ public class SNResource implements ResourceNode, Serializable {
 	public Set<Statement> getAssociations(final ResourceID predicate) {
 		final Set<Statement> result = new HashSet<Statement>();
 		for (Statement assoc : getAssociations()) {
-			final ResourceID assocPred = assoc.getPredicate();
-			final SNProperty property = assocPred.asResource().asProperty();
-			if (!RDFS.SUB_PROPERTY_OF.equals(predicate) && property.isAttached()){
-				if (property.isSubPropertyOf(predicate)){
-					result.add(assoc);
-				}
-			} else if (predicate.equals(assoc.getPredicate())) {
+			if (predicate.equals(assoc.getPredicate())) {
 				result.add(assoc);
 			}
 		}
@@ -258,14 +254,14 @@ public class SNResource implements ResourceNode, Serializable {
 	
 	@Override
 	public int hashCode() {
-		return getUri().hashCode();
+		return hash;
 	}
 	
 	@Override
 	public boolean equals(Object obj) {
 		if (obj instanceof ResourceID) {
 			final ResourceID other = (ResourceID) obj;
-			return getQualifiedName().equals(other.getQualifiedName());
+			return qn.equals(other.getQualifiedName());
 		}
 		return false;
 	}

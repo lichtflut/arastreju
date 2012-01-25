@@ -12,6 +12,7 @@ import java.util.Set;
 
 import org.arastreju.sge.SNOPS;
 import org.arastreju.sge.apriori.Aras;
+import org.arastreju.sge.model.Statement;
 import org.arastreju.sge.model.nodes.ResourceNode;
 import org.arastreju.sge.model.nodes.SemanticNode;
 
@@ -64,10 +65,10 @@ public class LinkedOrderedNodes {
 	 * @return 
 	 */
 	private static List<ResourceNode> sortByPredecessors(Collection<ResourceNode> nodes) {
-		final List<ResourceNode> result = new ArrayList<ResourceNode>(nodes.size());
+		final LinkedList<ResourceNode> result = new LinkedList<ResourceNode>();
 		ResourceNode current = findLast(nodes);
 		while (current != null) {
-			result.add(0, current);
+			result.addFirst(current);
 			current = getPredecessor(current);
 		}
 		if (result.size() != nodes.size()) {
@@ -94,12 +95,12 @@ public class LinkedOrderedNodes {
 	}
 	
 	protected static ResourceNode getSuccessor(ResourceNode node) {
-		final SemanticNode successor = SNOPS.singleObject(node, Aras.IS_PREDECESSOR_OF);
-		if (successor != null && successor.isResourceNode()) {
-			return successor.asResource();
-		} else {
-			return null;
+		for (Statement	stmt : node.getAssociations()) {
+			if (Aras.IS_PREDECESSOR_OF.equals(stmt.getPredicate())) {
+				return stmt.getObject().asResource();
+			}
 		}
+		return null;
 	}
 	
 	protected static ResourceNode getPredecessor(ResourceNode node) {
@@ -116,14 +117,9 @@ public class LinkedOrderedNodes {
 			return null;
 		}
 		final Set<ResourceNode> all = new HashSet<ResourceNode>(decls);
-		final Set<ResourceNode> successors = new HashSet<ResourceNode>();
-		for (ResourceNode current : all) {
-			final ResourceNode successor = getSuccessor(current);
-			if (successors != successor) {
-				successors.add(successor);
-			}
+		for (ResourceNode current : decls) {
+			all.remove(getSuccessor(current));
 		}
-		all.removeAll(successors);
 		return all.iterator().next();
 	}
 	
@@ -132,14 +128,9 @@ public class LinkedOrderedNodes {
 			return null;
 		}
 		final Set<ResourceNode> all = new HashSet<ResourceNode>(decls);
-		final Set<ResourceNode> predecessors = new HashSet<ResourceNode>();
-		for (ResourceNode current : all) {
-			final ResourceNode successor = getPredecessor(current);
-			if (predecessors != successor) {
-				predecessors.add(successor);
-			}
+		for (ResourceNode current : decls) {
+			all.remove(getPredecessor(current));
 		}
-		all.removeAll(predecessors);
 		return all.iterator().next();
 	}
 

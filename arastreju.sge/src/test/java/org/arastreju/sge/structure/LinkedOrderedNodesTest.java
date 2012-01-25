@@ -19,8 +19,6 @@ import org.arastreju.sge.model.nodes.SemanticNode;
 import org.arastreju.sge.model.nodes.views.SNScalar;
 import org.junit.Test;
 
-import de.lichtflut.infra.logging.StopWatch;
-
 /**
  * <p>
  *  Test case for {@link LinkedOrderedNodes}.
@@ -36,11 +34,12 @@ public class LinkedOrderedNodesTest {
 	
 	private static final ResourceID ID = new SimpleResourceID("http://l2r.info#ID");
 	
+	private static final int SIZE = 100;
+	
 	// ----------------------------------------------------
 
 	@Test
 	public void testPredecessorSort() {
-		final int SIZE = 1000;
 		final Set<ResourceNode> all = new HashSet<ResourceNode>();
 		ResourceNode current = create(0);
 		all.add(current);
@@ -51,17 +50,31 @@ public class LinkedOrderedNodesTest {
 			current = next;
 		}
 		
-		StopWatch sw = new StopWatch();
 		List<ResourceNode> sorted = LinkedOrderedNodes.sortResources(all);
-		sw.displayNanoTime("Sorting of " + SIZE + " nodes needed");
+		for(int i=0; i < SIZE; i++) {
+			Assert.assertEquals(i, getID(sorted.get(i)));
+		}
+	}
+	
+	@Test
+	public void testSuccessorSort() {
+		final Set<ResourceNode> all = new HashSet<ResourceNode>();
+		ResourceNode current = create(0);
+		all.add(current);
+		for(int i=1; i <= SIZE; i++) {
+			ResourceNode next = create(i);
+			all.add(next);
+			next.addAssociation(Aras.IS_SUCCESSOR_OF, current);
+			current = next;
+		}
+		
+		List<ResourceNode> sorted = LinkedOrderedNodes.sortResources(all);
 		
 		for(int i=0; i < SIZE; i++) {
 			Assert.assertEquals(i, getID(sorted.get(i)));
 		}
 		
-		System.out.println(Runtime.getRuntime().totalMemory());
 	}
-	
 	// ----------------------------------------------------
 	
 	private ResourceNode create(int id) {

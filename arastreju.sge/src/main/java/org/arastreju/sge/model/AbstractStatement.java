@@ -21,8 +21,6 @@ import java.util.Arrays;
 import org.arastreju.sge.context.Context;
 import org.arastreju.sge.model.nodes.SemanticNode;
 
-import de.lichtflut.infra.Infra;
-
 /**
  * <p>
  *  Abstract base for {@link Statement}s.
@@ -38,11 +36,13 @@ public class AbstractStatement implements Statement, Serializable {
 	
 	public static final Context[] NO_CTX = new Context[0];
 
-	protected ResourceID subject;
-	protected ResourceID predicate;
-	protected SemanticNode object;
+	protected final ResourceID subject;
+	protected final ResourceID predicate;
+	protected final SemanticNode object;
 	
-	private Context[] contexts = NO_CTX;
+	private final Context[] contexts;
+	
+	private final int hash;
 	
 	private boolean inferred;
 	
@@ -60,14 +60,20 @@ public class AbstractStatement implements Statement, Serializable {
 		this.subject = subject;
 		this.predicate = predicate;
 		this.object = object;
-		setContexts(contexts);
-	}
-	
-	/**
-	 * Constructor.
-	 */
-	protected AbstractStatement() {
-		super();
+		
+		if (contexts == null || (contexts.length == 1 && contexts[0] == null)) {
+			this.contexts = NO_CTX;
+		} else {
+			for (Context ctx : contexts) {
+				if (ctx == null) {
+					throw new IllegalArgumentException("Null context not allowed!");
+				}
+			}
+			this.contexts = Arrays.copyOf(contexts, contexts.length);
+			Arrays.sort(this.contexts);
+		}
+		
+		hash = calculateHash();
 	}
 	
 	// -----------------------------------------------------
@@ -114,34 +120,11 @@ public class AbstractStatement implements Statement, Serializable {
 		return this;
 	}
 	
-	/**
-	 * @param contexts the contexts to set
-	 */
-	protected void setContexts(final Context[] contexts) {
-		if (contexts == null || (contexts.length == 1 && contexts[0] == null)) {
-			this.contexts = NO_CTX;
-		} else {
-			for (Context ctx : contexts) {
-				if (ctx == null) {
-					throw new IllegalArgumentException("Null context not allowed!");
-				}
-			}
-			this.contexts = Arrays.copyOf(contexts, contexts.length);
-			Arrays.sort(this.contexts);
-		}
-	}
-
 	// -----------------------------------------------------
 
 	@Override
 	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((object == null) ? 0 : object.hashCode());
-		result = prime * result
-				+ ((predicate == null) ? 0 : predicate.hashCode());
-		result = prime * result + ((subject == null) ? 0 : subject.hashCode());
-		return result;
+		return hash;
 	}
 
 	@Override
@@ -149,14 +132,17 @@ public class AbstractStatement implements Statement, Serializable {
 		if (!(obj instanceof Statement)) {
 			return false;
 		}
+		if (hash != obj.hashCode()) {
+			return false;
+		}
 		final Statement other = (Statement) obj;
-		if (!Infra.equals(subject, other.getSubject())){
+		if (!object.equals(other.getObject())){
 			return false;
 		}
-		if (!Infra.equals(predicate, other.getPredicate())){
+		if (!subject.equals(other.getSubject())){
 			return false;
 		}
-		if (!Infra.equals(object, other.getObject())){
+		if (!predicate.equals(other.getPredicate())){
 			return false;
 		}
 		return true;
@@ -168,6 +154,17 @@ public class AbstractStatement implements Statement, Serializable {
 		sb.append(" " + predicate + " ");
 		sb.append(object);
 		return sb.toString();
+	}
+	
+	// ----------------------------------------------------
+	
+	private int calculateHash() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + object.hashCode();
+		result = prime * result + predicate.hashCode();
+		result = prime * result + subject.hashCode();
+		return result;
 	}
 
 }

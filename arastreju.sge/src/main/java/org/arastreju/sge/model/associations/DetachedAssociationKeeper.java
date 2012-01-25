@@ -88,11 +88,4 @@ public class DetachedAssociationKeeper extends AbstractAssociationKeeper impleme
 				"DetachedAssociationKeeper cannot resolve Associations: " + this);
 	}
 	
-	// ----------------------------------------------------
-	
-	@Override
-	public String toString() {
-		return super.toString();
-	}
-
 }
