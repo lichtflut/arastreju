@@ -76,9 +76,18 @@ public interface IdentityManagement {
 	User register(String uniqueName, Credential credential, ResourceNode corresponding) throws ArastrejuException;
 	
 	/**
-	 * Register a new user.
+	 * Change the primary identification of a user. !This changes the ID and the unique name!
 	 * @param user An existing user.
-	 * @param uniqueName Another unique name.
+	 * @param newID The new ID to identify the user.
+	 * @return The user.
+	 * @throws ArastrejuException 
+	 */
+	User changeID(User user, String newID) throws ArastrejuException;
+	
+	/**
+	 * Register an alternateID for a user.
+	 * @param user An existing user.
+	 * @param uniqueName Another unique name to identify the user.
 	 * @return The user.
 	 * @throws ArastrejuException 
 	 */
