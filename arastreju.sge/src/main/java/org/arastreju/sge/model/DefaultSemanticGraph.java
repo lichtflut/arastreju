@@ -119,6 +119,14 @@ public class DefaultSemanticGraph implements SemanticGraph {
 		this.statements.addAll(stmts);
 	}
 	
+	/** 
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void addStatement(Statement stmt) {
+		this.statements.add(stmt);
+	}
+	
 	/**
 	 * {@inheritDoc}
 	 */

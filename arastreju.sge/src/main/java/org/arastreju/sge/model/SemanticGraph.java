@@ -69,6 +69,12 @@ public interface SemanticGraph {
 	void addStatements(Collection<? extends Statement> associations);
 	
 	/**
+	 * Add a single statement.
+	 * @param stmt The statement
+	 */
+	void addStatement(Statement stmt);
+	
+	/**
 	 * Merge all data from given graph into this graph. 
 	 * The given graph will not be changed.
 	 * @param graph The graph to be merged.
