@@ -50,7 +50,7 @@ public class LinkedOrderedNodesTest {
 			current = next;
 		}
 		
-		List<ResourceNode> sorted = LinkedOrderedNodes.sortResources(all);
+		List<? extends ResourceNode> sorted = LinkedOrderedNodes.sortResources(all);
 		for(int i=0; i < SIZE; i++) {
 			Assert.assertEquals(i, getID(sorted.get(i)));
 		}
@@ -68,8 +68,7 @@ public class LinkedOrderedNodesTest {
 			current = next;
 		}
 		
-		List<ResourceNode> sorted = LinkedOrderedNodes.sortResources(all);
-		
+		List<? extends ResourceNode> sorted = LinkedOrderedNodes.sortResources(all);
 		for(int i=0; i < SIZE; i++) {
 			Assert.assertEquals(i, getID(sorted.get(i)));
 		}
