@@ -21,8 +21,6 @@ import java.util.Set;
 
 import org.arastreju.sge.SNOPS;
 import org.arastreju.sge.apriori.Aras;
-import org.arastreju.sge.eh.ArastrejuRuntimeException;
-import org.arastreju.sge.eh.ErrorCodes;
 import org.arastreju.sge.model.nodes.ResourceNode;
 import org.arastreju.sge.model.nodes.SemanticNode;
 import org.arastreju.sge.security.Identity;
@@ -72,7 +70,7 @@ public abstract class AbstractIdentity implements Identity, Serializable {
 	public String getName() {
 		final SemanticNode idNode = SNOPS.singleObject(identityNode, Aras.HAS_UNIQUE_NAME);
 		if (idNode == null) {
-			throw new ArastrejuRuntimeException(ErrorCodes.GENERAL_CONSISTENCY_FAILURE, "Identity has no name!");
+			return null;
 		}
 		return idNode.asValue().getStringValue();
 	}
