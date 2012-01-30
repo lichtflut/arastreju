@@ -81,7 +81,20 @@ public class SNOPS {
 		} else if (node.isValueNode()) {
 			return node.asValue().getStringValue();
 		} else {
-			return node.asResource().getQualifiedName().toString();
+			return node.asResource().toURI();
+		}
+	}
+	
+	/**
+	 * Converts a semantic node into resource node unless it is null or a value node.
+	 * @param node The node.
+	 * @return The corresponding resource node or null;
+	 */
+	public static ResourceNode resource(SemanticNode node) {
+		if (node == null || node.isValueNode()) {
+			return null;
+		} else {
+			return node.asResource();
 		}
 	}
 	
