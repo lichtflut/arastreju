@@ -87,6 +87,7 @@ public abstract class AbstractAssociationKeeper implements AssociationKeeper {
 		if (resolved) {
 			sb.append(" resolved ");
 		}
+		sb.append("\n");
 		for (Statement stmt : associations) {
 			sb.append("\t" + stmt + "\n");	
 		}
