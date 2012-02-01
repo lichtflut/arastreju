@@ -18,10 +18,10 @@ package org.arastreju.sge;
 import java.lang.reflect.Constructor;
 import java.util.Properties;
 
-import org.arastreju.sge.security.Identity;
 import org.arastreju.sge.spi.ArastrejuGateFactory;
 import org.arastreju.sge.spi.GateContext;
 import org.arastreju.sge.spi.LoginContext;
+import org.arastreju.sge.spi.RootContext;
 
 /**
  * <p>
@@ -140,7 +140,8 @@ public final class Arastreju {
 	 * @return The ArastrejuGate for the root context.
 	 */
 	public ArastrejuGate rootContext(String domain) {
-		return login(Identity.ROOT, null, domain);
+		final GateContext ctx = createRootContext(domain);
+		return factory.create(ctx);
 	}
 
 	// -----------------------------------------------------
@@ -150,6 +151,13 @@ public final class Arastreju {
 	 */
 	private GateContext createLoginContext(String user, String credential, String domain) {
 		return new LoginContext(profile).setUsername(user).setCredential(credential).setDomain(domain);
+	}
+	
+	/**
+	 * Create and initialize the Gate Context.
+	 */
+	private GateContext createRootContext(String domain) {
+		return new RootContext(profile, domain);
 	}
 	
 	// -- PRIVATE CONSTRUCTORS -----------------------------

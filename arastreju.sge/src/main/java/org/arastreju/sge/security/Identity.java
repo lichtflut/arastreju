@@ -33,10 +33,6 @@ import org.arastreju.sge.model.nodes.ResourceNode;
  */
 public interface Identity extends Serializable {
 	
-	public static final String ROOT = "root";
-	
-	// -----------------------------------------------------
-
 	ResourceNode getAssociatedResource();
 	
 	String getName();
