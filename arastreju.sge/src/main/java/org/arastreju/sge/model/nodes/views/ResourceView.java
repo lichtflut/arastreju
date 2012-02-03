@@ -63,6 +63,13 @@ public abstract class ResourceView implements ResourceNode, Serializable {
 		this.resource = new SNResource();
 	}
 	
+	/**
+	 * Creates a view to a resource to be created implicitly.
+	 */
+	protected ResourceView(QualifiedName qn) {
+		this.resource = new SNResource(qn);
+	}
+	
 	// -----------------------------------------------------
 	
 	/**
