@@ -30,7 +30,6 @@ import org.arastreju.sge.model.associations.DetachedAssociationKeeper;
 import org.arastreju.sge.model.nodes.views.SNClass;
 import org.arastreju.sge.model.nodes.views.SNEntity;
 import org.arastreju.sge.model.nodes.views.SNProperty;
-import org.arastreju.sge.naming.Namespace;
 import org.arastreju.sge.naming.QualifiedName;
 import org.arastreju.sge.naming.VoidNamespace;
 
@@ -61,14 +60,14 @@ public class SNResource implements ResourceNode, Serializable {
 	 * Default constructor for new unattached resource.
 	 */
 	public SNResource() {
-		this(VoidNamespace.getInstance(), UUID.randomUUID().toString());
+		this(new QualifiedName(VoidNamespace.getInstance(), UUID.randomUUID().toString()));
 	}
 	
 	/**
 	 * Default constructor for new unattached resource.
 	 */
 	public SNResource(final QualifiedName qn) {
-		this(qn.getNamespace(), qn.getSimpleName(), new DetachedAssociationKeeper());
+		this(qn, new DetachedAssociationKeeper());
 	}
 	
 	// -- PROTECTED CONSTRUCTORS --------------------------
@@ -83,23 +82,6 @@ public class SNResource implements ResourceNode, Serializable {
 		this.qn = qn;
 		this.associationKeeper = associationKeeper;
 		this.hash = qn.hashCode();
-	}
-	
-	/**
-	 * Default constructor for new unattached resource.
-	 */
-	protected SNResource(final Namespace namespace, final String name) {
-		this(namespace, name, new DetachedAssociationKeeper());
-	}
-	
-	/**
-	 * Constructor for SPI subclasses.
-	 * @param namespace The namespace.
-	 * @param name The local name.
-	 * @param associationKeeper
-	 */
-	protected SNResource(final Namespace namespace, final String name, final AssociationKeeper associationKeeper) {
-		this(new QualifiedName(namespace, name), associationKeeper);
 	}
 	
 	// ------------------------------------------------------

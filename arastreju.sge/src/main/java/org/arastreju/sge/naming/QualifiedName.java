@@ -19,8 +19,6 @@ import java.io.Serializable;
 
 import org.arastreju.sge.model.ResourceID;
 
-import de.lichtflut.infra.Infra;
-
 /**
  * <p>
  * 	A qualified name consists of a global namespace and a name.
@@ -39,9 +37,7 @@ public class QualifiedName implements Comparable<QualifiedName>, Serializable {
 	public static final String HASH = "#";
 	public static final String SLASH = "/";
 	
-	private final Namespace namespace;
-	private final String prefix;
-	private final String name;
+	private final String uri;
 	
 	//------------------------------------------------------
 	
@@ -74,33 +70,20 @@ public class QualifiedName implements Comparable<QualifiedName>, Serializable {
 		return name.substring(0, pos + 1);
 	}
 	
-	// -- FACTORY METHODS ---------------------------------
-	
-	public static QualifiedName forQname(final String qname) {
-		final int idx = getSeperatorIndex(qname);
-		final String prefix = qname.substring(0, idx);
-		final String name = qname.substring(idx +1);
-		return new QualifiedName(null, prefix, name);
-	}
-	
 	//------------------------------------------------------
 	
 	/**
 	 * Creates a new qualified name, where the prefix will be derived from managed namespace.
 	 */
 	public QualifiedName(final Namespace namespace, final String name) {
-		this.name = name;
-		this.prefix = namespace.getPrefix();
-		this.namespace = namespace;
+		this.uri = toURI(namespace, name);
 	}
 	
 	/**
 	 * Creates a new qualified name, where the prefix will be derived from managed namespace.
 	 */
 	public QualifiedName(final String namespace, final String name) {
-		this.name = name;
-		this.namespace = new SimpleNamespace(namespace);
-		this.prefix = null;
+		this.uri = toURI(namespace, name);
 	}
 	
 	/**
@@ -111,67 +94,50 @@ public class QualifiedName implements Comparable<QualifiedName>, Serializable {
 		this(QualifiedName.getNamespace(uri), QualifiedName.getSimpleName(uri));
 	}
 	
+	// ----------------------------------------------------
+	
 	/**
 	 * Creates a new qualified name.
 	 */
 	protected QualifiedName(final Namespace namespace, final String prefix, final String name) {
-		this.namespace = namespace;
-		this.prefix = prefix;
-		this.name = name;
+		this.uri = toURI(namespace, name);
 	}
 	
 	//------------------------------------------------------
 
 	public String getSimpleName() {
-		return name;
+		return getSimpleName(uri);
 	}
 	
 	public Namespace getNamespace(){
-		return namespace;
-	}
-	
-	public String toQName(){
-		if (prefix != null){
-			return prefix + PREFIX_DELIM + name;
-		} else {
-			return VOID_NAMESPACE + PREFIX_DELIM + name;
-		}
+		return new SimpleNamespace(uri);
 	}
 	
 	public String toURI() {
-		if (namespace != null){
-			return namespace.getUri() + name;
-		} else {
-			return VOID_NAMESPACE + HASH + name;
-		}
+		return uri;
 	}
 	
 	//------------------------------------------------------
 	
 	public int compareTo(QualifiedName other) {
-		return this.toQName().compareTo(other.toQName());
+		return uri.compareTo(other.uri);
 	}
 	
 	@Override
 	public String toString() {
-		return toURI();
+		return uri;
 	}
 	
 	@Override
 	public int hashCode() {
-		return toURI().hashCode();
+		return uri.hashCode();
 	}
 	
 	@Override
 	public boolean equals(Object obj) {
 		if (obj instanceof QualifiedName) {
 			QualifiedName other = (QualifiedName) obj;
-			boolean eq = Infra.equals(name, other.name) && Infra.equals(namespace, other.namespace);
-			if (!eq && toURI().equals(other.toURI())){
-				throw new IllegalStateException("Same URI but different namespace/name:" +
-						namespace + " " + name + " != " + other.namespace + " " + other.name);
-			}
-			return eq;
+			return uri.equals(other.uri);
 		}
 		return false;
 	}
@@ -187,6 +153,22 @@ public class QualifiedName implements Comparable<QualifiedName>, Serializable {
 			separatorIdx = name.lastIndexOf(PREFIX_DELIM);
 		}
 		return separatorIdx;
+	}
+	
+	private String toURI(String namespace, String name) {
+		if (namespace != null){
+			return namespace + name;
+		} else {
+			return VOID_NAMESPACE + HASH + name;
+		}
+	}
+	
+	private String toURI(Namespace namespace, String name) {
+		if (namespace != null){
+			return namespace.getUri() + name;
+		} else {
+			return VOID_NAMESPACE + HASH + name;
+		}
 	}
 		
 }

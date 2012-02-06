@@ -15,9 +15,6 @@
  */
 package org.arastreju.sge.model.nodes;
 
-import java.util.UUID;
-
-import org.arastreju.sge.naming.VoidNamespace;
 
 /**
  * <p>
@@ -36,7 +33,7 @@ public class BlankNode extends SNResource {
 	 * Creates a new blank node.
 	 */
 	public BlankNode() {
-		super(VoidNamespace.getInstance(), UUID.randomUUID().toString());
+		super();
 	}
 	
 	/**

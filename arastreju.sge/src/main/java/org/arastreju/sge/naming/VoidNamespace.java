@@ -17,8 +17,6 @@ package org.arastreju.sge.naming;
 
 import java.io.Serializable;
 
-import org.arastreju.sge.model.ResourceID;
-
 /**
  * <p>
  * 	Pseudo namespace for names that are not in a namespace. E.g. local names.
@@ -46,33 +44,6 @@ public class VoidNamespace implements Namespace, Comparable<Namespace>, Serializ
 	 */
 	public static Namespace getInstance(){
 		return INSTANCE;
-	}
-	
-	/**
-	 * Checks if given namespace references void namespace.
-	 * @param namespace The namespace to be checked.
-	 * @return true if given namespace represents the void namespace.
-	 */
-	public static boolean isVoidNamespace(final Namespace namespace) {
-		return INSTANCE.equals(namespace);
-	}
-	
-	/**
-	 * Checks if given URI references void namespace.
-	 * @param uri The URI to be checked.
-	 * @return true if URI references the void namespace.
-	 */
-	public static boolean isVoidNamespace(final String uri) {
-		return VOID.equals(uri);
-	}
-	
-	/**
-	 * Checks if given resource reference is in the void namespace.
-	 * @param uri The URI of a resource to be checked.
-	 * @return true if URI references the void namespace.
-	 */
-	public static boolean isInVoidNamespace(final ResourceID ref) {
-		return INSTANCE.equals(ref.getQualifiedName().getNamespace());
 	}
 	
 	// ------------------------------------------------------
