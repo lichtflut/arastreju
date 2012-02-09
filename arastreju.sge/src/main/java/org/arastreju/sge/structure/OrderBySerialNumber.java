@@ -27,8 +27,8 @@ public class OrderBySerialNumber implements Comparator<ResourceNode> {
 	 * {@inheritDoc}
 	 */
 	public int compare(ResourceNode a, ResourceNode b) {
-		SemanticNode serialA = SNOPS.singleObject(a, Aras.HAS_SERIAL_NUMBER);
-		SemanticNode serialB = SNOPS.singleObject(b, Aras.HAS_SERIAL_NUMBER);
+		SemanticNode serialA = SNOPS.fetchObject(a, Aras.HAS_SERIAL_NUMBER);
+		SemanticNode serialB = SNOPS.fetchObject(b, Aras.HAS_SERIAL_NUMBER);
 		if (serialA != null && serialA.isValueNode()) {
 			if (serialB != null && serialB.isValueNode()) {
 				return serialA.asValue().compareTo(serialB.asValue());

@@ -225,7 +225,7 @@ public class SNOPS {
 	public static Statement assure(final ResourceNode subject, final ResourceID predicate, final SemanticNode object, final Context... contexts){
 		final Set<Statement> all = subject.getAssociations(predicate);
 		if (all.size() > 1) {
-			throw new IllegalStateException("replace not possible if more than one associations exists: " + all);
+			remove(subject, predicate);
 		}
 		if (all.isEmpty()) {
 			return associate(subject, predicate, object, contexts);	
