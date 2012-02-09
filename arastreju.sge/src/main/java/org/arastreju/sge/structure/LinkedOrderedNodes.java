@@ -59,7 +59,7 @@ public class LinkedOrderedNodes {
 	
 	// ----------------------------------------------------
 	
-	private static List<ResourceNode> sortByPredecessors(Collection<? extends ResourceNode> nodes) {
+	public static List<ResourceNode> sortByPredecessors(Collection<? extends ResourceNode> nodes) {
 		final LinkedList<ResourceNode> result = new LinkedList<ResourceNode>();
 		ResourceNode current = findLast(nodes);
 		while (current != null) {
@@ -72,7 +72,7 @@ public class LinkedOrderedNodes {
 		return result;
 	}
 
-	private static List<ResourceNode> sortBySuccessors(Collection<? extends ResourceNode> nodes) {
+	public static List<ResourceNode> sortBySuccessors(Collection<? extends ResourceNode> nodes) {
 		final List<ResourceNode> result = new ArrayList<ResourceNode>(nodes.size());
 		ResourceNode current = findFirst(nodes);
 		while (current != null) {

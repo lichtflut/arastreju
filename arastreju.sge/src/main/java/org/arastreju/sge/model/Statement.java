@@ -15,6 +15,8 @@
  */
 package org.arastreju.sge.model;
 
+import java.io.Serializable;
+
 import org.arastreju.sge.context.Context;
 import org.arastreju.sge.model.nodes.SemanticNode;
 
@@ -30,7 +32,7 @@ import org.arastreju.sge.model.nodes.SemanticNode;
  *
  * @author Oliver Tigges
  */
-public interface Statement {
+public interface Statement extends Serializable {
 
 	ResourceID getSubject(); 
 	

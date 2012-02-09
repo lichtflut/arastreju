@@ -15,113 +15,95 @@
  */
 package org.arastreju.sge.naming;
 
-import java.io.Serializable;
 
 /**
  * <p>
- * 	Pseudo namespace for names that are not in a namespace. E.g. local names.
+ * Pseudo namespace for names that are not in a namespace. E.g. local names.
  * </p>
  * 
  * <p>
- * 	Created: 06.07.2009
+ * Created: 06.07.2009
  * </p>
- *
- * @author Oliver Tigges 
+ * 
+ * @author Oliver Tigges
  */
-public class VoidNamespace implements Namespace, Comparable<Namespace>, Serializable {
-	
+public class VoidNamespace implements Namespace {
+
 	/**
-	 * Constant for void namespace URI.
+	 * Constant for default UUID namespace URI.
 	 */
-	private static final String VOID = "http://void.arasteju.org#";
-	
+	private static final String UUID = "http://arasteju.org/uuid#";
+
 	private static final Namespace INSTANCE = new VoidNamespace();
 
 	// ------------------------------------------------------
-	
+
 	/**
 	 * Returns the reference to the Void Namespace.
 	 */
-	public static Namespace getInstance(){
+	public static Namespace getInstance() {
 		return INSTANCE;
 	}
-	
+
 	// ------------------------------------------------------
-	
+
 	/**
 	 * Private Constructor.
 	 */
 	private VoidNamespace() {
 	}
-	
+
 	// ------------------------------------------------------
-	
-	/* (non-Javadoc)
-	 * @see org.arastreju.api.model.semantic.Namespace#getUri()
+
+	/**
+	 * {@inheritDoc}
 	 */
 	public String getUri() {
-		return VOID;
-	}
-	
-	/* (non-Javadoc)
-	 * @see org.arastreju.api.ontology.Namespace#getDefaultPrefix()
-	 */
-	public String getPrefix() {
-		return "void";
+		return UUID;
 	}
 
-	/* (non-Javadoc)
-	 * @see org.arastreju.api.model.semantic.Namespace#isManaged()
+	/**
+	 * {@inheritDoc}
+	 */
+	public String getPrefix() {
+		return "aras-uuid";
+	}
+
+	/**
+	 * {@inheritDoc}
 	 */
 	public boolean isRegistered() {
 		return false;
 	}
-	
-	// -----------------------------------------------------
-	
-	public void setDefaultPrefix(final String prefix) {
-		throw new RuntimeException("Not supported");
-	}
 
-	public void setUri(final String uri) {
-		throw new RuntimeException("Not supported");
-	}
-	
-	// ------------------------------------------------------
-	
-	/* (non-Javadoc)
-	 * @see java.lang.Object#hashCode()
+	// -----------------------------------------------------
+
+	/**
+	 * {@inheritDoc}
 	 */
 	@Override
 	public int hashCode() {
-		return VOID.hashCode();
+		return UUID.hashCode();
 	}
-	
-	/* (non-Javadoc)
-	 * @see java.lang.Object#equals(java.lang.Object)
+
+	/**
+	 * {@inheritDoc}
 	 */
 	@Override
 	public boolean equals(Object obj) {
-		if (obj instanceof Namespace){
+		if (obj instanceof Namespace) {
 			Namespace other = (Namespace) obj;
-			return VOID.equals(other.getUri());
+			return UUID.equals(other.getUri());
 		}
 		return super.equals(obj);
 	}
-	
-	/* (non-Javadoc)
-	 * @see java.lang.Object#toString()
+
+	/**
+	 * {@inheritDoc}
 	 */
 	@Override
 	public String toString() {
 		return getUri();
-	}
-
-	/* (non-Javadoc)
-	 * @see java.lang.Comparable#compareTo(java.lang.Object)
-	 */
-	public int compareTo(final Namespace other) {
-		return -1;
 	}
 
 }

@@ -17,6 +17,7 @@ package org.arastreju.sge;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -171,6 +172,9 @@ public class SNOPS {
 	}
 	
 	public static Set<SemanticNode> objects(final ResourceNode subject, final ResourceID predicate){
+		if (subject == null) {
+			return Collections.emptySet();
+		}
 		return objects(subject.getAssociations(predicate));
 	}
 	

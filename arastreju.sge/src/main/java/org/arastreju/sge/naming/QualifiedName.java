@@ -110,7 +110,7 @@ public class QualifiedName implements Comparable<QualifiedName>, Serializable {
 	}
 	
 	public Namespace getNamespace(){
-		return new SimpleNamespace(uri);
+		return new SimpleNamespace(getNamespace(uri));
 	}
 	
 	public String toURI() {

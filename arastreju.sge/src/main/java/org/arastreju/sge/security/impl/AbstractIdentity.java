@@ -23,11 +23,10 @@ import org.arastreju.sge.SNOPS;
 import org.arastreju.sge.apriori.Aras;
 import org.arastreju.sge.model.nodes.ResourceNode;
 import org.arastreju.sge.model.nodes.SemanticNode;
+import org.arastreju.sge.model.nodes.views.ResourceView;
 import org.arastreju.sge.security.Identity;
 import org.arastreju.sge.security.Permission;
 import org.arastreju.sge.security.Role;
-
-import de.lichtflut.infra.Infra;
 
 /**
  * <p>
@@ -40,17 +39,13 @@ import de.lichtflut.infra.Infra;
  *
  * @author Oliver Tigges
  */
-public abstract class AbstractIdentity implements Identity, Serializable {
+public abstract class AbstractIdentity extends ResourceView implements Identity, Serializable {
 
-	private final ResourceNode identityNode;
-
-	// -----------------------------------------------------
-	
 	/**
 	 * @param identityNode
 	 */
 	public AbstractIdentity(final ResourceNode identityNode) {
-		this.identityNode = identityNode;
+		super(identityNode);
 		// trigger getName() check
 		getName();
 	}
@@ -61,14 +56,14 @@ public abstract class AbstractIdentity implements Identity, Serializable {
 	 * {@inheritDoc}
 	 */
 	public ResourceNode getAssociatedResource() {
-		return identityNode;
+		return getResource();
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	public String getName() {
-		final SemanticNode idNode = SNOPS.singleObject(identityNode, Aras.HAS_UNIQUE_NAME);
+		final SemanticNode idNode = SNOPS.singleObject(getResource(), Aras.HAS_UNIQUE_NAME);
 		if (idNode == null) {
 			return null;
 		}
@@ -81,7 +76,7 @@ public abstract class AbstractIdentity implements Identity, Serializable {
 	 * {@inheritDoc}
 	 */
 	public Set<Role> getRoles() {
-		final Set<SemanticNode> roleNodes = SNOPS.objects(identityNode, Aras.HAS_ROLE);
+		final Set<SemanticNode> roleNodes = SNOPS.objects(getResource(), Aras.HAS_ROLE);
 		final Set<Role> roles = new HashSet<Role>(roleNodes.size());
 		for (SemanticNode node : roleNodes) {
 			roles.add(new RoleImpl(node.asResource()));
@@ -125,28 +120,6 @@ public abstract class AbstractIdentity implements Identity, Serializable {
 			}
 		}
 		return false;
-	}
-	
-	// -----------------------------------------------------
-	
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public int hashCode() {
-		return identityNode.hashCode();
-	}
-	
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public boolean equals(final Object obj) {
-		if (obj instanceof Identity) {
-			final Identity other = (Identity) obj;
-			return Infra.equals(identityNode, other.getAssociatedResource());
-		}
-		return super.equals(obj);
 	}
 	
 }

@@ -15,7 +15,6 @@
  */
 package org.arastreju.sge.model;
 
-import java.io.Serializable;
 import java.util.Arrays;
 
 import org.arastreju.sge.context.Context;
@@ -32,7 +31,7 @@ import org.arastreju.sge.model.nodes.SemanticNode;
  *
  * @author Oliver Tigges
  */
-public class AbstractStatement implements Statement, Serializable {
+public class AbstractStatement implements Statement {
 	
 	public static final Context[] NO_CTX = new Context[0];
 

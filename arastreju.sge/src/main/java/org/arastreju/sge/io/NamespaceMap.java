@@ -22,7 +22,11 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
+import org.arastreju.sge.apriori.Aras;
+import org.arastreju.sge.apriori.RDF;
+import org.arastreju.sge.apriori.RDFS;
 import org.arastreju.sge.naming.Namespace;
+import org.arastreju.sge.naming.SimpleNamespace;
 
 /**
  * <p>
@@ -49,6 +53,9 @@ public class NamespaceMap {
 	 * Default constructor.
 	 */
 	public NamespaceMap() {
+		addNamespace(RDF.NAMESPACE_URI, "rdf");
+		addNamespace(RDFS.NAMESPACE_URI, "rdfs");
+		addNamespace(Aras.NAMESPACE_URI, "aras");
 	}
 	
 	/**
@@ -56,6 +63,7 @@ public class NamespaceMap {
 	 * @param namespaces Collection of Namespaces.
 	 */
 	public NamespaceMap(final Collection<Namespace> namespaces) {
+		this();
 		addNamepaces(namespaces);
 	}
 	
@@ -126,6 +134,10 @@ public class NamespaceMap {
 	}
 	
 	// -----------------------------------------------------
+	
+	private void addNamespace(String uri, String prefix) {
+		addNamespace(new SimpleNamespace(uri, prefix));
+	}
 	
 	private String prefix(final Namespace namespace){
 		final String defaultPrefix = namespace.getPrefix();

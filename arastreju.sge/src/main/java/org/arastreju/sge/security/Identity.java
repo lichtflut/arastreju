@@ -15,7 +15,6 @@
  */
 package org.arastreju.sge.security;
 
-import java.io.Serializable;
 import java.util.Set;
 
 import org.arastreju.sge.model.nodes.ResourceNode;
@@ -31,7 +30,7 @@ import org.arastreju.sge.model.nodes.ResourceNode;
  *
  * @author Oliver Tigges
  */
-public interface Identity extends Serializable {
+public interface Identity extends ResourceNode {
 	
 	ResourceNode getAssociatedResource();
 	
