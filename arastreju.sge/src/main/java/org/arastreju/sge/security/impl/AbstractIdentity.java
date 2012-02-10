@@ -46,8 +46,6 @@ public abstract class AbstractIdentity extends ResourceView implements Identity,
 	 */
 	public AbstractIdentity(final ResourceNode identityNode) {
 		super(identityNode);
-		// trigger getName() check
-		getName();
 	}
 	
 	// -----------------------------------------------------
@@ -79,7 +77,7 @@ public abstract class AbstractIdentity extends ResourceView implements Identity,
 		final Set<SemanticNode> roleNodes = SNOPS.objects(getResource(), Aras.HAS_ROLE);
 		final Set<Role> roles = new HashSet<Role>(roleNodes.size());
 		for (SemanticNode node : roleNodes) {
-			roles.add(new RoleImpl(node.asResource()));
+			roles.add(new SNRole(node.asResource()));
 		}
 		return roles;
 	}
@@ -90,9 +88,9 @@ public abstract class AbstractIdentity extends ResourceView implements Identity,
 	public Set<Permission> getPermissions() {
 		final Set<Permission> permissions = new HashSet<Permission>();
 		for(Role role : getRoles()) {
-			final Set<SemanticNode> permissionNodes = SNOPS.objects(role.getAssociatedResource(), Aras.CONTAINS);
+			final Set<SemanticNode> permissionNodes = SNOPS.objects(role, Aras.CONTAINS);
 			for (SemanticNode node : permissionNodes) {
-				permissions.add(new PermissionImpl(node.asResource()));
+				permissions.add(new SNPermission(node.asResource()));
 			}
 		}
 		return permissions;

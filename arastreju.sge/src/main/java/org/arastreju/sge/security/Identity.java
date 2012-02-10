@@ -32,8 +32,6 @@ import org.arastreju.sge.model.nodes.ResourceNode;
  */
 public interface Identity extends ResourceNode {
 	
-	ResourceNode getAssociatedResource();
-	
 	String getName();
 	
 	Set<Role> getRoles();

@@ -66,13 +66,20 @@ public class GraphBuilder {
 		visited.add(node);
 		final Set<Statement> associations = node.getAssociations();
 		for (Statement statement : associations) {
-			if (filter.accept(statement)) {
+			switch (filter.accept(statement)) {
+			case ACCEPT:
+				graph.addStatement(statement);
+				break;
+			case ACCEPPT_CONTINUE:
 				graph.addStatement(statement);
 				for (SemanticNode object : SNOPS.objects(node.getAssociations())) {
 					if (object.isResourceNode() && !visited.contains(object)) {
 						addCascading(object.asResource(), visited);
 					}
 				}
+			case STOP:
+			default:
+				break;
 			}
 		}
 	}

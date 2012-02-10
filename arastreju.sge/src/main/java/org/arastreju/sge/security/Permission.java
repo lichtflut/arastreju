@@ -28,9 +28,7 @@ import org.arastreju.sge.model.nodes.ResourceNode;
  *
  * @author Oliver Tigges
  */
-public interface Permission {
-	
-	ResourceNode getAssociatedResource();
+public interface Permission extends ResourceNode {
 	
 	String getName();
 

@@ -30,13 +30,7 @@ import org.arastreju.sge.model.nodes.ResourceNode;
  *
  * @author Oliver Tigges
  */
-public interface Role {
-	
-	/**
-	 * Get the resource node associated with this role.
-	 * @return The corresponding resource note.
-	 */ 
-	ResourceNode getAssociatedResource();
+public interface Role extends ResourceNode {
 	
 	/**
 	 * Get the unique role name.

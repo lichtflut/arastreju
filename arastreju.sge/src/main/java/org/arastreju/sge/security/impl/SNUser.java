@@ -16,8 +16,6 @@
 package org.arastreju.sge.security.impl;
 
 import static org.arastreju.sge.SNOPS.assure;
-import static org.arastreju.sge.SNOPS.singleObject;
-import static org.arastreju.sge.SNOPS.string;
 
 import org.arastreju.sge.apriori.Aras;
 import org.arastreju.sge.model.nodes.ResourceNode;
@@ -35,13 +33,13 @@ import org.arastreju.sge.security.User;
  *
  * @author Oliver Tigges
  */
-public class UserImpl extends AbstractIdentity implements User {
+public class SNUser extends AbstractIdentity implements User {
 
 	/**
 	 * Constructor.
 	 * @param userNode The node representing the user.
 	 */
-	public UserImpl(final ResourceNode userNode) {
+	public SNUser(final ResourceNode userNode) {
 		super(userNode);
 		// trigger resolving of associations
 		userNode.getAssociations();
@@ -53,18 +51,18 @@ public class UserImpl extends AbstractIdentity implements User {
 	 * {@inheritDoc}
 	 */
 	public String getEmail() {
-		return string(singleObject(getAssociatedResource(), Aras.HAS_EMAIL));
+		return stringValue(Aras.HAS_EMAIL);
 	}
 	
 	public void setEmail(String email) {
-		assure(getAssociatedResource(), Aras.HAS_EMAIL, new SNText(email), Aras.IDENT);
+		assure(this, Aras.HAS_EMAIL, new SNText(email), Aras.IDENT);
 	}
 	
 	/** 
 	 * {@inheritDoc}
 	 */
 	public String getDomain() {
-		return string(singleObject(getAssociatedResource(), Aras.BELONGS_TO_DOMAIN));
+		return stringValue(Aras.BELONGS_TO_DOMAIN);
 	}
 	
 	/** 

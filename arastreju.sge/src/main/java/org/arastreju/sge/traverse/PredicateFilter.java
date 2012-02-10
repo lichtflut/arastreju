@@ -26,22 +26,38 @@ public class PredicateFilter implements TraversalFilter {
 	
 	private final Set<ResourceID> allowed = new HashSet<ResourceID>();
 	
+	private final Set<ResourceID> follow = new HashSet<ResourceID>();
+	
 	// ----------------------------------------------------
 	
 	/**
 	 * @param allowed
 	 */
-	public PredicateFilter(Collection<ResourceID> allowed) {
+	public PredicateFilter(Collection<ResourceID> follow, Collection<ResourceID> allowed) {
 		this.allowed.addAll(allowed);
+		this.follow.addAll(follow);
 	}
 	
 	/**
-	 * @param allowed
+	 * Default constructor.
 	 */
-	public PredicateFilter(ResourceID... allowed) {
+	public PredicateFilter() {
+	}
+	
+	// ----------------------------------------------------
+	
+	public PredicateFilter addAllowed(ResourceID... allowed) {
 		for (ResourceID current : allowed) {
 			this.allowed.add(current);	
 		}
+		return this;
+	}
+	
+	public PredicateFilter addFollow(ResourceID... follow) {
+		for (ResourceID current : follow) {
+			this.follow.add(current);	
+		}
+		return this;
 	}
 	
 	// ----------------------------------------------------
@@ -50,14 +66,19 @@ public class PredicateFilter implements TraversalFilter {
 	* {@inheritDoc}
 	*/
 	@Override
-	public boolean accept(Statement stmt) {
+	public TraverseCommand accept(Statement stmt) {
 		final SNProperty predicate = stmt.getPredicate().asResource().asProperty();
-		for (ResourceID current : allowed) {
+		for (ResourceID current : follow) {
 			if (predicate.isSubPropertyOf(current)) {
-				return true;
+				return TraverseCommand.ACCEPPT_CONTINUE;
 			}
 		}
-		return false;
+		for (ResourceID current : allowed) {
+			if (predicate.isSubPropertyOf(current)) {
+				return TraverseCommand.ACCEPT;
+			}
+		}
+		return TraverseCommand.STOP;
 	}
 
 }

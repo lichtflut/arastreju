@@ -49,8 +49,12 @@ public class NotPredicateFilter implements TraversalFilter {
 	* {@inheritDoc}
 	*/
 	@Override
-	public boolean accept(Statement stmt) {
-		return !disallowed.contains(stmt.getPredicate());
+	public TraverseCommand accept(Statement stmt) {
+		if (disallowed.contains(stmt.getPredicate())) {
+			return TraverseCommand.STOP;
+		} else {
+			return TraverseCommand.ACCEPPT_CONTINUE;
+		}
 	}
 
 }

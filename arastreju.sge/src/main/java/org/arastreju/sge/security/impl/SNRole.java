@@ -17,13 +17,12 @@ package org.arastreju.sge.security.impl;
 
 import java.util.Set;
 
-import static org.arastreju.sge.SNOPS.*;
 import org.arastreju.sge.apriori.Aras;
 import org.arastreju.sge.model.nodes.ResourceNode;
+import org.arastreju.sge.model.nodes.views.ResourceView;
 import org.arastreju.sge.security.Permission;
 import org.arastreju.sge.security.Role;
 
-import de.lichtflut.infra.Infra;
 import de.lichtflut.infra.exceptions.NotYetImplementedException;
 
 /**
@@ -37,64 +36,38 @@ import de.lichtflut.infra.exceptions.NotYetImplementedException;
  *
  * @author Oliver Tigges
  */
-public class RoleImpl implements Role {
-	
-	private final ResourceNode node;
-	
-	// -----------------------------------------------------
+public class SNRole extends ResourceView implements Role {
 	
 	/**
 	 * Constructor.
 	 * @param node The node representing this role.
 	 */
-	public RoleImpl(final ResourceNode node) {
-		this.node = node;
+	public SNRole(final ResourceNode node) {
+		super(node);
 	}
 	
 	// -----------------------------------------------------
 
-	/* (non-Javadoc)
-	 * @see org.arastreju.sge.security.Role#getAssociatedResource()
+	/**
+	 * {@inheritDoc} 
 	 */
 	public ResourceNode getAssociatedResource() {
-		return node;
+		return getResource();
 	}
 	
 
-	/* (non-Javadoc)
-	 * @see org.arastreju.sge.security.Role#getName()
+	/**
+	 * {@inheritDoc} 
 	 */
 	public String getName() {
-		return string(singleObject(node, Aras.HAS_UNIQUE_NAME));
+		return stringValue(Aras.HAS_UNIQUE_NAME);
 	}
 
-	/* (non-Javadoc)
-	 * @see org.arastreju.sge.security.Role#getPermissions()
+	/**
+	 * {@inheritDoc} 
 	 */
 	public Set<Permission> getPermissions() {
 		throw new NotYetImplementedException();
 	}
 	
-	// -----------------------------------------------------
-	
-	/* (non-Javadoc)
-	 * @see java.lang.Object#hashCode()
-	 */
-	@Override
-	public int hashCode() {
-		return node.hashCode();
-	}
-	
-	/* (non-Javadoc)
-	 * @see java.lang.Object#equals(java.lang.Object)
-	 */
-	@Override
-	public boolean equals(final Object obj) {
-		if (obj instanceof Role) {
-			final Role other = (Role) obj;
-			return Infra.equals(node, other.getAssociatedResource());
-		}
-		return super.equals(obj);
-	}
-
 }

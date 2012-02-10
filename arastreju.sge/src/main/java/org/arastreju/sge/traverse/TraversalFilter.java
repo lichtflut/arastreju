@@ -20,6 +20,6 @@ import org.arastreju.sge.model.Statement;
  */
 public interface TraversalFilter extends Serializable {
 	
-	boolean accept(Statement stmt);
+	TraverseCommand accept(Statement stmt);
 
 }
