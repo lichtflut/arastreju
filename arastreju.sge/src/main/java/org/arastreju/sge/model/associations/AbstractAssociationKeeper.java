@@ -15,6 +15,7 @@
  */
 package org.arastreju.sge.model.associations;
 
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -31,7 +32,7 @@ import org.arastreju.sge.model.Statement;
  *
  * @author Oliver Tigges
  */
-public abstract class AbstractAssociationKeeper implements AssociationKeeper {
+public abstract class AbstractAssociationKeeper implements AssociationKeeper, Serializable {
 
 	private final Set<Statement> associations = new HashSet<Statement>();
 	
@@ -43,7 +44,6 @@ public abstract class AbstractAssociationKeeper implements AssociationKeeper {
 	 * Creates a new instance.
 	 */
 	public AbstractAssociationKeeper() {
-		super();
 	}
 	
 	/**
@@ -110,6 +110,10 @@ public abstract class AbstractAssociationKeeper implements AssociationKeeper {
 	protected AbstractAssociationKeeper markResolved(){
 		resolved = true;
 		return this;
+	}
+	
+	protected boolean isResolved() {
+		return resolved;
 	}
 	
 }

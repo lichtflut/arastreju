@@ -16,7 +16,6 @@
 package org.arastreju.sge.model.associations;
 
 
-import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -35,7 +34,7 @@ import org.arastreju.sge.model.Statement;
  *
  * @author Oliver Tigges
  */
-public class DetachedAssociationKeeper extends AbstractAssociationKeeper implements Serializable {
+public class DetachedAssociationKeeper extends AbstractAssociationKeeper {
 	
 	private final Set<Statement> removedAssociations = new HashSet<Statement>();
 	
