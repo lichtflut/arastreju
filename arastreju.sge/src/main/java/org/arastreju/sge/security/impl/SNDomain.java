@@ -4,7 +4,6 @@
 package org.arastreju.sge.security.impl;
 
 import static org.arastreju.sge.SNOPS.singleObject;
-import static org.arastreju.sge.SNOPS.string;
 
 import java.io.Serializable;
 
@@ -12,6 +11,7 @@ import org.arastreju.sge.SNOPS;
 import org.arastreju.sge.apriori.Aras;
 import org.arastreju.sge.model.nodes.ResourceNode;
 import org.arastreju.sge.model.nodes.SemanticNode;
+import org.arastreju.sge.model.nodes.views.ResourceView;
 import org.arastreju.sge.model.nodes.views.SNText;
 import org.arastreju.sge.security.Domain;
 
@@ -26,18 +26,20 @@ import org.arastreju.sge.security.Domain;
  *
  * @author Oliver Tigges
  */
-public class DomainImpl implements Domain, Serializable {
+public class SNDomain extends ResourceView implements Domain, Serializable {
 	
-	private final ResourceNode node;
-	
-	// ----------------------------------------------------
+	/**
+	 * Default constructor. 
+	 */
+	public SNDomain() {
+	}
 	
 	/**
 	 * Constructor.
 	 * @param node The associated node representing the domain.
 	 */
-	public DomainImpl(ResourceNode node) {
-		this.node = node;
+	public SNDomain(ResourceNode node) {
+		super(node);
 	}
 	
 	// ----------------------------------------------------
@@ -45,22 +47,19 @@ public class DomainImpl implements Domain, Serializable {
 	/** 
 	 * {@inheritDoc}
 	 */
-	public ResourceNode getAssociatedResource() {
-		return node;
-	}
-
-	/** 
-	 * {@inheritDoc}
-	 */
 	public String getUniqueName() {
-		return string(singleObject(node, Aras.HAS_UNIQUE_NAME));
+		return stringValue(Aras.HAS_UNIQUE_NAME);
+	}
+	
+	public void setUniqueName(String name) {
+		setValue(Aras.HAS_UNIQUE_NAME, name);
 	}
 
 	/** 
 	 * {@inheritDoc}
 	 */
 	public String getTitle() {
-		return string(singleObject(node, Aras.HAS_TITLE));
+		return stringValue(Aras.HAS_TITLE);
 	}
 	
 	/**
@@ -68,14 +67,14 @@ public class DomainImpl implements Domain, Serializable {
 	 * @param title The title
 	 */
 	public void setTitle(final String title) {
-		SNOPS.assure(node, Aras.HAS_TITLE, new SNText(title), Aras.IDENT);
+		SNOPS.assure(this, Aras.HAS_TITLE, new SNText(title), Aras.IDENT);
 	}
 
 	/** 
 	 * {@inheritDoc}
 	 */
 	public String getDescription() {
-		return string(singleObject(node, Aras.HAS_DESCRIPTION));
+		return stringValue(Aras.HAS_DESCRIPTION);
 	}
 	
 	/**
@@ -83,14 +82,14 @@ public class DomainImpl implements Domain, Serializable {
 	 * @param desc The description
 	 */
 	public void setDescription(final String desc) {
-		SNOPS.assure(node, Aras.HAS_DESCRIPTION, new SNText(desc), Aras.IDENT);
+		SNOPS.assure(this, Aras.HAS_DESCRIPTION, new SNText(desc), Aras.IDENT);
 	}
 
 	/** 
 	 * {@inheritDoc}
 	 */
 	public boolean isDomesticDomain() {
-		final SemanticNode mdNode = singleObject(node, Aras.IS_DOMESTIC_DOMAIN);
+		final SemanticNode mdNode = singleObject(this, Aras.IS_DOMESTIC_DOMAIN);
 		if (mdNode != null && mdNode.isValueNode()) {
 			return mdNode.asValue().getBooleanValue();
 		} else {

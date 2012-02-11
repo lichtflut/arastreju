@@ -33,7 +33,7 @@ import org.arastreju.sge.naming.Namespace;
 import org.arastreju.sge.naming.QualifiedName;
 import org.arastreju.sge.naming.SimpleNamespace;
 import org.arastreju.sge.security.Domain;
-import org.arastreju.sge.security.impl.DomainImpl;
+import org.arastreju.sge.security.impl.SNDomain;
 
 /**
  * <p>
@@ -77,7 +77,7 @@ public abstract class AbstractOrganizer implements Organizer {
 	}
 	
 	protected Domain createDomain(ResourceNode node) {
-		return new DomainImpl(node);
+		return new SNDomain(node);
 	}
 	
 	protected ResourceNode createDomesticDomainNode(String name) {

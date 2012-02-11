@@ -16,9 +16,7 @@ import org.arastreju.sge.model.nodes.ResourceNode;
  *
  * @author Oliver Tigges
  */
-public interface Domain {
-	
-	ResourceNode getAssociatedResource();
+public interface Domain extends ResourceNode {
 	
 	String getUniqueName();
 	
