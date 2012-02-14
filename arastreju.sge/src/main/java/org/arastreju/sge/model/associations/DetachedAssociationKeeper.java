@@ -50,6 +50,7 @@ public class DetachedAssociationKeeper extends AbstractAssociationKeeper {
 	
 	public DetachedAssociationKeeper(final Set<Statement> associations){
 		super(associations);
+		
 		markResolved();
 	}
 	

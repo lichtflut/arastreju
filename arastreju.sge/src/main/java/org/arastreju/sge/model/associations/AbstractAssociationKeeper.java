@@ -50,7 +50,7 @@ public abstract class AbstractAssociationKeeper implements AssociationKeeper, Se
 	 * Creates a new instance.
 	 * @param associations The associations to be kept.
 	 */
-	public AbstractAssociationKeeper(final Set<Statement> associations) {
+	protected AbstractAssociationKeeper(final Set<Statement> associations) {
 		this.associations.addAll(associations);
 		this.resolved = true;
 	}
