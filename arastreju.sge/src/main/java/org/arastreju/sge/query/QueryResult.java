@@ -56,9 +56,16 @@ public interface QueryResult extends Iterable<ResourceNode> {
 	/**
 	 * Converts the query result to a list.
 	 * @param The maximum amount of resource nodes to retrieve from index hits.
-	 * @return The list (or maybe an OutOfMemoryException)
+	 * @return The list.
 	 */
 	List<ResourceNode> toList(int max);
+	
+	/**
+	 * Converts the query result to a list.
+	 * @param The maximum amount of resource nodes to retrieve from index hits.
+	 * @return The list.
+	 */
+	List<ResourceNode> toList(int offset, int max);
 
 	/**
 	 * Check if the result is empty.

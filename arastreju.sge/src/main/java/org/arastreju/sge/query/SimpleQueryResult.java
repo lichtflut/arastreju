@@ -74,6 +74,20 @@ public class SimpleQueryResult implements QueryResult {
 	}
 	
 	/** 
+	* {@inheritDoc}
+	*/
+	public List<ResourceNode> toList(int offset, int max) {
+		if (offset >= list.size()) {
+			return Collections.emptyList();
+		}
+		if (max + offset > list.size()) {
+			return list.subList(offset, list.size() -1);
+		} else  {
+			return list.subList(offset, offset + max -1);	
+		}
+	}
+	
+	/** 
 	 * {@inheritDoc}
 	 */
 	public Iterator<ResourceNode> iterator() {

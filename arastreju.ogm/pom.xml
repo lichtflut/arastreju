@@ -60,7 +60,7 @@
 		<dependency>
 			<groupId>org.arastreju</groupId>
 			<artifactId>arastreju.sge</artifactId>
-			<version>${parent.version}</version>
+			<version>${project.parent.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>cglib</groupId>

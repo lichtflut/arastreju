@@ -40,11 +40,6 @@ public class GraphBuilder {
 	}
 	
 	// ----------------------------------------------------
-
-	public GraphBuilder addCascading(ResourceNode node) {
-		addCascading(node, new HashSet<ResourceNode>());
-		return this;
-	}
 	
 	/**
 	 * @return the graph
@@ -52,7 +47,14 @@ public class GraphBuilder {
 	public SemanticGraph getGraph() {
 		return graph;
 	}
+	
+	// ----------------------------------------------------
 
+	public GraphBuilder addCascading(ResourceNode node) {
+		addCascading(node, new HashSet<ResourceNode>());
+		return this;
+	}
+	
 	/**
 	 * @param associations
 	 */
