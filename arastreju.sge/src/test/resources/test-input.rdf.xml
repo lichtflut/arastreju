@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE rdf:RDF [
+    <!ENTITY rdfns 'http://www.w3.org/1999/02/22-rdf-syntax-ns#'>
+    <!ENTITY rdfsns 'http://www.w3.org/2000/01/rdf-schema#'>
+    <!ENTITY dcns 'http://purl.org/dc/elements/1.1/'>
+    <!ENTITY dctermsns 'http://purl.org/dc/terms/'>
+    <!ENTITY dctypens 'http://purl.org/dc/dcmitype/'>
+    <!ENTITY dcamns 'http://purl.org/dc/dcam/'>
+    <!ENTITY skosns 'http://www.w3.org/2004/02/skos/core#'>
+]>
+<rdf:RDF xmlns:skos="http://www.w3.org/2004/02/skos/core#"
+	xmlns:dcam="http://purl.org/dc/dcam/" xmlns:dcterms="http://purl.org/dc/terms/"
+	xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">
+	<rdf:Description rdf:about="http://purl.org/dc/terms/">
+		<dcterms:title xml:lang="en-US">English</dcterms:title>
+		<dcterms:title xml:lang="de">Deutsch</dcterms:title>
+		<dcterms:title xml:lang="de-CH">Schwyzerdütsch</dcterms:title>
+		<rdfs:comment>To comment on this schema, please contact
+			dcmifb@dublincore.org.</rdfs:comment>
+		<dcterms:publisher xml:lang="en-US">The Dublin Core Metadata
+			Initiative</dcterms:publisher>
+		<dcterms:modified>2008-01-14</dcterms:modified>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/dc/terms/title">
+		<rdfs:label xml:lang="en-US">Title</rdfs:label>
+		<dcterms:description xml:lang="en-US">A name given to the
+			resource.</dcterms:description>
+		<rdfs:isDefinedBy rdf:resource="http://purl.org/dc/terms/" />
+		<dcterms:issued>2008-01-14</dcterms:issued>
+		<dcterms:modified>2008-01-14</dcterms:modified>
+		<rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property" />
+		<dcterms:hasVersion
+			rdf:resource="http://dublincore.org/usage/terms/history/#titleT-001" />
+		<skos:note xml:lang="en-US">In current practice, this term is used
+			primarily with literal values; however, there are important uses with
+			non-literal values as well. As of December 2007, the DCMI Usage Board
+			is leaving this range unspecified pending an investigation of
+			options.</skos:note>
+		<rdfs:subPropertyOf rdf:resource="http://purl.org/dc/elements/1.1/title" />
+	</rdf:Description>
+</rdf:RDF>

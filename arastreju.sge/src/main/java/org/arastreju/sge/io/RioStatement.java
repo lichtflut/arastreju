@@ -26,7 +26,7 @@ import org.openrdf.model.impl.URIImpl;
 
 /**
  * <p>
- *  [DESCRIPTION]
+ *  Implementation of Sesame RIO statement based on an Arastreju Statement.
  * </p>
  *
  * <p>
@@ -42,7 +42,8 @@ public class RioStatement implements org.openrdf.model.Statement {
 	// -----------------------------------------------------
 	
 	/**
-	 * @param stmt
+	 * Constructor.
+	 * @param stmt The Arastreju statement.
 	 */
 	public RioStatement(final org.arastreju.sge.model.Statement stmt) {
 		this.arasStmt = stmt;

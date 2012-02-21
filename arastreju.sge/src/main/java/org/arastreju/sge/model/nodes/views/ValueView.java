@@ -19,6 +19,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Date;
+import java.util.Locale;
 
 import org.arastreju.sge.model.ElementaryDataType;
 import org.arastreju.sge.model.nodes.ResourceNode;
@@ -49,19 +50,50 @@ public abstract class ValueView implements ValueNode, Serializable {
 		this.value = value;
 	}
 	
+	/**
+	 * Create a view for a new value.
+	 * @param datatype The datatype.
+	 * @param value The value.
+	 */
 	protected ValueView(final ElementaryDataType datatype, final Object value){
 		this.value = new SNValue(datatype, value);
 	}
 	
-	// -----------------------------------------------------
+	/**
+	 * Create a view for a new value.
+	 * @param datatype The datatype.
+	 * @param value The value.
+	 * @param locale The locale.
+	 */
+	public ValueView(ElementaryDataType datatype, String value, Locale locale) {
+		this.value = new SNValue(datatype, value, locale);
+	}
 	
+	// ----------------------------------------------------
+	
+	/** 
+	* {@inheritDoc}
+	*/
+	public ElementaryDataType getDataType() {
+		return value.getDataType();
+	}
 
 	/** 
 	* {@inheritDoc}
 	*/
-	public boolean isAttached() {
-		return value.isAttached();
+	public Object getValue() {
+		return value.getValue();
 	}
+	
+	/** 
+	 * {@inheritDoc}
+	 */
+	@Override
+	public Locale getLocale() {
+		return value.getLocale();
+	}
+	
+	// -----------------------------------------------------
 
 	/** 
 	* {@inheritDoc}
@@ -135,20 +167,6 @@ public abstract class ValueView implements ValueNode, Serializable {
 		return value.asTimeSpec();
 	}
 
-	/** 
-	* {@inheritDoc}
-	*/
-	public ElementaryDataType getDataType() {
-		return value.getDataType();
-	}
-
-	/** 
-	* {@inheritDoc}
-	*/
-	public Object getValue() {
-		return value.getValue();
-	}
-	
 	/** 
 	* {@inheritDoc}
 	*/

@@ -15,6 +15,8 @@
  */
 package org.arastreju.sge.model.nodes.views;
 
+import java.util.Locale;
+
 import org.arastreju.sge.model.ElementaryDataType;
 import org.arastreju.sge.model.nodes.SNValue;
 
@@ -35,6 +37,14 @@ public class SNText extends ValueView {
 	 */
 	public SNText(final String text){
 		super(ElementaryDataType.STRING, text);
+	}
+	
+	/**
+	 * Creates a new text node.
+	 * @param text
+	 */
+	public SNText(final String text, final Locale locale){
+		super(ElementaryDataType.STRING, text, locale);
 	}
 	
 	/**

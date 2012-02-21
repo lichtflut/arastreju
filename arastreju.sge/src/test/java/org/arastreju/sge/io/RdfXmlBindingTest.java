@@ -22,6 +22,7 @@ import junit.framework.Assert;
 
 import org.arastreju.sge.SNOPS;
 import org.arastreju.sge.apriori.RDFS;
+import org.arastreju.sge.context.SimpleContextID;
 import org.arastreju.sge.model.DefaultSemanticGraph;
 import org.arastreju.sge.model.SemanticGraph;
 import org.arastreju.sge.model.Statement;
@@ -53,29 +54,20 @@ public class RdfXmlBindingTest {
 		final QualifiedName qnCar = new QualifiedName("http://q#", "Car");
 		final ResourceNode car = new SNResource(qnCar);
 		
-		final Statement association = SNOPS.associate(car, RDFS.SUB_CLASS_OF, vehicle);
+		final Statement association = SNOPS.associate(car, RDFS.SUB_CLASS_OF, vehicle, new SimpleContextID("http://q#", "Ctx"));
 		
 		SemanticGraph graph = new DefaultSemanticGraph(Arrays.asList(association));
 		Assert.assertNotNull(graph);
-
 	}
 	
 	@Test
 	public void testXmlReader() throws RDFHandlerException, IOException, SemanticIOException{
 		final SemanticGraphIO io = new RdfXmlBinding();
-		
-		final SemanticGraph graph = io.read(getClass().getClassLoader().getResourceAsStream("n04.aras.rdf"));
+		final SemanticGraph graph = io.read(getClass().getClassLoader().getResourceAsStream("test-input.rdf.xml"));
 		Assert.assertNotNull(graph);
 		
-	}
-	
-	@Test
-	public void testReoundtrip() throws IOException, SemanticIOException {
-		final SemanticGraphIO io = new RdfXmlBinding();
-		final SemanticGraph graph = io.read(getClass().getClassLoader().getResourceAsStream("n04.aras.rdf"));
-		Assert.assertNotNull(graph);
+		System.out.println(graph);
 		
 	}
-	
 	
 }

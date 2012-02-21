@@ -22,6 +22,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 import org.arastreju.sge.model.ElementaryDataType;
 import org.arastreju.sge.model.nodes.views.SNScalar;
@@ -49,7 +50,9 @@ public class SNValue implements ValueNode, Serializable {
 	private final ElementaryDataType datatype;
 	
 	private final Object value;
-
+	
+	private final Locale locale;
+	
 	// -----------------------------------------------------
 	
 	/**
@@ -58,10 +61,21 @@ public class SNValue implements ValueNode, Serializable {
 	 * @param value The value.
 	 */
 	public SNValue(final ElementaryDataType datatype, final Object value) {
+		this(datatype, value, null);
+	}
+	
+	/**
+	 * Constructor.
+	 * @param datatype The datatype.
+	 * @param value The value.
+	 * @param locale The locale
+	 */
+	public SNValue(ElementaryDataType datatype, Object value, Locale locale) {
 		if (value == null) {
 			throw new IllegalArgumentException("Value may not be null");
 		}
 		this.datatype = datatype;
+		this.locale = locale;
 		try {
 			this.value = convert(value, datatype);
 		} catch (ParseException e) {
@@ -70,50 +84,6 @@ public class SNValue implements ValueNode, Serializable {
 	}
 	
 	//-----------------------------------------------------
-	
-	/**
-	 * {@inheritDoc}
-	 */
-	public boolean isResourceNode() {
-		return false;
-	}
-	
-	/**
-	 * {@inheritDoc}
-	 */
-	public boolean isValueNode() {
-		return true;
-	}
-	
-	/**
-	 * {@inheritDoc}
-	 */
-	public boolean isAttached() {
-		return true;
-	}
-	
-	/**
-	 * {@inheritDoc}
-	 */
-	public ElementaryDataType getDataType() {
-		return datatype;
-	}
-	
-	/**
-	 * {@inheritDoc}
-	 */
-	public ResourceNode asResource() {
-		throw new IllegalStateException("Not a resource: " + this);
-	}
-	
-	/**
-	 * {@inheritDoc}
-	 */
-	public ValueNode asValue() {
-		return this;
-	}
-	
-	// ------------------------------------------------------
 	
 	/**
 	 * {@inheritDoc}
@@ -138,7 +108,53 @@ public class SNValue implements ValueNode, Serializable {
 		}
 	}
 	
-
+	/** 
+	 * {@inheritDoc}
+	 */
+	@Override
+	public Locale getLocale() {
+		return locale;
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	public ElementaryDataType getDataType() {
+		return datatype;
+	}
+	
+	// ----------------------------------------------------
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	public boolean isResourceNode() {
+		return false;
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	public boolean isValueNode() {
+		return true;
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	public ResourceNode asResource() {
+		throw new IllegalStateException("Not a resource: " + this);
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	public ValueNode asValue() {
+		return this;
+	}
+	
+	// ------------------------------------------------------
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -222,7 +238,11 @@ public class SNValue implements ValueNode, Serializable {
 	 */
 	@Override
 	public String toString() {
-		return getStringValue();
+		final StringBuilder sb = new StringBuilder(getStringValue());
+		if (locale != null) {
+			sb.append(" [" + locale + "]");
+		}
+		return sb.toString();
 	}
 
 	/**

@@ -15,7 +15,11 @@
  */
 package org.arastreju.sge.io;
 
+import java.util.Locale;
+
 import org.arastreju.sge.SNOPS;
+import org.arastreju.sge.context.Context;
+import org.arastreju.sge.context.SimpleContextID;
 import org.arastreju.sge.model.ResourceID;
 import org.arastreju.sge.model.SimpleResourceID;
 import org.arastreju.sge.model.nodes.BlankNode;
@@ -50,6 +54,8 @@ import de.lichtflut.infra.exceptions.NotYetSupportedException;
  */
 public class RdfReadHandler implements RDFHandler {
 	
+	private static final int MAX_TEXT_LENGTH = 100 * 1000;
+
 	private final Logger logger = LoggerFactory.getLogger(RdfReadHandler.class);
 	
 	private final ImportedStatementListener listener;
@@ -94,6 +100,8 @@ public class RdfReadHandler implements RDFHandler {
 		
 		listener.onNewStatement(
 				SNOPS.associate(toResourceNode(subject), toResourceRef(predicate), toNode(object)));	
+		
+		
 	}
 	
 	// -----------------------------------------------------
@@ -127,21 +135,45 @@ public class RdfReadHandler implements RDFHandler {
 		return new SNResource(toQualifiedName(uri));
 	}
 	
+	protected Context toContext(final Resource ctx) {
+		if (ctx == null) {
+			return null;
+		} else {
+			return new SimpleContextID(new QualifiedName(ctx.stringValue()));
+		}
+	}
+	
 	protected SemanticNode toNode(final Value value) {
 		if (isUriNode(value)){
 			return toResourceRef((URI) value);
 		} else if (value instanceof LiteralImpl){
+			final LiteralImpl literal = (LiteralImpl) value;
 			String content = value.stringValue();
-			if (content.length() > 200){
-				logger.warn("chopping content: " + content);
-				content = content.substring(0,200);
+			if (content.length() > MAX_TEXT_LENGTH){
+				logger.warn("Text too long; chopping content: " + content);
+				content = content.substring(0, MAX_TEXT_LENGTH);
 			}
-			return new SNText(content);
+			final Locale locale = getLocale(literal);
+			return new SNText(content, locale);
 		} else {
 			return null;
 		}
 	}
 	
+	protected Locale getLocale(LiteralImpl literal) {
+		if (literal.getLanguage() != null && literal.getLanguage().length() >=2 ) {
+			String expr = literal.getLanguage();
+			String language = expr.substring(0, 2);
+			if (expr.length() >= 5 ) {
+				String country = expr.substring(3, 5);
+				return new Locale(language, country);
+			} else {
+				return new Locale(language);
+			}
+		}
+		return null;
+	}
+
 	protected boolean isUriNode(final Object resource){
 		return resource instanceof URI;
 	}
@@ -153,5 +185,6 @@ public class RdfReadHandler implements RDFHandler {
 	protected QualifiedName toQualifiedName(final URI uri){
 		return new QualifiedName(uri.getNamespace(), uri.getLocalName());
 	}
+	
 	
 }
