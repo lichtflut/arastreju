@@ -75,15 +75,8 @@ public class QualifiedName implements Comparable<QualifiedName>, Serializable {
 	/**
 	 * Creates a new qualified name, where the prefix will be derived from managed namespace.
 	 */
-	public QualifiedName(final Namespace namespace, final String name) {
-		this.uri = toURI(namespace, name);
-	}
-	
-	/**
-	 * Creates a new qualified name, where the prefix will be derived from managed namespace.
-	 */
 	public QualifiedName(final String namespace, final String name) {
-		this.uri = toURI(namespace, name);
+		this(namespace + name);
 	}
 	
 	/**
@@ -91,26 +84,17 @@ public class QualifiedName implements Comparable<QualifiedName>, Serializable {
 	 * @param ref The {@link ResourceID}.
 	 */
 	public QualifiedName(final String uri){
-		this(QualifiedName.getNamespace(uri), QualifiedName.getSimpleName(uri));
+		this.uri = uri;
 	}
 	
 	// ----------------------------------------------------
 	
-	/**
-	 * Creates a new qualified name.
-	 */
-	protected QualifiedName(final Namespace namespace, final String prefix, final String name) {
-		this.uri = toURI(namespace, name);
-	}
-	
-	//------------------------------------------------------
-
 	public String getSimpleName() {
 		return getSimpleName(uri);
 	}
 	
-	public Namespace getNamespace(){
-		return new SimpleNamespace(getNamespace(uri));
+	public String getNamespace(){
+		return getNamespace(uri);
 	}
 	
 	public String toURI() {
@@ -155,20 +139,4 @@ public class QualifiedName implements Comparable<QualifiedName>, Serializable {
 		return separatorIdx;
 	}
 	
-	private String toURI(String namespace, String name) {
-		if (namespace != null){
-			return namespace + name;
-		} else {
-			return VOID_NAMESPACE + HASH + name;
-		}
-	}
-	
-	private String toURI(Namespace namespace, String name) {
-		if (namespace != null){
-			return namespace.getUri() + name;
-		} else {
-			return VOID_NAMESPACE + HASH + name;
-		}
-	}
-		
 }

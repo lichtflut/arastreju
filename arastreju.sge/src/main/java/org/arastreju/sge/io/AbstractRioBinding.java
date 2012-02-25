@@ -48,22 +48,29 @@ public abstract class AbstractRioBinding implements SemanticGraphIO {
     
     // -----------------------------------------------------
     
+    /**
+     * {@inheritDoc}
+     */
+     public void read(final InputStream in, ImportedStatementListener listener) throws IOException, SemanticIOException {
+         RDFParser parser = parserFactory().getParser();
+         try {
+             RdfReadHandler handler = new RdfReadHandler(listener);
+             parser.setRDFHandler(handler);
+             parser.parse(in, "void");
+         } catch (RDFParseException e) {
+             throw new SemanticIOException(ErrorCodes.GRAPH_READ_ERROR, "error while reading RDF", e);
+         } catch (RDFHandlerException e) {
+             throw new SemanticIOException(ErrorCodes.GRAPH_READ_ERROR, "error while reading RDF", e);
+         }
+     }
+    
    /**
     * {@inheritDoc}
     */
     public SemanticGraph read(final InputStream in) throws IOException, SemanticIOException {
         final AssociationCollector collector = new AssociationCollector();
-        RDFParser parser = parserFactory().getParser();
-        try {
-            RdfReadHandler handler = new RdfReadHandler(collector);
-            parser.setRDFHandler(handler);
-            parser.parse(in, "void");
-            return collector.toSemanticGraph();
-        } catch (RDFParseException e) {
-            throw new SemanticIOException(ErrorCodes.GRAPH_READ_ERROR, "error while reading RDF", e);
-        } catch (RDFHandlerException e) {
-            throw new SemanticIOException(ErrorCodes.GRAPH_READ_ERROR, "error while reading RDF", e);
-        }
+        read(in, collector);
+        return collector.toSemanticGraph();
     }
     
     /**

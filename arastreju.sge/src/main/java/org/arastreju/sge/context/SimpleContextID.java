@@ -17,7 +17,6 @@ package org.arastreju.sge.context;
 
 import org.arastreju.sge.model.SimpleResourceID;
 import org.arastreju.sge.model.nodes.views.SNContext;
-import org.arastreju.sge.naming.Namespace;
 import org.arastreju.sge.naming.QualifiedName;
 
 /**
@@ -48,26 +47,18 @@ public class SimpleContextID extends SimpleResourceID implements Context {
 		super(nsUri, name);
 	}
 
-	/**
-	 * @param namespace
-	 * @param name
-	 */
-	public SimpleContextID(Namespace namespace, String name) {
-		super(namespace, name);
-	}
-	
 	// -----------------------------------------------------
 	
-	/* (non-Javadoc)
-	 * @see org.arastreju.sge.model.SimpleResourceID#asResource()
+	/**
+	 * {@inheritDoc}
 	 */
 	@Override
 	public SNContext asResource() {
 		return new SNContext(super.asResource());
 	}
 
-	/* (non-Javadoc)
-	 * @see java.lang.Comparable#compareTo(java.lang.Object)
+	/**
+	 * {@inheritDoc}
 	 */
 	public int compareTo(final Context other) {
 		return getQualifiedName().compareTo(other.getQualifiedName());

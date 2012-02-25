@@ -68,7 +68,7 @@ public class SNOPS {
 	 * @return An isolated ID object.
 	 */
 	public static ResourceID id(final ResourceNode node) {
-		return new SimpleResourceID(node);
+		return new SimpleResourceID(node.getQualifiedName());
 	}
 	
 	/**

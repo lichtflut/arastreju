@@ -21,9 +21,7 @@ import java.util.UUID;
 import org.arastreju.sge.model.nodes.ResourceNode;
 import org.arastreju.sge.model.nodes.SNResource;
 import org.arastreju.sge.model.nodes.ValueNode;
-import org.arastreju.sge.naming.Namespace;
 import org.arastreju.sge.naming.QualifiedName;
-import org.arastreju.sge.naming.SimpleNamespace;
 import org.arastreju.sge.naming.VoidNamespace;
 
 /**
@@ -47,14 +45,7 @@ public class SimpleResourceID implements ResourceID, Serializable {
 	 * Creates a new unique ResourceID with random URI in {@link VoidNamespace}.
 	 */
 	public SimpleResourceID() {
-		this(VoidNamespace.getInstance(), UUID.randomUUID().toString());
-	}
-	
-	/**
-	 * Creates a copied ResourceID based on an existing ReosourceID.
-	 */
-	public SimpleResourceID(final ResourceID id) {
-		this(id.getQualifiedName());
+		this(VoidNamespace.getURI(), UUID.randomUUID().toString());
 	}
 	
 	/**
@@ -67,11 +58,10 @@ public class SimpleResourceID implements ResourceID, Serializable {
 	
 	/**
 	 * Constructor.
-	 * @param namespace The namespace.
-	 * @param name The simple name.
+	 * @param uri The URI.
 	 */
-	public SimpleResourceID(final Namespace namespace, final String name) {
-		this(new QualifiedName(namespace, name));
+	public SimpleResourceID(final String uri) {
+		this(new QualifiedName(uri));
 	}
 	
 	/**
@@ -80,15 +70,7 @@ public class SimpleResourceID implements ResourceID, Serializable {
 	 * @param name The simple name.
 	 */
 	public SimpleResourceID(final String nsUri, final String name) {
-		this(new SimpleNamespace(nsUri), name);
-	}
-	
-	/**
-	 * Constructor.
-	 * @param uri The URI.
-	 */
-	public SimpleResourceID(final String uri) {
-		this(new QualifiedName(uri));
+		this(new QualifiedName(nsUri, name));
 	}
 	
 	// ----------------------------------------------------

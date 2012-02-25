@@ -271,6 +271,9 @@ public class SNValue implements ValueNode, Serializable {
 			if (!Infra.equals(datatype, other.getDataType())) {
 				return false;
 			}
+			if (!Infra.equals(locale, other.getLocale())) {
+				return false;
+			}
 			return true;
 		}
 		return super.equals(obj);

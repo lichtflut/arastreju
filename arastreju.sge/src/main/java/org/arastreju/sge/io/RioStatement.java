@@ -17,6 +17,7 @@ package org.arastreju.sge.io;
 
 import org.arastreju.sge.model.ResourceID;
 import org.arastreju.sge.model.nodes.SemanticNode;
+import org.arastreju.sge.model.nodes.ValueNode;
 import org.openrdf.model.Resource;
 import org.openrdf.model.URI;
 import org.openrdf.model.Value;
@@ -66,7 +67,7 @@ public class RioStatement implements org.openrdf.model.Statement {
 		if (object.isResourceNode()){
 			return new URIImpl(object.asResource().getQualifiedName().toURI());
 		} else {
-			return new LiteralImpl(object.asValue().getStringValue());	
+			return createLiteral(object.asValue());
 		}
 	}
 
@@ -87,5 +88,30 @@ public class RioStatement implements org.openrdf.model.Statement {
 		}
 		return new URIImpl(subject.getQualifiedName().toURI());
 	}
-
+	
+	// ----------------------------------------------------
+	
+	private Value createLiteral(ValueNode value) {
+		switch(value.getDataType()) {
+		case DATE:
+			return new LiteralImpl(value.getStringValue(), new URIImpl("http://www.w3.org/2001/XMLSchema#date"));
+		case TIMESTAMP:
+			return new LiteralImpl(value.getStringValue(), new URIImpl("http://www.w3.org/2001/XMLSchema#dateTime"));
+		case TIME_OF_DAY:
+			return new LiteralImpl(value.getStringValue(), new URIImpl("http://www.w3.org/2001/XMLSchema#time"));
+		case INTEGER:
+			return new LiteralImpl(value.getStringValue(), new URIImpl("http://www.w3.org/2001/XMLSchema#integer"));
+		case DECIMAL:
+			return new LiteralImpl(value.getStringValue(), new URIImpl("http://www.w3.org/2001/XMLSchema#decimal"));
+		
+		case STRING:
+		default:
+			if (value.getLocale() != null) {
+				return new LiteralImpl(value.getStringValue(), value.getLocale().getLanguage());
+			} else {
+				return new LiteralImpl(value.getStringValue());
+			}
+		}
+	}
+	
 }

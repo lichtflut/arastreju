@@ -18,23 +18,23 @@ package org.arastreju.sge.naming;
 
 /**
  * <p>
- * Pseudo namespace for names that are not in a namespace. E.g. local names.
+ *  Pseudo namespace for names that are not in a namespace. E.g. local names.
  * </p>
  * 
  * <p>
- * Created: 06.07.2009
+ *  Created: 06.07.2009
  * </p>
  * 
  * @author Oliver Tigges
  */
-public class VoidNamespace implements Namespace {
+public class VoidNamespace {
 
 	/**
 	 * Constant for default UUID namespace URI.
 	 */
 	private static final String UUID = "http://arasteju.org/uuid#";
 
-	private static final Namespace INSTANCE = new VoidNamespace();
+	private static final Namespace INSTANCE = new SimpleNamespace(UUID, "void");
 
 	// ------------------------------------------------------
 
@@ -44,6 +44,13 @@ public class VoidNamespace implements Namespace {
 	public static Namespace getInstance() {
 		return INSTANCE;
 	}
+	
+	/**
+	 * @return the uuid
+	 */
+	public static String getURI() {
+		return UUID;
+	}
 
 	// ------------------------------------------------------
 
@@ -51,59 +58,6 @@ public class VoidNamespace implements Namespace {
 	 * Private Constructor.
 	 */
 	private VoidNamespace() {
-	}
-
-	// ------------------------------------------------------
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public String getUri() {
-		return UUID;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public String getPrefix() {
-		return "aras-uuid";
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public boolean isRegistered() {
-		return false;
-	}
-
-	// -----------------------------------------------------
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public int hashCode() {
-		return UUID.hashCode();
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public boolean equals(Object obj) {
-		if (obj instanceof Namespace) {
-			Namespace other = (Namespace) obj;
-			return UUID.equals(other.getUri());
-		}
-		return super.equals(obj);
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public String toString() {
-		return getUri();
 	}
 
 }
