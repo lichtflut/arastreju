@@ -33,6 +33,16 @@ import org.arastreju.sge.model.SemanticGraph;
  * @author Oliver Tigges
  */
 public interface SemanticGraphIO {
+	
+	/**
+	 * Reads statements in streaming mode.
+	 * @param in The input stream.
+	 * @param listener The listener for read statements.
+	 * @throws IOException
+	 * @throws SemanticIOException
+	 */
+	void read(InputStream in, ReadStatementListener listener) 
+			throws IOException, SemanticIOException;
 
 	/**
 	 * Reads a model extract from an RDS input stream.
@@ -41,15 +51,17 @@ public interface SemanticGraphIO {
 	 * @throws IOException
 	 * @throws SemanticIOException
 	 */
-	SemanticGraph read(final InputStream in) throws IOException,
+	SemanticGraph read(InputStream in) throws IOException,
 			SemanticIOException;
+	
+	// ----------------------------------------------------
 
 	/**
 	 * Writes the extract as RDF to given stream.
 	 * @param graph The graph to write.
 	 * @param The output stream.
 	 */
-	void write(final SemanticGraph graph, final OutputStream out)
+	void write(SemanticGraph graph, OutputStream out)
 			throws IOException, SemanticIOException;
 
 }

@@ -22,6 +22,8 @@ import org.arastreju.sge.model.nodes.ResourceNode;
 import org.arastreju.sge.model.nodes.views.SNText;
 import org.arastreju.sge.security.User;
 
+import de.lichtflut.infra.Infra;
+
 /**
  * <p>
  *  Implementation of User.
@@ -41,8 +43,6 @@ public class SNUser extends AbstractIdentity implements User {
 	 */
 	public SNUser(final ResourceNode userNode) {
 		super(userNode);
-		// trigger resolving of associations
-		userNode.getAssociations();
 	}
 	
 	// -----------------------------------------------------
@@ -70,7 +70,7 @@ public class SNUser extends AbstractIdentity implements User {
 	 */
 	@Override
 	public String toString() {
-		return getName();
+		return Infra.coalesce(getName(), getEmail(), getQualifiedName().getSimpleName());
 	}
 	
 }

@@ -33,7 +33,7 @@ import org.arastreju.sge.model.Statement;
  *
  * @author Oliver Tigges
  */
-public class AssociationCollector implements ImportedStatementListener {
+public class StatementCollector implements ReadStatementListener {
 	
 	private final List<Statement> statements = new ArrayList<Statement>();
 

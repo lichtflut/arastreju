@@ -38,17 +38,27 @@ import de.lichtflut.infra.exceptions.NotYetImplementedException;
  * @author Oliver Tigges
  */
 public class JsonBinding implements SemanticGraphIO {
+	
+	/** 
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void read(InputStream in, ReadStatementListener listener) throws IOException, SemanticIOException {
+		throw new NotYetImplementedException();
+	}
 
-	/* (non-Javadoc)
-	 * @see org.arastreju.sge.io.SemanticGraphIO#read(java.io.InputStream)
+	/** 
+	 * {@inheritDoc}
 	 */
 	public SemanticGraph read(final InputStream in) throws IOException,
 			SemanticIOException {
 		throw new NotYetImplementedException();
 	}
+	
+	// ----------------------------------------------------
 
-	/* (non-Javadoc)
-	 * @see org.arastreju.sge.io.SemanticGraphIO#write(org.arastreju.sge.model.SemanticGraph, java.io.OutputStream)
+	/** 
+	 * {@inheritDoc}
 	 */
 	public void write(final SemanticGraph graph, final OutputStream out)
 			throws IOException, SemanticIOException {

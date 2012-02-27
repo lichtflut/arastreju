@@ -28,7 +28,7 @@ import org.arastreju.sge.model.Statement;
  *
  * @author Oliver Tigges
  */
-public interface ImportedStatementListener {
+public interface ReadStatementListener {
 
 	void onNewStatement(Statement stmt);
 	

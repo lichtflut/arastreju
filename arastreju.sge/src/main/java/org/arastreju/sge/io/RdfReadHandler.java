@@ -58,14 +58,14 @@ public class RdfReadHandler implements RDFHandler {
 
 	private final Logger logger = LoggerFactory.getLogger(RdfReadHandler.class);
 	
-	private final ImportedStatementListener listener;
+	private final ReadStatementListener listener;
 	
 	// -----------------------------------------------------
 	
 	/**
 	 * Constructor.
 	 */
-	public RdfReadHandler(final ImportedStatementListener listener) {
+	public RdfReadHandler(final ReadStatementListener listener) {
 		this.listener = listener;
 		
 	}

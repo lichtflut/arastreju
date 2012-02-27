@@ -19,7 +19,7 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.arastreju.sge.SNOPS;
+import static org.arastreju.sge.SNOPS.*;
 import org.arastreju.sge.apriori.Aras;
 import org.arastreju.sge.model.nodes.ResourceNode;
 import org.arastreju.sge.model.nodes.SemanticNode;
@@ -61,11 +61,7 @@ public abstract class AbstractIdentity extends ResourceView implements Identity,
 	 * {@inheritDoc}
 	 */
 	public String getName() {
-		final SemanticNode idNode = SNOPS.singleObject(getResource(), Aras.HAS_UNIQUE_NAME);
-		if (idNode == null) {
-			return null;
-		}
-		return idNode.asValue().getStringValue();
+		return string(singleObject(getResource(), Aras.HAS_UNIQUE_NAME));
 	}
 	
 	// ----------------------------------------------------- 
@@ -74,7 +70,7 @@ public abstract class AbstractIdentity extends ResourceView implements Identity,
 	 * {@inheritDoc}
 	 */
 	public Set<Role> getRoles() {
-		final Set<SemanticNode> roleNodes = SNOPS.objects(getResource(), Aras.HAS_ROLE);
+		final Set<SemanticNode> roleNodes = objects(getResource(), Aras.HAS_ROLE);
 		final Set<Role> roles = new HashSet<Role>(roleNodes.size());
 		for (SemanticNode node : roleNodes) {
 			roles.add(new SNRole(node.asResource()));
@@ -88,7 +84,7 @@ public abstract class AbstractIdentity extends ResourceView implements Identity,
 	public Set<Permission> getPermissions() {
 		final Set<Permission> permissions = new HashSet<Permission>();
 		for(Role role : getRoles()) {
-			final Set<SemanticNode> permissionNodes = SNOPS.objects(role, Aras.CONTAINS);
+			final Set<SemanticNode> permissionNodes = objects(role, Aras.CONTAINS);
 			for (SemanticNode node : permissionNodes) {
 				permissions.add(new SNPermission(node.asResource()));
 			}
