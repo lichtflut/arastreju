@@ -7,83 +7,77 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.arastreju.sge.SNOPS;
-import org.arastreju.sge.model.DefaultSemanticGraph;
-import org.arastreju.sge.model.SemanticGraph;
 import org.arastreju.sge.model.Statement;
 import org.arastreju.sge.model.nodes.ResourceNode;
 import org.arastreju.sge.model.nodes.SemanticNode;
 
 /**
  * <p>
- *  Generic builder of a semantic graph based on traversal rules.
+ *  Common traverser for graphs.
  * </p>
  *
  * <p>
- * 	Created Jan 26, 2012
+ * 	Created Feb 28, 2012
  * </p>
  *
  * @author Oliver Tigges
  */
-public class GraphBuilder {
+public class GraphTraverser implements StatementVisitor {
 	
 	private final TraversalFilter filter;
 	
-	private final SemanticGraph graph = new DefaultSemanticGraph();
+	private final StatementVisitor visitor;
 
 	// ----------------------------------------------------
 	
 	/**
 	 * @param filter
 	 */
-	public GraphBuilder(TraversalFilter filter) {
+	public GraphTraverser(TraversalFilter filter) {
 		this.filter = filter;
+		this.visitor = this;
 	}
 	
 	/**
-	 * Constructor.
+	 * @param filter
+	 * @param visitor
 	 */
-	public GraphBuilder() {
-		this(new AcceptAllFilter());
+	public GraphTraverser(TraversalFilter filter, StatementVisitor visitor) {
+		this.filter = filter;
+		this.visitor = visitor;
 	}
-	
-	// ----------------------------------------------------
-	
-	/**
-	 * @return the graph
-	 */
-	public SemanticGraph getGraph() {
-		return graph;
-	}
-	
-	// ----------------------------------------------------
 
-	public GraphBuilder addCascading(ResourceNode node) {
-		addCascading(node, new HashSet<ResourceNode>());
-		return this;
-	}
+
+
+	// ----------------------------------------------------
 	
-	/**
-	 * @param associations
-	 */
-	public void addStatements(Set<Statement> associations) {
-		graph.addStatements(associations);
+	public void start(ResourceNode... node) {
+		final HashSet<ResourceNode> visited = new HashSet<ResourceNode>();
+		for (ResourceNode current : node) {
+			traverse(current, visited);
+		}
 	}
 	
 	// ----------------------------------------------------
-
-	private void addCascading(final ResourceNode node, final Set<ResourceNode> visited) {
+	
+	public void visit(Statement stmt) {
+	}
+	
+	// ----------------------------------------------------
+	
+	private void traverse(final ResourceNode node, final Set<ResourceNode> visited) {
 		visited.add(node);
 		final Set<Statement> associations = node.getAssociations();
 		for (Statement statement : associations) {
 			switch (filter.accept(statement)) {
 			case ACCEPT:
-				graph.addStatement(statement);
+				visitor.visit(statement);
 				break;
 			case ACCEPPT_CONTINUE:
-				graph.addStatement(statement);
+				visitor.visit(statement);
 				for (SemanticNode object : SNOPS.objects(node.getAssociations())) {
 					if (object.isResourceNode() && !visited.contains(object)) {
-						addCascading(object.asResource(), visited);
+						traverse(object.asResource(), visited);
 					}
 				}
 			case STOP:
