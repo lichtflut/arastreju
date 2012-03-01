@@ -90,7 +90,6 @@ public abstract class AbstractAssociationKeeper implements AssociationKeeper, Se
 		if (removedAssociations == null) {
 			removedAssociations = new HashSet<Statement>();
 		}
-		System.err.println("Remembering removed assoc: " + assoc);
 		removedAssociations.add(assoc);
 		return getAssociations().remove(assoc);
 	}
