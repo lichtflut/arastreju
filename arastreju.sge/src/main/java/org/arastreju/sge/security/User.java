@@ -29,8 +29,6 @@ package org.arastreju.sge.security;
  */
 public interface User extends Identity {
 
-	String getEmail();
-	
 	String getDomain();
 	
 }

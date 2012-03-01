@@ -15,14 +15,9 @@
  */
 package org.arastreju.sge.security.impl;
 
-import static org.arastreju.sge.SNOPS.assure;
-
 import org.arastreju.sge.apriori.Aras;
 import org.arastreju.sge.model.nodes.ResourceNode;
-import org.arastreju.sge.model.nodes.views.SNText;
 import org.arastreju.sge.security.User;
-
-import de.lichtflut.infra.Infra;
 
 /**
  * <p>
@@ -47,16 +42,15 @@ public class SNUser extends AbstractIdentity implements User {
 	
 	// -----------------------------------------------------
 
-	/**
+	/** 
 	 * {@inheritDoc}
 	 */
-	public String getEmail() {
-		return stringValue(Aras.HAS_EMAIL);
+	@Override
+	public String getName() {
+		return getQualifiedName().getSimpleName();
 	}
 	
-	public void setEmail(String email) {
-		assure(this, Aras.HAS_EMAIL, new SNText(email), Aras.IDENT);
-	}
+	// ----------------------------------------------------
 	
 	/** 
 	 * {@inheritDoc}
@@ -70,7 +64,7 @@ public class SNUser extends AbstractIdentity implements User {
 	 */
 	@Override
 	public String toString() {
-		return Infra.coalesce(getName(), getEmail(), getQualifiedName().getSimpleName());
+		return getName();
 	}
 	
 }

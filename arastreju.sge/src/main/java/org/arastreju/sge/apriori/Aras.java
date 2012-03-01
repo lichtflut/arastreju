@@ -95,7 +95,6 @@ public interface Aras {
 	
 	ResourceID IDENTIFIED_BY = new SimpleResourceID(NAMESPACE_URI, "isIdentifiedBy");
 	ResourceID HAS_CREDENTIAL = new SimpleResourceID(NAMESPACE_URI, "hasCredential");
-	ResourceID HAS_EMAIL = new SimpleResourceID(NAMESPACE_URI, "hasEmail");
 	ResourceID HAS_UNIQUE_NAME = new SimpleResourceID(NAMESPACE_URI, "hasUniqueName");
 	ResourceID HAS_TITLE = new SimpleResourceID(NAMESPACE_URI, "hasTitle");
 	ResourceID HAS_DESCRIPTION = new SimpleResourceID(NAMESPACE_URI, "hasDescription");

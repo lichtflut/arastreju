@@ -32,7 +32,12 @@ import org.arastreju.sge.model.nodes.ResourceNode;
  */
 public interface Identity extends ResourceNode {
 	
+	/**
+	 * @return A human readable name for this identity. 
+	 */
 	String getName();
+	
+	// ----------------------------------------------------
 	
 	Set<Role> getRoles();
 	

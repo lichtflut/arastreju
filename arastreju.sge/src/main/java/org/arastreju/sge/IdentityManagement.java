@@ -46,12 +46,12 @@ public interface IdentityManagement {
 	
 	/**
 	 * Login the user specified by name and credential.
-	 * @param uniqueName The unique user name.
+	 * @param identifier The unique user name.
 	 * @param credential The credential.
 	 * @return The user if login was successful.
 	 * @throws LoginException if the login was not successful.
 	 */
-	User login(String uniqueName, Credential credential) throws LoginException;
+	User login(String identifier, Credential credential) throws LoginException;
 	
 	// -- REGISTRATION ------------------------------------
 	
@@ -76,15 +76,6 @@ public interface IdentityManagement {
 	User register(String uniqueName, Credential credential, ResourceNode corresponding) throws ArastrejuException;
 	
 	/**
-	 * Change the primary identification of a user. !This changes the ID and the unique name!
-	 * @param user An existing user.
-	 * @param newID The new ID to identify the user.
-	 * @return The user.
-	 * @throws ArastrejuException 
-	 */
-	User changeID(User user, String newID) throws ArastrejuException;
-	
-	/**
 	 * Register an alternateID for a user.
 	 * @param user An existing user.
 	 * @param uniqueName Another unique name to identify the user.
@@ -92,6 +83,13 @@ public interface IdentityManagement {
 	 * @throws ArastrejuException 
 	 */
 	User registerAlternateID(User user, String uniqueName) throws ArastrejuException;
+	
+	/**
+	 * Check if a user identifier is already in use.
+	 * @param identifier The identifier to check.
+	 * @return true if the name is in use.
+	 */
+	boolean isIdentifierInUse(String identifier);
 	
 	// -- ROLE MANAGEMENT ---------------------------------
 	

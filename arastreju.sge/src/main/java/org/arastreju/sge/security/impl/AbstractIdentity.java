@@ -57,13 +57,6 @@ public abstract class AbstractIdentity extends ResourceView implements Identity,
 		return getResource();
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
-	public String getName() {
-		return string(singleObject(getResource(), Aras.HAS_UNIQUE_NAME));
-	}
-	
 	// ----------------------------------------------------- 
 
 	/**
