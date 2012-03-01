@@ -16,6 +16,7 @@
 package org.arastreju.sge.model.associations;
 
 import java.io.Serializable;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -35,6 +36,8 @@ import org.arastreju.sge.model.Statement;
 public abstract class AbstractAssociationKeeper implements AssociationKeeper, Serializable {
 
 	private final Set<Statement> associations = new HashSet<Statement>();
+	
+	private Set<Statement> removedAssociations;
 	
 	private boolean resolved;
 	
@@ -57,7 +60,10 @@ public abstract class AbstractAssociationKeeper implements AssociationKeeper, Se
 	
 	// -----------------------------------------------------
 	
-	public synchronized Set<Statement> getAssociations() {
+	/**
+	 * {@inheritDoc}
+	 */
+	public Set<Statement> getAssociations() {
 		if (!resolved){
 			if (!associations.isEmpty()){
 				throw new IllegalArgumentException("node has already an association attached: " + associations);
@@ -68,14 +74,37 @@ public abstract class AbstractAssociationKeeper implements AssociationKeeper, Se
 		return associations;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public void addAssociation(final Statement assoc) {
 		getAssociations().add(assoc);
 	}
+	
+	// ----------------------------------------------------
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public boolean removeAssociation(final Statement assoc) {
+		if (removedAssociations == null) {
+			removedAssociations = new HashSet<Statement>();
+		}
+		System.err.println("Remembering removed assoc: " + assoc);
+		removedAssociations.add(assoc);
 		return getAssociations().remove(assoc);
 	}
-
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	public Set<Statement> getAssociationsForRemoval() {
+		if (removedAssociations == null) {
+			return Collections.emptySet();
+		}
+		return removedAssociations;
+	}
+	
 	// -----------------------------------------------------
 	
 	/**

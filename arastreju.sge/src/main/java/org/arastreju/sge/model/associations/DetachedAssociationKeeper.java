@@ -16,7 +16,6 @@
 package org.arastreju.sge.model.associations;
 
 
-import java.util.HashSet;
 import java.util.Set;
 
 import org.arastreju.sge.eh.ArastrejuRuntimeException;
@@ -36,10 +35,6 @@ import org.arastreju.sge.model.Statement;
  */
 public class DetachedAssociationKeeper extends AbstractAssociationKeeper {
 	
-	private final Set<Statement> removedAssociations = new HashSet<Statement>();
-	
-	// -----------------------------------------------------
-
 	/**
 	 * Default constructor.
 	 */
@@ -50,7 +45,6 @@ public class DetachedAssociationKeeper extends AbstractAssociationKeeper {
 	
 	public DetachedAssociationKeeper(final Set<Statement> associations){
 		super(associations);
-		
 		markResolved();
 	}
 	
@@ -59,26 +53,10 @@ public class DetachedAssociationKeeper extends AbstractAssociationKeeper {
 	/**
 	 * {@inheritDoc}
 	 */
-	@Override
-	public boolean removeAssociation(Statement assoc) {
-		removedAssociations.add(assoc);
-		return super.removeAssociation(assoc);
-	}
-	
-	/**
-	 * {@inheritDoc}
-	 */
 	public boolean isAttached() {
 		return false;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
-	public Set<Statement> getAssociationsForRemoval() {
-		return removedAssociations;
-	}
-	
 	/**
 	 * {@inheritDoc}
 	 */
