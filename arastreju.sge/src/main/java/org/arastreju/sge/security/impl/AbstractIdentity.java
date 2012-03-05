@@ -20,6 +20,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 import static org.arastreju.sge.SNOPS.*;
+
+import org.arastreju.sge.SNOPS;
 import org.arastreju.sge.apriori.Aras;
 import org.arastreju.sge.model.nodes.ResourceNode;
 import org.arastreju.sge.model.nodes.SemanticNode;
@@ -107,6 +109,20 @@ public abstract class AbstractIdentity extends ResourceView implements Identity,
 			}
 		}
 		return false;
+	}
+	
+	// ----------------------------------------------------
+	
+	public String[] getIdentifiers() {
+		final Set<SemanticNode> identifiers = SNOPS.objects(this, Aras.IDENTIFIED_BY);
+		final String[] result = new String[identifiers.size()];
+		
+		int i = 0;
+		for (SemanticNode node : identifiers) {
+			result[i++] = node.asValue().getStringValue();
+		}
+		
+		return result;
 	}
 	
 }
