@@ -56,7 +56,7 @@ public class SNOPS {
 	}
 	
 	public static QualifiedName qualify(final String uri){
-		return new QualifiedName(uri);
+		return QualifiedName.create(uri);
 	}
 	
 	public static ResourceID id(final QualifiedName qn){

@@ -16,6 +16,8 @@
 package org.arastreju.sge.naming;
 
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.arastreju.sge.model.ResourceID;
 
@@ -38,6 +40,8 @@ public class QualifiedName implements Comparable<QualifiedName>, Serializable {
 	public static final String SLASH = "/";
 	
 	private final String uri;
+	
+	private static final Map<String, QualifiedName> cache = new HashMap<String, QualifiedName>();
 	
 	//------------------------------------------------------
 	
@@ -68,6 +72,30 @@ public class QualifiedName implements Comparable<QualifiedName>, Serializable {
 	public static String getNamespace(final String name) {
 		int pos = getSeperatorIndex(name);
 		return name.substring(0, pos + 1);
+	}
+	
+	/**
+	 * Create a new QualifiedName for this URI - regarding a cache.
+	 * @param uri The URI.
+	 * @return A new URI or the corresponding from cache.
+	 */
+	public static QualifiedName create(final String uri) {
+		if (cache.containsKey(uri)) {
+			return cache.get(uri);
+		} else {
+			final QualifiedName qn = new QualifiedName(uri);
+			cache.put(uri, qn);
+			return qn;
+		}
+	}
+	
+	/**
+	 * Create a new QualifiedName for this URI - regarding a cache.
+	 * @param uri The URI.
+	 * @return A new URI or the corresponding from cache.
+	 */
+	public static QualifiedName create(final String namespace, final String name) {
+		return create(namespace + name);
 	}
 	
 	//------------------------------------------------------

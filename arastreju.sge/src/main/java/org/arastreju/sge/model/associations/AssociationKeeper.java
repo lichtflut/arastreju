@@ -38,8 +38,16 @@ public interface AssociationKeeper {
 	 */
 	Set<Statement> getAssociations();
 	
-	void addAssociation(Statement assoc);
+	/**
+	 * Add an association.
+	 * @param association The association.
+	 */
+	void addAssociation(Statement association);
 
+	/**
+	 * Remove an association.
+	 * @param association The association.
+	 */
 	boolean removeAssociation(Statement stmt);
 	
 	// ----------------------------------------------------

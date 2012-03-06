@@ -35,7 +35,7 @@ import org.arastreju.sge.model.Statement;
  */
 public abstract class AbstractAssociationKeeper implements AssociationKeeper, Serializable {
 
-	private final Set<Statement> associations = new HashSet<Statement>();
+	private Set<Statement> associations;
 	
 	private Set<Statement> removedAssociations;
 	
@@ -54,7 +54,7 @@ public abstract class AbstractAssociationKeeper implements AssociationKeeper, Se
 	 * @param associations The associations to be kept.
 	 */
 	protected AbstractAssociationKeeper(final Set<Statement> associations) {
-		this.associations.addAll(associations);
+		getAssociationsDirectly().addAll(associations);
 		this.resolved = true;
 	}
 	
@@ -65,13 +65,13 @@ public abstract class AbstractAssociationKeeper implements AssociationKeeper, Se
 	 */
 	public Set<Statement> getAssociations() {
 		if (!resolved){
-			if (!associations.isEmpty()){
+			if (associations != null && !associations.isEmpty()){
 				throw new IllegalArgumentException("node has already an association attached: " + associations);
 			}
 			resolved = true;
 			resolveAssociations();
 		}
-		return associations;
+		return getAssociationsDirectly();
 	}
 
 	/**
@@ -116,8 +116,10 @@ public abstract class AbstractAssociationKeeper implements AssociationKeeper, Se
 			sb.append(" resolved ");
 		}
 		sb.append("\n");
-		for (Statement stmt : associations) {
-			sb.append("\t" + stmt + "\n");	
+		if (associations != null) {
+			for (Statement stmt : associations) {
+				sb.append("\t" + stmt + "\n");	
+			}
 		}
 		return sb.toString();
 	}
@@ -132,6 +134,9 @@ public abstract class AbstractAssociationKeeper implements AssociationKeeper, Se
 	// -----------------------------------------------------
 	
 	protected Set<Statement> getAssociationsDirectly() {
+		if (associations == null) {
+			associations = new HashSet<Statement>();
+		}
 		return associations;
 	}
 	

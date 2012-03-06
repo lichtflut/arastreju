@@ -17,14 +17,12 @@ package org.arastreju.sge.io;
 
 import java.util.Locale;
 
-import org.arastreju.sge.SNOPS;
 import org.arastreju.sge.context.Context;
 import org.arastreju.sge.context.SimpleContextID;
+import org.arastreju.sge.model.DetachedStatement;
 import org.arastreju.sge.model.ResourceID;
 import org.arastreju.sge.model.SimpleResourceID;
 import org.arastreju.sge.model.nodes.BlankNode;
-import org.arastreju.sge.model.nodes.ResourceNode;
-import org.arastreju.sge.model.nodes.SNResource;
 import org.arastreju.sge.model.nodes.SemanticNode;
 import org.arastreju.sge.model.nodes.views.SNText;
 import org.arastreju.sge.naming.QualifiedName;
@@ -87,7 +85,6 @@ public class RdfReadHandler implements RDFHandler {
 	public void handleNamespace(final String prefix, final String uri)
 			throws RDFHandlerException {
 		logger.debug("namespace: " + prefix + " -> " + uri);
-		// extract.registerNamespace(new SimpleNamespace(uri, prefix));
 	}
 
 	public void handleStatement(final Statement stmt)
@@ -99,9 +96,7 @@ public class RdfReadHandler implements RDFHandler {
 		Value object = stmt.getObject();
 		
 		listener.onNewStatement(
-				SNOPS.associate(toResourceNode(subject), toResourceRef(predicate), toNode(object)));	
-		
-		
+				new DetachedStatement(toResourceNode(subject), toResourceRef(predicate), toNode(object)));	
 	}
 	
 	// -----------------------------------------------------
@@ -121,7 +116,7 @@ public class RdfReadHandler implements RDFHandler {
 		return new SimpleResourceID(uri.getNamespace(), uri.getLocalName());
 	}
 	
-	protected ResourceNode toResourceNode(Resource resource){
+	protected ResourceID toResourceNode(Resource resource){
 		if (isUriNode(resource)){
 			return toResourceNode((URI) resource);
 		} else if (isBlankNode(resource)){
@@ -131,15 +126,15 @@ public class RdfReadHandler implements RDFHandler {
 		}
 	}
 	
-	protected ResourceNode toResourceNode(final URI uri){
-		return new SNResource(toQualifiedName(uri));
+	protected ResourceID toResourceNode(final URI uri){
+		return new SimpleResourceID(toQualifiedName(uri));
 	}
 	
 	protected Context toContext(final Resource ctx) {
 		if (ctx == null) {
 			return null;
 		} else {
-			return new SimpleContextID(new QualifiedName(ctx.stringValue()));
+			return new SimpleContextID(QualifiedName.create(ctx.stringValue()));
 		}
 	}
 	
@@ -183,8 +178,7 @@ public class RdfReadHandler implements RDFHandler {
 	}
 	
 	protected QualifiedName toQualifiedName(final URI uri){
-		return new QualifiedName(uri.getNamespace(), uri.getLocalName());
+		return QualifiedName.create(uri.getNamespace(), uri.getLocalName());
 	}
-	
 	
 }
