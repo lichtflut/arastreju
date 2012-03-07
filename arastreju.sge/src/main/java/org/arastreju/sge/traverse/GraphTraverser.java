@@ -47,8 +47,6 @@ public class GraphTraverser implements StatementVisitor {
 		this.visitor = visitor;
 	}
 
-
-
 	// ----------------------------------------------------
 	
 	public void start(ResourceNode... node) {

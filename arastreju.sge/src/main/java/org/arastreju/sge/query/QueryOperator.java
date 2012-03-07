@@ -28,6 +28,6 @@ package org.arastreju.sge.query;
  */
 public enum QueryOperator {
 	
-	EQUALS, HAS_VALUE, HAS_URI, NOT, AND, OR, SUB_QUERY;
+	EQUALS, HAS_VALUE, HAS_RELATION, HAS_URI, NOT, AND, OR, SUB_QUERY;
 	
 }

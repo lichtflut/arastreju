@@ -101,7 +101,15 @@ public abstract class QueryBuilder implements Query {
 	public Query addValue(String term) {
 		return append(new ValueParam(term));
 	}
-
+	
+	/** 
+	 * {@inheritDoc}
+	 */
+	@Override
+	public Query addRelation(String term) {
+		return append(new RelationQuery(term));
+	}
+	
 	/** 
 	 * {@inheritDoc}
 	 */

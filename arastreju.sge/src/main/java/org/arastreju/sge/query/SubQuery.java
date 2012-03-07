@@ -5,7 +5,7 @@ package org.arastreju.sge.query;
 
 /**
  * <p>
- *  A sub query.
+ *  A sub query, that will be included literally as is into the outer query.
  * </p>
  *
  * <p>

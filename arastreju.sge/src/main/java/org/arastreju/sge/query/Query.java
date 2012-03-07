@@ -70,11 +70,17 @@ public interface Query {
 	Query addURI(String term);
 	
 	/**
-	 * Add a global parameter for all fields.
-	 * @param name The name.
+	 * Add a parameter for a (literal) value query.
 	 * @param term The term.
 	 */
 	Query addValue(String term);
+	
+	/**
+	 * Add a parameter for a related resource.
+	 * @param name The name.
+	 * @param term The term.
+	 */
+	Query addRelation(String term);
 
 	// ----------------------------------------------------
 	

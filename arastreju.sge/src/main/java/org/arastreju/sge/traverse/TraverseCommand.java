@@ -19,6 +19,5 @@ public enum TraverseCommand {
 	STOP,
 	ACCEPT,
 	ACCEPPT_CONTINUE;
-	
 
 }
