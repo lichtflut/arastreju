@@ -136,6 +136,5 @@ public interface Query {
 	 * @return The query result.
 	 */
 	QueryResult getResult();
-
 	
 }
