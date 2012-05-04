@@ -75,8 +75,8 @@ public class SNTimeSpec extends ValueView {
 	
 	// -----------------------------------------------------
 	
-	/* (non-Javadoc)
-	 * @see org.arastreju.sge.model.nodes.views.ValueView#toString()
+	/**
+	 * {@inheritDoc}
 	 */
 	@Override
 	public String toString() {

@@ -15,8 +15,6 @@
  */
 package org.arastreju.sge.model;
 
-import java.util.Arrays;
-
 import org.arastreju.sge.context.Context;
 import org.arastreju.sge.model.nodes.SemanticNode;
 
@@ -33,17 +31,13 @@ import org.arastreju.sge.model.nodes.SemanticNode;
  */
 public class AbstractStatement implements Statement {
 	
-	public static final Context[] NO_CTX = new Context[0];
-
 	protected final ResourceID subject;
 	protected final ResourceID predicate;
 	protected final SemanticNode object;
 	
-	private final Context[] contexts;
+	private final StatementMetaInfo metaInfo;
 	
 	private final int hash;
-	
-	private boolean inferred;
 	
 	// -----------------------------------------------------
 
@@ -56,22 +50,22 @@ public class AbstractStatement implements Statement {
 	 */
 	public AbstractStatement(final ResourceID subject, final ResourceID predicate,
 			final SemanticNode object, final Context... contexts) {
+		this(subject, predicate, object, new StatementMetaInfo(contexts));
+	}
+	
+	/**
+	 * Creates a new Statement.
+	 * @param subject The subject.
+	 * @param predicate The predicate.
+	 * @param object The object.
+	 * @param metaInfo The statement meta information.
+	 */
+	public AbstractStatement(final ResourceID subject, final ResourceID predicate,
+			final SemanticNode object, final StatementMetaInfo metaInfo) {
 		this.subject = subject;
 		this.predicate = predicate;
 		this.object = object;
-		
-		if (contexts == null || (contexts.length == 1 && contexts[0] == null)) {
-			this.contexts = NO_CTX;
-		} else {
-			for (Context ctx : contexts) {
-				if (ctx == null) {
-					throw new IllegalArgumentException("Null context not allowed!");
-				}
-			}
-			this.contexts = Arrays.copyOf(contexts, contexts.length);
-			Arrays.sort(this.contexts);
-		}
-		
+		this.metaInfo = metaInfo;
 		hash = calculateHash();
 	}
 	
@@ -102,21 +96,15 @@ public class AbstractStatement implements Statement {
 	 * {@inheritDoc}
 	 */
 	public Context[] getContexts() {
-		return contexts;
+		return metaInfo.getContexts();
 	}
 	
-	/**
+	/** 
 	 * {@inheritDoc}
 	 */
-	public boolean isInferred() {
-		return inferred;
-	}
-	
-	// -----------------------------------------------------
-
-	protected Statement setInferred(boolean inferred) {
-		this.inferred = inferred;
-		return this;
+	@Override
+	public StatementMetaInfo getMetaInfo() {
+		return metaInfo;
 	}
 	
 	// -----------------------------------------------------

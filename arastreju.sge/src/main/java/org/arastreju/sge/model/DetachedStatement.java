@@ -45,4 +45,18 @@ public class DetachedStatement extends AbstractStatement {
 		super(subject, predicate, object, contexts);
 	}
 
+
+	/**
+	 * Creates a new Statement.
+	 * @param subject The subject.
+	 * @param predicate The predicate.
+	 * @param object The object.
+	 * @param metaInfo The statement meta information.
+	 */
+	public DetachedStatement(ResourceID subject, ResourceID predicate, SemanticNode object, StatementMetaInfo metaInfo) {
+		super(subject, predicate, object, metaInfo);
+	}
+
+	
+	
 }

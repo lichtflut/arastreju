@@ -42,4 +42,6 @@ public interface Statement extends Serializable {
 
 	Context[] getContexts();
 	
+	StatementMetaInfo getMetaInfo();
+	
 }

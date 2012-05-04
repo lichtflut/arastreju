@@ -15,6 +15,9 @@
  */
 package org.arastreju.sge.io;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+
 import org.arastreju.sge.model.ResourceID;
 import org.arastreju.sge.model.nodes.SemanticNode;
 import org.arastreju.sge.model.nodes.ValueNode;
@@ -37,6 +40,11 @@ import org.openrdf.model.impl.URIImpl;
  * @author Oliver Tigges
  */
 public class RioStatement implements org.openrdf.model.Statement {
+	
+	private static DateFormat XML_DATE = new SimpleDateFormat("yyyy-MM-dd");
+	
+	@SuppressWarnings("unused")
+	private static DateFormat XML_TIME = new SimpleDateFormat("HH:mm:ss");
 
 	private final org.arastreju.sge.model.Statement arasStmt;
 
@@ -94,7 +102,7 @@ public class RioStatement implements org.openrdf.model.Statement {
 	private Value createLiteral(ValueNode value) {
 		switch(value.getDataType()) {
 		case DATE:
-			return new LiteralImpl(value.getStringValue(), new URIImpl("http://www.w3.org/2001/XMLSchema#date"));
+			return new LiteralImpl(xmlDate(value), new URIImpl("http://www.w3.org/2001/XMLSchema#date"));
 		case TIMESTAMP:
 			return new LiteralImpl(value.getStringValue(), new URIImpl("http://www.w3.org/2001/XMLSchema#dateTime"));
 		case TIME_OF_DAY:
@@ -112,6 +120,10 @@ public class RioStatement implements org.openrdf.model.Statement {
 				return new LiteralImpl(value.getStringValue());
 			}
 		}
+	}
+	
+	private String xmlDate(ValueNode value) {
+		return XML_DATE.format(value.getTimeValue());
 	}
 	
 }

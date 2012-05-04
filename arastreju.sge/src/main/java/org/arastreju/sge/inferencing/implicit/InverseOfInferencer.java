@@ -68,16 +68,14 @@ public class InverseOfInferencer implements Inferencer {
 			logger.debug("Found inverted properties of {} : {}", property, invertedPredicates);
 		}
 	}
+	
+	// ----------------------------------------------------
 
-	/**
-	 * @param stmt
-	 * @param invertedPredicates
-	 */
-	private void addInverted(Statement stmt, Set<SemanticNode> invertedPredicates, Set<Statement> target) {
+	private void addInverted(Statement originalStmt, Set<SemanticNode> invertedPredicates, Set<Statement> target) {
 		for (SemanticNode sn : invertedPredicates) {
 			if (sn.isResourceNode()) {
-				final Statement inverted = new DetachedStatement(stmt.getObject().asResource(), sn.asResource(), 
-						stmt.getSubject(), stmt.getContexts());
+				final Statement inverted = new DetachedStatement(originalStmt.getObject().asResource(), sn.asResource(), 
+						originalStmt.getSubject(), originalStmt.getContexts());
 				target.add(inverted);
 				logger.debug("Added inverted Stmt: " + inverted);
 			}

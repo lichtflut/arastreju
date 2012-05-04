@@ -117,6 +117,14 @@
 		</plugins>
 	</build>
 	
+	<reporting>
+		<plugins>
+	    </plugins>
+	</reporting>
+	<dependencyManagement>
+		<dependencies>
+		</dependencies>
+	</dependencyManagement>
 	<dependencies>
 		<dependency>
 			<groupId>org.slf4j</groupId>
