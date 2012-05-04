@@ -18,6 +18,7 @@ package org.arastreju.sge;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -84,6 +85,21 @@ public class SNOPS {
 			return node.asValue().getStringValue();
 		} else {
 			return node.asResource().toURI();
+		}
+	}
+	
+	/**
+	 * Creates a date from given node, which must be a value node. 
+	 * @param node The node.
+	 * @return The string representation.
+	 */
+	public static Date date(final SemanticNode node) {
+		if (node == null) {
+			return null;
+		} else if (node.isValueNode()) {
+			return node.asValue().getTimeValue();
+		} else {
+			throw new IllegalArgumentException("Cannot convert a resource node to a date value.");
 		}
 	}
 	

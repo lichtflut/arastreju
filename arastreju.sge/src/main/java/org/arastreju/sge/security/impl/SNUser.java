@@ -55,7 +55,7 @@ public class SNUser extends AbstractIdentity implements User {
 	/** 
 	 * {@inheritDoc}
 	 */
-	public String getDomain() {
+	public String getDomesticDomain() {
 		return stringValue(Aras.BELONGS_TO_DOMAIN);
 	}
 	

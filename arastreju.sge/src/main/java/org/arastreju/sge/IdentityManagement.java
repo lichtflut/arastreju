@@ -40,6 +40,11 @@ import org.arastreju.sge.security.User;
  */
 public interface IdentityManagement {
 	
+	/**
+	 * Find the user identified by given identity.
+	 * @param identity The identity.
+	 * @return The attached user.
+	 */
 	User findUser(String identity);
 	
 	// -- LOGIN -------------------------------------------

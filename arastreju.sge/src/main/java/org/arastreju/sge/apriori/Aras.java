@@ -102,6 +102,7 @@ public interface Aras {
 	ResourceID HAS_PERMISSION = new SimpleResourceID(NAMESPACE_URI, "hasPermission");
 	
 	ResourceID BELONGS_TO_DOMAIN = new SimpleResourceID(NAMESPACE_URI, "belongsToDomain");
+	ResourceID HAS_ALTERNATE_DOMAIN = new SimpleResourceID(NAMESPACE_URI, "hasAlternateDomain");
 	ResourceID IS_DOMESTIC_DOMAIN = new SimpleResourceID(NAMESPACE_URI, "isDomesticDomain");
 	
 	// -- SCHEMAS -----------------------------------------
