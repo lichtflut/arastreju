@@ -15,15 +15,17 @@
  */
 package org.arastreju.sge.security.impl;
 
+import static org.arastreju.sge.SNOPS.objects;
+
+import java.util.HashSet;
 import java.util.Set;
 
 import org.arastreju.sge.apriori.Aras;
 import org.arastreju.sge.model.nodes.ResourceNode;
+import org.arastreju.sge.model.nodes.SemanticNode;
 import org.arastreju.sge.model.nodes.views.ResourceView;
 import org.arastreju.sge.security.Permission;
 import org.arastreju.sge.security.Role;
-
-import de.lichtflut.infra.exceptions.NotYetImplementedException;
 
 /**
  * <p>
@@ -67,7 +69,11 @@ public class SNRole extends ResourceView implements Role {
 	 * {@inheritDoc} 
 	 */
 	public Set<Permission> getPermissions() {
-		throw new NotYetImplementedException();
+		final Set<Permission> permissions = new HashSet<Permission>();
+		for (SemanticNode node : objects(this, Aras.CONTAINS)) {
+			permissions.add(new SNPermission(node.asResource()));
+		}
+		return permissions;
 	}
 	
 }
