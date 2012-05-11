@@ -19,6 +19,7 @@ import org.slf4j.LoggerFactory;
  * </p>
  *
  * @author Oliver Tigges
+ * @deprecated Not longer needed.
  */
 public class DomainInitializer {
 	

@@ -32,6 +32,18 @@ import org.arastreju.sge.spi.GateContext;
 public interface ArastrejuGate {
 	
 	/**
+	 * Open the gate - start new working context.
+	 */
+	void open();
+	
+	/**
+	 * Close the gate and free all resources.
+	 */
+	void close();
+	
+	// ----------------------------------------------------
+	
+	/**
 	 * Starts a new Modeling Conversation allowing to read and change the model.
 	 * @return The modeling conversation.
 	 */
@@ -52,6 +64,7 @@ public interface ArastrejuGate {
 	/**
 	 * Obtain the Identity Manager.
 	 * @return The Identity Manager.
+	 * @deprecated will be moved to other module.
 	 */
 	IdentityManagement getIdentityManagement();
 	
@@ -62,10 +75,5 @@ public interface ArastrejuGate {
 	 * @return The gate context.
 	 */
 	GateContext getContext();
-	
-	/**
-	 * Close the gate and free all resources.
-	 */
-	void close();
 	
 }

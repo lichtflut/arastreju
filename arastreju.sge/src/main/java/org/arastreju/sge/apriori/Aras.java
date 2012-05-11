@@ -105,6 +105,11 @@ public interface Aras {
 	ResourceID HAS_ALTERNATE_DOMAIN = new SimpleResourceID(NAMESPACE_URI, "hasAlternateDomain");
 	ResourceID IS_DOMESTIC_DOMAIN = new SimpleResourceID(NAMESPACE_URI, "isDomesticDomain");
 	
+	/**
+	 * The roles defined in a domain.
+	 */
+	ResourceID DEFINES_ROLE = new SimpleResourceID(NAMESPACE_URI, "definesRole");
+	
 	// -- SCHEMAS -----------------------------------------
 	
 	ResourceID ACTIVITY_SCHEMA = new SimpleResourceID(NAMESPACE_URI, "ActivitySchema");
