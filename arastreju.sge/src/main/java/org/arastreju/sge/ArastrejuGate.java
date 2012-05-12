@@ -61,13 +61,6 @@ public interface ArastrejuGate {
 	 */
 	Organizer getOrganizer();
 	
-	/**
-	 * Obtain the Identity Manager.
-	 * @return The Identity Manager.
-	 * @deprecated will be moved to other module.
-	 */
-	IdentityManagement getIdentityManagement();
-	
 	// ----------------------------------------------------
 	
 	/**

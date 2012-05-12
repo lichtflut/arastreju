@@ -20,7 +20,6 @@ import java.util.Properties;
 
 import org.arastreju.sge.spi.ArastrejuGateFactory;
 import org.arastreju.sge.spi.GateContext;
-import org.arastreju.sge.spi.LoginContext;
 import org.arastreju.sge.spi.RootContext;
 
 /**
@@ -93,28 +92,6 @@ public final class Arastreju {
 	// -----------------------------------------------------
 
 	/**
-	 * Login into default domain using username and credentials.
-	 * @param username The unique username.
-	 * @param credential The user's credential.
-	 * @return The corresponding {@link ArastrejuGate}.
-	 */
-	public ArastrejuGate login(String username, String credential) {
-		return login(username, credential, GateContext.MASTER_DOMAIN);
-	}
-	
-	/**
-	 * Login into a given domain using username and credentials.
-	 * @param username The unique username.
-	 * @param credential The user's credential.
-	 * @param domain The domain.
-	 * @return The corresponding {@link ArastrejuGate}.
-	 */
-	public ArastrejuGate login(String username, String credential, String domain) {
-		final GateContext ctx = createLoginContext(username, credential, domain);
-		return factory.create(ctx);
-	}
-
-	/**
 	 * Obtain the root context. Use Carefully! No login will be performed but
 	 * the ArastrejuGate will be used in root context.
 	 * 
@@ -145,13 +122,6 @@ public final class Arastreju {
 	}
 
 	// -----------------------------------------------------
-	
-	/**
-	 * Create and initialize the Gate Context.
-	 */
-	private GateContext createLoginContext(String user, String credential, String domain) {
-		return new LoginContext(profile).setUsername(user).setCredential(credential).setDomain(domain);
-	}
 	
 	/**
 	 * Create and initialize the Gate Context.

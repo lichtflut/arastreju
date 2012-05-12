@@ -27,13 +27,10 @@ import org.arastreju.sge.context.SimpleContextID;
 import org.arastreju.sge.model.ResourceID;
 import org.arastreju.sge.model.nodes.ResourceNode;
 import org.arastreju.sge.model.nodes.SNResource;
-import org.arastreju.sge.model.nodes.views.SNBoolean;
 import org.arastreju.sge.model.nodes.views.SNText;
 import org.arastreju.sge.naming.Namespace;
 import org.arastreju.sge.naming.QualifiedName;
 import org.arastreju.sge.naming.SimpleNamespace;
-import org.arastreju.sge.security.Domain;
-import org.arastreju.sge.security.impl.SNDomain;
 
 /**
  * <p>
@@ -76,28 +73,4 @@ public abstract class AbstractOrganizer implements Organizer {
 		return node;
 	}
 	
-	protected Domain createDomain(ResourceNode node) {
-		return new SNDomain(node);
-	}
-	
-	protected ResourceNode createDomesticDomainNode(String name) {
-		final ResourceNode node = new SNResource();
-		node.addAssociation(Aras.HAS_UNIQUE_NAME, new SNText(name), Aras.IDENT);
-		node.addAssociation(Aras.IS_DOMESTIC_DOMAIN, new SNBoolean(true), Aras.IDENT);
-		node.addAssociation(RDF.TYPE, Aras.DOMAIN, Aras.IDENT);
-		return node;
-	}
-	
-	protected ResourceNode createDomainNode(String name, String title, String description) {
-		final ResourceNode node = new SNResource();
-		node.addAssociation(Aras.HAS_UNIQUE_NAME, new SNText(name), Aras.IDENT);
-		if (title != null) {
-			node.addAssociation(Aras.HAS_TITLE, new SNText(title), Aras.IDENT);
-		}
-		if (description != null) {
-			node.addAssociation(Aras.HAS_DESCRIPTION, new SNText(description), Aras.IDENT);
-		}
-		node.addAssociation(RDF.TYPE, Aras.DOMAIN, Aras.IDENT);
-		return node;
-	}
 }

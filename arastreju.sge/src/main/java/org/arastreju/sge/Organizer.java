@@ -20,7 +20,6 @@ import java.util.Collection;
 import org.arastreju.sge.context.Context;
 import org.arastreju.sge.naming.Namespace;
 import org.arastreju.sge.naming.QualifiedName;
-import org.arastreju.sge.security.Domain;
 
 
 /**
@@ -45,47 +44,5 @@ public interface Organizer {
 	Collection<Context> getContexts();
 	
 	Context registerContext(QualifiedName qn);
-
-	// ----------------------------------------------------
-	
-	/**
-	 * Find a domain by it's name.
-	 * @param name The name of the domain
-	 * @return The domain.
-	 */
-	Domain findDomain(String name);
-	
-	/**
-	 * Get the master domain or null if not initialized.
-	 * @return The master domain or null.
-	 */
-	Domain getDomesticDomain();
-	
-	/**
-	 * Get all registered domains.
-	 * @return The domains.
-	 */
-	Collection<Domain> getDomains();
-	
-	/**
-	 * Initialize and set this domain. 
-	 * @param name The unique domain name.
-	 */
-	Domain initDomesticDomain(String name);
-	
-	/**
-	 * Register a new domain, known by this domain.
-	 * @param name The unique name.
-	 * @param title The title.
-	 * @param description A short description.
-	 * @return The domain.
-	 */
-	Domain registerDomain(String name, String title, String description);
-
-	/**
-	 * Update info for given domain.
-	 * @param domain The domain info.
-	 */
-	void updateDomain(Domain domain);
 
 }
