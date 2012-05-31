@@ -16,6 +16,7 @@
 package org.arastreju.sge;
 
 import java.lang.reflect.Constructor;
+import java.util.HashMap;
 import java.util.Properties;
 
 import org.arastreju.sge.spi.ArastrejuGateFactory;
@@ -47,6 +48,8 @@ public final class Arastreju {
 	private final String factoryClass;
 	private final ArastrejuGateFactory factory;
 	private final ArastrejuProfile profile;
+	
+	private static HashMap<String, GateContext> contextMap = new HashMap<String, GateContext>();
 
 	// -----------------------------------------------------
 
@@ -117,7 +120,11 @@ public final class Arastreju {
 	 * @return The ArastrejuGate for the root context.
 	 */
 	public ArastrejuGate rootContext(String domain) {
-		final GateContext ctx = createRootContext(domain);
+		GateContext ctx = contextMap.get(domain);
+		if(ctx==null){
+			ctx = createRootContext(domain);
+			contextMap.put(domain, ctx);
+		}
 		return factory.create(ctx);
 	}
 
