@@ -17,6 +17,7 @@ package org.arastreju.sge.spi;
 
 import org.arastreju.sge.ArastrejuGate;
 import org.arastreju.sge.ArastrejuProfile;
+import org.arastreju.sge.context.Context;
 
 /**
  * <p>
@@ -31,11 +32,17 @@ import org.arastreju.sge.ArastrejuProfile;
  */
 public class GateContext {
 	
+	public static final Context[] NO_CTX = new Context[0];
+	
 	public static final String MASTER_DOMAIN = "root";
 
 	private final ArastrejuProfile profile;
 	
 	private String domain = MASTER_DOMAIN;
+	
+	private Context writeContext;
+	
+	private Context[] readContexts;
 	
 	// -----------------------------------------------------
 	
@@ -60,6 +67,23 @@ public class GateContext {
 	 */
 	public String getDomain() {
 		return domain;
+	}
+	
+	/**
+	 * @return the readContexts
+	 */
+	public Context[] getReadContexts() {
+		if (readContexts == null) {
+			return NO_CTX;
+		}
+		return readContexts;
+	}
+	
+	/**
+	 * @return the writeContext
+	 */
+	public Context getWriteContext() {
+		return writeContext;
 	}
 	
 	/**

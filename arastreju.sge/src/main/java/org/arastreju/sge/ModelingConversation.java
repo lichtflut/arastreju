@@ -22,6 +22,7 @@ import org.arastreju.sge.model.nodes.ResourceNode;
 import org.arastreju.sge.naming.QualifiedName;
 import org.arastreju.sge.persistence.ResourceResolver;
 import org.arastreju.sge.persistence.TransactionControl;
+import org.arastreju.sge.query.Query;
 
 /**
  * <p>
@@ -49,6 +50,14 @@ public interface ModelingConversation extends ResourceResolver {
 	 * @return boolean indicating if a statement has been removed.
 	 */
 	boolean removeStatement(Statement stmt);
+	
+	// -- QUERY -------------------------------------------
+	
+	/**
+	 * Creates a new query.
+	 * @return The query.
+	 */
+	Query createQuery();
 	
 	// -- RESOURCE NODE -----------------------------------
 	
@@ -94,8 +103,6 @@ public interface ModelingConversation extends ResourceResolver {
 	/**
 	 * Removes the resource identified by given ID and all of it's incoming
 	 * and outgoing associations. 
-	 * If 'cascade' is <code>true</code> all resources will be removed cascading that 
-	 * have been associated only by the removed and have no incoming associations thereafter.
 	 * @param id The ID of the resource to be removed.
 	 */
 	void remove(ResourceID id);
@@ -111,6 +118,12 @@ public interface ModelingConversation extends ResourceResolver {
 	void detach(SemanticGraph graph);
 	
 	// -----------------------------------------------------
+	
+	/**
+	 * Get the context of the current conversation.
+	 * @return The conversation context.
+	 */
+	ConversationContext getConversationContext();
 	
 	/**
 	 * Begins a new transaction and returns the corresponding control object.

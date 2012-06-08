@@ -16,10 +16,8 @@
 package org.arastreju.sge.query;
 
 import java.util.List;
-import java.util.Set;
 
 import org.arastreju.sge.model.ResourceID;
-import org.arastreju.sge.model.Statement;
 import org.arastreju.sge.model.nodes.ResourceNode;
 
 /**
@@ -32,12 +30,14 @@ import org.arastreju.sge.model.nodes.ResourceNode;
  * </p>
  *
  * @author Oliver Tigges
+ * @deprecated Will be removed, use conversation.createQuery()
  */
 public interface QueryManager {
 	
 	/**
 	 * Creates a new query builder.
 	 * @return The query builder.
+	 * @deprecated use conversation.createQuery()
 	 */
 	Query buildQuery();
 	
@@ -47,15 +47,8 @@ public interface QueryManager {
 	 * Find resources with the given rdf:type.
 	 * @param type The resource ID of the type.
 	 * @return A list with all resources having given resource type as rdf:type.
+	 * @deprecated Use a query instead.
 	 */
 	List<ResourceNode> findByType(ResourceID type);
-	
-	/**
-	 * Find all incoming statements for the given resource. These are the statements where
-	 * <code>resource</code> is the object.
-	 * @param resource The resource.
-	 * @return A list with all statements where the resource is the client/object.
-	 */
-	Set<Statement> findIncomingStatements(ResourceID resource);
 	
 }

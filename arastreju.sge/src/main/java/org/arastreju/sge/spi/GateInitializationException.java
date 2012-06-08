@@ -17,7 +17,7 @@ package org.arastreju.sge.spi;
 
 /**
  * <p>
- *  [DESCRIPTION]
+ *  Exception to be thrown when a gate cannot be initialized.
  * </p>
  *
  * <p>
@@ -37,14 +37,14 @@ public class GateInitializationException extends RuntimeException {
 	/**
 	 * @param msg
 	 */
-	public GateInitializationException(final String msg) {
+	public GateInitializationException(String msg) {
 		super(msg);
 	}
 
 	/**
 	 * @param msg
 	 */
-	public GateInitializationException(final Throwable msg) {
+	public GateInitializationException(Throwable msg) {
 		super(msg);
 	}
 
@@ -52,7 +52,7 @@ public class GateInitializationException extends RuntimeException {
 	 * @param msg
 	 * @param cause
 	 */
-	public GateInitializationException(final String msg, Throwable cause) {
+	public GateInitializationException(String msg, Throwable cause) {
 		super(msg, cause);
 	}
 

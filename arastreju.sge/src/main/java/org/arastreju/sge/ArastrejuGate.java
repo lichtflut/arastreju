@@ -32,11 +32,6 @@ import org.arastreju.sge.spi.GateContext;
 public interface ArastrejuGate {
 	
 	/**
-	 * Open the gate - start new working context.
-	 */
-	void open();
-	
-	/**
 	 * Close the gate and free all resources.
 	 */
 	void close();
@@ -52,6 +47,7 @@ public interface ArastrejuGate {
 	/**
 	 * Obtain a query manager to execute complex queries.
 	 * @return The query manager.
+	 * @deprecated Use conversation.createQuery()
 	 */
 	QueryManager createQueryManager();
 	
