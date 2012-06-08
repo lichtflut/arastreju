@@ -15,8 +15,6 @@
  */
 package org.arastreju.sge.apriori;
 
-import org.arastreju.sge.context.Context;
-import org.arastreju.sge.context.SimpleContextID;
 import org.arastreju.sge.model.ResourceID;
 import org.arastreju.sge.model.SimpleResourceID;
 
@@ -34,14 +32,6 @@ import org.arastreju.sge.model.SimpleResourceID;
 public interface Aras {
 	
 	String NAMESPACE_URI = "http://arastreju.org/kernel#";
-	
-	String CTX_NAMESPACE_URI = "http://arastreju.org/contexts#";
-	
-	// -- CONTEXTS ----------------------------------------
-	
-	public static final Context IDENT = new SimpleContextID(CTX_NAMESPACE_URI, "IdentityManagement");
-	public static final Context TYPES = new SimpleContextID(CTX_NAMESPACE_URI, "TypeSystem");
-	
 	
 	// -- TYPES -------------------------------------------
 	
