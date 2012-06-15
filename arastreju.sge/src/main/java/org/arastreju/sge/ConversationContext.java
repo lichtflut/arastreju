@@ -25,5 +25,7 @@ public interface ConversationContext {
 	ConversationContext setWriteContext(Context context);
 	
 	ConversationContext setReadContexts(Context... contexts);
+	
+	void clear();
 
 }

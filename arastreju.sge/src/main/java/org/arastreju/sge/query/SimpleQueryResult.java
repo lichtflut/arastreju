@@ -67,7 +67,7 @@ public class SimpleQueryResult implements QueryResult {
 	* {@inheritDoc}
 	*/
 	public List<ResourceNode> toList(int max) {
-		if (max > list.size()) {
+		if (list.size() > max) {
 			return list.subList(0, max -1);
 		}
 		return list;
