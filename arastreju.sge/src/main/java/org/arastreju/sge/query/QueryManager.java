@@ -35,15 +35,6 @@ import org.arastreju.sge.model.nodes.ResourceNode;
 public interface QueryManager {
 	
 	/**
-	 * Creates a new query builder.
-	 * @return The query builder.
-	 * @deprecated use conversation.createQuery()
-	 */
-	Query buildQuery();
-	
-	// -----------------------------------------------------
-
-	/**
 	 * Find resources with the given rdf:type.
 	 * @param type The resource ID of the type.
 	 * @return A list with all resources having given resource type as rdf:type.
