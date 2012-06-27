@@ -52,13 +52,13 @@ public class NodeSetTest {
 
     @Test
     public void resourceNodesCanBeTestedAgainstValues() {
-        ResourceNode node = new SNResource();
+        ResourceNode resource = new SNResource();
 
-        NodeSet start = new ResourceNodeSet(node);
+        NodeSet start = new ResourceNodeSet(resource);
         NodeSet nodeSet = start.walk(new SimpleResourceID("http://does.not.exist/xyz"));
 
         Assert.assertTrue(start.asValue().isEmpty());
-        Assert.assertEquals(0, start.asValue());
+        Assert.assertEquals(0, start.asValue().size());
 
         Assert.assertFalse(start.asValue().matches(new SimpleResourceID()));
         Assert.assertFalse(nodeSet.matches("hello"));
