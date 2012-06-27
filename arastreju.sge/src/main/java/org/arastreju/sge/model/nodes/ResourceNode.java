@@ -68,7 +68,9 @@ public interface ResourceNode extends ResourceID {
 
 	/**
 	 * Add an association.
-	 * @param statement The association to add.
+	 * @param predicate The predicate of the association.
+     * @param object The object.
+     * @param ctx The optional contexts of this association.
 	 * @return The created statement.
 	 */
 	Statement addAssociation(ResourceID predicate, SemanticNode object, Context... ctx);

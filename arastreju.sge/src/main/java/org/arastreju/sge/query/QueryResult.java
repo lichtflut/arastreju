@@ -55,14 +55,15 @@ public interface QueryResult extends Iterable<ResourceNode> {
 	
 	/**
 	 * Converts the query result to a list.
-	 * @param The maximum amount of resource nodes to retrieve from index hits.
+	 * @param max The maximum amount of resource nodes to retrieve from index hits.
 	 * @return The list.
 	 */
 	List<ResourceNode> toList(int max);
 	
 	/**
 	 * Converts the query result to a list.
-	 * @param The maximum amount of resource nodes to retrieve from index hits.
+     * @param offset The offset, where to start in the result.
+	 * @param max The maximum amount of resource nodes to retrieve from index hits.
 	 * @return The list.
 	 */
 	List<ResourceNode> toList(int offset, int max);

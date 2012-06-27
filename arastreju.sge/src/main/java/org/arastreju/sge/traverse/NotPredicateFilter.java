@@ -28,14 +28,14 @@ public class NotPredicateFilter implements TraversalFilter {
 	// ----------------------------------------------------
 	
 	/**
-	 * @param allowed
+	 * @param disallowed
 	 */
 	public NotPredicateFilter(Collection<ResourceID> disallowed) {
 		this.disallowed.addAll(disallowed);
 	}
 	
 	/**
-	 * @param allowed
+	 * @param disallowed
 	 */
 	public NotPredicateFilter(ResourceID... disallowed) {
 		for (ResourceID current : disallowed) {
