@@ -20,7 +20,6 @@ import org.arastreju.sge.model.SemanticGraph;
 import org.arastreju.sge.model.Statement;
 import org.arastreju.sge.model.nodes.ResourceNode;
 import org.arastreju.sge.naming.QualifiedName;
-import org.arastreju.sge.persistence.ResourceResolver;
 import org.arastreju.sge.persistence.TransactionControl;
 import org.arastreju.sge.query.Query;
 
@@ -35,7 +34,7 @@ import org.arastreju.sge.query.Query;
  *
  * @author Oliver Tigges
  */
-public interface ModelingConversation extends ResourceResolver {
+public interface ModelingConversation {
 	
 	/**
 	 * Adds a statement to the semantic model.

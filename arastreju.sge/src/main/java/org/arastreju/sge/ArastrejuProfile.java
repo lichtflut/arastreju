@@ -63,7 +63,9 @@ public class ArastrejuProfile implements GateLifecycleListener {
 	private static final String DEFAULT_PROFILE = "arastreju.default.profile";
 	
 	// -----------------------------------------------------
-	
+
+    private final String name;
+
 	private final Properties properties = new Properties();
 	
 	private final Map<String, Object> profileObjects = new HashMap<String, Object>();
@@ -73,26 +75,32 @@ public class ArastrejuProfile implements GateLifecycleListener {
 	private final List<ProfileCloseListener> listeners = new ArrayList<ProfileCloseListener>();
 	
 	// -----------------------------------------------------
-	
+
+    /**
+     * Default constructor.
+     * @param name The name of the profile.
+     */
+    public ArastrejuProfile(final String name) {
+        this.name = name;
+    }
+
 	/**
 	 * Constructor.
+     * @param name The name of the profile.
 	 * @param properties The properties for this profile.
 	 */
-	public ArastrejuProfile(final Properties properties) {
+	public ArastrejuProfile(final String name, final Properties properties) {
+        this(name);
 		this.properties.putAll(properties);
 	}
 	
 	/**
-	 * Default constructor. 
-	 */
-	public ArastrejuProfile() {
-	}
-	
-	/**
 	 * Constructor.
-	 * @param properties The properties for this profile.
+     * @param name The name of the profile.
+	 * @param propertyStream The input stream providing the properties.
 	 */
-	protected ArastrejuProfile(final InputStream propertyStream) {
+	protected ArastrejuProfile(final String name, final InputStream propertyStream) {
+        this(name);
 		try {
 			properties.load(propertyStream);
 			propertyStream.close();
@@ -113,7 +121,7 @@ public class ArastrejuProfile implements GateLifecycleListener {
 			throw new ArastrejuRuntimeException(ErrorCodes.INITIALIZATION_EXCEPTION, 
 					"Didn't find Arastreu profile file");
 		}
-		return new ArastrejuProfile(in);
+		return new ArastrejuProfile("default", in);
 	}
 	
 	public static ArastrejuProfile read(final String profile) {
@@ -122,7 +130,7 @@ public class ArastrejuProfile implements GateLifecycleListener {
 			throw new ArastrejuRuntimeException(ErrorCodes.INITIALIZATION_EXCEPTION, 
 					"Didn't find Arastreu profile file: " + STANDARD_DIR + "/" + profile );
 		}
-		return new ArastrejuProfile(in);
+		return new ArastrejuProfile(profile, in);
 	}
 	
 	private static InputStream find(final String profile) {
@@ -142,8 +150,18 @@ public class ArastrejuProfile implements GateLifecycleListener {
 		}
 		return in;
 	}
-	
-	// -- PROPERTIES --------------------------------------
+
+    // ----------------------------------------------------
+
+    /**
+     * The name of this profile.
+     * @return the unique name.
+     */
+    public String getName() {
+        return name;
+    }
+
+    // -- PROPERTIES --------------------------------------
 	
 	/**
 	 * @return the properties

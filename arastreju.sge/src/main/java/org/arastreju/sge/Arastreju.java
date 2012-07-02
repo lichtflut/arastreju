@@ -45,8 +45,7 @@ public final class Arastreju {
 
 	// -----------------------------------------------------
 
-	private final String factoryClass;
-	private final ArastrejuGateFactory factory;
+    private final ArastrejuGateFactory factory;
 	private final ArastrejuProfile profile;
 	
 	private static HashMap<String, GateContext> contextMap = new HashMap<String, GateContext>();
@@ -116,14 +115,15 @@ public final class Arastreju {
 	 *  Specific providers can deny root access. 
 	 * </p>
 	 * 
-	 * @param credential The credential of user 'root'.
+	 * @param domain The domain.
 	 * @return The ArastrejuGate for the root context.
 	 */
 	public ArastrejuGate rootContext(String domain) {
-		GateContext ctx = contextMap.get(domain);
+        String ctxKey = profile.getName() + "::" + domain;
+		GateContext ctx = contextMap.get(ctxKey);
 		if(ctx==null){
 			ctx = createRootContext(domain);
-			contextMap.put(domain, ctx);
+			contextMap.put(ctxKey, ctx);
 		}
 		return factory.create(ctx);
 	}
@@ -161,7 +161,7 @@ public final class Arastreju {
 	@SuppressWarnings("rawtypes")
 	private Arastreju(final ArastrejuProfile profile) {
 		this.profile = profile;
-		this.factoryClass = profile.getProperty(ArastrejuProfile.GATE_FACTORY);
+        String factoryClass = profile.getProperty(ArastrejuProfile.GATE_FACTORY);
 		try {
 			final Constructor constructor = 
 					Class.forName(factoryClass).getConstructor(ArastrejuProfile.class);

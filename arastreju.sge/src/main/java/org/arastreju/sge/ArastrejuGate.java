@@ -45,13 +45,6 @@ public interface ArastrejuGate {
 	ModelingConversation startConversation();
 	
 	/**
-	 * Obtain a query manager to execute complex queries.
-	 * @return The query manager.
-	 * @deprecated Use conversation.createQuery()
-	 */
-	QueryManager createQueryManager();
-	
-	/**
 	 * Obtain the Organizer for Contexts and Namespaces.
 	 * @return The organizer.
 	 */
