@@ -25,6 +25,7 @@ import org.arastreju.sge.model.DetachedStatement;
 import org.arastreju.sge.model.Statement;
 import org.arastreju.sge.model.nodes.ResourceNode;
 import org.arastreju.sge.model.nodes.views.SNClass;
+import org.arastreju.sge.persistence.ResourceResolver;
 
 /**
  * <p>

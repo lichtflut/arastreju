@@ -24,6 +24,7 @@ import org.arastreju.sge.model.DetachedStatement;
 import org.arastreju.sge.model.Statement;
 import org.arastreju.sge.model.nodes.SemanticNode;
 import org.arastreju.sge.model.nodes.views.SNProperty;
+import org.arastreju.sge.persistence.ResourceResolver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

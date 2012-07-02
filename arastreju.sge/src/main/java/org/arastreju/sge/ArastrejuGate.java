@@ -15,7 +15,6 @@
  */
 package org.arastreju.sge;
 
-import org.arastreju.sge.query.QueryManager;
 import org.arastreju.sge.spi.GateContext;
 
 /**
