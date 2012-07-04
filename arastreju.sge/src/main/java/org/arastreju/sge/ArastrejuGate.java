@@ -29,14 +29,7 @@ import org.arastreju.sge.spi.GateContext;
  * @author Oliver Tigges
  */
 public interface ArastrejuGate {
-	
-	/**
-	 * Close the gate and free all resources.
-	 */
-	void close();
-	
-	// ----------------------------------------------------
-	
+
 	/**
 	 * Starts a new Modeling Conversation allowing to read and change the model.
 	 * @return The modeling conversation.
@@ -56,5 +49,11 @@ public interface ArastrejuGate {
 	 * @return The gate context.
 	 */
 	GateContext getContext();
+
+
+    /**
+     * Close the gate and free all resources.
+     */
+    void close();
 	
 }

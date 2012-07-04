@@ -51,6 +51,8 @@ public class ArastrejuProfile implements GateLifecycleListener {
 	public static final String GATE_FACTORY = "org.arastreju.gate-factory";
 	
 	public static final String ARAS_STORE_DIRECTORY = "org.arastreju.store.directory";
+
+    public static final String ENABLE_VIRTUAL_DOMAINS = "org.arastreju.enable-virtual-domains";
 	
 	// ----------------------------------------------------
 	
@@ -178,6 +180,26 @@ public class ArastrejuProfile implements GateLifecycleListener {
 	public boolean isPropertyDefined(final String key) {
 		return properties.containsKey(key);
 	}
+
+    /**
+     * Checks if a key is defined in the profile.
+     * @param key The key.
+     * @return true if a value for the key is defined.
+     */
+    public boolean isPropertyEnabled(final String key) {
+        String property = properties.getProperty(key);
+        return property != null && ("true".equals(property) || "yes".equals(property));
+    }
+
+    /**
+     * Checks if a key is defined in the profile.
+     * @param key The key.
+     * @return true if a value for the key is defined.
+     */
+    public boolean isPropertyDisabled(final String key) {
+        String property = properties.getProperty(key);
+        return property != null && ("false".equals(property) || "no".equals(property));
+    }
 	
 	/**
 	 * Get a single property.

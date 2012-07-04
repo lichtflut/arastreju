@@ -15,13 +15,15 @@
  */
 package org.arastreju.sge;
 
+import org.arastreju.sge.config.PhysicalDomain;
+import org.arastreju.sge.config.StoreIdentifier;
+import org.arastreju.sge.config.VirtualDomain;
+import org.arastreju.sge.spi.ArastrejuGateFactory;
+import org.arastreju.sge.spi.GateContext;
+
 import java.lang.reflect.Constructor;
 import java.util.HashMap;
 import java.util.Properties;
-
-import org.arastreju.sge.spi.ArastrejuGateFactory;
-import org.arastreju.sge.spi.GateContext;
-import org.arastreju.sge.spi.RootContext;
 
 /**
  * <p>
@@ -105,27 +107,35 @@ public final class Arastreju {
 	 * @return The ArastrejuGate for the root context.
 	 */
 	public ArastrejuGate rootContext() {
-		return rootContext(GateContext.MASTER_DOMAIN);
+		return openGate(GateContext.MASTER_DOMAIN);
 	}
+
+    /**
+     * Open a gate to a domain.
+     *
+     * <p>
+     *  Specific providers can deny root access.
+     * </p>
+     *
+     * @param domain The domain.
+     * @return The ArastrejuGate for the root context.
+     */
+    public ArastrejuGate openGate(String domain) {
+        String ctxKey = profile.getName() + "::" + domain;
+        GateContext ctx = contextMap.get(ctxKey);
+        if(ctx==null){
+            ctx = createGateContext(domain);
+            contextMap.put(ctxKey, ctx);
+        }
+        return factory.create(ctx);
+    }
 	
 	/**
-	 * Obtain the root context. Use Carefully! ArastrejuGate will be used in root context.
-	 * 
-	 * <p>
-	 *  Specific providers can deny root access. 
-	 * </p>
-	 * 
-	 * @param domain The domain.
-	 * @return The ArastrejuGate for the root context.
+	 * @deprecated  Use openGate() instead.
 	 */
+    @Deprecated
 	public ArastrejuGate rootContext(String domain) {
-        String ctxKey = profile.getName() + "::" + domain;
-		GateContext ctx = contextMap.get(ctxKey);
-		if(ctx==null){
-			ctx = createRootContext(domain);
-			contextMap.put(ctxKey, ctx);
-		}
-		return factory.create(ctx);
+       return openGate(domain);
 	}
 
 	// -----------------------------------------------------
@@ -133,8 +143,14 @@ public final class Arastreju {
 	/**
 	 * Create and initialize the Gate Context.
 	 */
-	private GateContext createRootContext(String domain) {
-		return new RootContext(profile, domain);
+	private GateContext createGateContext(String domain) {
+        final StoreIdentifier identifier;
+        if (profile.isPropertyEnabled(ArastrejuProfile.ENABLE_VIRTUAL_DOMAINS)) {
+            identifier = new VirtualDomain(domain);
+        } else {
+            identifier = new PhysicalDomain(domain);
+        }
+		return new GateContext(profile, identifier);
 	}
 	
 	// -- PRIVATE CONSTRUCTORS -----------------------------

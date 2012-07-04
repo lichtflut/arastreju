@@ -1,5 +1,7 @@
 package org.arastreju.sge.config;
 
+import org.arastreju.sge.model.ResourceID;
+
 /**
  **
  * <p>
@@ -12,18 +14,23 @@ package org.arastreju.sge.config;
  *
  * @author Oliver Tigges
  */
-public class VirtualDomain {
+public class VirtualDomain implements StoreIdentifier {
+
+    public static final String DEFAULT_STORAGE_NAME = "virtuals";
+
+    // ----------------------------------------------------
 
     private String name;
 
-    private String storageDomain;
+    private String physicalStore;
 
-    private String context;
+    private ResourceID context;
 
     // ----------------------------------------------------
 
     public VirtualDomain(String name) {
         this.name = name;
+        this.physicalStore = DEFAULT_STORAGE_NAME;
     }
 
     // ----------------------------------------------------
@@ -36,19 +43,21 @@ public class VirtualDomain {
         this.name = name;
     }
 
-    public String getStorageDomain() {
-        return storageDomain;
+    @Override
+    public String getStorageName() {
+        return physicalStore;
     }
 
-    public void setStorageDomain(String storageDomain) {
-        this.storageDomain = storageDomain;
+    public void setStorageName(String storageDomain) {
+        this.physicalStore = storageDomain;
     }
 
-    public String getContext() {
+    public ResourceID getContext() {
         return context;
     }
 
-    public void setContext(String context) {
+    public void setContext(ResourceID context) {
         this.context = context;
     }
+
 }

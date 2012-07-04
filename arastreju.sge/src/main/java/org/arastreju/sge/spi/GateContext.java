@@ -17,6 +17,7 @@ package org.arastreju.sge.spi;
 
 import org.arastreju.sge.ArastrejuGate;
 import org.arastreju.sge.ArastrejuProfile;
+import org.arastreju.sge.config.StoreIdentifier;
 import org.arastreju.sge.context.Context;
 
 /**
@@ -36,7 +37,11 @@ public class GateContext {
 	
 	public static final String MASTER_DOMAIN = "root";
 
+    // ----------------------------------------------------
+
 	private final ArastrejuProfile profile;
+
+    private final StoreIdentifier storeIdentifier;
 	
 	private String domain = MASTER_DOMAIN;
 	
@@ -47,15 +52,21 @@ public class GateContext {
 	// -----------------------------------------------------
 	
 	/**
-	 * Constructor for username/credential.
+	 * Constructor.
 	 */
-	public GateContext(final ArastrejuProfile profile) {
+	public GateContext(final ArastrejuProfile profile, final StoreIdentifier storeIdentifier) {
 		this.profile = profile;
-	}
+        this.storeIdentifier = storeIdentifier;
+    }
 	
 	// -----------------------------------------------------
 
-	/**
+
+    public StoreIdentifier getStoreIdentifier() {
+        return storeIdentifier;
+    }
+
+    /**
 	 * @return the profile
 	 */
 	public ArastrejuProfile getProfile() {
