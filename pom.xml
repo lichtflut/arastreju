@@ -10,6 +10,7 @@
 	<modules>
 		<module>arastreju.sge</module>
 		<module>arastreju.ogm</module>
+		<module>arastreju.mem</module>
 	</modules>
 	<build>
 		<pluginManagement>
