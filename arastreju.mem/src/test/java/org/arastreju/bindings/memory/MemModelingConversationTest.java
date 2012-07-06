@@ -1,5 +1,7 @@
 package org.arastreju.bindings.memory;
 
+import org.junit.Test;
+
 /**
  * <p>
  *  Test case for MemModelingConversation.
@@ -13,5 +15,9 @@ package org.arastreju.bindings.memory;
  */
 public class MemModelingConversationTest {
 
+    @Test
+    public void placeholder() {
+
+    }
 
 }
