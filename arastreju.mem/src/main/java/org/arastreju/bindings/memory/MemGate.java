@@ -1,6 +1,8 @@
 package org.arastreju.bindings.memory;
 
 import de.lichtflut.infra.exceptions.NotYetImplementedException;
+import org.arastreju.bindings.memory.conversation.MemConversationContext;
+import org.arastreju.bindings.memory.conversation.MemModelingConversation;
 import org.arastreju.sge.ModelingConversation;
 import org.arastreju.sge.Organizer;
 import org.arastreju.sge.context.DomainIdentifier;
@@ -27,7 +29,9 @@ public class MemGate extends AbstractArastrejuGate {
 
     @Override
     public ModelingConversation startConversation() {
-        return new MemModellingConversation();
+        MemConversationContext cc = new MemConversationContext();
+        initContext(cc);
+        return new MemModelingConversation(cc);
     }
 
     @Override
