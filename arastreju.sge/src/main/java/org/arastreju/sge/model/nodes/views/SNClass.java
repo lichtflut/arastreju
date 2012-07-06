@@ -26,6 +26,7 @@ import org.arastreju.sge.apriori.RDFS;
 import org.arastreju.sge.context.Context;
 import org.arastreju.sge.model.ResourceID;
 import org.arastreju.sge.model.Statement;
+import org.arastreju.sge.model.nodes.ResourceNode;
 import org.arastreju.sge.model.nodes.SNResource;
 import org.arastreju.sge.naming.QualifiedName;
 
@@ -47,7 +48,7 @@ public class SNClass extends ResourceView {
 	/**
 	 * Create a new view for given resource. 
 	 */
-	public SNClass(final SNResource resource) {
+	public SNClass(final ResourceNode resource) {
 		super(resource);
 	}
 	

@@ -24,6 +24,7 @@ import org.arastreju.sge.apriori.RDF;
 import org.arastreju.sge.apriori.RDFS;
 import org.arastreju.sge.model.ResourceID;
 import org.arastreju.sge.model.Statement;
+import org.arastreju.sge.model.nodes.ResourceNode;
 import org.arastreju.sge.model.nodes.SNResource;
 import org.arastreju.sge.model.nodes.SemanticNode;
 import org.arastreju.sge.naming.QualifiedName;
@@ -53,13 +54,10 @@ public class SNProperty extends ResourceView {
 	/**
 	 * Creates a new Property view for given resource.
 	 */
-	public SNProperty(final SNResource resource) {
+	public SNProperty(final ResourceNode resource) {
 		super(resource);
 	}
 
-	/**
-	 * @param stereotype
-	 */
 	public SNProperty() {
 	}
 
