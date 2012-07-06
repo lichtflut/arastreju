@@ -13,15 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.arastreju.sge.spi;
-
-import org.arastreju.sge.ArastrejuGate;
-import org.arastreju.sge.ArastrejuProfile;
-import org.arastreju.sge.context.DomainIdentifier;
+package org.arastreju.sge.context;
 
 /**
  * <p>
- *  Factory for creation of implementation specific {@link ArastrejuGate}s.
+ *  Identifies a domain of an Arastreju instance.
  * </p>
  *
  * <p>
@@ -30,30 +26,45 @@ import org.arastreju.sge.context.DomainIdentifier;
  *
  * @author Oliver Tigges
  */
-public abstract class ArastrejuGateFactory {
+public abstract class DomainIdentifier {
 	
-	private final ArastrejuProfile profile;
+	public static final String MASTER_DOMAIN = "root";
+
+    // ----------------------------------------------------
+
+	private String domainName;
 
 	// -----------------------------------------------------
 	
 	/**
 	 * Constructor.
 	 */
-	public ArastrejuGateFactory(final ArastrejuProfile profile) {
-		this.profile = profile;
-	}
+	public DomainIdentifier(final String domainName) {
+	    this.domainName = domainName;
+    }
 	
 	// -----------------------------------------------------
 
-	public abstract ArastrejuGate create(final DomainIdentifier ctx) throws GateInitializationException;
-	
-	// -----------------------------------------------------+
-	
 	/**
-	 * @return the profile
+	 * @return the domain name.
 	 */
-	protected ArastrejuProfile getProfile() {
-		return profile;
+	public String getDomainName() {
+		return domainName;
 	}
+
+    /**
+     * Get the name of the storage.
+     * @return The storage.
+     */
+    public abstract String getStorage();
+
+    /**
+     * Get the initial context.
+     * @return The initial context.
+     */
+    public abstract Context getInitialContext();
+
+
+
 	
 }

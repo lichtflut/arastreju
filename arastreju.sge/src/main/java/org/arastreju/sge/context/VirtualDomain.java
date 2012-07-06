@@ -1,6 +1,6 @@
-package org.arastreju.sge.config;
+package org.arastreju.sge.context;
 
-import org.arastreju.sge.model.ResourceID;
+import org.arastreju.sge.naming.Namespace;
 
 /**
  **
@@ -14,50 +14,36 @@ import org.arastreju.sge.model.ResourceID;
  *
  * @author Oliver Tigges
  */
-public class VirtualDomain implements StoreIdentifier {
+public class VirtualDomain extends DomainIdentifier {
 
     public static final String DEFAULT_STORAGE_NAME = "virtuals";
 
     // ----------------------------------------------------
 
-    private String name;
-
     private String physicalStore;
 
-    private ResourceID context;
+    private Context context;
 
     // ----------------------------------------------------
 
     public VirtualDomain(String name) {
-        this.name = name;
+        super(name);
         this.physicalStore = DEFAULT_STORAGE_NAME;
+        this.context = new SimpleContextID(Namespace.LOCAL_CONTEXTS, name);
     }
 
     // ----------------------------------------------------
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
 
     @Override
-    public String getStorageName() {
+    public String getStorage() {
         return physicalStore;
     }
 
-    public void setStorageName(String storageDomain) {
-        this.physicalStore = storageDomain;
-    }
-
-    public ResourceID getContext() {
+    @Override
+    public Context getInitialContext() {
         return context;
     }
 
-    public void setContext(ResourceID context) {
-        this.context = context;
-    }
 
 }

@@ -31,6 +31,14 @@ import java.io.Serializable;
  */
 public interface Namespace extends Serializable {
 
+    String LOCAL = "http://local.arasteju.org/";
+
+    String LOCAL_CONTEXTS = "http://local.arasteju.org/contexts/";
+
+    String UUID = "http://arasteju.org/uuid/";
+
+    // ----------------------------------------------------
+
 	/**
 	 * The URI of this namespace.
 	 * @return The URI of this namespace.

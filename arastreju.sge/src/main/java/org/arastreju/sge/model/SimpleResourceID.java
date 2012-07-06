@@ -15,14 +15,14 @@
  */
 package org.arastreju.sge.model;
 
-import java.io.Serializable;
-import java.util.UUID;
-
 import org.arastreju.sge.model.nodes.ResourceNode;
 import org.arastreju.sge.model.nodes.SNResource;
 import org.arastreju.sge.model.nodes.ValueNode;
+import org.arastreju.sge.naming.Namespace;
 import org.arastreju.sge.naming.QualifiedName;
-import org.arastreju.sge.naming.VoidNamespace;
+
+import java.io.Serializable;
+import java.util.UUID;
 
 /**
  * <p>
@@ -42,10 +42,10 @@ public class SimpleResourceID implements ResourceID, Serializable {
 	// -----------------------------------------------------
 
 	/**
-	 * Creates a new unique ResourceID with random URI in {@link VoidNamespace}.
+	 * Creates a new unique ResourceID with random URI in Namespace.UUID namespace.
 	 */
 	public SimpleResourceID() {
-		this(VoidNamespace.getURI(), UUID.randomUUID().toString());
+		this(Namespace.UUID, UUID.randomUUID().toString());
 	}
 	
 	/**

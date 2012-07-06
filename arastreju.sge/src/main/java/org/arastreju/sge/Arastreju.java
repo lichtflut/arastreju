@@ -15,11 +15,11 @@
  */
 package org.arastreju.sge;
 
-import org.arastreju.sge.config.PhysicalDomain;
-import org.arastreju.sge.config.StoreIdentifier;
-import org.arastreju.sge.config.VirtualDomain;
+import org.arastreju.sge.context.DomainIdentifier;
+import org.arastreju.sge.context.MasterDomain;
+import org.arastreju.sge.context.PhysicalDomain;
+import org.arastreju.sge.context.VirtualDomain;
 import org.arastreju.sge.spi.ArastrejuGateFactory;
-import org.arastreju.sge.spi.GateContext;
 
 import java.lang.reflect.Constructor;
 import java.util.HashMap;
@@ -50,7 +50,7 @@ public final class Arastreju {
     private final ArastrejuGateFactory factory;
 	private final ArastrejuProfile profile;
 	
-	private static HashMap<String, GateContext> contextMap = new HashMap<String, GateContext>();
+	private static HashMap<String, DomainIdentifier> contextMap = new HashMap<String, DomainIdentifier>();
 
 	// -----------------------------------------------------
 
@@ -95,20 +95,27 @@ public final class Arastreju {
 
 	// -----------------------------------------------------
 
-	/**
-	 * Obtain the root context. Use Carefully! No login will be performed but
-	 * the ArastrejuGate will be used in root context.
-	 * 
-	 * <p>
-	 *  Specific providers can deny root access. Or allow root access only as long
-	 *  as user 'root' has no credential set. 
-	 * </p>
-	 * 
-	 * @return The ArastrejuGate for the root context.
-	 */
+    /**
+     * @deprecated  Use openMasterGate() instead.
+     */
+    @Deprecated
 	public ArastrejuGate rootContext() {
-		return openGate(GateContext.MASTER_DOMAIN);
+		return openMasterGate();
 	}
+
+    /**
+     * Open the gate to the master domain.
+     *
+     * <p>
+     *  Specific providers can deny root access. Or allow root access only as long
+     *  as user 'root' has no credential set.
+     * </p>
+     *
+     * @return The ArastrejuGate for the root context.
+     */
+    public ArastrejuGate openMasterGate() {
+        return openGate(DomainIdentifier.MASTER_DOMAIN);
+    }
 
     /**
      * Open a gate to a domain.
@@ -122,9 +129,9 @@ public final class Arastreju {
      */
     public ArastrejuGate openGate(String domain) {
         String ctxKey = profile.getName() + "::" + domain;
-        GateContext ctx = contextMap.get(ctxKey);
+        DomainIdentifier ctx = contextMap.get(ctxKey);
         if(ctx==null){
-            ctx = createGateContext(domain);
+            ctx = createDomainIdentifier(domain);
             contextMap.put(ctxKey, ctx);
         }
         return factory.create(ctx);
@@ -143,14 +150,14 @@ public final class Arastreju {
 	/**
 	 * Create and initialize the Gate Context.
 	 */
-	private GateContext createGateContext(String domain) {
-        final StoreIdentifier identifier;
-        if (profile.isPropertyEnabled(ArastrejuProfile.ENABLE_VIRTUAL_DOMAINS)) {
-            identifier = new VirtualDomain(domain);
+	private DomainIdentifier createDomainIdentifier(String domain) {
+        if (DomainIdentifier.MASTER_DOMAIN.equals(domain)) {
+            return new MasterDomain();
+        } else if (profile.isPropertyEnabled(ArastrejuProfile.ENABLE_VIRTUAL_DOMAINS)) {
+            return new VirtualDomain(domain);
         } else {
-            identifier = new PhysicalDomain(domain);
+            return new PhysicalDomain(domain);
         }
-		return new GateContext(profile, identifier);
 	}
 	
 	// -- PRIVATE CONSTRUCTORS -----------------------------

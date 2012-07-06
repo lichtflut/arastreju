@@ -1,5 +1,7 @@
 package org.arastreju.sge.config;
 
+import org.arastreju.sge.context.VirtualDomain;
+
 /**
  * <p>
  *  Interface for the mapping of a virtual domain name to a virtual domain.

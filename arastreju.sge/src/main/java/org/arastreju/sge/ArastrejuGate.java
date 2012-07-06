@@ -15,7 +15,7 @@
  */
 package org.arastreju.sge;
 
-import org.arastreju.sge.spi.GateContext;
+import org.arastreju.sge.context.DomainIdentifier;
 
 /**
  * <p>
@@ -45,13 +45,6 @@ public interface ArastrejuGate {
 	// ----------------------------------------------------
 	
 	/**
-	 * Get the context of this gate.
-	 * @return The gate context.
-	 */
-	GateContext getContext();
-
-
-    /**
      * Close the gate and free all resources.
      */
     void close();

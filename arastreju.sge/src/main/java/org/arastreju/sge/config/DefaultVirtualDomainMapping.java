@@ -1,5 +1,6 @@
 package org.arastreju.sge.config;
 
+import org.arastreju.sge.context.VirtualDomain;
 import org.arastreju.sge.model.SimpleResourceID;
 
 /**
@@ -30,8 +31,6 @@ public class DefaultVirtualDomainMapping implements VirtualDomainMapping {
     @Override
     public VirtualDomain getVirtualDomain(String virtualDomainName) {
         VirtualDomain vd = new VirtualDomain(virtualDomainName);
-        vd.setStorageName(DEFAULT_STORAGE_NAME);
-        vd.setContext(new SimpleResourceID(contextBaseURI + virtualDomainName));
         return vd;
     }
 
