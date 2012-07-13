@@ -66,13 +66,14 @@ public interface ResourceNode extends ResourceID {
 	
 	// -----------------------------------------------------
 
-    /**
-     * Add an association.
-     * @param predicate The predicate of the association.
+	/**
+	 * Add an association.
+	 * @param predicate The predicate of the association.
      * @param object The object.
-     * @return The created statement.
-     */
-    Statement addAssociation(ResourceID predicate, SemanticNode object);
+     * @param ctx The optional contexts of this association.
+	 * @return The created statement.
+	 */
+	Statement addAssociation(ResourceID predicate, SemanticNode object, Context... ctx);
 
 	/**
 	 * Removes the association from this resource object. This will have no effect on the database when this node isn't

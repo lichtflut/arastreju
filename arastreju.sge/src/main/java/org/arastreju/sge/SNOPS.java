@@ -228,7 +228,7 @@ public class SNOPS {
      * Create a new associated statement, that will be added to the subject.
      */
     public static Statement associate(final ResourceNode subject, final ResourceID predicate, final SemanticNode object, final Context... ctx){
-        return subject.addAssociation(predicate, object);
+        return subject.addAssociation(predicate, object, ctx);
     }
 	
 	/**
