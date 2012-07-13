@@ -33,7 +33,7 @@ public interface Namespace extends Serializable {
 
     String LOCAL = "http://local.arasteju.org/";
 
-    String LOCAL_CONTEXTS = "http://local.arasteju.org/contexts/";
+    String LOCAL_CONTEXTS = LOCAL + "contexts/";
 
     String UUID = "http://arasteju.org/uuid/";
 

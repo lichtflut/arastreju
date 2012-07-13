@@ -45,7 +45,7 @@ public abstract class ArastrejuGateFactory {
 	
 	// -----------------------------------------------------
 
-	public abstract ArastrejuGate create(final DomainIdentifier ctx) throws GateInitializationException;
+	public abstract ArastrejuGate create(final DomainIdentifier identifier) throws GateInitializationException;
 	
 	// -----------------------------------------------------+
 	

@@ -96,14 +96,6 @@ public final class Arastreju {
 	// -----------------------------------------------------
 
     /**
-     * @deprecated  Use openMasterGate() instead.
-     */
-    @Deprecated
-	public ArastrejuGate rootContext() {
-		return openMasterGate();
-	}
-
-    /**
      * Open the gate to the master domain.
      *
      * <p>
@@ -129,14 +121,22 @@ public final class Arastreju {
      */
     public ArastrejuGate openGate(String domain) {
         String ctxKey = profile.getName() + "::" + domain;
-        DomainIdentifier ctx = contextMap.get(ctxKey);
-        if(ctx==null){
-            ctx = createDomainIdentifier(domain);
-            contextMap.put(ctxKey, ctx);
+        DomainIdentifier identifier = contextMap.get(ctxKey);
+        if(identifier==null){
+            identifier = createDomainIdentifier(domain);
+            contextMap.put(ctxKey, identifier);
         }
-        return factory.create(ctx);
+        return factory.create(identifier);
     }
-	
+
+    /**
+     * @deprecated  Use openMasterGate() instead.
+     */
+    @Deprecated
+    public ArastrejuGate rootContext() {
+        return openMasterGate();
+    }
+
 	/**
 	 * @deprecated  Use openGate() instead.
 	 */
