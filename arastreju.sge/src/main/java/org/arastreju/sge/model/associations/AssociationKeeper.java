@@ -46,7 +46,7 @@ public interface AssociationKeeper {
 
 	/**
 	 * Remove an association.
-	 * @param association The association.
+	 * @param stmt The association.
 	 */
 	boolean removeAssociation(Statement stmt);
 	

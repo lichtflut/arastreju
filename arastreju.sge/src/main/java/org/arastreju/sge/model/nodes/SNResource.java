@@ -188,8 +188,8 @@ public class SNResource implements ResourceNode, Serializable {
 	 * {@inheritDoc}
 	 * @return 
 	 */
-	public Statement addAssociation(ResourceID predicate, SemanticNode object, Context... ctx) {
-		final Statement statement = new DetachedStatement(this, predicate, object, ctx);
+	public Statement addAssociation(ResourceID predicate, SemanticNode object) {
+		final Statement statement = new DetachedStatement(this, predicate, object);
 		associationKeeper.addAssociation(statement);
 		return statement;
 	}

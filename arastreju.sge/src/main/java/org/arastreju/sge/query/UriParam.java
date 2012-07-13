@@ -46,7 +46,7 @@ public class UriParam implements QueryParam {
 	 */
 	public QueryOperator getOperator() {
 		return QueryOperator.HAS_URI;
-	};
+	}
 	
 	/** 
 	 * {@inheritDoc}

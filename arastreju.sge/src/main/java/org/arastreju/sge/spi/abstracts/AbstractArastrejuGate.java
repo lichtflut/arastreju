@@ -31,7 +31,7 @@ public abstract class AbstractArastrejuGate implements ArastrejuGate {
 
     protected void initContext(ConversationContext cc) {
         if (domainIdentifier.getInitialContext() != null) {
-            cc.setWriteContext(domainIdentifier.getInitialContext());
+            cc.setPrimaryContext(domainIdentifier.getInitialContext());
             cc.setReadContexts(domainIdentifier.getInitialContext());
         }
     }

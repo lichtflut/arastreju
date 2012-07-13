@@ -105,7 +105,7 @@ public abstract class AbstractConversationContext implements ConversationContext
    /** 
 	 * {@inheritDoc}
 	 */
-    public Context getWriteContext() {
+    public Context getPrimaryContext() {
     	return writeContext;
     }
 
@@ -113,7 +113,7 @@ public abstract class AbstractConversationContext implements ConversationContext
 	 * {@inheritDoc}
 	 */
     @Override
-	public ConversationContext setWriteContext(Context ctx) {
+	public ConversationContext setPrimaryContext(Context ctx) {
 		this.writeContext = ctx;
 		return this;
 	}

@@ -109,11 +109,11 @@ public abstract class ResourceView implements ResourceNode, Serializable {
 		return resource.getAssociations(predicate);
 	}
 
-	/** 
+	/**
 	 * {@inheritDoc}
 	 */
-	public Statement addAssociation(ResourceID predicate, SemanticNode object, Context... ctx) {
-		return resource.addAssociation(predicate, object, ctx);
+	public Statement addAssociation(ResourceID predicate, SemanticNode object) {
+		return resource.addAssociation(predicate, object);
 	}
 
 	/**

@@ -54,7 +54,7 @@ public class RdfXmlBindingTest {
 		final QualifiedName qnCar = new QualifiedName("http://q#", "Car");
 		final ResourceNode car = new SNResource(qnCar);
 		
-		final Statement association = SNOPS.associate(car, RDFS.SUB_CLASS_OF, vehicle, new SimpleContextID("http://q#", "Ctx"));
+		final Statement association = SNOPS.associate(car, RDFS.SUB_CLASS_OF, vehicle);
 		
 		SemanticGraph graph = new DefaultSemanticGraph(Arrays.asList(association));
 		Assert.assertNotNull(graph);

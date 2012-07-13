@@ -20,9 +20,9 @@ public interface ConversationContext {
 
 	Context[] getReadContexts();
 
-	Context getWriteContext();
+	Context getPrimaryContext();
 	
-	ConversationContext setWriteContext(Context context);
+	ConversationContext setPrimaryContext(Context context);
 	
 	ConversationContext setReadContexts(Context... contexts);
 	

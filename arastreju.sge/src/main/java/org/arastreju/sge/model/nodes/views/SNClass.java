@@ -80,15 +80,15 @@ public class SNClass extends ResourceView {
 	
 	//-- INSTANCES ----------------------------------------
 	
-	public SNEntity createInstance(final Context... contexts){
+	public SNEntity createInstance(){
 		final SNEntity instance = new SNEntity();
-		SNOPS.associate(instance, RDF.TYPE, this, contexts);
+		SNOPS.associate(instance, RDF.TYPE, this);
 		return instance;
 	}
 	
-	public SNEntity createInstance(final QualifiedName qn, final Context... contexts){
+	public SNEntity createInstance(final QualifiedName qn){
 		final SNEntity instance = new SNEntity(qn);
-		SNOPS.associate(instance, RDF.TYPE, this, contexts);
+		SNOPS.associate(instance, RDF.TYPE, this);
 		return instance;
 	}
 	

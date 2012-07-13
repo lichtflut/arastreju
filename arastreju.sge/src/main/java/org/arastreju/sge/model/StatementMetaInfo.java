@@ -31,7 +31,8 @@ public class StatementMetaInfo implements Serializable {
 	
 	/**
 	 * Constructor.
-	 * @param timestamp
+     * @param contexts The contexts.
+	 * @param timestamp The timestamp of the creation of the statment.
 	 */
 	public StatementMetaInfo(Context[] contexts, Date timestamp) {
 		this.timestamp = timestamp;
@@ -50,7 +51,8 @@ public class StatementMetaInfo implements Serializable {
 	}
 	
 	/**
-	 * @param contexts
+     * Constructor.
+	 * @param contexts The contexts.
 	 */
 	public StatementMetaInfo(Context[] contexts) {
 		this(contexts, new Date());
@@ -71,5 +73,15 @@ public class StatementMetaInfo implements Serializable {
 	public Date getTimestamp() {
 		return timestamp;
 	}
-	
+
+    // ----------------------------------------------------
+
+
+    @Override
+    public String toString() {
+        return "StatementMetaInfo{" +
+                "timestamp=" + timestamp +
+                ", contexts=" + (contexts == null ? null : Arrays.asList(contexts)) +
+                '}';
+    }
 }

@@ -223,13 +223,13 @@ public class SNOPS {
 	}
 	
 	// -- MODIFICATIONS -----------------------------------
-	
-	/**
-	 * Create a new associated statement, that will be added to the subject. 
-	 */
-	public static Statement associate(final ResourceNode subject, final ResourceID predicate, final SemanticNode object, final Context... ctx){
-		return subject.addAssociation(predicate, object, ctx);
-	}
+
+    /**
+     * Create a new associated statement, that will be added to the subject.
+     */
+    public static Statement associate(final ResourceNode subject, final ResourceID predicate, final SemanticNode object, final Context... ctx){
+        return subject.addAssociation(predicate, object);
+    }
 	
 	/**
 	 * Assures that the subject has only this object for given predicate.
