@@ -37,9 +37,7 @@ public interface Aras {
 	
 	ResourceID CONTEXT = new SimpleResourceID(NAMESPACE_URI, "Context");
 	ResourceID NAMESPACE = new SimpleResourceID(NAMESPACE_URI, "Namespace");
-	ResourceID DIAGRAM = new SimpleResourceID(NAMESPACE_URI, "Diagram");
-	ResourceID REGISTER = new SimpleResourceID(NAMESPACE_URI, "Register");
-	
+
 	// -- DATATYPES ---------------------------------------
 	
 	ResourceID DATATYPE_STRING = new SimpleResourceID("http://arastreju.org/kernel#", "String");
@@ -64,56 +62,7 @@ public interface Aras {
 	ResourceID HAS_NAME = new SimpleResourceID(NAMESPACE_URI, "hasName");
 	ResourceID HAS_PREFIX = new SimpleResourceID(NAMESPACE_URI, "hasPrefix");
 	ResourceID HAS_URI = new SimpleResourceID(NAMESPACE_URI, "hasURI");
-	
-	// -- MODEL SELECTIONS --------------------------------
-	
-	ResourceID CONTAINS = new SimpleResourceID(NAMESPACE_URI, "contains");
-	ResourceID SELECTS_BY_QUERY = new SimpleResourceID(NAMESPACE_URI, "selectsByQuery");
-	ResourceID SELECTS_BY_NAMESPACE = new SimpleResourceID(NAMESPACE_URI, "selectsByNamespace");
-	ResourceID HAS_DEFAULT_NAMESPACE = new SimpleResourceID(NAMESPACE_URI, "hasDefaultNamespace");
-	ResourceID IS_IN_CONTEXT = new SimpleResourceID(NAMESPACE_URI, "isInContext");
-	
-	// -- IDENTITY MANAGEMENT -----------------------------
-	
-	ResourceID IDENTITY = new SimpleResourceID(NAMESPACE_URI, "Identity");
-	ResourceID USER = new SimpleResourceID(NAMESPACE_URI, "User");
-	ResourceID GROUP = new SimpleResourceID(NAMESPACE_URI, "Group");
-	ResourceID CREDENTIAL = new SimpleResourceID(NAMESPACE_URI, "Credential");
-	ResourceID ROLE = new SimpleResourceID(NAMESPACE_URI, "Role");
-	ResourceID PERMISSION = new SimpleResourceID(NAMESPACE_URI, "Permission");
-	ResourceID DOMAIN = new SimpleResourceID(NAMESPACE_URI, "Domain");
-	
-	ResourceID IDENTIFIED_BY = new SimpleResourceID(NAMESPACE_URI, "isIdentifiedBy");
-	ResourceID HAS_CREDENTIAL = new SimpleResourceID(NAMESPACE_URI, "hasCredential");
-	ResourceID HAS_UNIQUE_NAME = new SimpleResourceID(NAMESPACE_URI, "hasUniqueName");
-	ResourceID HAS_TITLE = new SimpleResourceID(NAMESPACE_URI, "hasTitle");
-	ResourceID HAS_DESCRIPTION = new SimpleResourceID(NAMESPACE_URI, "hasDescription");
-	ResourceID HAS_ROLE = new SimpleResourceID(NAMESPACE_URI, "hasRole");
-	ResourceID HAS_PERMISSION = new SimpleResourceID(NAMESPACE_URI, "hasPermission");
-	
-	ResourceID BELONGS_TO_DOMAIN = new SimpleResourceID(NAMESPACE_URI, "belongsToDomain");
-	ResourceID HAS_ALTERNATE_DOMAIN = new SimpleResourceID(NAMESPACE_URI, "hasAlternateDomain");
-	ResourceID IS_DOMESTIC_DOMAIN = new SimpleResourceID(NAMESPACE_URI, "isDomesticDomain");
-	
-	/**
-	 * The roles defined in a domain.
-	 */
-	ResourceID DEFINES_ROLE = new SimpleResourceID(NAMESPACE_URI, "definesRole");
-	
-	// -- SCHEMAS -----------------------------------------
-	
-	ResourceID ACTIVITY_SCHEMA = new SimpleResourceID(NAMESPACE_URI, "ActivitySchema");
-	ResourceID ACTELLON_SCHEMA = new SimpleResourceID(NAMESPACE_URI, "ActellonSchema");
-	ResourceID RELATION_SCHEMA = new SimpleResourceID(NAMESPACE_URI, "RelationSchema");
-	
-	ResourceID HAS_SCHEMA = new SimpleResourceID(NAMESPACE_URI, "hasSchema");
-	ResourceID HAS_STATEMENT_SCHEMA = new SimpleResourceID(NAMESPACE_URI, "hasStatementSchema");
-	ResourceID HAS_ACTELLON_SCHEMA = new SimpleResourceID(NAMESPACE_URI, "hasActellonSchema");
-	ResourceID HAS_ATTRIBUTE_SCHEMA = new SimpleResourceID(NAMESPACE_URI, "hasAttributeSchema");
-	ResourceID HAS_RELATION_SCHEMA = new SimpleResourceID(NAMESPACE_URI, "hasRelationSchema");
-	ResourceID SUB_SCHEMA_OF = new SimpleResourceID(NAMESPACE_URI, "subSchemaOf");
-	ResourceID CONTAINS_CHOICE_ELEMENTS = new SimpleResourceID(NAMESPACE_URI, "containsChoiceElements");
-	
+
 	// -- CONSTRAINTS -------------------------------------
 	
 	ResourceID HAS_PROPER_NAME = new SimpleResourceID(NAMESPACE_URI, "hasProperName");
