@@ -4,6 +4,7 @@
 package org.arastreju.sge;
 
 import org.arastreju.sge.context.Context;
+import org.arastreju.sge.persistence.TxProvider;
 
 /**
  * <p>
@@ -25,7 +26,11 @@ public interface ConversationContext {
 	ConversationContext setPrimaryContext(Context context);
 	
 	ConversationContext setReadContexts(Context... contexts);
-	
+
 	void clear();
+
+    // ----------------------------------------------------
+
+    TxProvider getTxProvider();
 
 }

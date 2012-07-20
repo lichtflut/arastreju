@@ -58,6 +58,12 @@ public interface TransactionControl {
 	 */
 	void flush();
 
+    /**
+     * Check if the current transaction is active.
+     * @return true if there is an active transaction
+     */
+    boolean isActive();
+
 	
 	
 }

@@ -1,10 +1,12 @@
 package org.arastreju.bindings.memory.conversation;
 
+import org.arastreju.bindings.memory.tx.MemTransactionProvider;
+import org.arastreju.sge.persistence.TxProvider;
 import org.arastreju.sge.spi.abstracts.AbstractConversationContext;
 
 /**
  * <p>
- *  DESCRITPION.
+ *  Conversation context specific for memory binding.
  * </p>
 
  * <p>
@@ -19,4 +21,8 @@ public class MemConversationContext extends AbstractConversationContext {
     protected void clearCaches() {
     }
 
+    @Override
+    public TxProvider getTxProvider() {
+        return new MemTransactionProvider();
+    }
 }
