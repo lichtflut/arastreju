@@ -59,9 +59,16 @@ public interface SemanticGraphIO {
 	/**
 	 * Writes the extract as RDF to given stream.
 	 * @param graph The graph to write.
-	 * @param The output stream.
+	 * @param out The output stream.
 	 */
 	void write(SemanticGraph graph, OutputStream out)
 			throws IOException, SemanticIOException;
 
+
+    /**
+     * Writed statments from given provider to output stream.
+     * @param provider The provider of statements.
+     * @param out The output stream.
+     */
+    void write(final StatementProvider provider, final OutputStream out);
 }

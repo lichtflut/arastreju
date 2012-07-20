@@ -98,6 +98,32 @@ public abstract class AbstractRioBinding implements SemanticGraphIO {
             throw new SemanticIOException(ErrorCodes.GRAPH_WRITE_ERROR, "associations couldn't be written", e);
         }
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void write(final StatementProvider provider, final OutputStream out)
+            throws IOException, SemanticIOException {
+        try {
+            final RDFWriter writer = writerFactory().getWriter(out);
+            final NamespaceMap nsMap = new NamespaceMap(provider.getNamespaces());
+            logger.debug("PrefixMap: \n" + nsMap);
+            for(String prefix : nsMap.getPrefixes()){
+                writer.handleNamespace(prefix, nsMap.getNamespace(prefix).getUri());
+            }
+
+            writer.startRDF();
+            for (Statement stmt : provider) {
+                writer.handleStatement(new RioStatement(stmt));
+            }
+            writer.endRDF();
+
+        } catch(IllegalArgumentException e){
+            throw new SemanticIOException(ErrorCodes.GRAPH_WRITE_ERROR, "associations couldn't be written", e);
+        } catch(RDFHandlerException e){
+            throw new SemanticIOException(ErrorCodes.GRAPH_WRITE_ERROR, "associations couldn't be written", e);
+        }
+    }
     
     // ----------------------------------------------------
     

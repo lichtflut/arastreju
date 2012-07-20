@@ -81,8 +81,13 @@ public class JsonBinding implements SemanticGraphIO {
 			out.write(sb.toString().getBytes());
 		}
 	}
-	
-	protected void renderEdges(final StringBuilder sb, final Set<? extends Statement> assocs) {
+
+    @Override
+    public void write(StatementProvider provider, OutputStream out) {
+        throw new NotYetImplementedException();
+    }
+
+    protected void renderEdges(final StringBuilder sb, final Set<? extends Statement> assocs) {
 		boolean first = true;
 		for (Statement assoc : assocs) {
 			if (assoc.getObject().isResourceNode()){
