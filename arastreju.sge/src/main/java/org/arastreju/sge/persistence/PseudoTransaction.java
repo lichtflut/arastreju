@@ -17,54 +17,65 @@ package org.arastreju.sge.persistence;
 
 /**
  * <p>
- * 	Interface to transaction controlling of Arastreju gate.
+ * 	This pseudo implementation does not really work transactional.
  * </p>
  * 
  * <p>
- * 	Created: 10.07.2008
+ * 	Created: 20 Jul, 2012
  * </p>
  *
- * @author Oliver Tigges
+ * @author Raphael Esterle
  */
-public interface TransactionControl {
-	
-	/**
-	 * Marks the transaction as successful. 
-	 */
-	void success();
-	
-	/**
-	 * Marks the transaction as failed. 
-	 */
-	void fail();
-	
-	/**
-	 * Finish the transaction. If fail() has been called during this transaction a rollback will be performed. 
-	 * Otherwise the transaction will be committed.
-	 */
-	void finish();
-	
-	/**
-	 * Commit the transaction.
-	 */
-	void commit();
-	
-	/**
-	 * Roles the transaction back .
-	 */
-	void rollback();
-	
-	/**
-	 * flushes current state to database.
-	 */
-	void flush();
+public class PseudoTransaction implements TransactionControl {
 
-    /**
-     * Check if the current transaction is active.
-     * @return true if there is an active transaction
-     */
-    boolean isActive();
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void success() {
+	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void fail() {
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void finish() {
+	}
 	
-	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void commit() {
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void rollback() {
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void flush() {
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public boolean isActive() {
+		return true;
+	}
+
 }

@@ -114,6 +114,10 @@ public interface ModelingConversation {
 	 */
 	void attach(SemanticGraph graph);
 	
+	/**
+	 * Detach all statements of the graph.
+	 * @param graph The graph to be detached.
+	 */
 	void detach(SemanticGraph graph);
 	
 	// -----------------------------------------------------

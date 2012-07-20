@@ -1,0 +1,69 @@
+<?xml version="1.0"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.arastreju</groupId>
+		<artifactId>arastreju</artifactId>
+		<version>0.7.3-SNAPSHOT</version>
+	</parent>
+	<groupId>org.arastreju</groupId>
+	<artifactId>arastreju.mem</artifactId>
+	<name>Arastreju RDB Binding</name>
+	<description>Arastreju Binding - Relational Databases</description>
+	<properties>
+		<sesame.version>2.6.1</sesame.version>
+	</properties>
+	<licenses>
+		<license>
+			<name>Apache 2</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+			<distribution>repo</distribution>
+			<comments>A business-friendly OSS license</comments>
+		</license>
+	</licenses>
+	<organization>
+		<name>lichtflut Forschungs- und Entwicklungsgesellschaft mbH</name>
+		<url>http://www.lichtflut.de</url>
+	</organization>
+	<build>
+		<resources>
+			<resource>
+				<filtering>true</filtering>
+				<directory>src/main/resources</directory>
+			</resource>
+			<resource>
+				<filtering>false</filtering>
+				<directory>src/main/java</directory>
+				<includes>
+					<include>**</include>
+				</includes>
+				<excludes>
+					<exclude>**/*.java</exclude>
+				</excludes>
+			</resource>
+		</resources>
+		<testResources>
+			<testResource>
+				<filtering>false</filtering>
+				<directory>src/test/resources</directory>
+			</testResource>
+			<testResource>
+				<filtering>false</filtering>
+				<directory>src/test/java</directory>
+				<includes>
+					<include>**</include>
+				</includes>
+				<excludes>
+					<exclude>**/*.java</exclude>
+				</excludes>
+			</testResource>
+		</testResources>
+	</build>
+	<dependencies>
+		<dependency>
+			<groupId>org.arastreju</groupId>
+			<artifactId>arastreju.sge</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+	</dependencies>
+</project>

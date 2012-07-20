@@ -15,7 +15,6 @@
  */
 package org.arastreju.sge;
 
-import org.arastreju.sge.context.DomainIdentifier;
 
 /**
  * <p>

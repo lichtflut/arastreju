@@ -97,6 +97,8 @@ public abstract class TxProvider {
 
     protected abstract TransactionControl newTx();
 
-    protected abstract TransactionControl newSubTx(TransactionControl parent);
+    protected TransactionControl newSubTx(TransactionControl parent) {
+    	return new SubTransaction(parent);
+    }
 	
 }

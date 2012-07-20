@@ -33,4 +33,6 @@ public interface ConversationContext {
 
     TxProvider getTxProvider();
 
+	boolean isActive();
+
 }
