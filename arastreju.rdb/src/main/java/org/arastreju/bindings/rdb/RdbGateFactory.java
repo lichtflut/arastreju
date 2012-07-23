@@ -16,6 +16,10 @@ package org.arastreju.bindings.rdb;
  * @author Raphael Esterle
  */
 
+import java.sql.Connection;
+
+import org.arastreju.rdb.db.DB;
+import org.arastreju.rdb.db.DBInit;
 import org.arastreju.sge.ArastrejuGate;
 import org.arastreju.sge.ArastrejuProfile;
 import org.arastreju.sge.context.DomainIdentifier;
@@ -35,11 +39,19 @@ public class RdbGateFactory extends ArastrejuGateFactory {
 		
 		// TODO: check is storage with given name already exists.
 		
-		getProfile().getProperty("jdbc.url");
+		ArastrejuProfile profile = getProfile();
 		
-		RdbConnectionProvider provider = new RdbConnectionProvider();
+		RdbConnectionProvider provider = new RdbConnectionProvider(
+				profile.getProperty(DB.PROFILE_DRIVER.val()),
+				profile.getProperty(DB.PROFILE_USER.val()),
+				profile.getProperty(DB.PROFILE_PASS.val()),
+				profile.getProperty(DB.PROFILE_PROTOCOL.val())+profile.getProperty(DB.PROFILE_DB.val()),
+				10);
 		
-		// TODO: iniitalize provider with JDBC stuff
+		Connection con = provider.getConnection();
+		if(!DBInit.tableExists(con, storageName))
+			DBInit.init(con, storageName);
+		provider.close(con);
 		
 		return new RdbGate(provider, identifier);
 	}
