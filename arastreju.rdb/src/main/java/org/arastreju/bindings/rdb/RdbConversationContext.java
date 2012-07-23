@@ -1,5 +1,5 @@
-/**
- * 
+/*
+ * Copyright 2012 by lichtflut Forschungs- und Entwicklungsgesellschaft mbH
  */
 package org.arastreju.bindings.rdb;
 
@@ -8,7 +8,15 @@ import org.arastreju.sge.persistence.TxProvider;
 import org.arastreju.sge.spi.abstracts.AbstractConversationContext;
 
 /**
- * @author raphael
+ * <p>
+ *  RRdb specific extension of AbstractConversationContext. 
+ * </p>
+ *
+ * <p>
+ * 	Created 23.07.2012
+ * </p>
+ *
+ * @author Raphael Esterle
  */
 public class RdbConversationContext extends AbstractConversationContext {
 	
