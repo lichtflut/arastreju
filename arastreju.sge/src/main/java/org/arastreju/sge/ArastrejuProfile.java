@@ -138,8 +138,6 @@ public class ArastrejuProfile implements GateLifecycleListener {
 	private static InputStream find(final String profile) {
 		final ClassLoader cl = Thread.currentThread().getContextClassLoader();
 		
-		System.out.println();
-		
 		String name = profile.trim();
 		InputStream in = cl.getResourceAsStream(profile);
 

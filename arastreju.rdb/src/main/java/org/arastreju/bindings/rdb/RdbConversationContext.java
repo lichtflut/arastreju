@@ -21,12 +21,15 @@ import org.arastreju.sge.spi.abstracts.AbstractConversationContext;
 public class RdbConversationContext extends AbstractConversationContext {
 	
 	private RdbConnectionProvider connectionProvider;
-
+	
+	// ----------------------------------------------------
+	
 	public RdbConversationContext(RdbConnectionProvider connectionProvider) {
 		this.connectionProvider = connectionProvider;
 	}
 	
-
+	// ----------------------------------------------------
+	
 	@Override
 	public TxProvider getTxProvider() {
 		return new JdbcTxProvider();

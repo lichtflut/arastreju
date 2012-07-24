@@ -38,7 +38,9 @@ public class RdbConnectionProvider {
 	private Vector<Connection> cons;
 
 	private final int max_cons;
-
+	
+	// ----------------------------------------------------
+	
 	public RdbConnectionProvider(String driver, String user, String pass,
 			String url, int max_cons) {
 		super();
@@ -51,6 +53,8 @@ public class RdbConnectionProvider {
 		usedCons = new Vector<Connection>();
 		cons = new Vector<Connection>();
 	}
+	
+	// ----------------------------------------------------
 	
 	public Connection getConnection() {
 		Connection con = null;

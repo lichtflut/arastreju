@@ -18,8 +18,7 @@ package org.arastreju.bindings.rdb;
 
 import java.sql.Connection;
 
-import org.arastreju.rdb.db.DB;
-import org.arastreju.rdb.db.DBInit;
+import org.arastreju.bindings.rdb.jdbc.DBOperations;
 import org.arastreju.sge.ArastrejuGate;
 import org.arastreju.sge.ArastrejuProfile;
 import org.arastreju.sge.context.DomainIdentifier;
@@ -27,30 +26,39 @@ import org.arastreju.sge.spi.ArastrejuGateFactory;
 import org.arastreju.sge.spi.GateInitializationException;
 
 public class RdbGateFactory extends ArastrejuGateFactory {
-
+	
+	private final String DRIVER ="org.arastreju.bindings.rdb.jdbcDriver";
+	private final String DB = "org.arastreju.bindings.rdb.db";
+	private final String USER = "org.arastreju.bindings.rdb.dbUser";
+	private final String PASS = "org.arastreju.bindings.rdb.dbPass";
+	private final String PROTOCOL = "org.arastreju.bindings.rdb.protocol";
+	private final int MAX_CONNECTIONS = 10;
+	
+	// ----------------------------------------------------
+	
 	public RdbGateFactory(ArastrejuProfile profile) {
 		super(profile);
 	}
-
+	
+	// ----------------------------------------------------
+	
 	@Override
 	public ArastrejuGate create(DomainIdentifier identifier) throws GateInitializationException {
 		
 		String storageName = identifier.getStorage();
 		
-		// TODO: check is storage with given name already exists.
-		
 		ArastrejuProfile profile = getProfile();
 		
 		RdbConnectionProvider provider = new RdbConnectionProvider(
-				profile.getProperty(DB.PROFILE_DRIVER.val()),
-				profile.getProperty(DB.PROFILE_USER.val()),
-				profile.getProperty(DB.PROFILE_PASS.val()),
-				profile.getProperty(DB.PROFILE_PROTOCOL.val())+profile.getProperty(DB.PROFILE_DB.val()),
-				10);
+				profile.getProperty(DRIVER),
+				profile.getProperty(USER),
+				profile.getProperty(PASS),
+				profile.getProperty(PROTOCOL)+profile.getProperty(DB),
+				MAX_CONNECTIONS);
 		
 		Connection con = provider.getConnection();
-		if(!DBInit.tableExists(con, storageName))
-			DBInit.init(con, storageName);
+		if(!DBOperations.tableExists(con, storageName))
+			DBOperations.createTable(con, storageName);
 		provider.close(con);
 		
 		return new RdbGate(provider, identifier);

@@ -24,12 +24,16 @@ import org.arastreju.sge.spi.abstracts.AbstractModelingConversation;
 public class RdbModelingConversation extends AbstractModelingConversation {
 
 	private RdbConversationContext context;
-
+	
+	// ----------------------------------------------------
+	
 	public RdbModelingConversation(RdbConversationContext conversationContext) {
 		super(conversationContext);
 		context = conversationContext;
 	}
-
+	
+	// ----------------------------------------------------
+	
 	@Override
 	public Query createQuery() {
 		// TODO Auto-generated method stub

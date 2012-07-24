@@ -2,7 +2,7 @@
  * Copyright 2012 by lichtflut Forschungs- und Entwicklungsgesellschaft mbH
  */
 
-package org.arastreju.rdb.db;
+package org.arastreju.bindings.rdb.jdbc;
 
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
@@ -24,19 +24,46 @@ import org.arastreju.sge.eh.ErrorCodes;
  * @author Raphael Esterle
  */
 
-public class DBInit {
+public class DBOperations {
 	
-	public static void init(Connection con, String storageName){
-		System.out.println("CON: "+con);
+	public static void createTable(Connection con, String tableName){
+		
+		String fieldType = "varchar(255)";
+		String ws = " ";
+		String de = ", ";
+		StringBuilder sb = new StringBuilder("CREATE TABLE ");
+		sb.append(tableName);
+		sb.append('(');
+		sb.append(ws);
+		
+		for(Column col : Column.values()){
+			sb.append(col.value());
+			sb.append(ws);
+			sb.append(fieldType);
+			sb.append(de);
+		}
+		
+		sb.setCharAt(sb.length()-1, ';');
+		sb.setCharAt(sb.length()-2, ')');
+		
+		System.out.println(sb.toString());
+		
 		try {
 			Statement smt = con.createStatement();
-			smt.execute("CREATE TABLE "+storageName+" (" +
-					"subject varchar(255), "+
-					"predicate varchar(255), "+
-					"object varchar(255));");
+			smt.execute(sb.toString());
 		} catch (SQLException e) {
 			throw new ArastrejuRuntimeException(ErrorCodes.GENERAL_IO_ERROR, "SQL Error:"+e.getMessage());
 		}
+	}
+	
+	public static void deleteTable(Connection con, String tablename){
+		try {
+			Statement smt = con.createStatement();
+			smt.execute("DROP TABLE "+tablename+";");
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
 	}
 	
 	public static boolean tableExists(Connection con, String name){
@@ -44,7 +71,6 @@ public class DBInit {
 			DatabaseMetaData meta = con.getMetaData();
 			return meta.getTables(null, null, name, null).next();
 		} catch (SQLException e) {
-			System.out.println("hlalalalala");
 			e.printStackTrace();
 		}
 		return false;
