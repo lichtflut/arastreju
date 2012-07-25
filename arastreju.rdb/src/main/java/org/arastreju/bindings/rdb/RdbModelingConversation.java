@@ -15,8 +15,14 @@ package org.arastreju.bindings.rdb;
  * @author Raphael Esterle
  */
 
+import java.lang.reflect.Field;
+import java.util.Set;
+
 import org.arastreju.sge.model.ResourceID;
+import org.arastreju.sge.model.Statement;
+import org.arastreju.sge.model.associations.AssociationKeeper;
 import org.arastreju.sge.model.nodes.ResourceNode;
+import org.arastreju.sge.model.nodes.SNResource;
 import org.arastreju.sge.naming.QualifiedName;
 import org.arastreju.sge.query.Query;
 import org.arastreju.sge.spi.abstracts.AbstractModelingConversation;
@@ -24,12 +30,22 @@ import org.arastreju.sge.spi.abstracts.AbstractModelingConversation;
 public class RdbModelingConversation extends AbstractModelingConversation {
 
 	private RdbConversationContext context;
+	private Field assocKeeperField;
 	
 	// ----------------------------------------------------
 	
 	public RdbModelingConversation(RdbConversationContext conversationContext) {
 		super(conversationContext);
 		context = conversationContext;
+		try {
+			assocKeeperField = SNResource.class.getDeclaredField("associationKeeper");
+			assocKeeperField.setAccessible(true);
+		} catch (SecurityException e) {
+			e.printStackTrace();
+		} catch (NoSuchFieldException e) {
+			e.printStackTrace();
+		}
+		
 	}
 	
 	// ----------------------------------------------------
@@ -54,8 +70,23 @@ public class RdbModelingConversation extends AbstractModelingConversation {
 
 	@Override
 	public void attach(ResourceNode node) {
-		// TODO Auto-generated method stub
+		System.out.println("in");
+		if(node.isAttached())
+			return;
+		if(context.getCache().contains(node.getQualifiedName()));
+			//merge
+		else{
+			Set<Statement> copy = node.getAssociations();
+			RdbAssosiationKeeper keeper = new RdbAssosiationKeeper(node, context);
+			setAssociationKeeper(node, keeper);
 
+			for (Statement smt : copy) {
+				keeper.addAssociation(smt);
+			}
+
+			context.getCache().add(node.getQualifiedName(), keeper);
+		}
+			
 	}
 
 	@Override
@@ -80,6 +111,21 @@ public class RdbModelingConversation extends AbstractModelingConversation {
 	protected void assertActive() {
 		// TODO Auto-generated method stub
 
+	}
+	
+	private void setAssociationKeeper(final ResourceNode node,
+			final AssociationKeeper ak) {
+		final ResourceNode resource = node.asResource();
+		if (!(resource instanceof SNResource)) {
+			throw new IllegalArgumentException(
+					"Cannot set AssociationKeeper for class: "
+							+ node.getClass());
+		}
+		try {
+			assocKeeperField.set(resource, ak);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 }

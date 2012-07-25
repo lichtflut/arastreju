@@ -21,11 +21,15 @@ import org.arastreju.sge.spi.abstracts.AbstractConversationContext;
 public class RdbConversationContext extends AbstractConversationContext {
 	
 	private RdbConnectionProvider connectionProvider;
+	private String table;
+	private Cache cache;
 	
 	// ----------------------------------------------------
 	
-	public RdbConversationContext(RdbConnectionProvider connectionProvider) {
+	public RdbConversationContext(RdbConnectionProvider connectionProvider, String table) {
 		this.connectionProvider = connectionProvider;
+		this.table=table;
+		cache = new Cache();
 	}
 	
 	// ----------------------------------------------------
@@ -42,5 +46,12 @@ public class RdbConversationContext extends AbstractConversationContext {
 	public RdbConnectionProvider getConnectionProvider() {
 		return connectionProvider;
 	}
-
+	
+	public String getTable(){
+		return table;
+	}
+	
+	public Cache getCache(){
+		return cache;
+	}
 }

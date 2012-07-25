@@ -29,25 +29,27 @@ public class RdbConnectionProvider {
 	private Logger logger = LoggerFactory
 			.getLogger(RdbConnectionProvider.class);
 	
-	private String driver;
-	private String user;
-	private String pass;
-	private String url;
-
-	private Vector<Connection> usedCons;
-	private Vector<Connection> cons;
+	private final String driver;
+	private final String user;
+	private final String pass;
+	private final String url;
+	private final String table;
 
 	private final int max_cons;
+	
+	private Vector<Connection> usedCons;
+	private Vector<Connection> cons;
 	
 	// ----------------------------------------------------
 	
 	public RdbConnectionProvider(String driver, String user, String pass,
-			String url, int max_cons) {
+			String url, String table, int max_cons) {
 		super();
 		this.driver = driver;
 		this.user = user;
 		this.pass = pass;
 		this.url = url;
+		this.table = table;
 		this.max_cons = max_cons;
 		
 		usedCons = new Vector<Connection>();
@@ -113,6 +115,10 @@ public class RdbConnectionProvider {
 
 	public int poolSize() {
 		return cons.size();
+	}
+	
+	public String getTable(){
+		return table;
 	}
 	
 }

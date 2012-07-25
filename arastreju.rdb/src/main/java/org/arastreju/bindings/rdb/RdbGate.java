@@ -37,7 +37,7 @@ public class RdbGate extends AbstractArastrejuGate {
 	
 	@Override
 	public ModelingConversation startConversation() {
-		RdbConversationContext ctx = new RdbConversationContext(connectionProvider);
+		RdbConversationContext ctx = new RdbConversationContext(connectionProvider,getDomainIdentifier().getStorage());
 		initContext(ctx);
 		return new RdbModelingConversation(ctx);
 	}

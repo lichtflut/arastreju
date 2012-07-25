@@ -54,6 +54,7 @@ public class RdbGateFactory extends ArastrejuGateFactory {
 				profile.getProperty(USER),
 				profile.getProperty(PASS),
 				profile.getProperty(PROTOCOL)+profile.getProperty(DB),
+				storageName,
 				MAX_CONNECTIONS);
 		
 		Connection con = provider.getConnection();
