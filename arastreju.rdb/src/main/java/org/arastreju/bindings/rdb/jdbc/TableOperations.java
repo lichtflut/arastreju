@@ -5,16 +5,24 @@
 package org.arastreju.bindings.rdb.jdbc;
 
 import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.arastreju.sge.eh.ArastrejuRuntimeException;
 import org.arastreju.sge.eh.ErrorCodes;
+import org.junit.experimental.results.ResultMatchers;
+
+import com.sun.corba.se.spi.orbutil.fsm.Guard.Result;
+import com.sun.xml.internal.bind.v2.schemagen.xmlschema.List;
 
 /**
  * <p>
- *  
+ *  Database relatet operations witch work on an specific table.
  * </p>
  *
  * <p>
@@ -35,8 +43,25 @@ public class TableOperations {
 		}
 	}
 	
-	public static Map<String, String> select(){
-		return null;
+	public static ArrayList<Map<String, String>> select(Connection con, String table, Map<String, String> conditions){
+		Statement stm = createStatement(con);
+		ArrayList<Map<String, String>> result = new ArrayList<Map<String,String>>();
+		try {
+			ResultSet rs = stm.executeQuery(SQLQueryBuilder.createSelect(table, conditions));
+			ResultSetMetaData meta;
+			while(rs.next()){
+				meta = rs.getMetaData();
+				HashMap<String, String> temp = new HashMap<String, String>();
+				for (int i = 0; i < meta.getColumnCount(); i++) {
+					temp.put(meta.getColumnLabel(i+1), rs.getString(i+1));
+				}
+				result.add(temp);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return result;
 	}
 	
 	private static Statement createStatement(Connection con){

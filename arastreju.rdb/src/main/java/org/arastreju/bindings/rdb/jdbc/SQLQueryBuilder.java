@@ -61,19 +61,15 @@ public class SQLQueryBuilder {
 	 * @param type Type
 	 * @return The query as {@link String}
 	 */
-	public static String createSelect(String sub, String pre, String obj, ElementaryDataType type){
+	public static String createSelect(String table, Map<String, String> conditions){
 
-		StringBuilder query = new StringBuilder("SELECT * FROM"+sp+sp+"WHERE");
-		if(null!=sub)
-			query.append(sp+Column.SUBJECT+"="+qm+sub+qm+sp+and);
-		if(null!=pre)
-			query.append(sp+Column.PREDICATE+"="+qm+pre+qm+sp+and);
-		if(null!=obj)
-			query.append(sp+Column.OBJECT+"="+qm+obj+qm+sp+and);
-		if(null!=type)
-			query.append(sp+"="+qm+type+qm+sp+and);
-
-		return query.substring(0, query.length()-4);		
+		StringBuilder query = new StringBuilder("SELECT * FROM "+table+" WHERE ");
+		for (String key : conditions.keySet()) {
+			query.append(key+"='"+conditions.get(key)+"' AND ");
+		}
+		query.delete(query.length()-5, query.length());
+		query.append(';');
+		return query.toString();
 	}
 
 	/**

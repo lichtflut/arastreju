@@ -70,7 +70,6 @@ public class RdbModelingConversation extends AbstractModelingConversation {
 
 	@Override
 	public void attach(ResourceNode node) {
-		System.out.println("in");
 		if(node.isAttached())
 			return;
 		if(context.getCache().contains(node.getQualifiedName()));

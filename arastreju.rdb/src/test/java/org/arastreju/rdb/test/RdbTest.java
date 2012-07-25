@@ -59,7 +59,6 @@ public class RdbTest {
 		
 		try {
 			Class.forName(driver);
-			System.out.println(url);
 			con = DriverManager.getConnection(url, user, pass);
 			con.setAutoCommit(true);
 			//DBOperations.deleteTable(con, DomainIdentifier.MASTER_DOMAIN);
@@ -88,18 +87,24 @@ public class RdbTest {
 		c.put(Column.SUBJECT.value(), "SUBJECT");
 		c.put(Column.PREDICATE.value(), "PREDICATE");
 		c.put(Column.OBJECT.value(), "OBJECT");
-		System.out.println(SQLQueryBuilder.createInsert("test", c));
+		System.out.println(SQLQueryBuilder.createSelect("test", c));
 		
 		ResourceNode n0 = new SNResource(qnCar);
 		ResourceNode n1 = new SNResource(qnBike);
+		ResourceNode n2 = new SNResource(qnVehicle);
 		SNOPS.associate(n1, SNOPS.id(qnKnows), n0, null);
 		SNOPS.associate(n1, SNOPS.id(qnHasEmployees), new SNValue(ElementaryDataType.INTEGER, 6), null);
+		SNOPS.associate(n1, SNOPS.id(qnKnows), n2, null);
 		mc.attach(n1);
 	}
 	
 	@Test
-	public void testAdding(){
+	public void testResolv(){
+		Arastreju aras = Arastreju.getInstance(profile);
+		ArastrejuGate gate = aras.openMasterGate();
 		
+		ModelingConversation mc = gate.startConversation();
+		mc.resolve(SNOPS.id(qnCar));
 	}
 
 }
