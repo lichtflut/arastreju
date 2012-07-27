@@ -4,6 +4,9 @@
 
 package org.arastreju.bindings.rdb.jdbc;
 
+import org.arastreju.sge.eh.ArastrejuRuntimeException;
+import org.arastreju.sge.eh.ErrorCodes;
+
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
@@ -12,13 +15,6 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-
-import org.arastreju.sge.eh.ArastrejuRuntimeException;
-import org.arastreju.sge.eh.ErrorCodes;
-import org.junit.experimental.results.ResultMatchers;
-
-import com.sun.corba.se.spi.orbutil.fsm.Guard.Result;
-import com.sun.xml.internal.bind.v2.schemagen.xmlschema.List;
 
 /**
  * <p>

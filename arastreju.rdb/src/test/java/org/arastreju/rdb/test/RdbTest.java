@@ -1,6 +1,23 @@
 package org.arastreju.rdb.test;
 
-import static org.junit.Assert.*;
+import org.arastreju.bindings.rdb.RdbGateFactory;
+import org.arastreju.bindings.rdb.jdbc.Column;
+import org.arastreju.bindings.rdb.jdbc.SQLQueryBuilder;
+import org.arastreju.sge.Arastreju;
+import org.arastreju.sge.ArastrejuGate;
+import org.arastreju.sge.ArastrejuProfile;
+import org.arastreju.sge.ModelingConversation;
+import org.arastreju.sge.SNOPS;
+import org.arastreju.sge.model.ElementaryDataType;
+import org.arastreju.sge.model.nodes.ResourceNode;
+import org.arastreju.sge.model.nodes.SNResource;
+import org.arastreju.sge.model.nodes.SNValue;
+import org.arastreju.sge.naming.QualifiedName;
+import org.junit.After;
+import org.junit.Ignore;
+import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -8,26 +25,13 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.arastreju.bindings.rdb.RdbGateFactory;
-import org.arastreju.bindings.rdb.jdbc.Column;
-import org.arastreju.bindings.rdb.jdbc.DBOperations;
-import org.arastreju.bindings.rdb.jdbc.SQLQueryBuilder;
-import org.arastreju.sge.Arastreju;
-import org.arastreju.sge.ArastrejuGate;
-import org.arastreju.sge.ArastrejuProfile;
-import org.arastreju.sge.ModelingConversation;
-import org.arastreju.sge.SNOPS;
-import org.arastreju.sge.context.DomainIdentifier;
-import org.arastreju.sge.model.ElementaryDataType;
-import org.arastreju.sge.model.nodes.ResourceNode;
-import org.arastreju.sge.model.nodes.SNResource;
-import org.arastreju.sge.model.nodes.SNValue;
-import org.arastreju.sge.naming.QualifiedName;
-import org.junit.After;
-import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
+/**
+ * OT: Marked to be ignored - do not work if no MySQL is running.
+ */
+@Ignore
 public class RdbTest {
 
 	private final Logger logger = LoggerFactory.getLogger(RdbTest.class);
