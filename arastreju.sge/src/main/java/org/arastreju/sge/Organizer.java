@@ -18,6 +18,7 @@ package org.arastreju.sge;
 import java.util.Collection;
 
 import org.arastreju.sge.context.Context;
+import org.arastreju.sge.io.StatementContainer;
 import org.arastreju.sge.naming.Namespace;
 import org.arastreju.sge.naming.QualifiedName;
 
@@ -44,5 +45,9 @@ public interface Organizer {
 	Collection<Context> getContexts();
 	
 	Context registerContext(QualifiedName qn);
+
+    // ----------------------------------------------------
+
+    StatementContainer getStatements(Context ctx);
 
 }

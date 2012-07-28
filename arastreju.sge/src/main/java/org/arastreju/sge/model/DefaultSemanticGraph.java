@@ -19,6 +19,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -74,6 +75,15 @@ public class DefaultSemanticGraph implements SemanticGraph {
 	public Set<Statement> getStatements() {
 		return Collections.unmodifiableSet(statements);
 	}
+
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Iterator<Statement> iterator() {
+        return getStatements().iterator();
+    }
 
 	/**
 	 * {@inheritDoc}
@@ -167,8 +177,8 @@ public class DefaultSemanticGraph implements SemanticGraph {
 			}
 		}
 	}
-	
-	private static class StmtComparator implements Comparator<Statement> {
+
+    private static class StmtComparator implements Comparator<Statement> {
 
 		/** 
 		* {@inheritDoc}

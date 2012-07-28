@@ -15,6 +15,8 @@
  */
 package org.arastreju.sge.context;
 
+import org.arastreju.sge.naming.Namespace;
+
 /**
  * <p>
  *  Identifies a domain of an Arastreju instance.
@@ -34,6 +36,8 @@ public abstract class DomainIdentifier {
 
 	private String domainName;
 
+    private SimpleContextID context;
+
 	// -----------------------------------------------------
 	
 	/**
@@ -41,6 +45,7 @@ public abstract class DomainIdentifier {
 	 */
 	public DomainIdentifier(final String domainName) {
 	    this.domainName = domainName;
+        this.context = new SimpleContextID(Namespace.LOCAL_CONTEXTS, domainName);
     }
 	
 	// -----------------------------------------------------
@@ -62,7 +67,9 @@ public abstract class DomainIdentifier {
      * Get the initial context.
      * @return The initial context.
      */
-    public abstract Context getInitialContext();
+    public Context getInitialContext() {
+        return context;
+    }
 
 
 

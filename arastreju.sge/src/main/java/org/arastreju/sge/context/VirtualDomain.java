@@ -22,14 +22,11 @@ public class VirtualDomain extends DomainIdentifier {
 
     private String physicalStore;
 
-    private Context context;
-
     // ----------------------------------------------------
 
     public VirtualDomain(String name) {
         super(name);
         this.physicalStore = DEFAULT_STORAGE_NAME;
-        this.context = new SimpleContextID(Namespace.LOCAL_CONTEXTS, name);
     }
 
     // ----------------------------------------------------
@@ -39,11 +36,5 @@ public class VirtualDomain extends DomainIdentifier {
     public String getStorage() {
         return physicalStore;
     }
-
-    @Override
-    public Context getInitialContext() {
-        return context;
-    }
-
 
 }

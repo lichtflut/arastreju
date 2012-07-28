@@ -102,18 +102,18 @@ public abstract class AbstractRioBinding implements SemanticGraphIO {
     /**
      * {@inheritDoc}
      */
-    public void write(final StatementProvider provider, final OutputStream out)
+    public void write(final StatementContainer container, final OutputStream out)
             throws IOException, SemanticIOException {
         try {
             final RDFWriter writer = writerFactory().getWriter(out);
-            final NamespaceMap nsMap = new NamespaceMap(provider.getNamespaces());
+            final NamespaceMap nsMap = new NamespaceMap(container.getNamespaces());
             logger.debug("PrefixMap: \n" + nsMap);
             for(String prefix : nsMap.getPrefixes()){
                 writer.handleNamespace(prefix, nsMap.getNamespace(prefix).getUri());
             }
 
             writer.startRDF();
-            for (Statement stmt : provider) {
+            for (Statement stmt : container) {
                 writer.handleStatement(new RioStatement(stmt));
             }
             writer.endRDF();

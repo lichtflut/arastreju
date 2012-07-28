@@ -1,6 +1,7 @@
 package org.arastreju.sge.context;
 
 import org.arastreju.sge.model.ResourceID;
+import org.arastreju.sge.naming.Namespace;
 
 /**
  * <p>
@@ -15,6 +16,10 @@ import org.arastreju.sge.model.ResourceID;
  */
 public class PhysicalDomain extends DomainIdentifier {
 
+    /**
+     * Constructor.
+     * @param domainName The domain name.
+     */
     public PhysicalDomain(String domainName) {
         super(domainName);
     }
@@ -26,8 +31,4 @@ public class PhysicalDomain extends DomainIdentifier {
         return getDomainName();
     }
 
-    @Override
-    public Context getInitialContext() {
-        return null;
-    }
 }
