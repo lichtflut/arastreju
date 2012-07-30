@@ -48,6 +48,6 @@ public interface Organizer {
 
     // ----------------------------------------------------
 
-    StatementContainer getStatements(Context ctx);
+    StatementContainer getStatements(Context... ctx);
 
 }
