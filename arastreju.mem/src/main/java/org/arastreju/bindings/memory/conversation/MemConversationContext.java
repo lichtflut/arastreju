@@ -1,6 +1,7 @@
 package org.arastreju.bindings.memory.conversation;
 
 import org.arastreju.bindings.memory.tx.MemTransactionProvider;
+import org.arastreju.sge.context.Context;
 import org.arastreju.sge.persistence.TxProvider;
 import org.arastreju.sge.spi.abstracts.AbstractConversationContext;
 
@@ -16,6 +17,15 @@ import org.arastreju.sge.spi.abstracts.AbstractConversationContext;
  * @author Oliver Tigges
  */
 public class MemConversationContext extends AbstractConversationContext {
+
+    public MemConversationContext(Context primary, Context... readContexts) {
+       super(primary, readContexts);
+    }
+
+    public MemConversationContext() {
+    }
+
+    // ----------------------------------------------------
 
     @Override
     protected void clearCaches() {

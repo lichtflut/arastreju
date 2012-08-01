@@ -4,6 +4,7 @@
 package org.arastreju.bindings.rdb;
 
 import org.arastreju.bindings.rdb.tx.JdbcTxProvider;
+import org.arastreju.sge.context.Context;
 import org.arastreju.sge.persistence.TxProvider;
 import org.arastreju.sge.spi.abstracts.AbstractConversationContext;
 
@@ -22,15 +23,21 @@ public class RdbConversationContext extends AbstractConversationContext {
 	
 	private RdbConnectionProvider connectionProvider;
 	private String table;
-	private Cache cache;
+	private Cache cache = new Cache();
 	
 	// ----------------------------------------------------
 	
 	public RdbConversationContext(RdbConnectionProvider connectionProvider, String table) {
 		this.connectionProvider = connectionProvider;
 		this.table=table;
-		cache = new Cache();
 	}
+
+    public RdbConversationContext(RdbConnectionProvider connectionProvider, String table,
+                                  Context primaryContext, Context... readContexts) {
+        super(primaryContext, readContexts);
+        this.connectionProvider = connectionProvider;
+        this.table=table;
+    }
 	
 	// ----------------------------------------------------
 	

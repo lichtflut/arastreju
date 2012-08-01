@@ -16,6 +16,8 @@
 package org.arastreju.sge;
 
 
+import org.arastreju.sge.context.Context;
+
 /**
  * <p>
  *  Single point of entrance to Arastreju.
@@ -34,6 +36,14 @@ public interface ArastrejuGate {
 	 * @return The modeling conversation.
 	 */
 	ModelingConversation startConversation();
+
+    /**
+     * Starts a new Modeling Conversation using the given contexts.
+     * @param primary The primary context in which new statements will be placed.
+     * @param readContexts The additional contexts to be regarded when traversing through the graph.
+     * @return The modeling conversation.
+     */
+    ModelingConversation startConversation(Context primary, Context... readContexts);
 	
 	/**
 	 * Obtain the Organizer for Contexts and Namespaces.
