@@ -127,7 +127,9 @@ public abstract class AbstractConversationContext implements ConversationContext
     @Override
 	public ConversationContext setPrimaryContext(Context ctx) {
 		this.primaryContext = ctx;
-        readContexts.add(primaryContext);
+        if (primaryContext != null) {
+            readContexts.add(primaryContext);
+        }
 		return this;
 	}
 
@@ -142,8 +144,10 @@ public abstract class AbstractConversationContext implements ConversationContext
                 readContexts.add(ctx);
             }
         }
-        readContexts.add(primaryContext);
-		return this;
+        if (primaryContext != null) {
+            readContexts.add(primaryContext);
+        }
+        return this;
 	}
 
     // ----------------------------------------------------
