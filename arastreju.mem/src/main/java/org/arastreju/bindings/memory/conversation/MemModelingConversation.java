@@ -4,11 +4,14 @@ import de.lichtflut.infra.exceptions.NotYetImplementedException;
 import org.arastreju.sge.ConversationContext;
 import org.arastreju.sge.model.ResourceID;
 import org.arastreju.sge.model.SemanticGraph;
+import org.arastreju.sge.model.Statement;
 import org.arastreju.sge.model.nodes.ResourceNode;
 import org.arastreju.sge.naming.QualifiedName;
 import org.arastreju.sge.persistence.TransactionControl;
 import org.arastreju.sge.query.Query;
 import org.arastreju.sge.spi.abstracts.AbstractModelingConversation;
+
+import java.util.Set;
 
 /**
  * <p>
@@ -23,18 +26,19 @@ import org.arastreju.sge.spi.abstracts.AbstractModelingConversation;
  */
 public class MemModelingConversation extends AbstractModelingConversation {
 
-    private final MemConversationContext conversationContext;
-
-    // ----------------------------------------------------
-
     public MemModelingConversation(MemConversationContext conversationContext) {
-        this.conversationContext = conversationContext;
+        super(conversationContext);
     }
 
     // ----------------------------------------------------
 
     @Override
     public Query createQuery() {
+        throw new NotYetImplementedException();
+    }
+
+    @Override
+    public Set<Statement> findIncomingStatements(ResourceID object) {
         throw new NotYetImplementedException();
     }
 
@@ -68,39 +72,10 @@ public class MemModelingConversation extends AbstractModelingConversation {
         throw new NotYetImplementedException();
     }
 
-
-
-    @Override
-    public void attach(SemanticGraph graph) {
-        throw new NotYetImplementedException();
-    }
-
-    @Override
-    public void detach(SemanticGraph graph) {
-        throw new NotYetImplementedException();
-    }
-
-    // ----------------------------------------------------
-
-    @Override
-    public ConversationContext getConversationContext() {
-        return conversationContext;
-    }
-
-    @Override
-    public TransactionControl beginTransaction() {
-        throw new NotYetImplementedException();
-    }
-
-    @Override
-    public void close() {
-        conversationContext.close();
-    }
-
     // ----------------------------------------------------
 
     @Override
     protected void assertActive() {
-        //To change body of implemented methods use File | Settings | File Templates.
     }
+
 }

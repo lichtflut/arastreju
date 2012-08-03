@@ -23,6 +23,8 @@ import org.arastreju.sge.naming.QualifiedName;
 import org.arastreju.sge.persistence.TransactionControl;
 import org.arastreju.sge.query.Query;
 
+import java.util.Set;
+
 /**
  * <p>
  *  A Modeling Conversation allows to read an change parts of the semantic model.
@@ -57,6 +59,13 @@ public interface Conversation {
 	 * @return The query.
 	 */
 	Query createQuery();
+
+    /**
+     * Find all statements where given resource ID is the object.
+     * @param object The object of the statements.
+     * @return The statements.
+     */
+    Set<Statement> findIncomingStatements(ResourceID object);
 	
 	// -- RESOURCE NODE -----------------------------------
 	

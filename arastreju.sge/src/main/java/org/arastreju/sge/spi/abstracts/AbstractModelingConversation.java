@@ -3,12 +3,15 @@ package org.arastreju.sge.spi.abstracts;
 import org.arastreju.sge.ConversationContext;
 import org.arastreju.sge.ModelingConversation;
 import org.arastreju.sge.SNOPS;
+import org.arastreju.sge.model.ResourceID;
 import org.arastreju.sge.model.SemanticGraph;
 import org.arastreju.sge.model.Statement;
 import org.arastreju.sge.model.nodes.ResourceNode;
 import org.arastreju.sge.model.nodes.SemanticNode;
 import org.arastreju.sge.persistence.TransactionControl;
 import org.arastreju.sge.persistence.TxResultAction;
+
+import java.util.Set;
 
 /**
  * <p>
@@ -32,7 +35,7 @@ public abstract class AbstractModelingConversation implements ModelingConversati
 	}
     
     /**
-     * @deprecated Use other consgtructor with conversation.
+     * @deprecated Use other constructor with conversation.
      */
     public AbstractModelingConversation() {
 		this.conversationContext = null;
@@ -40,9 +43,6 @@ public abstract class AbstractModelingConversation implements ModelingConversati
     
     // ----------------------------------------------------
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void addStatement(final Statement stmt) {
         assertActive();
@@ -50,20 +50,16 @@ public abstract class AbstractModelingConversation implements ModelingConversati
         SNOPS.associate(subject, stmt.getPredicate(), stmt.getObject(), stmt.getContexts());
     }
 
-	/**
-    * {@inheritDoc}
-    */
     @Override
     public boolean removeStatement(final Statement stmt) {
         assertActive();
         final ResourceNode subject = resolve(stmt.getSubject());
         return SNOPS.remove(subject, stmt.getPredicate(), stmt.getObject());
     }
-    
 
-	/**
-	 * {@inheritDoc}
-	 */
+    // ----------------------------------------------------
+    
+    @Override
 	public void attach(final SemanticGraph graph) {
 		assertActive();
 		conversationContext.getTxProvider().doTransacted(new TxResultAction<SemanticGraph>() {
@@ -77,9 +73,7 @@ public abstract class AbstractModelingConversation implements ModelingConversati
 		});
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
+	@Override
 	public void detach(final SemanticGraph graph) {
 		assertActive();
 		for(SemanticNode node : graph.getNodes()){
@@ -88,26 +82,19 @@ public abstract class AbstractModelingConversation implements ModelingConversati
 			}
 		}
 	}
+
+    // ----------------------------------------------------
     
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public ConversationContext getConversationContext() {
     	return conversationContext;
     }
     
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void close() {
     	conversationContext.clear();
     }
     
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public TransactionControl beginTransaction() {
     	return conversationContext.getTxProvider().begin();
