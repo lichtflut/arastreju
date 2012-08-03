@@ -71,128 +71,90 @@ public abstract class ResourceView implements ResourceNode, Serializable {
 	}
 	
 	// -----------------------------------------------------
-	
-	/**
-	 * {@inheritDoc}
-	 */
+
+    @Override
 	public QualifiedName getQualifiedName() {
 		return resource.getQualifiedName();
 	}
-	
-	/** 
-	 * {@inheritDoc}
-	 */
+
+    @Override
 	public String toURI() {
 		return resource.toURI();
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
+    @Override
 	public boolean isBlankNode() {
 		return resource.isBlankNode();
 	}
 	
 	// -----------------------------------------------------
-	
-	/**
-	 * {@inheritDoc}
-	 */
+
+    @Override
 	public Set<Statement> getAssociations() {
 		return resource.getAssociations();
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
+	@Override
 	public Set<Statement> getAssociations(final ResourceID predicate) {
 		return resource.getAssociations(predicate);
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
+    @Override
 	public Statement addAssociation(ResourceID predicate, SemanticNode object, Context... ctx) {
 		return resource.addAssociation(predicate, object, ctx);
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
+    @Override
 	public boolean removeAssociation(final Statement stmt) {
 		return resource.removeAssociation(stmt);
 	}
 	
 	// ------------------------------------------------------
 
-	/**
-	 * {@inheritDoc}
-	 */
+    @Override
 	public boolean isValueNode() {
 		return false;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
+    @Override
 	public boolean isResourceNode() {
 		return true;
 	}
-	
-	/**
-	 * {@inheritDoc}
-	 */
+
+    @Override
 	public boolean isAttached() {
 		return resource.isAttached();
 	}
 
 	// -----------------------------------------------------
 
-	/**
-	 * {@inheritDoc}
-	 */
+    @Override
 	public SNClass asClass() {
 		return resource.asClass();
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
+    @Override
 	public SNEntity asEntity() {
 		return resource.asEntity();
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
+    @Override
 	public SNProperty asProperty() {
 		return resource.asProperty();
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
+    @Override
 	public ResourceNode asResource() {
 		return resource;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
+    @Override
 	public ValueNode asValue() {
 		throw new IllegalStateException("Cannot convert a resource to a value node");
 	}
 	
 	// -----------------------------------------------------
 
-	/**
-	 * Returns the wrapped resource.
-	 * @return The resource wrapped by this view.
-	 */
-	protected ResourceNode getResource() {
-		return resource;
-	}
-	
 	protected String stringValue(ResourceID attribute) {
 		return SNOPS.string(SNOPS.fetchObject(this, attribute));
 	}

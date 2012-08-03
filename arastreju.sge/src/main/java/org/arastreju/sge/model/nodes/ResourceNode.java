@@ -52,7 +52,7 @@ public interface ResourceNode extends ResourceID {
 	// -----------------------------------------------------
 
 	/**
-	 * Get all associations.
+	 * Get all associations of this node.
 	 * @return Set of all associations.
 	 */
 	Set<Statement> getAssociations();
@@ -62,8 +62,8 @@ public interface ResourceNode extends ResourceID {
 	 * @param predicate The relevant predicate.
 	 * @return Set of matching associations.
 	 */
-	Set<Statement> getAssociations(final ResourceID predicate);
-	
+	Set<Statement> getAssociations(ResourceID predicate);
+
 	// -----------------------------------------------------
 
 	/**

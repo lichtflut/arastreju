@@ -37,7 +37,7 @@ public interface AssociationKeeper {
 	 * @return The resolved association set.
 	 */
 	Set<Statement> getAssociations();
-	
+
 	/**
 	 * Add an association.
 	 * @param association The association.

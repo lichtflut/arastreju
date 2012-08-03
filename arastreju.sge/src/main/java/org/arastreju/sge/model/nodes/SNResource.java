@@ -85,85 +85,56 @@ public class SNResource implements ResourceNode, Serializable {
 	
 	// ------------------------------------------------------
 
-	/**
-	 * {@inheritDoc}
-	 */
+    @Override
 	public QualifiedName getQualifiedName() {
 		return qn;
 	}
-	
-	/** 
-	 * {@inheritDoc}
-	 */
+
+    @Override
 	public String toURI() {
 		return qn.toURI();
 	}
-	
-	/**
-	 * {@inheritDoc}
-	 */
+
+    @Override
 	public boolean isBlankNode() {
 		return false;
 	}
 	
 	// -----------------------------------------------------
-	
-	/**
-	 * {@inheritDoc}
-	 */
-	public String getUri() {
-		return getQualifiedName().toURI();
-	}
-	
-	// -----------------------------------------------------
-	
-	/**
-	 * {@inheritDoc}
-	 */
+
+    @Override
 	public boolean isAttached() {
 		return associationKeeper.isAttached();
 	}
-	
-	/**
-	 * {@inheritDoc}
-	 */
+
+    @Override
 	public boolean isResourceNode() {
 		return true;
 	}
-	
-	/**
-	 * {@inheritDoc}
-	 */
+
+    @Override
 	public boolean isValueNode() {
 		return false;
 	}
-	
-	/**
-	 * {@inheritDoc}
-	 */
+
+    @Override
 	public ResourceNode asResource() {
 		return this;
 	}
-	
-	/**
-	 * {@inheritDoc}
-	 */
+
+    @Override
 	public ValueNode asValue() {
 		throw new IllegalStateException("Not a value: " + this);
 	}
 	
 	// -- ASSOCIATIONS ------------------------------------
 	
-	/**
-	 * {@inheritDoc}
-	 */
+	@Override
 	public Set<Statement> getAssociations() {
 		return Collections.unmodifiableSet(associationKeeper.getAssociations());
 	}
-	
-	/**
-	 * {@inheritDoc}
-	 */
+
+    @Override
 	public Set<Statement> getAssociations(final ResourceID predicate) {
 		final Set<Statement> result = new HashSet<Statement>();
 		for (Statement assoc : getAssociations()) {
@@ -173,21 +144,8 @@ public class SNResource implements ResourceNode, Serializable {
 		}
 		return result;
 	}
-	
-	/**
-	 * {@inheritDoc}
-	 */
-	public void addAssociation(Statement statement) {
-		if (!statement.getSubject().equals(this)){
-			throw new IllegalArgumentException("This node is not the statement's subject.");
-		}
-		associationKeeper.addAssociation(statement);
-	}
-	
-	/** 
-	 * {@inheritDoc}
-	 * @return 
-	 */
+
+    @Override
 	public Statement addAssociation(ResourceID predicate, SemanticNode object, Context... ctx) {
 		final Statement statement = new DetachedStatement(this, predicate, object, ctx);
 		associationKeeper.addAssociation(statement);
@@ -195,33 +153,25 @@ public class SNResource implements ResourceNode, Serializable {
 	}
 	
 	// -- DENY ASSOC --------------------------------------
-	
-	/**
-	 * {@inheritDoc}
-	 */
+
+    @Override
 	public boolean removeAssociation(final Statement stmt){
 		return associationKeeper.removeAssociation(stmt);
 	}
 	
 	// -----------------------------------------------------
-	
-	/**
-	 * {@inheritDoc}
-	 */
+
+    @Override
 	public SNEntity asEntity() {
 		return new SNEntity(this);
 	}
-	
-	/**
-	 * {@inheritDoc}
-	 */
+
+    @Override
 	public SNClass asClass() {
 		return new SNClass(this);
 	}
-	
-	/**
-	 * {@inheritDoc}
-	 */
+
+    @Override
 	public SNProperty asProperty(){
 		return new SNProperty(this);
 	}
@@ -230,7 +180,7 @@ public class SNResource implements ResourceNode, Serializable {
 	
 	@Override
 	public String toString() {
-		return getUri();
+		return toURI();
 	}
 	
 	@Override
