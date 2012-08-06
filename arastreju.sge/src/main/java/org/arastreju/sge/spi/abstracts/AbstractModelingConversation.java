@@ -3,15 +3,12 @@ package org.arastreju.sge.spi.abstracts;
 import org.arastreju.sge.ConversationContext;
 import org.arastreju.sge.ModelingConversation;
 import org.arastreju.sge.SNOPS;
-import org.arastreju.sge.model.ResourceID;
 import org.arastreju.sge.model.SemanticGraph;
 import org.arastreju.sge.model.Statement;
 import org.arastreju.sge.model.nodes.ResourceNode;
 import org.arastreju.sge.model.nodes.SemanticNode;
 import org.arastreju.sge.persistence.TransactionControl;
 import org.arastreju.sge.persistence.TxResultAction;
-
-import java.util.Set;
 
 /**
  * <p>
@@ -26,43 +23,45 @@ import java.util.Set;
  */
 public abstract class AbstractModelingConversation implements ModelingConversation {
 
-    private ConversationContext conversationContext;
+	private final ConversationContext conversationContext;
 
-    // ----------------------------------------------------
-    
-    public AbstractModelingConversation(ConversationContext conversationContext) {
+	// ----------------------------------------------------
+
+	public AbstractModelingConversation(final ConversationContext conversationContext) {
 		this.conversationContext = conversationContext;
 	}
-    
-    /**
-     * @deprecated Use other constructor with conversation.
-     */
-    public AbstractModelingConversation() {
+
+	/**
+	 * @deprecated Use other constructor with conversation.
+	 */
+	@Deprecated
+	public AbstractModelingConversation() {
 		this.conversationContext = null;
 	}
-    
-    // ----------------------------------------------------
 
-    @Override
-    public void addStatement(final Statement stmt) {
-        assertActive();
-        final ResourceNode subject = resolve(stmt.getSubject());
-        SNOPS.associate(subject, stmt.getPredicate(), stmt.getObject(), stmt.getContexts());
-    }
+	// ----------------------------------------------------
 
-    @Override
-    public boolean removeStatement(final Statement stmt) {
-        assertActive();
-        final ResourceNode subject = resolve(stmt.getSubject());
-        return SNOPS.remove(subject, stmt.getPredicate(), stmt.getObject());
-    }
+	@Override
+	public void addStatement(final Statement stmt) {
+		assertActive();
+		final ResourceNode subject = resolve(stmt.getSubject());
+		SNOPS.associate(subject, stmt.getPredicate(), stmt.getObject(), stmt.getContexts());
+	}
 
-    // ----------------------------------------------------
-    
-    @Override
+	@Override
+	public boolean removeStatement(final Statement stmt) {
+		assertActive();
+		final ResourceNode subject = resolve(stmt.getSubject());
+		return SNOPS.remove(subject, stmt.getPredicate(), stmt.getObject());
+	}
+
+	// ----------------------------------------------------
+
+	@Override
 	public void attach(final SemanticGraph graph) {
 		assertActive();
 		conversationContext.getTxProvider().doTransacted(new TxResultAction<SemanticGraph>() {
+			@Override
 			public SemanticGraph execute() {
 				for(Statement stmt : graph.getStatements()) {
 					final ResourceNode subject = resolve(stmt.getSubject());
@@ -83,24 +82,24 @@ public abstract class AbstractModelingConversation implements ModelingConversati
 		}
 	}
 
-    // ----------------------------------------------------
-    
-    @Override
-    public ConversationContext getConversationContext() {
-    	return conversationContext;
-    }
-    
-    @Override
-    public void close() {
-    	conversationContext.clear();
-    }
-    
-    @Override
-    public TransactionControl beginTransaction() {
-    	return conversationContext.getTxProvider().begin();
-    }
+	// ----------------------------------------------------
 
-    // ----------------------------------------------------
+	@Override
+	public ConversationContext getConversationContext() {
+		return conversationContext;
+	}
 
-    protected abstract void assertActive();
+	@Override
+	public void close() {
+		conversationContext.clear();
+	}
+
+	@Override
+	public TransactionControl beginTransaction() {
+		return conversationContext.getTxProvider().begin();
+	}
+
+	// ----------------------------------------------------
+
+	protected abstract void assertActive();
 }
