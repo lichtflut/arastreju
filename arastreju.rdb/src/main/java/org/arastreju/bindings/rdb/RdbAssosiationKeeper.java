@@ -43,6 +43,11 @@ import org.slf4j.LoggerFactory;
 
 public class RdbAssosiationKeeper extends AbstractAssociationKeeper {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	private final Logger logger = LoggerFactory.getLogger(RdbAssosiationKeeper.class);
 	
 	private final ResourceID id;
@@ -103,37 +108,35 @@ public class RdbAssosiationKeeper extends AbstractAssociationKeeper {
 		conditions.put(Column.SUBJECT.value(), id.toURI());
 		ArrayList<Map<String, String>> stms = TableOperations.select(ctx.getConnectionProvider().getConnection(), ctx.getTable(), conditions);
 		for (Map<String, String> map : stms) {
-			ResourceID subject = SNOPS.id(new QualifiedName(map.get(Column.SUBJECT.value())));
-			ResourceID predicate = SNOPS.id(new QualifiedName(map.get(Column.PREDICATE.value())));
+			SNOPS.id(new QualifiedName(map.get(Column.SUBJECT.value())));
+			SNOPS.id(new QualifiedName(map.get(Column.PREDICATE.value())));
 			
 			String sObj = map.get(Column.OBJECT.value());
-			SemanticNode object = null;
-			
 			ElementaryDataType type = ElementaryDataType.valueOf(map.get(Column.TYPE.value().trim()));
 			
 			switch(type){
 				case RESOURCE:
 					QualifiedName qn = new QualifiedName(sObj);
-					ResourceID id = SNOPS.id(qn);
-					object = new SNResource(qn);
+				SNOPS.id(qn);
+				new SNResource(qn);
 					break;
 				case INTEGER:
-					object = new SNValue(type, new BigInteger(sObj));
+				new SNValue(type, new BigInteger(sObj));
 					break;
 				case DECIMAL:
-					object = new SNValue(type, new BigDecimal(sObj));
+				new SNValue(type, new BigDecimal(sObj));
 					break;
 				case DATE:
-					object = new SNValue(type, new Date(Long.parseLong(sObj)));
+				new SNValue(type, new Date(Long.parseLong(sObj)));
 					break;
 				case BOOLEAN:
 					boolean b = false;
 					if(sObj.equals("1"))
 						b = true;
-					object = new SNValue(type, b);
+				new SNValue(type, b);
 					break;
 				default:
-					object = new SNValue(type, sObj);
+				new SNValue(type, sObj);
 					break;
 			}
 		}

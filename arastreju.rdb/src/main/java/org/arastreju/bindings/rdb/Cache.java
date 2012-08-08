@@ -39,8 +39,8 @@ public class Cache {
 		return data.containsKey(id);
 	}
 	
-	public void remove(AssociationKeeper keeper){
-		data.remove(keeper);
+	public void remove(QualifiedName qn){
+		data.remove(qn);
 	}
 	
 	public AssociationKeeper get(QualifiedName qn){

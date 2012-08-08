@@ -40,11 +40,10 @@ public class TableOperations {
 	}
 	
 	public static ArrayList<Map<String, String>> select(Connection con, String table, Map<String, String> conditions){
-		Statement stm = createStatement(con);
 		ArrayList<Map<String, String>> result = new ArrayList<Map<String,String>>();
+		ResultSet rs = exQuery(con, SQLQueryBuilder.createSelect(table, conditions));
+		ResultSetMetaData meta;
 		try {
-			ResultSet rs = stm.executeQuery(SQLQueryBuilder.createSelect(table, conditions));
-			ResultSetMetaData meta;
 			while(rs.next()){
 				meta = rs.getMetaData();
 				HashMap<String, String> temp = new HashMap<String, String>();
@@ -57,7 +56,31 @@ public class TableOperations {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
 		return result;
+	}
+	
+	public static void deleteAssosiation(Connection con, String table, String subject, String predicate, String object){
+		exQuery(con, SQLQueryBuilder.createDelete(table, subject, predicate, object));
+	}
+	
+	public static void deleteOutgoingAssosiations(Connection con, String table, String subject){
+		exQuery(con, SQLQueryBuilder.deleteOutgoingAssosiations(table, subject));
+	}
+	
+	public static void deleteIncommingAssosiations(Connection con, String table, String object){
+		exQuery(con, SQLQueryBuilder.deleteOutgoingAssosiations(table, object));
+	}
+	
+	private static ResultSet exQuery(Connection con, String query){
+		Statement stm = createStatement(con);;
+		ResultSet rs;
+		try {
+			rs = stm.executeQuery(query);
+			return rs;
+		} catch (SQLException e) {
+			throw new ArastrejuRuntimeException(ErrorCodes.GRAPH_IO_ERROR, "SQL ERROR: "+e.getMessage());
+		}
 	}
 	
 	private static Statement createStatement(Connection con){

@@ -20,6 +20,7 @@ package org.arastreju.rdb.test;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import java.math.BigInteger;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -66,6 +67,7 @@ public class RdbTest {
 			"hasEmployees");
 	private final QualifiedName qnKnows = new QualifiedName("http://q#",
 			"knows");
+	private BigInteger one = new BigInteger("1");
 	
 	@After
 	public void tearDown(){
@@ -114,15 +116,17 @@ public class RdbTest {
 		ResourceNode n1 = new SNResource(qnBike);
 		ResourceNode n2 = new SNResource(qnVehicle);
 		SNOPS.associate(n1, SNOPS.id(qnKnows), n0, null);
-		SNOPS.associate(n1, SNOPS.id(qnHasEmployees), new SNValue(ElementaryDataType.INTEGER, 1010), null);
+		SNOPS.associate(n1, SNOPS.id(qnHasEmployees), new SNValue(ElementaryDataType.INTEGER, one), null);
 		SNOPS.associate(n1, SNOPS.id(qnKnows), n2, null);
 		mc.attach(n1);
 	}
 	
 	@Test
 	public void testResolve(){
-		System.out.println("resolve "+this.mc);
-		ResourceNode node = mc.resolve(SNOPS.id(qnVehicle));
+		System.out.println(mc.resolve(SNOPS.id(qnBike)).getAssociations());
+		ResourceNode node = mc.resolve(SNOPS.id(qnBike));
+		mc.remove(node);
+		System.out.println(mc.resolve(SNOPS.id(qnBike)).getAssociations());
 	}
 
 }

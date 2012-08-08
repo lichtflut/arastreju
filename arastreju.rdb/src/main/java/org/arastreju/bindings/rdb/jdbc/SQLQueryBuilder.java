@@ -25,7 +25,6 @@ public class SQLQueryBuilder {
 	private static final String dim = ",";
 	private static final String qm = "'";
 	private static final String bo = "(";
-	private static final String bc = ")";
 	private static final String sp = " ";
 	private static final String and = "AND";
 
@@ -80,18 +79,24 @@ public class SQLQueryBuilder {
 	 * @param type Type
 	 * @return The query as {@link String}
 	 */
-	public static String createDelete(String sub, String pre, String obj, ElementaryDataType type){
+	public static String createDelete(String table, String sub, String pre, String obj){
 
-		StringBuilder query = new StringBuilder("DELETE FROM"+sp+sp+"WHERE");
+		StringBuilder query = new StringBuilder("DELETE FROM"+sp+table+sp+"WHERE");
 		if(null!=sub)
-			query.append(sp+Column.SUBJECT+"="+qm+sub+qm+sp+and);
+			query.append(sp+Column.SUBJECT.value()+"="+qm+sub+qm+sp+and);
 		if(null!=pre)
-			query.append(sp+Column.PREDICATE+"="+qm+pre+qm+sp+and);
+			query.append(sp+Column.PREDICATE.value()+"="+qm+pre+qm+sp+and);
 		if(null!=obj)
-			query.append(sp+Column.OBJECT+"="+qm+obj+qm+sp+and);
-		if(null!=type)
-			query.append(sp+"="+qm+type+qm+sp+and);
+			query.append(sp+Column.OBJECT.value()+"="+qm+obj+qm+sp+and);
 
 		return query.substring(0, query.length()-4);		
+	}
+	
+	public static String deleteOutgoingAssosiations(String table, String subject){
+		return "DELETE FROM "+table+" WHERE "+Column.SUBJECT.value()+"='"+subject+"';";
+	}
+	
+	public static String deleteIncommingAssosiations(String table, String object){
+		return "DELETE FROM "+table+" WHERE "+Column.OBJECT.value()+"='"+object+"';";
 	}
 }
