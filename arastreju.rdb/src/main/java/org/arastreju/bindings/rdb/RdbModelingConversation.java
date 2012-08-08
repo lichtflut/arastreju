@@ -64,8 +64,16 @@ public class RdbModelingConversation extends AbstractModelingConversation {
 
 	@Override
 	public ResourceNode resolve(ResourceID resourceID) {
-		// TODO Auto-generated method stub
-		return null;
+		Cache cache = context.getCache();
+		ResourceNode node = resourceID.asResource();
+		QualifiedName qn = resourceID.getQualifiedName();
+		if(node.isAttached())
+			return node;
+		if(cache.contains(resourceID.getQualifiedName())){
+			setAssociationKeeper(node, cache.get(qn));
+		}
+		setAssociationKeeper(node, new RdbAssosiationKeeper(resourceID, context));
+		return node;
 	}
 
 	@Override
@@ -82,7 +90,7 @@ public class RdbModelingConversation extends AbstractModelingConversation {
 			for (Statement smt : copy) {
 				keeper.addAssociation(smt);
 			}
-
+			System.out.println("add: "+node.getQualifiedName());
 			context.getCache().add(node.getQualifiedName(), keeper);
 		}
 			

@@ -1,8 +1,33 @@
+/*
+ * Copyright 2012 by lichtflut Forschungs- und Entwicklungsgesellschaft mbH
+ */
+
 package org.arastreju.rdb.test;
+
+/**
+ * <p>
+ *  [DESCRIPTION]
+ * </p>
+ *
+ * <p>
+ * 	Created 25.07.2012
+ * </p>
+ *
+ * @author Raphael Esterle
+
+ */
+
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.arastreju.bindings.rdb.RdbGateFactory;
 import org.arastreju.bindings.rdb.jdbc.Column;
-import org.arastreju.bindings.rdb.jdbc.SQLQueryBuilder;
 import org.arastreju.sge.Arastreju;
 import org.arastreju.sge.ArastrejuGate;
 import org.arastreju.sge.ArastrejuProfile;
@@ -14,29 +39,21 @@ import org.arastreju.sge.model.nodes.SNResource;
 import org.arastreju.sge.model.nodes.SNValue;
 import org.arastreju.sge.naming.QualifiedName;
 import org.junit.After;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.Map;
-
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-
 /**
  * OT: Marked to be ignored - do not work if no MySQL is running.
  */
-@Ignore
+//@Ignore
 public class RdbTest {
 
 	private final Logger logger = LoggerFactory.getLogger(RdbTest.class);
 	
 	final private ArastrejuProfile profile = ArastrejuProfile.read("arastreju.default.profile");
+	
+	private static ModelingConversation mc;
 	
 	private final QualifiedName qnVehicle = new QualifiedName("http://q#",
 			"Verhicle");
@@ -86,29 +103,26 @@ public class RdbTest {
 		Arastreju aras = Arastreju.getInstance(profile);
 		ArastrejuGate gate = aras.openMasterGate();
 		
-		ModelingConversation mc = gate.startConversation();
+		this.mc = gate.startConversation();
+		
 		Map<String, String> c = new HashMap<String, String>();
 		c.put(Column.SUBJECT.value(), "SUBJECT");
 		c.put(Column.PREDICATE.value(), "PREDICATE");
 		c.put(Column.OBJECT.value(), "OBJECT");
-		System.out.println(SQLQueryBuilder.createSelect("test", c));
 		
 		ResourceNode n0 = new SNResource(qnCar);
 		ResourceNode n1 = new SNResource(qnBike);
 		ResourceNode n2 = new SNResource(qnVehicle);
 		SNOPS.associate(n1, SNOPS.id(qnKnows), n0, null);
-		SNOPS.associate(n1, SNOPS.id(qnHasEmployees), new SNValue(ElementaryDataType.INTEGER, 6), null);
+		SNOPS.associate(n1, SNOPS.id(qnHasEmployees), new SNValue(ElementaryDataType.INTEGER, 1010), null);
 		SNOPS.associate(n1, SNOPS.id(qnKnows), n2, null);
 		mc.attach(n1);
 	}
 	
 	@Test
-	public void testResolv(){
-		Arastreju aras = Arastreju.getInstance(profile);
-		ArastrejuGate gate = aras.openMasterGate();
-		
-		ModelingConversation mc = gate.startConversation();
-		mc.resolve(SNOPS.id(qnCar));
+	public void testResolve(){
+		System.out.println("resolve "+this.mc);
+		ResourceNode node = mc.resolve(SNOPS.id(qnVehicle));
 	}
 
 }

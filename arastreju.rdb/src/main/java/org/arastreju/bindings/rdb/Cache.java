@@ -43,4 +43,8 @@ public class Cache {
 		data.remove(keeper);
 	}
 	
+	public AssociationKeeper get(QualifiedName qn){
+		return data.get(qn);
+	}
+	
 }

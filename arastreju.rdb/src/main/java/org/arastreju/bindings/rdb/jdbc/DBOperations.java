@@ -46,8 +46,6 @@ public class DBOperations {
 		sb.setCharAt(sb.length()-1, ';');
 		sb.setCharAt(sb.length()-2, ')');
 		
-		System.out.println(sb.toString());
-		
 		try {
 			Statement smt = con.createStatement();
 			smt.execute(sb.toString());

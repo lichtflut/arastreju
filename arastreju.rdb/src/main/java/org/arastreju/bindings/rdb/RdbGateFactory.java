@@ -45,7 +45,7 @@ public class RdbGateFactory extends ArastrejuGateFactory {
 	@Override
 	public ArastrejuGate create(DomainIdentifier identifier) throws GateInitializationException {
 		
-		String storageName = identifier.getStorage();
+		String storageName = identifier.getStorage().toUpperCase();
 		
 		ArastrejuProfile profile = getProfile();
 		
