@@ -71,8 +71,9 @@ public class RdbModelingConversation extends AbstractModelingConversation {
 			return node;
 		if(cache.contains(resourceID.getQualifiedName())){
 			setAssociationKeeper(node, cache.get(qn));
+		}else{
+			setAssociationKeeper(node, new RdbAssosiationKeeper(resourceID, context));
 		}
-		setAssociationKeeper(node, new RdbAssosiationKeeper(resourceID, context));
 		return node;
 	}
 
