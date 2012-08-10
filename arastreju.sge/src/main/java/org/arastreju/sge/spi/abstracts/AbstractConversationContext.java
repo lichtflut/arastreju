@@ -21,6 +21,7 @@ import org.arastreju.sge.context.Context;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -59,7 +60,7 @@ public abstract class AbstractConversationContext implements ConversationContext
 	 * Creates a new Working Context.
 	 */
 	public AbstractConversationContext() {
-		LOGGER.info("New Conversation Context startet. " + ctxId);
+		LOGGER.debug("New Conversation Context startet. " + ctxId);
 	}
 
     /**
@@ -140,9 +141,7 @@ public abstract class AbstractConversationContext implements ConversationContext
 	public ConversationContext setReadContexts(Context... ctxs) {
         this.readContexts.clear();
         if (ctxs != null) {
-            for (Context ctx : ctxs) {
-                readContexts.add(ctx);
-            }
+            Collections.addAll(readContexts, ctxs);
         }
         if (primaryContext != null) {
             readContexts.add(primaryContext);
@@ -172,8 +171,9 @@ public abstract class AbstractConversationContext implements ConversationContext
 	
 	@Override
 	protected void finalize() throws Throwable {
+        super.finalize();
 		if (active) {
-			LOGGER.warn("Conversation context will be removed by GC, but has not been closed. " + ctxId);
+			LOGGER.debug("Conversation context will be removed by GC, but has not been closed. " + ctxId);
 		}
 	}
 
