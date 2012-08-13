@@ -20,6 +20,7 @@ import java.sql.Connection;
 import java.util.Set;
 
 import org.arastreju.bindings.rdb.jdbc.TableOperations;
+import org.arastreju.sge.SNOPS;
 import org.arastreju.sge.model.ResourceID;
 import org.arastreju.sge.model.Statement;
 import org.arastreju.sge.model.associations.AssociationKeeper;
@@ -30,11 +31,14 @@ import org.arastreju.sge.naming.QualifiedName;
 import org.arastreju.sge.query.Query;
 import org.arastreju.sge.spi.abstracts.AbstractModelingConversation;
 
+import de.lichtflut.infra.exceptions.NotYetImplementedException;
+
 public class RdbModelingConversation extends AbstractModelingConversation {
 
 	private RdbConversationContext context;
 	private Field assocKeeperField;
 	private final Cache cache;
+	private final RdbConnectionProvider conProvider;
 	
 	// ----------------------------------------------------
 	
@@ -42,6 +46,7 @@ public class RdbModelingConversation extends AbstractModelingConversation {
 		super(conversationContext);
 		context = conversationContext;
 		cache = context.getCache();
+		conProvider = context.getConnectionProvider();
 		try {
 			assocKeeperField = SNResource.class.getDeclaredField("associationKeeper");
 			assocKeeperField.setAccessible(true);
@@ -62,12 +67,11 @@ public class RdbModelingConversation extends AbstractModelingConversation {
 
 	@Override
 	public ResourceNode findResource(QualifiedName qn) {
-		if(cache.contains(qn)){
-			ResourceNode node = new SNResource(qn);
-			setAssociationKeeper(node, cache.get(qn));
-			return node;
-		}
-		return null;
+		ResourceNode node = resolve(SNOPS.id(qn));
+		if(node.isBlankNode())
+			return null;
+		return node;
+	
 	}
 
 	@Override
@@ -104,23 +108,23 @@ public class RdbModelingConversation extends AbstractModelingConversation {
 
 	@Override
 	public void detach(ResourceNode node) {
-		// TODO Auto-generated method stub
+		throw new NotYetImplementedException();
 
 	}
 
 	@Override
 	public void reset(ResourceNode node) {
-		// TODO Auto-generated method stub
+		throw new NotYetImplementedException();
 
 	}
 
 	@Override
 	public void remove(ResourceID id) {
 		// Delete all outgoing and incomming assosiations
-		Connection con = context.getConnectionProvider().getConnection();
+		Connection con = conProvider.getConnection();
 		TableOperations.deleteOutgoingAssosiations(con, context.getTable(), id.toURI());
 		TableOperations.deleteIncommingAssosiations(con, context.getTable(), id.toURI());
-		context.getConnectionProvider().close(con);
+		conProvider.close(con);
 		
 		// Remove the assosiationkeeper from cache. 
 		cache.remove(id.getQualifiedName());
@@ -132,8 +136,7 @@ public class RdbModelingConversation extends AbstractModelingConversation {
 
 	@Override
 	protected void assertActive() {
-		// TODO Auto-generated method stub
-
+		throw new NotYetImplementedException();
 	}
 	
 	private void setAssociationKeeper(final ResourceNode node,

@@ -123,10 +123,21 @@ public class RdbTest {
 	
 	@Test
 	public void testResolve(){
-		System.out.println(mc.resolve(SNOPS.id(qnBike)).getAssociations());
+		// Resolve existing Node
 		ResourceNode node = mc.resolve(SNOPS.id(qnBike));
-		mc.remove(node);
-		System.out.println(mc.resolve(SNOPS.id(qnBike)).getAssociations());
+		assertNotNull(node);
+		assertTrue(node.getAssociations().size()==3);
+		
+		// Resolve a non existant Node
+		node = mc.resolve(SNOPS.id(qnEmployedBy));
+		assertNotNull(node);
+		assertTrue(node.getAssociations().size()==0);
+		
+	}
+	
+	@Test
+	public void tesFind(){
+		mc.findResource(qnKnows);
 	}
 
 }

@@ -53,8 +53,7 @@ public class TableOperations {
 				result.add(temp);
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new ArastrejuRuntimeException(ErrorCodes.GENERAL_IO_ERROR, "SQL ERROR: "+e.getMessage());
 		}
 		
 		return result;
