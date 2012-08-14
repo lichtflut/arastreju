@@ -19,6 +19,7 @@ import java.lang.reflect.Field;
 import java.sql.Connection;
 import java.util.Set;
 
+import org.arastreju.bindings.rdb.impl.RdbResourceResolver;
 import org.arastreju.bindings.rdb.jdbc.TableOperations;
 import org.arastreju.sge.SNOPS;
 import org.arastreju.sge.model.ResourceID;
@@ -39,6 +40,7 @@ public class RdbModelingConversation extends AbstractModelingConversation {
 	private Field assocKeeperField;
 	private final Cache cache;
 	private final RdbConnectionProvider conProvider;
+	private final RdbResourceResolver resolver;
 	
 	// ----------------------------------------------------
 	
@@ -47,6 +49,7 @@ public class RdbModelingConversation extends AbstractModelingConversation {
 		context = conversationContext;
 		cache = context.getCache();
 		conProvider = context.getConnectionProvider();
+		resolver = new RdbResourceResolver(conversationContext);
 		try {
 			assocKeeperField = SNResource.class.getDeclaredField("associationKeeper");
 			assocKeeperField.setAccessible(true);
@@ -76,24 +79,24 @@ public class RdbModelingConversation extends AbstractModelingConversation {
 
 	@Override
 	public ResourceNode resolve(ResourceID resourceID) {
-		ResourceNode node = resourceID.asResource();
-		QualifiedName qn = resourceID.getQualifiedName();
-		if(node.isAttached())
-			return node;
-		if(cache.contains(resourceID.getQualifiedName())){
-			setAssociationKeeper(node, cache.get(qn));
-		}else{
-			setAssociationKeeper(node, new RdbAssosiationKeeper(resourceID, context));
-		}
-		return node;
+		return resolver.resolve(resourceID);
 	}
 
 	@Override
 	public void attach(ResourceNode node) {
+		
 		if(node.isAttached())
 			return;
-		if(cache.contains(node.getQualifiedName()));
-			//merge
+		if(cache.contains(node.getQualifiedName())){
+			AssociationKeeper newKeeper = cache.get(node.getQualifiedName());
+			Set<Statement> oldAssocs = node.getAssociations();
+			Set<Statement> newAssocs = newKeeper.getAssociations();
+			for (Statement statement : oldAssocs) {
+				if(!newAssocs.contains(statement))
+					newKeeper.addAssociation(statement);
+			}
+			setAssociationKeeper(node, newKeeper);
+		}
 		else{
 			Set<Statement> copy = node.getAssociations();
 			RdbAssosiationKeeper keeper = new RdbAssosiationKeeper(node, context);

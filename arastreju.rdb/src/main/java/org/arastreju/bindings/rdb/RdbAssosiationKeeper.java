@@ -32,7 +32,6 @@ import org.arastreju.sge.naming.QualifiedName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
 /**
  * <p>
  * Simple Database Operations.
@@ -52,8 +51,9 @@ public class RdbAssosiationKeeper extends AbstractAssociationKeeper {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	private final Logger logger = LoggerFactory.getLogger(RdbAssosiationKeeper.class);
-	
+	private final Logger logger = LoggerFactory
+			.getLogger(RdbAssosiationKeeper.class);
+
 	private final ResourceID id;
 	private RdbConversationContext ctx;
 	private final RdbConnectionProvider conProvieder;
@@ -76,37 +76,37 @@ public class RdbAssosiationKeeper extends AbstractAssociationKeeper {
 	@Override
 	public void addAssociation(final Statement assoc) {
 		if (!getAssociations().contains(assoc)) {
-			
+
 			super.addAssociation(assoc);
-			
+
 			HashMap<String, String> inserts = new HashMap<String, String>();
 			inserts.put(Column.SUBJECT.value(), assoc.getSubject().toURI());
 			inserts.put(Column.PREDICATE.value(), assoc.getPredicate().toURI());
 			SemanticNode object = assoc.getObject();
-			if(object.isResourceNode()){
-				inserts.put(Column.OBJECT.value(), assoc.getObject().asResource().toURI());
-				inserts.put(Column.TYPE.value(), ElementaryDataType.RESOURCE.toString());
-			}
-			else{
-				
+			if (object.isResourceNode()) {
+				inserts.put(Column.OBJECT.value(), assoc.getObject()
+						.asResource().toURI());
+				inserts.put(Column.TYPE.value(),
+						ElementaryDataType.RESOURCE.toString());
+			} else {
+
 				ValueNode vNode = assoc.getObject().asValue();
-				
+
 				inserts.put(Column.TYPE.value(), vNode.getDataType().toString());
 				inserts.put(Column.OBJECT.value(), vNode.getStringValue());
 			}
-				
+
 			Connection con = conProvieder.getConnection();
 			TableOperations.insert(con, ctx.getTable(), inserts);
-			System.out.println("insert: "+assoc.getSubject()+" "+inserts.get(Column.PREDICATE.value())+" "+inserts.get(Column.OBJECT.value()));
 			conProvieder.close(con);
 		}
 	}
 
 	@Override
 	public boolean removeAssociation(final Statement assoc) {
-//		if(rdb.deleteAssoc(assoc)){
-//			return super.removeAssociation(assoc);
-//		}
+		// if(rdb.deleteAssoc(assoc)){
+		// return super.removeAssociation(assoc);
+		// }
 		return false;
 	}
 
@@ -115,45 +115,50 @@ public class RdbAssosiationKeeper extends AbstractAssociationKeeper {
 		HashMap<String, String> conditions = new HashMap<String, String>();
 		conditions.put(Column.SUBJECT.value(), id.toURI());
 		Connection con = conProvieder.getConnection();
-		ArrayList<Map<String, String>> stms = TableOperations.select(con, ctx.getTable(), conditions);;
+		ArrayList<Map<String, String>> stms = TableOperations.select(con,
+				ctx.getTable(), conditions);
+		;
 		conProvieder.close(con);
-		
+
 		for (Map<String, String> map : stms) {
-			
-			ResourceID predicate = SNOPS.id(new QualifiedName(map.get(Column.PREDICATE.value().toUpperCase())));
+
+			ResourceID predicate = SNOPS.id(new QualifiedName(map
+					.get(Column.PREDICATE.value().toUpperCase())));
 			String sObj = map.get(Column.OBJECT.value().toUpperCase());
-			ElementaryDataType type = ElementaryDataType.valueOf(map.get(Column.TYPE.value().trim().toUpperCase()));
+			ElementaryDataType type = ElementaryDataType.valueOf(map
+					.get(Column.TYPE.value().trim().toUpperCase()));
 			SemanticNode object = null;
-			
-			switch(type){
-				case RESOURCE:
-					QualifiedName qn = new QualifiedName(sObj);
-					object = new SNResource(qn);
-					break;
-				case INTEGER:
-					object = new SNValue(type, new BigInteger(sObj));
-					break;
-				case DECIMAL:
-					object = new SNValue(type, new BigDecimal(sObj));
-					break;
-				case DATE:
-					object = new SNValue(type, new Date(Long.parseLong(sObj)));
-					break;
-				case BOOLEAN:
-					boolean b = false;
-					if(sObj.equals("1"))
-						b = true;
-					object = new SNValue(type, b);
-					break;
-				default:
-					object = new SNValue(type, sObj);
-					break;
+
+			switch (type) {
+			case RESOURCE:
+				QualifiedName qn = new QualifiedName(sObj);
+				object = new SNResource(qn);
+				break;
+			case INTEGER:
+				object = new SNValue(type, new BigInteger(sObj));
+				break;
+			case DECIMAL:
+				object = new SNValue(type, new BigDecimal(sObj));
+				break;
+			case DATE:
+				object = new SNValue(type, new Date(Long.parseLong(sObj)));
+				break;
+			case BOOLEAN:
+				boolean b = false;
+				if (sObj.equals("1"))
+					b = true;
+				object = new SNValue(type, b);
+				break;
+			default:
+				object = new SNValue(type, sObj);
+				break;
 			}
-			
-			getAssociations().add(new DetachedStatement(this.id, predicate, object, ctx.getReadContexts()));
+
+			getAssociations().add(
+					new DetachedStatement(this.id, predicate, object, ctx
+							.getReadContexts()));
 		}
 
 	}
-	
 
 }
