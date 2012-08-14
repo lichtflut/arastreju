@@ -6,6 +6,7 @@ package org.arastreju.bindings.rdb.jdbc;
 
 import org.arastreju.sge.eh.ArastrejuRuntimeException;
 import org.arastreju.sge.eh.ErrorCodes;
+import org.arastreju.sge.naming.QualifiedName;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -14,6 +15,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -39,7 +41,33 @@ public class TableOperations {
 		}
 	}
 	
-	public static ArrayList<Map<String, String>> select(Connection con, String table, Map<String, String> conditions){
+	public static void deleteAssosiation(Connection con, String table, String subject, String predicate, String object){
+		exQuery(con, SQLQueryBuilder.createDelete(table, subject, predicate, object));
+	}
+	
+	public static void deleteOutgoingAssosiations(Connection con, String table, String subject){
+		exQuery(con, SQLQueryBuilder.deleteOutgoingAssosiations(table, subject));
+	}
+	
+	public static void deleteIncommingAssosiations(Connection con, String table, String object){
+		exQuery(con, SQLQueryBuilder.deleteOutgoingAssosiations(table, object));
+	}
+	
+	public static List<Map<String, String>> getOutgoingAssosiations(Connection con, String table, QualifiedName qn){
+		HashMap<String, String> conditions = new HashMap<String, String>();
+		conditions.put(Column.SUBJECT.value(), qn.toURI());
+		ArrayList<Map<String, String>> res = select(con, table, conditions);
+		return res;
+	}
+	
+	public static List<Map<String, String>> getIncommingAssosiations(Connection con, String table, QualifiedName qn){
+		HashMap<String, String> conditions = new HashMap<String, String>();
+		conditions.put(Column.OBJECT.value(), qn.toURI());
+		ArrayList<Map<String, String>> res = select(con, table, conditions);
+		return res;
+	}
+	
+	private static ArrayList<Map<String, String>> select(Connection con, String table, Map<String, String> conditions){
 		ArrayList<Map<String, String>> result = new ArrayList<Map<String,String>>();
 		ResultSet rs = exQuery(con, SQLQueryBuilder.createSelect(table, conditions));
 		ResultSetMetaData meta;
@@ -59,16 +87,14 @@ public class TableOperations {
 		return result;
 	}
 	
-	public static void deleteAssosiation(Connection con, String table, String subject, String predicate, String object){
-		exQuery(con, SQLQueryBuilder.createDelete(table, subject, predicate, object));
-	}
-	
-	public static void deleteOutgoingAssosiations(Connection con, String table, String subject){
-		exQuery(con, SQLQueryBuilder.deleteOutgoingAssosiations(table, subject));
-	}
-	
-	public static void deleteIncommingAssosiations(Connection con, String table, String object){
-		exQuery(con, SQLQueryBuilder.deleteOutgoingAssosiations(table, object));
+	public static boolean hasOutgoingAssosiations(Connection con, String table, QualifiedName qn){
+		String query = "SELECT 1 FROM "+table+" WHERE "+Column.SUBJECT.value()+"='"+qn.toURI()+"' LIMIT 1;";
+		ResultSet rs = exQuery(con, query);
+		try {
+			return rs.next();
+		} catch (SQLException e) {
+			throw new ArastrejuRuntimeException(ErrorCodes.GENERAL_IO_ERROR, e.getMessage());
+		}
 	}
 	
 	private static ResultSet exQuery(Connection con, String query){

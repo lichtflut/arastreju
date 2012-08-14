@@ -11,6 +11,7 @@ import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -47,8 +48,8 @@ public class RdbAssosiationKeeper extends AbstractAssociationKeeper {
 	 */
 	private static final long serialVersionUID = 1L;
 
-//	private final Logger logger = LoggerFactory
-//			.getLogger(RdbAssosiationKeeper.class);
+	// private final Logger logger = LoggerFactory
+	// .getLogger(RdbAssosiationKeeper.class);
 
 	private final ResourceID id;
 	private RdbConversationContext ctx;
@@ -108,12 +109,10 @@ public class RdbAssosiationKeeper extends AbstractAssociationKeeper {
 
 	@Override
 	protected void resolveAssociations() {
-		HashMap<String, String> conditions = new HashMap<String, String>();
-		conditions.put(Column.SUBJECT.value(), id.toURI());
 		Connection con = conProvieder.getConnection();
-		ArrayList<Map<String, String>> stms = TableOperations.select(con,
-				ctx.getTable(), conditions);
-		;
+		List<Map<String, String>> stms = TableOperations
+				.getOutgoingAssosiations(con, ctx.getTable(),
+						id.getQualifiedName());
 		conProvieder.close(con);
 
 		for (Map<String, String> map : stms) {
