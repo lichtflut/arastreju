@@ -181,6 +181,7 @@ public class RdbTest {
 		SNOPS.associate(car, Aras.HAS_PROPER_NAME, new SNText("Audi"));
 
 		mc.attach(car);
+		mc.getClass();
 
 
 		// detach and find again
