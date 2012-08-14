@@ -16,7 +16,6 @@ package org.arastreju.bindings.rdb;
  * @author Raphael Esterle
  */
 
-
 import org.arastreju.sge.ModelingConversation;
 import org.arastreju.sge.Organizer;
 import org.arastreju.sge.context.DomainIdentifier;
@@ -25,19 +24,21 @@ import org.arastreju.sge.spi.abstracts.AbstractArastrejuGate;
 public class RdbGate extends AbstractArastrejuGate {
 
 	private RdbConnectionProvider connectionProvider;
-	
+
 	// ----------------------------------------------------
-	
-	protected RdbGate(RdbConnectionProvider connectionProvider, DomainIdentifier identifier) {
+
+	protected RdbGate(RdbConnectionProvider connectionProvider,
+			DomainIdentifier identifier) {
 		super(identifier);
 		this.connectionProvider = connectionProvider;
 	}
-	
+
 	// ----------------------------------------------------
-	
+
 	@Override
 	public ModelingConversation startConversation() {
-		RdbConversationContext ctx = new RdbConversationContext(connectionProvider,getDomainIdentifier().getStorage());
+		RdbConversationContext ctx = new RdbConversationContext(
+				connectionProvider, getDomainIdentifier().getStorage());
 		initContext(ctx);
 		return new RdbModelingConversation(ctx);
 	}

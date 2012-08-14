@@ -14,21 +14,21 @@ import org.slf4j.LoggerFactory;
 
 /**
  * <p>
- *  Manages a pool of JDBC connections.
+ * Manages a pool of JDBC connections.
  * </p>
- *
+ * 
  * <p>
- * 	Created 23.07.2012
+ * Created 23.07.2012
  * </p>
- *
+ * 
  * @author Raphael Esterle
  */
 
 public class RdbConnectionProvider {
-	
+
 	private Logger logger = LoggerFactory
 			.getLogger(RdbConnectionProvider.class);
-	
+
 	private final String driver;
 	private final String user;
 	private final String pass;
@@ -36,12 +36,12 @@ public class RdbConnectionProvider {
 	private final String table;
 
 	private final int max_cons;
-	
+
 	private Vector<Connection> usedCons;
 	private Vector<Connection> cons;
-	
+
 	// ----------------------------------------------------
-	
+
 	public RdbConnectionProvider(String driver, String user, String pass,
 			String url, String table, int max_cons) {
 		super();
@@ -51,23 +51,23 @@ public class RdbConnectionProvider {
 		this.url = url;
 		this.table = table;
 		this.max_cons = max_cons;
-		
+
 		usedCons = new Vector<Connection>();
 		cons = new Vector<Connection>();
 	}
-	
+
 	// ----------------------------------------------------
-	
+
 	public Connection getConnection() {
 		Connection con = null;
-		if (usedSize()+poolSize()+1 > max_cons) {
-			logger.info("maximun is reached! "+getLogInfo());
+		if (usedSize() + poolSize() + 1 > max_cons) {
+			logger.info("maximun is reached! " + getLogInfo());
 			return con;
 		} else if (cons.size() > 0) {
 			con = cons.lastElement();
 			cons.remove(con);
 			usedCons.add(con);
-			logger.debug("returned pooled connection "+getLogInfo());
+			logger.debug("returned pooled connection " + getLogInfo());
 			return con;
 		}
 		con = createCon();
@@ -91,8 +91,8 @@ public class RdbConnectionProvider {
 			con = DriverManager.getConnection(url, user, pass);
 			con.setAutoCommit(true);
 		} catch (ClassNotFoundException e) {
-			System.out.println("cant load driver "+driver);
-			logger.debug("Cann't load Driver "+driver);
+			System.out.println("cant load driver " + driver);
+			logger.debug("Cann't load Driver " + driver);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -116,9 +116,9 @@ public class RdbConnectionProvider {
 	public int poolSize() {
 		return cons.size();
 	}
-	
-	public String getTable(){
+
+	public String getTable() {
 		return table;
 	}
-	
+
 }

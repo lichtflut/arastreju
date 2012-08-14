@@ -7,12 +7,9 @@ import org.arastreju.bindings.rdb.Cache;
 import org.arastreju.bindings.rdb.RdbAssosiationKeeper;
 import org.arastreju.bindings.rdb.RdbConversationContext;
 import org.arastreju.bindings.rdb.SNResourceRdb;
-import org.arastreju.sge.ConversationContext;
-import org.arastreju.sge.SNOPS;
 import org.arastreju.sge.model.ResourceID;
 import org.arastreju.sge.model.associations.AssociationKeeper;
 import org.arastreju.sge.model.nodes.ResourceNode;
-import org.arastreju.sge.model.nodes.SemanticNode;
 import org.arastreju.sge.naming.QualifiedName;
 import org.arastreju.sge.persistence.ResourceResolver;
 

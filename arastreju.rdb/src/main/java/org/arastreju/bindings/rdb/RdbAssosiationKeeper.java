@@ -11,13 +11,11 @@ import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import org.arastreju.bindings.rdb.jdbc.Column;
 import org.arastreju.bindings.rdb.jdbc.TableOperations;
-import org.arastreju.sge.ConversationContext;
 import org.arastreju.sge.SNOPS;
 import org.arastreju.sge.model.DetachedStatement;
 import org.arastreju.sge.model.ElementaryDataType;
@@ -29,8 +27,6 @@ import org.arastreju.sge.model.nodes.SNValue;
 import org.arastreju.sge.model.nodes.SemanticNode;
 import org.arastreju.sge.model.nodes.ValueNode;
 import org.arastreju.sge.naming.QualifiedName;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * <p>
@@ -51,8 +47,8 @@ public class RdbAssosiationKeeper extends AbstractAssociationKeeper {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	private final Logger logger = LoggerFactory
-			.getLogger(RdbAssosiationKeeper.class);
+//	private final Logger logger = LoggerFactory
+//			.getLogger(RdbAssosiationKeeper.class);
 
 	private final ResourceID id;
 	private RdbConversationContext ctx;

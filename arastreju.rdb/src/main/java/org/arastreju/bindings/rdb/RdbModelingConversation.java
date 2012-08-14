@@ -41,9 +41,9 @@ public class RdbModelingConversation extends AbstractModelingConversation {
 	private final Cache cache;
 	private final RdbConnectionProvider conProvider;
 	private final RdbResourceResolver resolver;
-	
+
 	// ----------------------------------------------------
-	
+
 	public RdbModelingConversation(RdbConversationContext conversationContext) {
 		super(conversationContext);
 		context = conversationContext;
@@ -51,18 +51,19 @@ public class RdbModelingConversation extends AbstractModelingConversation {
 		conProvider = context.getConnectionProvider();
 		resolver = new RdbResourceResolver(conversationContext);
 		try {
-			assocKeeperField = SNResource.class.getDeclaredField("associationKeeper");
+			assocKeeperField = SNResource.class
+					.getDeclaredField("associationKeeper");
 			assocKeeperField.setAccessible(true);
 		} catch (SecurityException e) {
 			e.printStackTrace();
 		} catch (NoSuchFieldException e) {
 			e.printStackTrace();
 		}
-		
+
 	}
-	
+
 	// ----------------------------------------------------
-	
+
 	@Override
 	public Query createQuery() {
 		return null;
@@ -71,10 +72,10 @@ public class RdbModelingConversation extends AbstractModelingConversation {
 	@Override
 	public ResourceNode findResource(QualifiedName qn) {
 		ResourceNode node = resolve(SNOPS.id(qn));
-		if(node.asResource().getAssociations().size()<1)
+		if (node.asResource().getAssociations().size() < 1)
 			return null;
 		return node;
-	
+
 	}
 
 	@Override
@@ -84,29 +85,29 @@ public class RdbModelingConversation extends AbstractModelingConversation {
 
 	@Override
 	public void attach(ResourceNode node) {
-		
-		if(node.isAttached())
+
+		if (node.isAttached())
 			return;
-		if(cache.contains(node.getQualifiedName())){
+		if (cache.contains(node.getQualifiedName())) {
 			AssociationKeeper newKeeper = cache.get(node.getQualifiedName());
 			Set<Statement> oldAssocs = node.getAssociations();
 			Set<Statement> newAssocs = newKeeper.getAssociations();
 			for (Statement statement : oldAssocs) {
-				if(!newAssocs.contains(statement))
+				if (!newAssocs.contains(statement))
 					newKeeper.addAssociation(statement);
 			}
 			setAssociationKeeper(node, newKeeper);
-		}
-		else{
+		} else {
 			Set<Statement> copy = node.getAssociations();
-			RdbAssosiationKeeper keeper = new RdbAssosiationKeeper(node, context);
+			RdbAssosiationKeeper keeper = new RdbAssosiationKeeper(node,
+					context);
 			setAssociationKeeper(node, keeper);
 			for (Statement smt : copy) {
 				keeper.addAssociation(smt);
 			}
 			cache.add(node.getQualifiedName(), keeper);
 		}
-			
+
 	}
 
 	@Override
@@ -126,23 +127,24 @@ public class RdbModelingConversation extends AbstractModelingConversation {
 	public void remove(ResourceID id) {
 		// Delete all outgoing and incomming assosiations
 		Connection con = conProvider.getConnection();
-		TableOperations.deleteOutgoingAssosiations(con, context.getTable(), id.toURI());
-		TableOperations.deleteIncommingAssosiations(con, context.getTable(), id.toURI());
+		TableOperations.deleteOutgoingAssosiations(con, context.getTable(),
+				id.toURI());
+		TableOperations.deleteIncommingAssosiations(con, context.getTable(),
+				id.toURI());
 		conProvider.close(con);
-		
-		// Remove the assosiationkeeper from cache. 
+
+		// Remove the assosiationkeeper from cache.
 		cache.remove(id.getQualifiedName());
-		
+
 		setAssociationKeeper(id.asResource(), new DetachedAssociationKeeper());
-		
-		
+
 	}
 
 	@Override
 	protected void assertActive() {
 		throw new NotYetImplementedException();
 	}
-	
+
 	private void setAssociationKeeper(final ResourceNode node,
 			final AssociationKeeper ak) {
 		final ResourceNode resource = node.asResource();

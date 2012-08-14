@@ -9,15 +9,14 @@ import org.arastreju.sge.naming.QualifiedName;
 
 /**
  * <p>
- *  [DESCRIPTION]
+ * [DESCRIPTION]
  * </p>
- *
+ * 
  * <p>
- * 	Created 14.08.2012
+ * Created 14.08.2012
  * </p>
- *
+ * 
  * @author Raphael Esterle
-
  */
 public class SNResourceRdb extends SNResource {
 
@@ -25,8 +24,8 @@ public class SNResourceRdb extends SNResource {
 	 * 
 	 */
 	private static final long serialVersionUID = 6763966628967338553L;
-	
-	public SNResourceRdb(final QualifiedName qn, final AssociationKeeper keeper){
+
+	public SNResourceRdb(final QualifiedName qn, final AssociationKeeper keeper) {
 		super(qn, keeper);
 	}
 
