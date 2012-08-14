@@ -17,9 +17,11 @@ package org.arastreju.rdb.test;
 
  */
 
+import static org.junit.Assert.*;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import java.io.IOException;
 import java.math.BigInteger;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -34,12 +36,17 @@ import org.arastreju.sge.ArastrejuGate;
 import org.arastreju.sge.ArastrejuProfile;
 import org.arastreju.sge.ModelingConversation;
 import org.arastreju.sge.SNOPS;
+import org.arastreju.sge.apriori.Aras;
+import org.arastreju.sge.apriori.RDFS;
 import org.arastreju.sge.model.ElementaryDataType;
 import org.arastreju.sge.model.nodes.ResourceNode;
 import org.arastreju.sge.model.nodes.SNResource;
 import org.arastreju.sge.model.nodes.SNValue;
+import org.arastreju.sge.model.nodes.ValueNode;
+import org.arastreju.sge.model.nodes.views.SNText;
 import org.arastreju.sge.naming.QualifiedName;
 import org.junit.After;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -107,37 +114,86 @@ public class RdbTest {
 		
 		this.mc = gate.startConversation();
 		
-		Map<String, String> c = new HashMap<String, String>();
-		c.put(Column.SUBJECT.value(), "SUBJECT");
-		c.put(Column.PREDICATE.value(), "PREDICATE");
-		c.put(Column.OBJECT.value(), "OBJECT");
-		
-		ResourceNode n0 = new SNResource(qnCar);
-		ResourceNode n1 = new SNResource(qnBike);
-		ResourceNode n2 = new SNResource(qnVehicle);
-		SNOPS.associate(n1, SNOPS.id(qnKnows), n0, null);
-		SNOPS.associate(n1, SNOPS.id(qnHasEmployees), new SNValue(ElementaryDataType.INTEGER, one), null);
-		SNOPS.associate(n1, SNOPS.id(qnKnows), n2, null);
-		mc.attach(n1);
 	}
 	
-	@Test
-	public void testResolve(){
-		// Resolve existing Node
-		ResourceNode node = mc.resolve(SNOPS.id(qnBike));
-		assertNotNull(node);
-		assertTrue(node.getAssociations().size()==3);
-		
-		// Resolve a non existant Node
-		node = mc.resolve(SNOPS.id(qnEmployedBy));
-		assertNotNull(node);
-		assertTrue(node.getAssociations().size()==0);
-		
-	}
 	
 	@Test
-	public void tesFind(){
-		mc.findResource(qnKnows);
+	public void testResolveAndFind() throws IOException {
+
+		ResourceNode found = mc.findResource(qnVehicle);
+		System.out.println(found);
+		assertNull(found);
+
+		ResourceNode resolved = mc.resolve(SNOPS.id(qnVehicle));
+		assertNotNull(resolved);
+
+		resolved.addAssociation(SNOPS.id(qnKnows), mc.resolve(SNOPS.id(qnBike)), null);
+
+		found = mc.findResource(qnVehicle);
+		assertNotNull(found);
 	}
 
+	
+	@Test
+	public void testDetaching() throws IOException{
+
+
+		final ResourceNode car = new SNResource(qnCar);
+
+		car.addAssociation(SNOPS.id(qnKnows), mc.resolve(SNOPS.id(qnVehicle)), null);
+		mc.attach(car);
+
+		final ResourceNode car3 = mc.findResource(qnCar);
+		assertEquals(car, car3);
+
+		mc.detach(car);
+
+		final ResourceNode car4 = mc.findResource(qnCar);
+		assertNotSame(car, car4);
+	}
+	
+	@Test
+	public void testDatatypes() throws IOException {
+		final ResourceNode car = new SNResource(qnCar);
+
+		mc.attach(car);
+
+		SNOPS.associate(car, Aras.HAS_PROPER_NAME, new SNText("BMW"));
+		mc.detach(car);
+
+		final ResourceNode car2 = mc.findResource(qnCar);
+		assertNotSame(car, car2);
+		final ValueNode value = SNOPS.singleObject(car2, Aras.HAS_PROPER_NAME).asValue();
+
+		assertEquals(value.getStringValue(), "BMW");
+	}
+	
+	@Test
+	@Ignore
+	public void testPersisting() throws IOException {
+		
+		final ResourceNode vehicle = new SNResource(qnVehicle);
+		final ResourceNode car = new SNResource(qnCar);
+		
+		System.out.println(car.getQualifiedName());
+		
+		SNOPS.associate(car, RDFS.SUB_CLASS_OF, vehicle);
+		SNOPS.associate(car, Aras.HAS_PROPER_NAME, new SNText("Audi"));
+
+		mc.attach(car);
+
+
+		// detach and find again
+		mc.detach(car);
+		final ResourceNode car2 = mc.findResource(qnCar);
+		assertNotSame(car, car2);
+
+
+		final ResourceNode res = SNOPS.singleObject(car2, RDFS.SUB_CLASS_OF).asResource();
+
+		final ValueNode value = SNOPS.singleObject(car2, Aras.HAS_PROPER_NAME).asValue();
+		assertEquals(value.getStringValue(), "Audi");
+	}
+
+	
 }

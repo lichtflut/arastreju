@@ -68,7 +68,7 @@ public class RdbModelingConversation extends AbstractModelingConversation {
 	@Override
 	public ResourceNode findResource(QualifiedName qn) {
 		ResourceNode node = resolve(SNOPS.id(qn));
-		if(node.isBlankNode())
+		if(node.asResource().getAssociations().size()<1)
 			return null;
 		return node;
 	
@@ -108,8 +108,9 @@ public class RdbModelingConversation extends AbstractModelingConversation {
 
 	@Override
 	public void detach(ResourceNode node) {
-		throw new NotYetImplementedException();
-
+		Set<Statement> copy = node.getAssociations();
+		setAssociationKeeper(node, new DetachedAssociationKeeper(copy));
+		cache.remove(node.getQualifiedName());
 	}
 
 	@Override
