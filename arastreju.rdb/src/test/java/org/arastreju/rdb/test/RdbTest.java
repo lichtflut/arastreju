@@ -73,7 +73,7 @@ public class RdbTest {
 	
 	@Before
 	public void init(){
-		
+	
 		Arastreju aras = Arastreju.getInstance(profile);
 		ArastrejuGate gate = aras.openMasterGate();
 		

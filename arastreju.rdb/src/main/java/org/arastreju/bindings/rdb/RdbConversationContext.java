@@ -3,7 +3,10 @@
  */
 package org.arastreju.bindings.rdb;
 
+import java.sql.Connection;
+
 import org.arastreju.bindings.rdb.tx.JdbcTxProvider;
+import org.arastreju.sge.persistence.TransactionControl;
 import org.arastreju.sge.persistence.TxProvider;
 import org.arastreju.sge.spi.abstracts.AbstractConversationContext;
 
@@ -20,32 +23,28 @@ import org.arastreju.sge.spi.abstracts.AbstractConversationContext;
  */
 public class RdbConversationContext extends AbstractConversationContext {
 
-	private RdbConnectionProvider connectionProvider;
+	private TxProvider txProvider;
 	private String table;
 	private Cache cache;
-
+	private Connection con;
 	// ----------------------------------------------------
 
-	public RdbConversationContext(RdbConnectionProvider connectionProvider,
-			String table) {
-		this.connectionProvider = connectionProvider;
+	public RdbConversationContext(Connection con, String table) {
+		this.txProvider = new JdbcTxProvider(con);
 		this.table = table;
 		cache = new Cache();
+		this.con = con;
 	}
 
 	// ----------------------------------------------------
 
 	@Override
 	public TxProvider getTxProvider() {
-		return new JdbcTxProvider();
+		return txProvider;
 	}
 
 	@Override
 	protected void clearCaches() {
-	}
-
-	public RdbConnectionProvider getConnectionProvider() {
-		return connectionProvider;
 	}
 
 	public String getTable() {
@@ -54,5 +53,9 @@ public class RdbConversationContext extends AbstractConversationContext {
 
 	public Cache getCache() {
 		return cache;
+	}
+	
+	public Connection getConnection(){
+		return con;
 	}
 }

@@ -32,7 +32,7 @@ import java.util.Map;
 
 public class TableOperations {
 	
-	public static void insert(Connection con, String table, String subject, String predicate, String object, String type){
+	public static void insert(Connection con, String table, String subject, String predicate, String object, String type) throws SQLException{
 		Map<String, String> conditions = createConditionMap();
 		conditions.put(Column.SUBJECT.value(), subject);
 		conditions.put(Column.PREDICATE.value(), predicate);
@@ -51,33 +51,33 @@ public class TableOperations {
 		return false;
 	}
 	
-	public static void deleteOutgoingAssosiations(Connection con, String table, String uri){
+	public static void deleteOutgoingAssosiations(Connection con, String table, String uri) throws SQLException{
 		Map< String, String> conditions = new HashMap<String, String>();
 		conditions.put(Column.SUBJECT.value(), uri);
 		exQuery(con, SQLQueryBuilder.createDelete(table, conditions));
 	}
 	
-	public static void deleteIncommingAssosiations(Connection con, String table, String uri){
+	public static void deleteIncommingAssosiations(Connection con, String table, String uri) throws SQLException{
 		Map< String, String> conditions = new HashMap<String, String>();
 		conditions.put(Column.OBJECT.value(), uri);
 		exQuery(con, SQLQueryBuilder.createDelete(table, conditions));
 	}
 	
-	public static List<Map<String, String>> getOutgoingAssosiations(Connection con, String table, QualifiedName qn){
+	public static List<Map<String, String>> getOutgoingAssosiations(Connection con, String table, QualifiedName qn) throws SQLException{
 		HashMap<String, String> conditions = new HashMap<String, String>();
 		conditions.put(Column.SUBJECT.value(), qn.toURI());
 		ArrayList<Map<String, String>> res = select(con, table, conditions);
 		return res;
 	}
 	
-	public static List<Map<String, String>> getIncommingAssosiations(Connection con, String table, QualifiedName qn){
+	public static List<Map<String, String>> getIncommingAssosiations(Connection con, String table, QualifiedName qn) throws SQLException{
 		HashMap<String, String> conditions = new HashMap<String, String>();
 		conditions.put(Column.OBJECT.value(), qn.toURI());
 		ArrayList<Map<String, String>> res = select(con, table, conditions);
 		return res;
 	}
 	
-	private static ArrayList<Map<String, String>> select(Connection con, String table, Map<String, String> conditions){
+	private static ArrayList<Map<String, String>> select(Connection con, String table, Map<String, String> conditions) throws SQLException{
 		ArrayList<Map<String, String>> result = new ArrayList<Map<String,String>>();
 		ResultSet rs = exQuery(con, SQLQueryBuilder.createSelect(table, conditions));
 		ResultSetMetaData meta;
@@ -97,25 +97,20 @@ public class TableOperations {
 		return result;
 	}
 	
-	public static boolean hasOutgoingAssosiations(Connection con, String table, QualifiedName qn){
+	public static int hasOutgoingAssosiations(Connection con, String table, QualifiedName qn) throws SQLException{
 		String query = "SELECT 1 FROM "+table+" WHERE "+Column.SUBJECT.value()+"='"+qn.toURI()+"' LIMIT 1;";
 		ResultSet rs = exQuery(con, query);
-		try {
-			return rs.next();
-		} catch (SQLException e) {
-			throw new ArastrejuRuntimeException(ErrorCodes.GENERAL_IO_ERROR, e.getMessage());
-		}
+		if(rs.next())
+			return 1;
+		return 0;
+		
 	}
 	
-	private static ResultSet exQuery(Connection con, String query){
-		Statement stm = createStatement(con);;
+	private static ResultSet exQuery(Connection con, String query) throws SQLException{
 		ResultSet rs;
-		try {
-			rs = stm.executeQuery(query);
-			return rs;
-		} catch (SQLException e) {
-			throw new ArastrejuRuntimeException(ErrorCodes.GRAPH_IO_ERROR, "SQL ERROR: "+e.getMessage());
-		}
+		Statement stm = createStatement(con);
+		rs = stm.executeQuery(query);
+		return rs;
 	}
 	
 	private static int exUpdate(Connection con, String query){
@@ -131,7 +126,7 @@ public class TableOperations {
 		try {
 			return con.createStatement();
 		} catch (SQLException e) {
-			throw new ArastrejuRuntimeException(ErrorCodes.GENERAL_IO_ERROR);
+			throw new ArastrejuRuntimeException(ErrorCodes.GENERAL_IO_ERROR, e.getMessage());
 		}
 	}
 	

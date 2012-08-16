@@ -15,18 +15,22 @@ package org.arastreju.bindings.rdb;
  * @author Raphael Esterle
  */
 
-import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.HashSet;
 import java.util.Set;
 
 import org.arastreju.bindings.rdb.impl.RdbResourceResolver;
 import org.arastreju.bindings.rdb.jdbc.TableOperations;
+import org.arastreju.bindings.rdb.tx.JdbcTxProvider;
+import org.arastreju.sge.eh.ArastrejuRuntimeException;
+import org.arastreju.sge.eh.ErrorCodes;
 import org.arastreju.sge.model.ResourceID;
 import org.arastreju.sge.model.Statement;
 import org.arastreju.sge.model.associations.AssociationKeeper;
 import org.arastreju.sge.model.associations.DetachedAssociationKeeper;
 import org.arastreju.sge.model.nodes.ResourceNode;
 import org.arastreju.sge.naming.QualifiedName;
+import org.arastreju.sge.persistence.TxAction;
 import org.arastreju.sge.query.Query;
 import org.arastreju.sge.spi.AssocKeeperAccess;
 import org.arastreju.sge.spi.abstracts.AbstractModelingConversation;
@@ -38,7 +42,6 @@ public class RdbModelingConversation extends AbstractModelingConversation {
 	private RdbConversationContext context;
 	private AssocKeeperAccess assocKeeperAccess;
 	private final Cache cache;
-	private final RdbConnectionProvider conProvider;
 	private final RdbResourceResolver resolver;
 
 	// ----------------------------------------------------
@@ -47,7 +50,6 @@ public class RdbModelingConversation extends AbstractModelingConversation {
 		super(conversationContext);
 		context = conversationContext;
 		cache = context.getCache();
-		conProvider = context.getConnectionProvider();
 		resolver = new RdbResourceResolver(conversationContext);
 		assocKeeperAccess = AssocKeeperAccess.getInstance();
 	}
@@ -100,14 +102,23 @@ public class RdbModelingConversation extends AbstractModelingConversation {
 	}
 
 	@Override
-	public void remove(ResourceID id) {
+	public void remove(final ResourceID id) {
 		// Delete all outgoing and incomming assosiations
-		Connection con = conProvider.getConnection();
-		TableOperations.deleteOutgoingAssosiations(con, context.getTable(),
-				id.toURI());
-		TableOperations.deleteIncommingAssosiations(con, context.getTable(),
-				id.toURI());
-		conProvider.returnConection(con);
+		JdbcTxProvider txProvider = (JdbcTxProvider) context.getTxProvider();
+		txProvider.doTransacted(new TxAction() {
+			
+			@Override
+			public void execute() {
+				try {
+					TableOperations.deleteOutgoingAssosiations(context.getConnection(), context.getTable(),
+							id.toURI());
+					TableOperations.deleteIncommingAssosiations(context.getConnection(), context.getTable(),
+							id.toURI());
+				} catch (SQLException e) {
+					throw new ArastrejuRuntimeException(ErrorCodes.GENERAL_QUERY_ERROR, e.getMessage());
+				}
+			}
+		});
 
 		// Remove the assosiationkeeper from cache.
 		cache.remove(id.getQualifiedName());

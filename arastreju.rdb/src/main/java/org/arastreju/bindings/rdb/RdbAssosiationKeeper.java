@@ -7,7 +7,7 @@ package org.arastreju.bindings.rdb;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -17,6 +17,8 @@ import java.util.Set;
 import org.arastreju.bindings.rdb.jdbc.Column;
 import org.arastreju.bindings.rdb.jdbc.TableOperations;
 import org.arastreju.sge.SNOPS;
+import org.arastreju.sge.eh.ArastrejuRuntimeException;
+import org.arastreju.sge.eh.ErrorCodes;
 import org.arastreju.sge.model.DetachedStatement;
 import org.arastreju.sge.model.ElementaryDataType;
 import org.arastreju.sge.model.ResourceID;
@@ -27,6 +29,8 @@ import org.arastreju.sge.model.nodes.SNValue;
 import org.arastreju.sge.model.nodes.SemanticNode;
 import org.arastreju.sge.model.nodes.ValueNode;
 import org.arastreju.sge.naming.QualifiedName;
+import org.arastreju.sge.persistence.TxAction;
+import org.arastreju.sge.persistence.TxResultAction;
 
 /**
  * <p>
@@ -52,17 +56,15 @@ public class RdbAssosiationKeeper extends AbstractAssociationKeeper {
 
 	private final ResourceID id;
 	private RdbConversationContext ctx;
-	private final RdbConnectionProvider conProvieder;
 
 	public RdbAssosiationKeeper(ResourceID id, RdbConversationContext ctx) {
 		super();
 		this.id = id;
 		this.ctx = ctx;
-		conProvieder = ctx.getConnectionProvider();
 	}
 
 	public Set<Statement> getAssociationsForRemoval() {
-		return null;
+		return super.getAssociationsForRemoval();
 	}
 
 	public boolean isAttached() {
@@ -78,15 +80,23 @@ public class RdbAssosiationKeeper extends AbstractAssociationKeeper {
 
 			Map<String, String> objectStr = objectAsString(assoc.getObject());
 
-			String subject = assoc.getSubject().toURI();
-			String predicate = assoc.getPredicate().toURI();
-			String object = objectStr.get(Column.OBJECT.value());
-			String type = objectStr.get(Column.TYPE.value());
-
-			Connection con = conProvieder.getConnection();
-			TableOperations.insert(con, ctx.getTable(), subject, predicate,
-					object, type);
-			conProvieder.returnConection(con);
+			final String subject = assoc.getSubject().toURI();
+			final String predicate = assoc.getPredicate().toURI();
+			final String object = objectStr.get(Column.OBJECT.value());
+			final String type = objectStr.get(Column.TYPE.value());
+			
+			ctx.getTxProvider().doTransacted(new TxAction() {
+				
+				@Override
+				public void execute() {
+					try {
+						TableOperations.insert(ctx.getConnection(), ctx.getTable(), subject, predicate,
+								object, type);
+					} catch (SQLException e) {
+						throw new ArastrejuRuntimeException(ErrorCodes.GENERAL_IO_ERROR, e.getMessage());
+					}
+				}
+			});
 		}
 	}
 
@@ -95,25 +105,35 @@ public class RdbAssosiationKeeper extends AbstractAssociationKeeper {
 		
 		Map<String, String> objectStr = objectAsString(assoc.getObject());
 
-		String subject = assoc.getSubject().toURI();
-		String predicate = assoc.getPredicate().toURI();
-		String object = objectStr.get(Column.OBJECT.value());
-		
-		Connection con = conProvieder.getConnection();
-		boolean b = TableOperations.deleteAssosiation(con, ctx.getTable(), subject, predicate, object);
-		conProvieder.returnConection(con);
-		if(b)
-			super.removeAssociation(assoc);
-		return b;
+		final String subject = assoc.getSubject().toURI();
+		final String predicate = assoc.getPredicate().toURI();
+		final String object = objectStr.get(Column.OBJECT.value());
+		ctx.getTxProvider().doTransacted(new TxAction() {
+			public void execute() {
+				TableOperations.deleteAssosiation(ctx.getConnection(), ctx.getTable(), subject, predicate, object);
+				
+			}
+		});
+		super.removeAssociation(assoc);
+		return true;
 	}
 
 	@Override
 	protected void resolveAssociations() {
-		Connection con = conProvieder.getConnection();
-		List<Map<String, String>> stms = TableOperations
-				.getOutgoingAssosiations(con, ctx.getTable(),
-						id.getQualifiedName());
-		conProvieder.returnConection(con);
+		List<Map<String, String>> stms =ctx.getTxProvider().doTransacted(new TxResultAction<List<Map<String, String>>>() {
+
+			@Override
+			public List<Map<String, String>> execute() {
+				try {
+					return TableOperations
+							.getOutgoingAssosiations(ctx.getConnection(), ctx.getTable(),
+									id.getQualifiedName());
+				} catch (SQLException e) {
+					throw new ArastrejuRuntimeException(ErrorCodes.GENERAL_IO_ERROR, e.getMessage());
+				}
+			}
+		});
+		
 
 		for (Map<String, String> map : stms) {
 

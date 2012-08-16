@@ -16,7 +16,9 @@ package org.arastreju.bindings.rdb;
  * @author Raphael Esterle
  */
 
+import java.beans.PropertyVetoException;
 import java.sql.Connection;
+import java.sql.SQLException;
 
 import org.arastreju.bindings.rdb.jdbc.DBOperations;
 import org.arastreju.sge.ArastrejuGate;
@@ -25,6 +27,8 @@ import org.arastreju.sge.context.DomainIdentifier;
 import org.arastreju.sge.spi.ArastrejuGateFactory;
 import org.arastreju.sge.spi.GateInitializationException;
 
+import com.mchange.v2.c3p0.ComboPooledDataSource;
+
 public class RdbGateFactory extends ArastrejuGateFactory {
 
 	private final String DRIVER = "org.arastreju.bindings.rdb.jdbcDriver";
@@ -32,8 +36,8 @@ public class RdbGateFactory extends ArastrejuGateFactory {
 	private final String USER = "org.arastreju.bindings.rdb.dbUser";
 	private final String PASS = "org.arastreju.bindings.rdb.dbPass";
 	private final String PROTOCOL = "org.arastreju.bindings.rdb.protocol";
-	private final int MAX_CONNECTIONS = 10;
-
+	//private final int MAX_CONNECTIONS = 10;
+	
 	// ----------------------------------------------------
 
 	public RdbGateFactory(ArastrejuProfile profile) {
@@ -45,22 +49,46 @@ public class RdbGateFactory extends ArastrejuGateFactory {
 	@Override
 	public ArastrejuGate create(DomainIdentifier identifier)
 			throws GateInitializationException {
-
-		String storageName = identifier.getStorage().toUpperCase();
-
-		ArastrejuProfile profile = getProfile();
-
-		RdbConnectionProvider provider = new RdbConnectionProvider(
-				profile.getProperty(DRIVER), profile.getProperty(USER),
-				profile.getProperty(PASS), profile.getProperty(PROTOCOL)
-						+ profile.getProperty(DB), storageName, MAX_CONNECTIONS);
-
-		Connection con = provider.getConnection();
+		Connection con = getConnection();
+		String storageName = identifier.getStorage();
 		if (!DBOperations.tableExists(con, storageName))
 			DBOperations.createTable(con, storageName);
-		provider.returnConection(con);
-
-		return new RdbGate(provider, identifier);
+		try {
+			con.commit();
+		} catch (SQLException e) {
+			throw new GateInitializationException();
+		}
+		return new RdbGate(con, identifier);
 	}
-
+	
+	@SuppressWarnings("null")
+	private Connection getConnection(){
+		ComboPooledDataSource cpds = (ComboPooledDataSource) getProfile().getProfileObject(DB);
+		if(null==cpds){
+				ArastrejuProfile profile = getProfile();
+				cpds = new ComboPooledDataSource();
+				try {
+					cpds.setDriverClass(profile.getProperty(DRIVER));
+					cpds.setJdbcUrl(profile.getProperty(PROTOCOL)+ profile.getProperty(DB));
+					cpds.setUser(profile.getProperty(USER));
+					cpds.setPassword(profile.getProperty(PASS));
+					
+					cpds.setMinPoolSize(5);
+					cpds.setAcquireIncrement(5);
+					cpds.setMaxPoolSize(20);
+				} catch (PropertyVetoException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+			getProfile().setProfileObject(DB, cpds);
+			getConnection();
+		}
+		try {
+			return cpds.getConnection();
+		} catch (SQLException e) {
+			throw new GateInitializationException();
+		}
+	}
+	
 }
