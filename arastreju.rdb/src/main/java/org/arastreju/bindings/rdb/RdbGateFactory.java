@@ -58,7 +58,7 @@ public class RdbGateFactory extends ArastrejuGateFactory {
 		Connection con = provider.getConnection();
 		if (!DBOperations.tableExists(con, storageName))
 			DBOperations.createTable(con, storageName);
-		provider.close(con);
+		provider.returnConection(con);
 
 		return new RdbGate(provider, identifier);
 	}

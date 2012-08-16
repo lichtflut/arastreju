@@ -72,7 +72,7 @@ public class RdbResourceResolver implements ResourceResolver {
 		} else {
 			Connection con = conProvieder.getConnection();
 			boolean b = TableOperations.hasOutgoingAssosiations(con, ctx.getTable(), qn);
-			conProvieder.close(con);
+			conProvieder.returnConection(con);
 			if(b)
 				return new SNResourceRdb(qn, new RdbAssosiationKeeper(SNOPS.id(qn), ctx));
 		}

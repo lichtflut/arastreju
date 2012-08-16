@@ -20,7 +20,7 @@ import java.util.Map;
 
 /**
  * <p>
- *  Database relatet operations witch work on an specific table.
+ *  Database related operations witch work on an specific table.
  * </p>
  *
  * <p>
@@ -32,25 +32,33 @@ import java.util.Map;
 
 public class TableOperations {
 	
-	public static void insert(Connection con, String table, Map<String, String> columns){
-		Statement stm = createStatement(con);
-		try {
-			stm.execute(SQLQueryBuilder.createInsert(table, columns));
-		} catch (SQLException e) {
-			throw new ArastrejuRuntimeException(ErrorCodes.GENERAL_IO_ERROR, "SQL ERROR: "+e.getMessage());
-		}
+	public static void insert(Connection con, String table, String subject, String predicate, String object, String type){
+		Map<String, String> conditions = createConditionMap();
+		conditions.put(Column.SUBJECT.value(), subject);
+		conditions.put(Column.PREDICATE.value(), predicate);
+		conditions.put(Column.OBJECT.value(), object);
+		conditions.put(Column.TYPE.value(), type);
+		exQuery(con, SQLQueryBuilder.createInsert(table, conditions));
 	}
 	
 	public static void deleteAssosiation(Connection con, String table, String subject, String predicate, String object){
-		exQuery(con, SQLQueryBuilder.createDelete(table, subject, predicate, object));
+		Map< String, String> conditions = new HashMap<String, String>();
+		conditions.put(Column.SUBJECT.value(), subject);
+		conditions.put(Column.PREDICATE.value(), predicate);
+		conditions.put(Column.OBJECT.value(), object);
+		exQuery(con, SQLQueryBuilder.createDelete(table, conditions));
 	}
 	
-	public static void deleteOutgoingAssosiations(Connection con, String table, String subject){
-		exQuery(con, SQLQueryBuilder.deleteOutgoingAssosiations(table, subject));
+	public static void deleteOutgoingAssosiations(Connection con, String table, String uri){
+		Map< String, String> conditions = new HashMap<String, String>();
+		conditions.put(Column.SUBJECT.value(), uri);
+		exQuery(con, SQLQueryBuilder.createDelete(table, conditions));
 	}
 	
-	public static void deleteIncommingAssosiations(Connection con, String table, String object){
-		exQuery(con, SQLQueryBuilder.deleteOutgoingAssosiations(table, object));
+	public static void deleteIncommingAssosiations(Connection con, String table, String uri){
+		Map< String, String> conditions = new HashMap<String, String>();
+		conditions.put(Column.OBJECT.value(), uri);
+		exQuery(con, SQLQueryBuilder.createDelete(table, conditions));
 	}
 	
 	public static List<Map<String, String>> getOutgoingAssosiations(Connection con, String table, QualifiedName qn){
@@ -116,4 +124,7 @@ public class TableOperations {
 		}
 	}
 	
+	private static Map<String, String> createConditionMap(){
+		return new HashMap<String, String>();
+	}
 }

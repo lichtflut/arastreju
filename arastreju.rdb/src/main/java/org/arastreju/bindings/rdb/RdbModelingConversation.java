@@ -132,7 +132,7 @@ public class RdbModelingConversation extends AbstractModelingConversation {
 				id.toURI());
 		TableOperations.deleteIncommingAssosiations(con, context.getTable(),
 				id.toURI());
-		conProvider.close(con);
+		conProvider.returnConection(con);
 
 		// Remove the assosiationkeeper from cache.
 		cache.remove(id.getQualifiedName());

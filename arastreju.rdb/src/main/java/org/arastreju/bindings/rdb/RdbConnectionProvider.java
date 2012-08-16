@@ -76,7 +76,7 @@ public class RdbConnectionProvider {
 		return con;
 	}
 
-	public void close(Connection con) {
+	public void returnConection(Connection con) {
 		usedCons.remove(con);
 		cons.add(con);
 		logger.debug("Connection pooled " + getLogInfo());

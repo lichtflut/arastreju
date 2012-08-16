@@ -81,37 +81,31 @@ public class SQLQueryBuilder {
 		return query.toString();
 	}
 
-	/**
-	 * Creates an delete query with the given parameters.
-	 * 
-	 * @param sub
-	 *            Subject
-	 * @param pre
-	 *            Predicate
-	 * @param obj
-	 *            Object
-	 * @param type
-	 *            Type
-	 * @return The query as {@link String}
-	 */
-	public static String createDelete(String table, String sub, String pre,
-			String obj) {
-
-		StringBuilder query = new StringBuilder("DELETE FROM" + sp + table + sp
-				+ "WHERE");
-		if (null != sub)
-			query.append(sp + Column.SUBJECT.value() + "=" + qm + sub + qm + sp
-					+ and);
-		if (null != pre)
-			query.append(sp + Column.PREDICATE.value() + "=" + qm + pre + qm
-					+ sp + and);
-		if (null != obj)
-			query.append(sp + Column.OBJECT.value() + "=" + qm + obj + qm + sp
-					+ and);
-
-		return query.substring(0, query.length() - 4);
+	
+	public static String createDelete(String table, Map<String, String> conditions){
+		StringBuilder query = new StringBuilder("DELETE * FROM " + table
+				+ " WHERE ");
+		query.append(assignmentList(conditions, and));
+		query.append(";");
+		return query.toString();
 	}
-
+	
+	private static String assignmentList(Map<String, String> conditions, String seperator){
+		final String eq = "='";
+		StringBuilder sb = new StringBuilder();
+		for (String key : conditions.keySet()) {
+			sb.append(key);
+			sb.append(eq);
+			sb.append(qm);
+			sb.append(conditions.get(key));
+			sb.append(qm);
+			sb.append(sp);
+			sb.append(seperator);
+			sb.append(sp);
+		}
+		return sb.toString();
+	}
+	
 	public static String deleteOutgoingAssosiations(String table, String subject) {
 		return "DELETE FROM " + table + " WHERE " + Column.SUBJECT.value()
 				+ "='" + subject + "';";

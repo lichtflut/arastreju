@@ -8,7 +8,6 @@ package org.arastreju.bindings.rdb;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.sql.Connection;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -72,38 +71,37 @@ public class RdbAssosiationKeeper extends AbstractAssociationKeeper {
 
 	@Override
 	public void addAssociation(final Statement assoc) {
+
 		if (!getAssociations().contains(assoc)) {
 
 			super.addAssociation(assoc);
 
-			HashMap<String, String> inserts = new HashMap<String, String>();
-			inserts.put(Column.SUBJECT.value(), assoc.getSubject().toURI());
-			inserts.put(Column.PREDICATE.value(), assoc.getPredicate().toURI());
-			SemanticNode object = assoc.getObject();
-			if (object.isResourceNode()) {
-				inserts.put(Column.OBJECT.value(), assoc.getObject()
-						.asResource().toURI());
-				inserts.put(Column.TYPE.value(),
-						ElementaryDataType.RESOURCE.toString());
-			} else {
+			Map<String, String> objectStr = objectAsString(assoc.getObject());
 
-				ValueNode vNode = assoc.getObject().asValue();
-
-				inserts.put(Column.TYPE.value(), vNode.getDataType().toString());
-				inserts.put(Column.OBJECT.value(), vNode.getStringValue());
-			}
+			String subject = assoc.getSubject().toURI();
+			String predicate = assoc.getPredicate().toURI();
+			String object = objectStr.get(Column.OBJECT.value());
+			String type = objectStr.get(Column.TYPE.value());
 
 			Connection con = conProvieder.getConnection();
-			TableOperations.insert(con, ctx.getTable(), inserts);
-			conProvieder.close(con);
+			TableOperations.insert(con, ctx.getTable(), subject, predicate,
+					object, type);
+			conProvieder.returnConection(con);
 		}
 	}
 
 	@Override
 	public boolean removeAssociation(final Statement assoc) {
-		// if(rdb.deleteAssoc(assoc)){
-		// return super.removeAssociation(assoc);
-		// }
+		
+		Map<String, String> objectStr = objectAsString(assoc.getObject());
+
+		String subject = assoc.getSubject().toURI();
+		String predicate = assoc.getPredicate().toURI();
+		String object = objectStr.get(Column.OBJECT.value());
+		
+		Connection con = conProvieder.getConnection();
+		TableOperations.deleteAssosiation(con, ctx.getTable(), subject, predicate, object);
+		conProvieder.returnConection(con);
 		return false;
 	}
 
@@ -113,7 +111,7 @@ public class RdbAssosiationKeeper extends AbstractAssociationKeeper {
 		List<Map<String, String>> stms = TableOperations
 				.getOutgoingAssosiations(con, ctx.getTable(),
 						id.getQualifiedName());
-		conProvieder.close(con);
+		conProvieder.returnConection(con);
 
 		for (Map<String, String> map : stms) {
 
@@ -154,6 +152,19 @@ public class RdbAssosiationKeeper extends AbstractAssociationKeeper {
 							.getReadContexts()));
 		}
 
+	}
+
+	private Map<String, String> objectAsString(SemanticNode node) {
+		Map<String, String> hm = new HashMap<String, String>();
+		if (node.isResourceNode()) {
+			hm.put(Column.OBJECT.value(), node.asResource().toURI());
+			hm.put(Column.TYPE.value(), ElementaryDataType.RESOURCE.toString());
+		} else {
+			ValueNode vNode = node.asValue();
+			hm.put(Column.OBJECT.value(), vNode.getStringValue());
+			hm.put(Column.TYPE.value(), vNode.getDataType().toString());
+		}
+		return hm;
 	}
 
 }
