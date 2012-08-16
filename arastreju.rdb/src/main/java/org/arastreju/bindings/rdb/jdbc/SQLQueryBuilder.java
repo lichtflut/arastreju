@@ -24,6 +24,7 @@ public class SQLQueryBuilder {
 	private static final String qm = "'";
 	private static final String bo = "(";
 	private static final String sp = " ";
+	private static final String eq = "=";
 	private static final String and = "AND";
 
 	/**
@@ -83,15 +84,15 @@ public class SQLQueryBuilder {
 
 	
 	public static String createDelete(String table, Map<String, String> conditions){
-		StringBuilder query = new StringBuilder("DELETE * FROM " + table
+		StringBuilder query = new StringBuilder("DELETE FROM " + table
 				+ " WHERE ");
 		query.append(assignmentList(conditions, and));
 		query.append(";");
+		System.out.println(query.toString());
 		return query.toString();
 	}
 	
 	private static String assignmentList(Map<String, String> conditions, String seperator){
-		final String eq = "='";
 		StringBuilder sb = new StringBuilder();
 		for (String key : conditions.keySet()) {
 			sb.append(key);
@@ -103,7 +104,7 @@ public class SQLQueryBuilder {
 			sb.append(seperator);
 			sb.append(sp);
 		}
-		return sb.toString();
+		return sb.substring(0, sb.length()-4);
 	}
 	
 	public static String deleteOutgoingAssosiations(String table, String subject) {

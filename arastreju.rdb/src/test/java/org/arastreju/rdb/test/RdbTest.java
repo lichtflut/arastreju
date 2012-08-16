@@ -18,19 +18,12 @@ package org.arastreju.rdb.test;
  */
 
 import static org.junit.Assert.*;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-
 import java.io.IOException;
 import java.math.BigInteger;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.Map;
-
 import org.arastreju.bindings.rdb.RdbGateFactory;
-import org.arastreju.bindings.rdb.jdbc.Column;
 import org.arastreju.bindings.rdb.jdbc.DBOperations;
 import org.arastreju.sge.Arastreju;
 import org.arastreju.sge.ArastrejuGate;
@@ -40,16 +33,14 @@ import org.arastreju.sge.SNOPS;
 import org.arastreju.sge.apriori.Aras;
 import org.arastreju.sge.apriori.RDFS;
 import org.arastreju.sge.context.DomainIdentifier;
-import org.arastreju.sge.model.ElementaryDataType;
+import org.arastreju.sge.model.Statement;
 import org.arastreju.sge.model.nodes.ResourceNode;
 import org.arastreju.sge.model.nodes.SNResource;
-import org.arastreju.sge.model.nodes.SNValue;
 import org.arastreju.sge.model.nodes.ValueNode;
 import org.arastreju.sge.model.nodes.views.SNText;
 import org.arastreju.sge.naming.QualifiedName;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -227,5 +218,31 @@ public class RdbTest {
 		assertEquals(propername.getStringValue(), "Knut");
 	}
 	
+	@Test
+	public void testDirectRemoval() {
+		
+		final ResourceNode vehicle = new SNResource(qnVehicle);
+		final ResourceNode car1 = new SNResource(qnCar);
+		
+		final Statement association = SNOPS.associate(car1, Aras.HAS_BRAND_NAME, new SNText("BMW"));
+		SNOPS.associate(car1, RDFS.SUB_CLASS_OF, vehicle);
+		SNOPS.associate(car1, Aras.HAS_PROPER_NAME, new SNText("Knut"));
+		
+		mc.attach(car1);
+		
+		final Statement stored = SNOPS.singleAssociation(car1, Aras.HAS_BRAND_NAME);
+		assertEquals(association.hashCode(), stored.hashCode());
+		
+		assertEquals(3, car1.getAssociations().size());
+		assertFalse(car1.getAssociations(Aras.HAS_BRAND_NAME).isEmpty());
+		assertTrue("Association not present", car1.getAssociations().contains(association));
+		
+		final boolean removedFlag = car1.removeAssociation(association);
+		assertTrue(removedFlag);
+		
+		assertEquals(2, car1.getAssociations().size());
+		assertTrue(car1.getAssociations( Aras.HAS_BRAND_NAME).isEmpty());
+		
+	}
 	
 }

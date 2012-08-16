@@ -100,9 +100,11 @@ public class RdbAssosiationKeeper extends AbstractAssociationKeeper {
 		String object = objectStr.get(Column.OBJECT.value());
 		
 		Connection con = conProvieder.getConnection();
-		TableOperations.deleteAssosiation(con, ctx.getTable(), subject, predicate, object);
+		boolean b = TableOperations.deleteAssosiation(con, ctx.getTable(), subject, predicate, object);
 		conProvieder.returnConection(con);
-		return false;
+		if(b)
+			super.removeAssociation(assoc);
+		return b;
 	}
 
 	@Override

@@ -41,12 +41,14 @@ public class TableOperations {
 		exQuery(con, SQLQueryBuilder.createInsert(table, conditions));
 	}
 	
-	public static void deleteAssosiation(Connection con, String table, String subject, String predicate, String object){
+	public static boolean deleteAssosiation(Connection con, String table, String subject, String predicate, String object){
 		Map< String, String> conditions = new HashMap<String, String>();
 		conditions.put(Column.SUBJECT.value(), subject);
 		conditions.put(Column.PREDICATE.value(), predicate);
 		conditions.put(Column.OBJECT.value(), object);
-		exQuery(con, SQLQueryBuilder.createDelete(table, conditions));
+		if(exUpdate(con, SQLQueryBuilder.createDelete(table, conditions))>0)
+			return true;
+		return false;
 	}
 	
 	public static void deleteOutgoingAssosiations(Connection con, String table, String uri){
@@ -111,6 +113,15 @@ public class TableOperations {
 		try {
 			rs = stm.executeQuery(query);
 			return rs;
+		} catch (SQLException e) {
+			throw new ArastrejuRuntimeException(ErrorCodes.GRAPH_IO_ERROR, "SQL ERROR: "+e.getMessage());
+		}
+	}
+	
+	private static int exUpdate(Connection con, String query){
+		Statement stm = createStatement(con);
+		try {
+			return stm.executeUpdate(query);
 		} catch (SQLException e) {
 			throw new ArastrejuRuntimeException(ErrorCodes.GRAPH_IO_ERROR, "SQL ERROR: "+e.getMessage());
 		}
