@@ -88,7 +88,6 @@ public class SQLQueryBuilder {
 				+ " WHERE ");
 		query.append(assignmentList(conditions, and));
 		query.append(";");
-		System.out.println(query.toString());
 		return query.toString();
 	}
 	

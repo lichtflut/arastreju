@@ -18,6 +18,7 @@ package org.arastreju.rdb.test;
  */
 
 import static org.junit.Assert.*;
+
 import java.io.IOException;
 import java.math.BigInteger;
 import java.sql.Connection;
@@ -242,6 +243,37 @@ public class RdbTest {
 		
 		assertEquals(2, car1.getAssociations().size());
 		assertTrue(car1.getAssociations( Aras.HAS_BRAND_NAME).isEmpty());
+		
+	}
+	
+	@Test
+	public void testAttachingRemoval() {
+		final ResourceNode vehicle = new SNResource(qnVehicle);
+		final ResourceNode car1 = new SNResource(qnCar);
+		
+		mc.attach(car1);
+		
+		final Statement association = SNOPS.associate(car1, Aras.HAS_BRAND_NAME, new SNText("BMW"));
+		SNOPS.associate(car1, RDFS.SUB_CLASS_OF, vehicle);
+		SNOPS.associate(car1, Aras.HAS_PROPER_NAME, new SNText("Knut"));
+		
+		// detach 
+		mc.detach(car1);
+		
+		assertEquals(3, car1.getAssociations().size());
+		assertFalse(car1.getAssociations(Aras.HAS_BRAND_NAME).isEmpty());
+		assertTrue("Association not present", car1.getAssociations().contains(association));
+		
+		final boolean removedFlag = car1.removeAssociation(association);
+		assertTrue(removedFlag);
+		
+		mc.attach(car1);
+		
+		final ResourceNode car2 = mc.findResource(qnCar);
+		assertNotSame(car1, car2);
+		
+		assertEquals(2, car2.getAssociations().size());
+		assertTrue(car2.getAssociations( Aras.HAS_BRAND_NAME).isEmpty());
 		
 	}
 	

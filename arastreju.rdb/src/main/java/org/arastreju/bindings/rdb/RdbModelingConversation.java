@@ -15,21 +15,20 @@ package org.arastreju.bindings.rdb;
  * @author Raphael Esterle
  */
 
-import java.lang.reflect.Field;
 import java.sql.Connection;
+import java.util.HashSet;
 import java.util.Set;
 
 import org.arastreju.bindings.rdb.impl.RdbResourceResolver;
 import org.arastreju.bindings.rdb.jdbc.TableOperations;
-import org.arastreju.sge.SNOPS;
 import org.arastreju.sge.model.ResourceID;
 import org.arastreju.sge.model.Statement;
 import org.arastreju.sge.model.associations.AssociationKeeper;
 import org.arastreju.sge.model.associations.DetachedAssociationKeeper;
 import org.arastreju.sge.model.nodes.ResourceNode;
-import org.arastreju.sge.model.nodes.SNResource;
 import org.arastreju.sge.naming.QualifiedName;
 import org.arastreju.sge.query.Query;
+import org.arastreju.sge.spi.AssocKeeperAccess;
 import org.arastreju.sge.spi.abstracts.AbstractModelingConversation;
 
 import de.lichtflut.infra.exceptions.NotYetImplementedException;
@@ -37,7 +36,7 @@ import de.lichtflut.infra.exceptions.NotYetImplementedException;
 public class RdbModelingConversation extends AbstractModelingConversation {
 
 	private RdbConversationContext context;
-	private Field assocKeeperField;
+	private AssocKeeperAccess assocKeeperAccess;
 	private final Cache cache;
 	private final RdbConnectionProvider conProvider;
 	private final RdbResourceResolver resolver;
@@ -50,16 +49,7 @@ public class RdbModelingConversation extends AbstractModelingConversation {
 		cache = context.getCache();
 		conProvider = context.getConnectionProvider();
 		resolver = new RdbResourceResolver(conversationContext);
-		try {
-			assocKeeperField = SNResource.class
-					.getDeclaredField("associationKeeper");
-			assocKeeperField.setAccessible(true);
-		} catch (SecurityException e) {
-			e.printStackTrace();
-		} catch (NoSuchFieldException e) {
-			e.printStackTrace();
-		}
-
+		assocKeeperAccess = AssocKeeperAccess.getInstance();
 	}
 
 	// ----------------------------------------------------
@@ -71,10 +61,6 @@ public class RdbModelingConversation extends AbstractModelingConversation {
 
 	@Override
 	public ResourceNode findResource(QualifiedName qn) {
-		
-//		ResourceNode node = resolve(SNOPS.id(qn));
-//		if (node.asResource().getAssociations().size() < 1)
-//			return null;
 		return resolver.findResource(qn);
 
 	}
@@ -86,35 +72,24 @@ public class RdbModelingConversation extends AbstractModelingConversation {
 
 	@Override
 	public void attach(ResourceNode node) {
-
+		
+		// Node is attached
 		if (node.isAttached())
 			return;
+		AssociationKeeper newKeeper;
 		if (cache.contains(node.getQualifiedName())) {
-			AssociationKeeper newKeeper = cache.get(node.getQualifiedName());
-			Set<Statement> oldAssocs = node.getAssociations();
-			Set<Statement> newAssocs = newKeeper.getAssociations();
-			for (Statement statement : oldAssocs) {
-				if (!newAssocs.contains(statement))
-					newKeeper.addAssociation(statement);
-			}
-			setAssociationKeeper(node, newKeeper);
-		} else {
-			Set<Statement> copy = node.getAssociations();
-			RdbAssosiationKeeper keeper = new RdbAssosiationKeeper(node,
-					context);
-			setAssociationKeeper(node, keeper);
-			for (Statement smt : copy) {
-				keeper.addAssociation(smt);
-			}
-			cache.add(node.getQualifiedName(), keeper);
+			newKeeper = cache.get(node.getQualifiedName());
+		}else{
+			newKeeper = new RdbAssosiationKeeper(node, context);
 		}
+		merge(newKeeper, node);
 
 	}
 
 	@Override
 	public void detach(ResourceNode node) {
 		Set<Statement> copy = node.getAssociations();
-		setAssociationKeeper(node, new DetachedAssociationKeeper(copy));
+		assocKeeperAccess.setAssociationKeeper(node, new DetachedAssociationKeeper(copy));
 		cache.remove(node.getQualifiedName());
 	}
 
@@ -136,8 +111,8 @@ public class RdbModelingConversation extends AbstractModelingConversation {
 
 		// Remove the assosiationkeeper from cache.
 		cache.remove(id.getQualifiedName());
-
-		setAssociationKeeper(id.asResource(), new DetachedAssociationKeeper());
+		
+		assocKeeperAccess.setAssociationKeeper(id.asResource(), new DetachedAssociationKeeper());
 
 	}
 
@@ -146,19 +121,23 @@ public class RdbModelingConversation extends AbstractModelingConversation {
 		throw new NotYetImplementedException();
 	}
 
-	private void setAssociationKeeper(final ResourceNode node,
-			final AssociationKeeper ak) {
-		final ResourceNode resource = node.asResource();
-		if (!(resource instanceof SNResource)) {
-			throw new IllegalArgumentException(
-					"Cannot set AssociationKeeper for class: "
-							+ node.getClass());
+	/**
+	 * Merges all associations from the 'changed' node to the 'attached' keeper and put's keeper in 'changed'.
+	 * @param attached The currently attached keeper for this resource.
+	 * @param changed An unattached node referencing the same resource.
+	 */
+	protected void merge(final AssociationKeeper attached, final ResourceNode changed) {
+		final Set<Statement> currentAssocs = new HashSet<Statement>(attached.getAssociations());
+		final AssociationKeeper detached = assocKeeperAccess.getAssociationKeeper(changed);
+		for (Statement toBeRemoved : detached.getAssociationsForRemoval()) {
+			attached.removeAssociation(toBeRemoved);
 		}
-		try {
-			assocKeeperField.set(resource, ak);
-		} catch (Exception e) {
-			e.printStackTrace();
+		for(Statement assoc : detached.getAssociations()){
+			if (!currentAssocs.contains(assoc)){
+				attached.addAssociation(assoc);
+			}
 		}
+		assocKeeperAccess.setAssociationKeeper(changed, attached);
 	}
 
 }
