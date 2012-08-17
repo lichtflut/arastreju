@@ -49,20 +49,22 @@ public class RdbGateFactory extends ArastrejuGateFactory {
 	@Override
 	public ArastrejuGate create(DomainIdentifier identifier)
 			throws GateInitializationException {
-		Connection con = getConnection();
-		String storageName = identifier.getStorage();
-		if (!DBOperations.tableExists(con, storageName))
-			DBOperations.createTable(con, storageName);
+		Connection con;
 		try {
+			con = getDataSource().getConnection();
+			String storageName = identifier.getStorage();
+			if (!DBOperations.tableExists(con, storageName))
+				DBOperations.createTable(con, storageName);
 			con.commit();
+			con.close();
+			return new RdbGate(getDataSource(), identifier);
 		} catch (SQLException e) {
 			throw new GateInitializationException();
 		}
-		return new RdbGate(con, identifier);
+		
 	}
-	
-	@SuppressWarnings("null")
-	private Connection getConnection(){
+
+	private ComboPooledDataSource getDataSource(){
 		ComboPooledDataSource cpds = (ComboPooledDataSource) getProfile().getProfileObject(DB);
 		if(null==cpds){
 				ArastrejuProfile profile = getProfile();
@@ -77,18 +79,13 @@ public class RdbGateFactory extends ArastrejuGateFactory {
 					cpds.setAcquireIncrement(5);
 					cpds.setMaxPoolSize(20);
 				} catch (PropertyVetoException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					throw new GateInitializationException();
 				}
 				
 			getProfile().setProfileObject(DB, cpds);
-			getConnection();
+			getDataSource();
 		}
-		try {
-			return cpds.getConnection();
-		} catch (SQLException e) {
-			throw new GateInitializationException();
-		}
+		return cpds;
 	}
 	
 }

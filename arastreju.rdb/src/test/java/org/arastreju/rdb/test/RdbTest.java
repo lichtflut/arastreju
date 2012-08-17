@@ -96,6 +96,7 @@ public class RdbTest {
 			Class.forName(driver);
 			con = DriverManager.getConnection(url, user, pass);
 			DBOperations.deleteTable(con, DomainIdentifier.MASTER_DOMAIN);
+			mc.close();
 		} catch (ClassNotFoundException e) {
 			System.out.println("cant load driver "+driver);
 			logger.debug("Cann't load Driver "+driver);

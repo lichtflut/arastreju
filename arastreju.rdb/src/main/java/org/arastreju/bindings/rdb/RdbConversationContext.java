@@ -4,9 +4,12 @@
 package org.arastreju.bindings.rdb;
 
 import java.sql.Connection;
+import java.sql.SQLException;
 
+import org.arastreju.bindings.rdb.jdbc.ConnectionWraper;
 import org.arastreju.bindings.rdb.tx.JdbcTxProvider;
-import org.arastreju.sge.persistence.TransactionControl;
+import org.arastreju.sge.eh.ArastrejuRuntimeException;
+import org.arastreju.sge.eh.ErrorCodes;
 import org.arastreju.sge.persistence.TxProvider;
 import org.arastreju.sge.spi.abstracts.AbstractConversationContext;
 
@@ -23,17 +26,17 @@ import org.arastreju.sge.spi.abstracts.AbstractConversationContext;
  */
 public class RdbConversationContext extends AbstractConversationContext {
 
-	private TxProvider txProvider;
-	private String table;
-	private Cache cache;
-	private Connection con;
+	private final TxProvider txProvider;
+	private final String table;
+	private final Cache cache;
+	private final ConnectionWraper cw;
 	// ----------------------------------------------------
 
-	public RdbConversationContext(Connection con, String table) {
-		this.txProvider = new JdbcTxProvider(con);
+	public RdbConversationContext(ConnectionWraper cw, String table) {
+		this.txProvider = new JdbcTxProvider(cw);
 		this.table = table;
 		cache = new Cache();
-		this.con = con;
+		this.cw = cw;
 	}
 
 	// ----------------------------------------------------
@@ -56,6 +59,10 @@ public class RdbConversationContext extends AbstractConversationContext {
 	}
 	
 	public Connection getConnection(){
-		return con;
+		try {
+			return cw.getConnection();
+		} catch (SQLException e) {
+			throw new ArastrejuRuntimeException(ErrorCodes.GENERAL_CONSISTENCY_FAILURE, e.getMessage());
+		}
 	}
 }
