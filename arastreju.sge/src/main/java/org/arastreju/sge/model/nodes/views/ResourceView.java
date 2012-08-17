@@ -158,6 +158,15 @@ public abstract class ResourceView implements ResourceNode, Serializable {
 	protected String stringValue(ResourceID attribute) {
 		return SNOPS.string(SNOPS.fetchObject(this, attribute));
 	}
+
+    protected Boolean booleanValue(ResourceID attribute) {
+        final SemanticNode value = SNOPS.fetchObject(this, attribute);
+        if (value != null && value.isValueNode()) {
+            return value.asValue().getBooleanValue();
+        } else {
+            return null;
+        }
+    }
 	
 	protected Integer intValue(ResourceID attribute) {
 		final SemanticNode value = SNOPS.fetchObject(this, attribute);

@@ -31,6 +31,7 @@ import org.arastreju.sge.model.SimpleResourceID;
 import org.arastreju.sge.model.Statement;
 import org.arastreju.sge.model.nodes.ResourceNode;
 import org.arastreju.sge.model.nodes.SemanticNode;
+import org.arastreju.sge.model.nodes.views.SNBoolean;
 import org.arastreju.sge.model.nodes.views.SNScalar;
 import org.arastreju.sge.model.nodes.views.SNText;
 import org.arastreju.sge.naming.QualifiedName;
@@ -271,7 +272,9 @@ public class SNOPS {
 			node = new SNText((String) object);
 		} else if (object instanceof Integer) {
 			node = new SNScalar((Integer) object);
-		} else {
+        } else if (object instanceof Boolean) {
+            node = new SNBoolean((Boolean) object);
+        } else {
 			throw new IllegalArgumentException("Unsupported value: " + object);
 		}
 		return assure(subject, predicate, node, contexts);
