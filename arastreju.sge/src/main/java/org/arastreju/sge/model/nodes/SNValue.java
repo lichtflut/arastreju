@@ -33,7 +33,7 @@ import de.lichtflut.infra.Infra;
 
 /**
  * <p>
- * 	Base for data nodes. Data nodes may have no outgoing associations 
+ * 	Base for data nodes. Data nodes may have no outgoing associations
  *  but may only be associated from resource nodes.
  * </p>
  * 
@@ -44,17 +44,17 @@ import de.lichtflut.infra.Infra;
  * @author Oliver Tigges
  */
 public class SNValue implements ValueNode, Serializable {
-	
+
 	private static final DateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
-	
+
 	private final ElementaryDataType datatype;
-	
+
 	private final Object value;
-	
+
 	private final Locale locale;
-	
+
 	// -----------------------------------------------------
-	
+
 	/**
 	 * Constructor.
 	 * @param datatype The datatype.
@@ -63,14 +63,14 @@ public class SNValue implements ValueNode, Serializable {
 	public SNValue(final ElementaryDataType datatype, final Object value) {
 		this(datatype, value, null);
 	}
-	
+
 	/**
 	 * Constructor.
 	 * @param datatype The datatype.
 	 * @param value The value.
 	 * @param locale The locale
 	 */
-	public SNValue(ElementaryDataType datatype, Object value, Locale locale) {
+	public SNValue(final ElementaryDataType datatype, final Object value, final Locale locale) {
 		if (value == null) {
 			throw new IllegalArgumentException("Value may not be null");
 		}
@@ -82,9 +82,9 @@ public class SNValue implements ValueNode, Serializable {
 			throw new IllegalStateException("Value not of expected type", e);
 		}
 	}
-	
+
 	//-----------------------------------------------------
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -94,6 +94,7 @@ public class SNValue implements ValueNode, Serializable {
 			return getBooleanValue();
 		case URI:
 		case STRING:
+		case FILE:
 			return getStringValue();
 		case DECIMAL:
 			return getDecimalValue();
@@ -107,61 +108,60 @@ public class SNValue implements ValueNode, Serializable {
 			throw new IllegalStateException("Cannot determine type of value: " + value + " (" + datatype + ")");
 		}
 	}
-	
-	/** 
+
+	/**
 	 * {@inheritDoc}
 	 */
-	@Override
 	public Locale getLocale() {
 		return locale;
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
 	public ElementaryDataType getDataType() {
 		return datatype;
 	}
-	
+
 	// ----------------------------------------------------
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
 	public boolean isResourceNode() {
 		return false;
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
 	public boolean isValueNode() {
 		return true;
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
 	public ResourceNode asResource() {
 		throw new IllegalStateException("Not a resource: " + this);
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
 	public ValueNode asValue() {
 		return this;
 	}
-	
+
 	// ------------------------------------------------------
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
 	public String getStringValue() {
 		if (value == null){
 			return "";
-		} 
+		}
 		switch (datatype) {
 		case DATE:
 		case TIME_OF_DAY:
@@ -173,7 +173,7 @@ public class SNValue implements ValueNode, Serializable {
 			return value.toString();
 		}
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -200,39 +200,39 @@ public class SNValue implements ValueNode, Serializable {
 	public Date getTimeValue() {
 		return (Date) value;
 	}
-	
-	/** 
-	* {@inheritDoc}
-	*/
+
+	/**
+	 * {@inheritDoc}
+	 */
 	public Boolean getBooleanValue() {
 		return (Boolean) value;
 	}
-	
+
 	// -----------------------------------------------------
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
 	public SNTimeSpec asTimeSpec() {
 		return new SNTimeSpec(this);
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
 	public SNScalar asScalar() {
 		return new SNScalar(this);
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
 	public SNText asText() {
 		return new SNText(this);
 	}
-	
+
 	// -----------------------------------------------------
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -278,12 +278,12 @@ public class SNValue implements ValueNode, Serializable {
 		}
 		return super.equals(obj);
 	}
-	
+
 	// -----------------------------------------------------
-	
+
 	/**
 	 * Converts a String value to needed type, if necessary.
-	 * @throws ParseException 
+	 * @throws ParseException
 	 */
 	private Object convert(final Object value, final ElementaryDataType datatype) throws ParseException {
 		if (!(value instanceof String)) {
@@ -303,10 +303,10 @@ public class SNValue implements ValueNode, Serializable {
 		}
 	}
 
-	/** 
+	/**
 	 * {@inheritDoc}
 	 */
-	public int compareTo(ValueNode other) {
+	public int compareTo(final ValueNode other) {
 		switch (datatype) {
 		case BOOLEAN:
 			return getBooleanValue().compareTo(other.getBooleanValue());
@@ -325,5 +325,5 @@ public class SNValue implements ValueNode, Serializable {
 			throw new IllegalStateException("Cannot determine type of value: " + value + " (" + datatype + ")");
 		}
 	}
-	
+
 }
