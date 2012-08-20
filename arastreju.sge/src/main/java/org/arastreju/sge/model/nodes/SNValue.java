@@ -94,7 +94,6 @@ public class SNValue implements ValueNode, Serializable {
 			return getBooleanValue();
 		case URI:
 		case STRING:
-		case FILE:
 			return getStringValue();
 		case DECIMAL:
 			return getDecimalValue();

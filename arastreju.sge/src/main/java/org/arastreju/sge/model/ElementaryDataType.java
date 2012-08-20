@@ -67,7 +67,6 @@ public enum ElementaryDataType {
 	TIME_OF_DAY,
 	TERM,
 	PROPER_NAME,
-	FILE,
 
 	RESOURCE;
 
@@ -97,8 +96,6 @@ public enum ElementaryDataType {
 			return TIME_OF_DAY;
 		} else if (Aras.DATATYPE_URI.equals(node)){
 			return URI;
-		} else if (Aras.DATATYPE_FILE.equals(node)){
-			return FILE;
 		} else {
 			// default is resource
 			return RESOURCE;
