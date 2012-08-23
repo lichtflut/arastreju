@@ -32,6 +32,6 @@ public interface TxAction {
 	/**
 	 * Execute.
 	 */
-	void execute();
+	void execute() throws RuntimeException;
 
 }

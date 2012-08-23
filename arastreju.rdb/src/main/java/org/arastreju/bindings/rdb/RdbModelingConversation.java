@@ -20,8 +20,10 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.arastreju.bindings.rdb.impl.RdbResourceResolver;
+import org.arastreju.bindings.rdb.jdbc.ConnectionWraper;
 import org.arastreju.bindings.rdb.jdbc.TableOperations;
 import org.arastreju.bindings.rdb.tx.JdbcTxProvider;
+import org.arastreju.sge.SNOPS;
 import org.arastreju.sge.eh.ArastrejuRuntimeException;
 import org.arastreju.sge.eh.ErrorCodes;
 import org.arastreju.sge.model.ResourceID;
@@ -39,8 +41,8 @@ import de.lichtflut.infra.exceptions.NotYetImplementedException;
 
 public class RdbModelingConversation extends AbstractModelingConversation {
 
-	private RdbConversationContext context;
-	private AssocKeeperAccess assocKeeperAccess;
+	private final RdbConversationContext context;
+	private final AssocKeeperAccess assocKeeperAccess;
 	private final Cache cache;
 	private final RdbResourceResolver resolver;
 
@@ -52,6 +54,11 @@ public class RdbModelingConversation extends AbstractModelingConversation {
 		cache = context.getCache();
 		resolver = new RdbResourceResolver(conversationContext);
 		assocKeeperAccess = AssocKeeperAccess.getInstance();
+		
+	}
+	
+	public RdbModelingConversation(ConnectionWraper cw){
+		this(new RdbConversationContext(cw));
 	}
 
 	// ----------------------------------------------------
@@ -97,8 +104,12 @@ public class RdbModelingConversation extends AbstractModelingConversation {
 
 	@Override
 	public void reset(ResourceNode node) {
-		throw new NotYetImplementedException();
-
+		if(node.isAttached())
+			return;
+		AssociationKeeper keeper = cache.get(node.getQualifiedName());
+		if(null==keeper)
+			keeper = new RdbAssosiationKeeper(SNOPS.id(node), context);
+		assocKeeperAccess.setAssociationKeeper(node, keeper);
 	}
 
 	@Override
@@ -126,7 +137,7 @@ public class RdbModelingConversation extends AbstractModelingConversation {
 		assocKeeperAccess.setAssociationKeeper(id.asResource(), new DetachedAssociationKeeper());
 
 	}
-
+	
 	@Override
 	protected void assertActive() {
 		throw new NotYetImplementedException();

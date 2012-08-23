@@ -27,20 +27,22 @@ import com.mchange.v2.c3p0.ComboPooledDataSource;
 public class RdbGate extends AbstractArastrejuGate {
 
 	private final ComboPooledDataSource dataSource;
+	private final String table;
+	private RdbConversationContext ctx;
 
 	// ----------------------------------------------------
 
 	protected RdbGate(ComboPooledDataSource dataSource, DomainIdentifier identifier) {
 		super(identifier);
 		this.dataSource = dataSource;
+		table = identifier.getStorage();
 	}
 
 	// ----------------------------------------------------
 
 	@Override
 	public ModelingConversation startConversation() {
-		RdbConversationContext ctx = new RdbConversationContext(new ConnectionWraper(dataSource),
-				getDomainIdentifier().getStorage());
+		ctx = new RdbConversationContext(new ConnectionWraper(dataSource, table));
 		initContext(ctx);
 		return new RdbModelingConversation(ctx);
 	}
@@ -53,8 +55,8 @@ public class RdbGate extends AbstractArastrejuGate {
 
 	@Override
 	public void close() {
-		// TODO Auto-generated method stub
-
+		ctx.close();
+		dataSource.close();
 	}
 
 }

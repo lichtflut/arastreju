@@ -12,7 +12,7 @@ import org.arastreju.sge.naming.QualifiedName;
 
 /**
  * <p>
- *  [DESCRIPTION]
+ *  Caches AssosiationKeepers for a QualifiedName.
  * </p>
  *
  * <p>
@@ -45,6 +45,10 @@ public class Cache {
 	
 	public AssociationKeeper get(QualifiedName qn){
 		return data.get(qn);
+	}
+	
+	public void clear(){
+		data.clear();
 	}
 	
 }

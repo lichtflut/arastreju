@@ -19,12 +19,15 @@ package org.arastreju.rdb.test;
 
 import static org.junit.Assert.*;
 
+import java.beans.PropertyVetoException;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+
 import org.arastreju.bindings.rdb.RdbGateFactory;
+import org.arastreju.bindings.rdb.jdbc.ConnectionWraper;
 import org.arastreju.bindings.rdb.jdbc.DBOperations;
 import org.arastreju.sge.Arastreju;
 import org.arastreju.sge.ArastrejuGate;
@@ -32,19 +35,27 @@ import org.arastreju.sge.ArastrejuProfile;
 import org.arastreju.sge.ModelingConversation;
 import org.arastreju.sge.SNOPS;
 import org.arastreju.sge.apriori.Aras;
+import org.arastreju.sge.apriori.RDF;
 import org.arastreju.sge.apriori.RDFS;
 import org.arastreju.sge.context.DomainIdentifier;
 import org.arastreju.sge.model.Statement;
 import org.arastreju.sge.model.nodes.ResourceNode;
 import org.arastreju.sge.model.nodes.SNResource;
 import org.arastreju.sge.model.nodes.ValueNode;
+import org.arastreju.sge.model.nodes.views.SNClass;
 import org.arastreju.sge.model.nodes.views.SNText;
 import org.arastreju.sge.naming.QualifiedName;
+import org.arastreju.sge.query.FieldParam;
+import org.arastreju.sge.query.QueryParam;
+import org.arastreju.sge.query.ValueParam;
+import org.bindings.arastreju.rdb.query.RdbQueryBuilder;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.mchange.v2.c3p0.ComboPooledDataSource;
 
 /**
  * OT: Marked to be ignored - do not work if no MySQL is running.
@@ -76,7 +87,6 @@ public class RdbTest {
 	
 		Arastreju aras = Arastreju.getInstance(profile);
 		ArastrejuGate gate = aras.openMasterGate();
-		
 		this.mc = gate.startConversation();
 		
 	}
@@ -276,6 +286,70 @@ public class RdbTest {
 		assertEquals(2, car2.getAssociations().size());
 		assertTrue(car2.getAssociations( Aras.HAS_BRAND_NAME).isEmpty());
 		
+	}
+	
+	@Test
+	public void testRemove() {
+		final SNClass vehicle = new SNResource(qnVehicle).asClass();
+		final SNClass car = new SNResource(qnCar).asClass();
+		final SNClass bike = new SNResource(qnBike).asClass();
+		
+		final ResourceNode car1 = car.createInstance();
+		
+		SNOPS.associate(vehicle, RDFS.SUB_CLASS_OF, RDF.TYPE);
+		SNOPS.associate(car, RDFS.SUB_CLASS_OF, vehicle);
+		SNOPS.associate(bike, RDFS.SUB_CLASS_OF, vehicle);
+		
+		mc.attach(vehicle);
+		mc.attach(bike);
+		
+		SNOPS.associate(car1, Aras.HAS_BRAND_NAME, new SNText("BMW"));
+		SNOPS.associate(car1, Aras.HAS_PROPER_NAME, new SNText("Knut"));
+		
+		mc.attach(car1);
+
+		mc.remove(car);
+		assertNull(mc.findResource(qnCar));
+		mc.remove(car1);
+		
+		assertTrue(car1.getAssociations().isEmpty());
+		assertFalse(car1.isAttached());
+		assertTrue(car.getAssociations().isEmpty());
+		assertFalse(car.isAttached());
+		
+		assertFalse(vehicle.getAssociations().isEmpty());
+		assertTrue(vehicle.isAttached());
+		
+		mc.detach(vehicle);
+		
+		ResourceNode found = mc.findResource(qnVehicle);
+		assertNotNull(found);
+		assertEquals(RDF.TYPE, SNOPS.singleObject(found, RDFS.SUB_CLASS_OF));
+	}
+	
+	@Test
+	public void testQuerry(){
+		String driver = profile.getProperty("org.arastreju.bindings.rdb.jdbcDriver");
+		String user =  profile.getProperty("org.arastreju.bindings.rdb.dbUser");
+		String pass =  profile.getProperty("org.arastreju.bindings.rdb.dbPass");
+		String url = profile.getProperty("org.arastreju.bindings.rdb.protocol")+
+				profile.getProperty("org.arastreju.bindings.rdb.db");
+		ComboPooledDataSource cpds = new ComboPooledDataSource();
+		try {
+			cpds.setDriverClass(driver);
+		} catch (PropertyVetoException e) {
+			e.printStackTrace();
+		}
+		cpds.setUser(user);
+		cpds.setDataSourceName(url);
+		cpds.setPassword(pass);
+		ConnectionWraper cw = new ConnectionWraper(cpds, "test");
+		RdbQueryBuilder query = new RdbQueryBuilder(cw);
+		query
+				.addValue("Automobil")
+				.and().not()
+				.add(new FieldParam(qnBike, "aBike"));
+		query.getResult();
 	}
 	
 }

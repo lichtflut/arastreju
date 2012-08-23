@@ -110,7 +110,11 @@ public class RdbAssosiationKeeper extends AbstractAssociationKeeper {
 		final String object = objectStr.get(Column.OBJECT.value());
 		ctx.getTxProvider().doTransacted(new TxAction() {
 			public void execute() {
-				TableOperations.deleteAssosiation(ctx.getConnection(), ctx.getTable(), subject, predicate, object);
+				try {
+					TableOperations.deleteAssosiation(ctx.getConnection(), ctx.getTable(), subject, predicate, object);
+				} catch (SQLException e) {
+					throw new ArastrejuRuntimeException(ErrorCodes.GENERAL_IO_ERROR, e.getMessage());
+				}
 				
 			}
 		});
