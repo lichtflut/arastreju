@@ -187,10 +187,17 @@ public class SNValue implements ValueNode, Serializable {
 	 * {@inheritDoc}
 	 */
 	public BigInteger getIntegerValue() {
+        if (value instanceof BigInteger) {
+            return (BigInteger) value;
+        }
 		if (value instanceof String){
 			return new BigInteger((String) value);
 		}
-		return (BigInteger) value;
+        if (value instanceof Number) {
+            Number number = (Number) value;
+            return BigInteger.valueOf(number.longValue());
+        }
+        throw new IllegalStateException("Cannot convert '" + value + "' to an BigInteger.");
 	}
 
 	/**
@@ -239,7 +246,7 @@ public class SNValue implements ValueNode, Serializable {
 	public String toString() {
 		final StringBuilder sb = new StringBuilder(getStringValue());
 		if (locale != null) {
-			sb.append(" [" + locale + "]");
+			sb.append(" [").append(locale).append("]");
 		}
 		return sb.toString();
 	}
@@ -281,28 +288,6 @@ public class SNValue implements ValueNode, Serializable {
 	// -----------------------------------------------------
 
 	/**
-	 * Converts a String value to needed type, if necessary.
-	 * @throws ParseException
-	 */
-	private Object convert(final Object value, final ElementaryDataType datatype) throws ParseException {
-		if (!(value instanceof String)) {
-			return value;
-		}
-		final String sVal = (String) value;
-		switch (datatype) {
-		case DATE:
-		case TIME_OF_DAY:
-		case TIMESTAMP:
-			return DATE_FORMAT.parse(sVal);
-		case BOOLEAN:
-			return Boolean.parseBoolean(sVal);
-
-		default:
-			return sVal;
-		}
-	}
-
-	/**
 	 * {@inheritDoc}
 	 */
 	public int compareTo(final ValueNode other) {
@@ -324,5 +309,32 @@ public class SNValue implements ValueNode, Serializable {
 			throw new IllegalStateException("Cannot determine type of value: " + value + " (" + datatype + ")");
 		}
 	}
+
+    // -- CONVERSIONS -------------------------------------
+
+    /**
+     * Converts a String value to needed type, if necessary.
+     * @throws ParseException
+     */
+    private Object convert(final Object value, final ElementaryDataType datatype) throws ParseException {
+        if (value instanceof String) {
+            return convertString((String) value, datatype);
+        }
+        return value;
+    }
+
+    private Object convertString(final String value, final ElementaryDataType datatype) throws ParseException {
+        switch (datatype) {
+            case DATE:
+            case TIME_OF_DAY:
+            case TIMESTAMP:
+                return DATE_FORMAT.parse(value);
+            case BOOLEAN:
+                return Boolean.parseBoolean(value);
+
+            default:
+                return value;
+        }
+    }
 
 }

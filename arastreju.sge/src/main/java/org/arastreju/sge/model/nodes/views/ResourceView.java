@@ -180,6 +180,10 @@ public abstract class ResourceView implements ResourceNode, Serializable {
 	protected void setValue(ResourceID attribute, Object value) {
 		SNOPS.assure(this, attribute, value);
 	}
+
+    protected void removeValues(ResourceID attribute) {
+        SNOPS.remove(this, attribute);
+    }
 	
 	// -----------------------------------------------------
 	
