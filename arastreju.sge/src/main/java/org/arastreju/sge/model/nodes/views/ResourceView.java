@@ -178,7 +178,11 @@ public abstract class ResourceView implements ResourceNode, Serializable {
 	}
 	
 	protected void setValue(ResourceID attribute, Object value) {
-		SNOPS.assure(this, attribute, value);
+        if (value != null) {
+		    SNOPS.assure(this, attribute, value);
+        } else {
+            removeValues(attribute);
+        }
 	}
 
     protected void removeValues(ResourceID attribute) {
