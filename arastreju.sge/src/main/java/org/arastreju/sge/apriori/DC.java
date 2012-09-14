@@ -34,11 +34,19 @@ public interface DC {
 	String NAMESPACE_URI = "http://purl.org/dc/terms/";
 	
 	// -- TYPES -------------------------------------------
+
+    ResourceID MEDIA_TYPE = new SimpleResourceID(NAMESPACE_URI, "MediaType");
 	
 	// -- PROPERTIES ---------------------------------------
+
+    ResourceID TITLE = new SimpleResourceID(NAMESPACE_URI, "title");
+
+    ResourceID SUBJECT = new SimpleResourceID(NAMESPACE_URI, "subject");
 	
 	ResourceID CREATOR = new SimpleResourceID(NAMESPACE_URI, "creator");
 	
 	ResourceID CREATED = new SimpleResourceID(NAMESPACE_URI, "created");
+
+    ResourceID MODIFIED = new SimpleResourceID(NAMESPACE_URI, "modified");
 
 }
