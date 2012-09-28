@@ -103,9 +103,6 @@ public abstract class AbstractConversationContext implements ConversationContext
 	
 	// ----------------------------------------------------
 	
-	/** 
-	 * {@inheritDoc}
-	 */
 	public Context[] getReadContexts() {
 		assertActive();
 		if (readContexts != null) {
@@ -115,16 +112,10 @@ public abstract class AbstractConversationContext implements ConversationContext
 		}
 	}
 	
-   /** 
-	 * {@inheritDoc}
-	 */
     public Context getPrimaryContext() {
     	return primaryContext;
     }
 
-	/**
-	 * {@inheritDoc}
-	 */
     @Override
 	public ConversationContext setPrimaryContext(Context ctx) {
 		this.primaryContext = ctx;
@@ -134,9 +125,6 @@ public abstract class AbstractConversationContext implements ConversationContext
 		return this;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
     @Override
 	public ConversationContext setReadContexts(Context... ctxs) {
         this.readContexts.clear();
@@ -150,6 +138,20 @@ public abstract class AbstractConversationContext implements ConversationContext
 	}
 
     // ----------------------------------------------------
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        AbstractConversationContext that = (AbstractConversationContext) o;
+        return ctxId == that.ctxId;
+    }
+
+    @Override
+    public int hashCode() {
+        return (int) (ctxId ^ (ctxId >>> 32));
+    }
 
     @Override
     public String toString() {
