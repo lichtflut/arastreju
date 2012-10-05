@@ -16,6 +16,8 @@
 package org.arastreju.sge.model.nodes.views;
 
 import java.io.Serializable;
+import java.text.DateFormat;
+import java.util.Date;
 import java.util.Set;
 
 import org.arastreju.sge.SNOPS;
@@ -176,6 +178,15 @@ public abstract class ResourceView implements ResourceNode, Serializable {
 			return null;
 		}
 	}
+
+    protected Date timeValue(ResourceID attribute) {
+        final SemanticNode value = SNOPS.fetchObject(this, attribute);
+        if (value != null && value.isValueNode()) {
+            return value.asValue().getTimeValue();
+        } else {
+            return null;
+        }
+    }
 	
 	protected void setValue(ResourceID attribute, Object value) {
         if (value != null) {
