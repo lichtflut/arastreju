@@ -42,10 +42,10 @@ import org.arastreju.sge.naming.SimpleNamespace;
 public class NamespaceMap {
 	
 	private final Map<String, Namespace> prefixMap = new HashMap<String, Namespace>();
+
+    private final Map<Namespace, String> nsMap = new HashMap<Namespace, String>();
 	
-	private final Set<Namespace> namespaces = new HashSet<Namespace>();
-	
-	private int nextId = 1; 
+	private int nextId = 1;
 	
 	// -----------------------------------------------------
 	
@@ -84,7 +84,7 @@ public class NamespaceMap {
 	 * @return the namespaces
 	 */
 	public Set<Namespace> getNamespaces() {
-		return namespaces;
+		return nsMap.keySet();
 	}
 	
 	/** Check if there exists a namespace for given prefix.
@@ -103,6 +103,18 @@ public class NamespaceMap {
 	public Namespace getNamespace(final String prefix){
 		return prefixMap.get(prefix);
 	}
+
+    /**
+     * Get the existing prefix or create a new one if not in this map.
+     * @param namespace The namespace.
+     * @return The corresponding prefix.
+     */
+    public String getPrefix(Namespace namespace) {
+        if (!nsMap.containsKey(namespace)) {
+             addNamespace(namespace);
+        }
+        return nsMap.get(namespace);
+    }
 	
 	// -----------------------------------------------------
 	
@@ -113,9 +125,10 @@ public class NamespaceMap {
 	}
 	
 	public synchronized void addNamespace(final Namespace namespace){
-		if (!this.namespaces.contains(namespace)){
-			this.namespaces.add(namespace);
-			prefixMap.put(prefix(namespace), namespace);
+		if (!this.nsMap.containsKey(namespace)){
+            String prefix = prefix(namespace);
+            nsMap.put(namespace, prefix);
+			prefixMap.put(prefix, namespace);
 		}
 	}
 	
