@@ -85,9 +85,6 @@ public class SNValue implements ValueNode, Serializable {
 
 	//-----------------------------------------------------
 
-	/**
-	 * {@inheritDoc}
-	 */
 	public Object getValue(){
 		switch (datatype) {
 		case BOOLEAN:
@@ -108,55 +105,34 @@ public class SNValue implements ValueNode, Serializable {
 		}
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	public Locale getLocale() {
 		return locale;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	public ElementaryDataType getDataType() {
 		return datatype;
 	}
 
 	// ----------------------------------------------------
 
-	/**
-	 * {@inheritDoc}
-	 */
 	public boolean isResourceNode() {
 		return false;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	public boolean isValueNode() {
 		return true;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	public ResourceNode asResource() {
 		throw new IllegalStateException("Not a resource: " + this);
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	public ValueNode asValue() {
 		return this;
 	}
 
 	// ------------------------------------------------------
 
-	/**
-	 * {@inheritDoc}
-	 */
 	public String getStringValue() {
 		if (value == null){
 			return "";
@@ -183,9 +159,6 @@ public class SNValue implements ValueNode, Serializable {
 		return (BigDecimal) value;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	public BigInteger getIntegerValue() {
         if (value instanceof BigInteger) {
             return (BigInteger) value;
@@ -200,48 +173,30 @@ public class SNValue implements ValueNode, Serializable {
         throw new IllegalStateException("Cannot convert '" + value + "' to an BigInteger.");
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	public Date getTimeValue() {
 		return (Date) value;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	public Boolean getBooleanValue() {
 		return (Boolean) value;
 	}
 
 	// -----------------------------------------------------
 
-	/**
-	 * {@inheritDoc}
-	 */
 	public SNTimeSpec asTimeSpec() {
 		return new SNTimeSpec(this);
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	public SNScalar asScalar() {
 		return new SNScalar(this);
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	public SNText asText() {
 		return new SNText(this);
 	}
 
 	// -----------------------------------------------------
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public String toString() {
 		final StringBuilder sb = new StringBuilder(getStringValue());
@@ -251,9 +206,6 @@ public class SNValue implements ValueNode, Serializable {
 		return sb.toString();
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -264,9 +216,6 @@ public class SNValue implements ValueNode, Serializable {
 		return result;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public boolean equals(final Object obj) {
 		if (obj instanceof ValueNode) {
@@ -287,9 +236,6 @@ public class SNValue implements ValueNode, Serializable {
 
 	// -----------------------------------------------------
 
-	/**
-	 * {@inheritDoc}
-	 */
 	public int compareTo(final ValueNode other) {
 		switch (datatype) {
 		case BOOLEAN:
@@ -331,9 +277,22 @@ public class SNValue implements ValueNode, Serializable {
                 return DATE_FORMAT.parse(value);
             case BOOLEAN:
                 return Boolean.parseBoolean(value);
+            case DECIMAL:
+                return new BigDecimal(value);
+            case INTEGER:
+                return new BigInteger(value);
+            case URI:
+            case STRING:
+            case PROPER_NAME:
+            case TERM:
+            case UNDEFINED:
+                return value;
+
+            case RESOURCE:
+                throw new IllegalStateException("SNValue may not contain a value of type RESOURCE.");
 
             default:
-                return value;
+                throw new IllegalStateException("Unsupported datatype: " + datatype);
         }
     }
 
