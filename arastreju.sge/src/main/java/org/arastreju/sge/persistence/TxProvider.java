@@ -16,6 +16,8 @@
  */
 package org.arastreju.sge.persistence;
 
+import org.arastreju.sge.repl.ArasLiveReplicator;
+
 /**
  * <p>
  *  Provider of transactions.
@@ -30,6 +32,7 @@ package org.arastreju.sge.persistence;
 public abstract class TxProvider {
 
 	private TransactionControl tx;
+	private ArasLiveReplicator repl;
 
 	// -----------------------------------------------------
 
@@ -37,6 +40,7 @@ public abstract class TxProvider {
 	 * Constructor.
 	 */
 	public TxProvider() {
+		this.repl = new ArasLiveReplicator();
 	}
 	
 	// -----------------------------------------------------
@@ -48,6 +52,7 @@ public abstract class TxProvider {
 	public TransactionControl begin() {
 		if (!inTransaction()) {
 			tx = newTx();
+			repl.reset();
 			return tx;
 		} else {
 			return newSubTx(tx);
@@ -93,6 +98,27 @@ public abstract class TxProvider {
 		}
 	}
 
+	/**
+	 * @return reference to the replicator (source part)
+	 */
+	public ArasLiveReplicator getRepl() {
+		return repl;
+	}
+	
+	/** 
+	 * called by finished transactions. If successful, the replicator
+	 * is triggered to send out the data it acquired in the course
+	 * of this transaction
+	 */
+	public void onTransactionFinish(TransactionControl tx, boolean success) {
+		if (this.tx == tx) { //root- or sub-transaction?
+			if (success) //root-transaction succeeded
+				repl.dispatch();
+			
+			repl.reset();
+		}
+	}
+	
     // ----------------------------------------------------
 
     protected abstract TransactionControl newTx();

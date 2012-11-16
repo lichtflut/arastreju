@@ -17,7 +17,8 @@ package org.arastreju.sge.persistence;
 
 /**
  * <p>
- * 	Interface to transaction controlling of Arastreju gate.
+ * 	Abstract class for transaction controlling of Arastreju gate.
+ *  Knows its Transaction provider, accessible through tx().
  * </p>
  * 
  * <p>
@@ -26,45 +27,70 @@ package org.arastreju.sge.persistence;
  *
  * @author Oliver Tigges
  */
-public interface TransactionControl {
+public abstract class TransactionControl {
+	private TxProvider tx;
+	private boolean success;
+	
+	// ----------------------------------------------------
+	
+	public TransactionControl(TxProvider tx) {
+		this.tx = tx;
+		this.success = false;
+	}
+	
+	// ----------------------------------------------------
+	
+	/**
+	 * @return The transaction provider
+	 */
+	public TxProvider tx() {
+		return tx;
+	}
 	
 	/**
 	 * Marks the transaction as successful. 
 	 */
-	void success();
+	public final void success() {
+		success = true;
+		onSuccess();
+	}
+
+	protected abstract void onSuccess(); /* was: success() */
 	
 	/**
 	 * Marks the transaction as failed. 
 	 */
-	void fail();
+	public abstract void fail();
 	
 	/**
 	 * Finish the transaction. If fail() has been called during this transaction a rollback will be performed. 
 	 * Otherwise the transaction will be committed.
 	 */
-	void finish();
+	public final void finish() {
+		onFinish();
+		tx.onTransactionFinish(this, success);
+	}
+
+	protected abstract void onFinish(); /* was: finish() */
 	
 	/**
 	 * Commit the transaction.
 	 */
-	void commit();
+	public abstract void commit();
 	
 	/**
 	 * Roles the transaction back .
 	 */
-	void rollback();
+	public abstract void rollback();
 	
 	/**
 	 * flushes current state to database.
 	 */
-	void flush();
+	public abstract void flush();
 
     /**
      * Check if the current transaction is active.
      * @return true if there is an active transaction
      */
-    boolean isActive();
-
-	
-	
+    public abstract boolean isActive();
 }

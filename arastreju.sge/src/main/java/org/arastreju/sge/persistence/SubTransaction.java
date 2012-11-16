@@ -29,7 +29,7 @@ package org.arastreju.sge.persistence;
  *
  * @author Oliver Tigges
  */
-public class SubTransaction implements TransactionControl {
+public class SubTransaction extends TransactionControl {
 
 	private final TransactionControl superTx;
 	
@@ -39,6 +39,7 @@ public class SubTransaction implements TransactionControl {
 	 * @param superTx The super transaction.
 	 */
 	public SubTransaction(final TransactionControl superTx) {
+		super(superTx.tx());
 		this.superTx = superTx;
 	}
 	
@@ -47,7 +48,7 @@ public class SubTransaction implements TransactionControl {
 	/** 
 	 * {@inheritDoc}
 	 */
-	public void success() {
+	public void onSuccess() {
 		superTx.success();
 	}
 	
@@ -61,7 +62,7 @@ public class SubTransaction implements TransactionControl {
 	/** 
 	 * {@inheritDoc}
 	 */
-	public void finish() {
+	public void onFinish() {
 		// do nothing
 	}
 	
@@ -93,4 +94,5 @@ public class SubTransaction implements TransactionControl {
     public boolean isActive() {
         return superTx.isActive();
     }
+
 }

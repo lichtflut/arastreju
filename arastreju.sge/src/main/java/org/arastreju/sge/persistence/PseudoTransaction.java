@@ -26,13 +26,21 @@ package org.arastreju.sge.persistence;
  *
  * @author Raphael Esterle
  */
-public class PseudoTransaction implements TransactionControl {
+public class PseudoTransaction extends TransactionControl {
+
+	public PseudoTransaction() {
+		this(null);
+	}
+	
+	public PseudoTransaction(TxProvider tx) {
+		super(tx);
+	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void success() {
+	public void onSuccess() {
 	}
 
 	/**
@@ -46,7 +54,7 @@ public class PseudoTransaction implements TransactionControl {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void finish() {
+	public void onFinish() {
 	}
 	
 	/**
