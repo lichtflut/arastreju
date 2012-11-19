@@ -65,7 +65,7 @@ public class SNClass extends ResourceView {
 
 	public Set<SNClass> getDirectSuperClasses() {
 		final Set<SNClass> superClasses = new HashSet<SNClass>();
-		for (Statement current : getAssociations(RDFS.SUB_CLASS_OF)) {
+		for (Statement current : SNOPS.associations(this, RDFS.SUB_CLASS_OF)) {
 			final SNClass directImplementedClass = current.getObject().asResource().asClass();
 			superClasses.add(directImplementedClass);
 		}

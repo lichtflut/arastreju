@@ -31,7 +31,7 @@ import org.arastreju.sge.naming.QualifiedName;
 
 /**
  * <p>
- * 	Resource view for Properties.
+ * 	Resource views for Properties.
  * 	Corresponds to rdfs:Property.
  * </p>
  * 
@@ -46,13 +46,25 @@ public class SNProperty extends ResourceView {
 	private Set<SNProperty> inverseProperties;
 	
 	// ------------------------------------------------------
+
+    public static SNProperty from(SemanticNode node) {
+        if (node instanceof SNProperty) {
+            return (SNProperty) node;
+        } else if (node instanceof ResourceNode) {
+            return new SNProperty((ResourceNode) node);
+        } else {
+            return null;
+        }
+    }
+
+    // ----------------------------------------------------
 	
 	public SNProperty(final QualifiedName qn) {
 		super(new SNResource(qn));
 	}
 	
 	/**
-	 * Creates a new Property view for given resource.
+	 * Creates a new Property views for given resource.
 	 */
 	public SNProperty(final ResourceNode resource) {
 		super(resource);

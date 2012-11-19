@@ -57,8 +57,12 @@ public class StatementMetaInfo implements Serializable {
 	public StatementMetaInfo(Context[] contexts) {
 		this(contexts, new Date());
 	}
-	
-	// ----------------------------------------------------
+
+    public StatementMetaInfo() {
+        this(null);
+    }
+
+    // ----------------------------------------------------
 
 	/**
 	 * @return the contexts
