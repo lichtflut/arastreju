@@ -26,6 +26,7 @@ import org.arastreju.sge.apriori.RDFS;
 import org.arastreju.sge.model.ResourceID;
 import org.arastreju.sge.model.Statement;
 import org.arastreju.sge.model.nodes.ResourceNode;
+import org.arastreju.sge.model.nodes.SemanticNode;
 import org.arastreju.sge.naming.QualifiedName;
 
 /**
@@ -36,6 +37,18 @@ import org.arastreju.sge.naming.QualifiedName;
  * @author Oliver Tigges
  */
 public class SNClass extends ResourceView {
+
+    public static SNClass from(SemanticNode node) {
+        if (node instanceof SNClass) {
+            return (SNClass) node;
+        } else if (node instanceof ResourceNode) {
+            return new SNClass((ResourceNode) node);
+        } else {
+            return null;
+        }
+    }
+
+    // ----------------------------------------------------
 
 	/**
 	 * Creates a new class resource.

@@ -49,7 +49,7 @@ public interface ResourceNode extends ResourceID {
 	 */
 	boolean isAttached();
 	
-	// -----------------------------------------------------
+	// -- ASSOCIATIONS ------------------------------------
 
 	/**
 	 * Get all associations of this node.
@@ -77,8 +77,6 @@ public interface ResourceNode extends ResourceID {
 	boolean removeAssociation(Statement stmt);
 	
 	// -----------------------------------------------------
-
-	SNEntity asEntity();
 
 	SNClass asClass();
 

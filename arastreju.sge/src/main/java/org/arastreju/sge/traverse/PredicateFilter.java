@@ -4,6 +4,7 @@
 package org.arastreju.sge.traverse;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -31,7 +32,9 @@ public class PredicateFilter implements TraversalFilter {
 	// ----------------------------------------------------
 	
 	/**
-	 * @param allowed
+     * Constructor.
+     * @param follow The predicates to follow.
+	 * @param allowed The allowed predicates.
 	 */
 	public PredicateFilter(Collection<ResourceID> follow, Collection<ResourceID> allowed) {
 		this.allowed.addAll(allowed);
@@ -47,27 +50,20 @@ public class PredicateFilter implements TraversalFilter {
 	// ----------------------------------------------------
 	
 	public PredicateFilter addAllowed(ResourceID... allowed) {
-		for (ResourceID current : allowed) {
-			this.allowed.add(current);	
-		}
+        Collections.addAll(this.allowed, allowed);
 		return this;
 	}
 	
 	public PredicateFilter addFollow(ResourceID... follow) {
-		for (ResourceID current : follow) {
-			this.follow.add(current);	
-		}
+        Collections.addAll(this.follow, follow);
 		return this;
 	}
 	
 	// ----------------------------------------------------
 
-	/** 
-	* {@inheritDoc}
-	*/
 	@Override
 	public TraverseCommand accept(Statement stmt) {
-		final SNProperty predicate = stmt.getPredicate().asResource().asProperty();
+		final SNProperty predicate = SNProperty.from(stmt.getPredicate());
 		for (ResourceID current : follow) {
 			if (predicate.isSubPropertyOf(current)) {
 				return TraverseCommand.ACCEPPT_CONTINUE;

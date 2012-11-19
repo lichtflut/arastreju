@@ -93,7 +93,7 @@ public class SNProperty extends ResourceView {
 		final Set<SNProperty> result = new HashSet<SNProperty>();
 		final Set<Statement> extensions = getAssociations(RDFS.SUB_PROPERTY_OF);
 		for (Statement current : extensions) {
-			final SNProperty directSuperProperty = current.getObject().asResource().asProperty();
+			final SNProperty directSuperProperty = SNProperty.from(current.getObject());
 			result.add(directSuperProperty);
 		}
 		return result;
@@ -108,7 +108,7 @@ public class SNProperty extends ResourceView {
 			inverseProperties = new HashSet<SNProperty>();
 			Set<? extends Statement> assocs = getAssociations(Aras.INVERSE_OF);
 			for (Statement current : assocs) {
-				SNProperty property = current.getObject().asResource().asProperty();
+				SNProperty property = SNProperty.from(current.getObject());
 				inverseProperties.add(property);
 			}
 		}
@@ -180,7 +180,7 @@ public class SNProperty extends ResourceView {
 		targetSet.add(this);
 		final Set<? extends Statement> extensions = getAssociations(RDFS.SUB_PROPERTY_OF);
 		for (Statement current : extensions) {
-			final SNProperty directSuperProperty = current.getObject().asResource().asProperty();
+			final SNProperty directSuperProperty = SNProperty.from(current.getObject());
 			if (!targetSet.contains(directSuperProperty)) {
 				directSuperProperty.addSuperProperties(targetSet);
 			}

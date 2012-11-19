@@ -19,7 +19,6 @@ import org.arastreju.sge.apriori.RDF;
 import org.arastreju.sge.model.ResourceID;
 import org.arastreju.sge.model.Statement;
 import org.arastreju.sge.model.nodes.ResourceNode;
-import org.arastreju.sge.model.nodes.SNResource;
 import org.arastreju.sge.model.nodes.SemanticNode;
 import org.arastreju.sge.naming.QualifiedName;
 
@@ -74,7 +73,7 @@ public class SNEntity extends ResourceView {
 	public Set<SNClass> getDirectClasses() {
 		Set<SNClass> result = new HashSet<SNClass>();
 		for(Statement assoc: getAssociations(RDF.TYPE)){
-			result.add(assoc.getObject().asResource().asClass());
+			result.add(SNClass.from(assoc.getObject()));
 		}
 		return result;
 	}
