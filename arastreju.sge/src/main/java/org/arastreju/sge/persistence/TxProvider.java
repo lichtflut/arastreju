@@ -17,6 +17,7 @@
 package org.arastreju.sge.persistence;
 
 import org.arastreju.sge.repl.ArasLiveReplicator;
+import org.arastreju.sge.repl.DummyReplicator;
 
 /**
  * <p>
@@ -40,7 +41,7 @@ public abstract class TxProvider {
 	 * Constructor.
 	 */
 	public TxProvider() {
-		this.repl = new ArasLiveReplicator();
+		this.repl = createReplicator();
 	}
 	
 	// -----------------------------------------------------
@@ -125,6 +126,14 @@ public abstract class TxProvider {
 
     protected TransactionControl newSubTx(TransactionControl parent) {
     	return new SubTransaction(parent);
+    }
+    
+    /**
+     * subclasses should override this in case they want replication
+     * @return a newly created backend-specific replicator, or null for no replication facilities
+     */
+    protected ArasLiveReplicator createReplicator() {
+    	return new DummyReplicator();
     }
 	
 }
