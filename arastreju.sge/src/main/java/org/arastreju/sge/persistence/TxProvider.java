@@ -42,6 +42,7 @@ public abstract class TxProvider {
 	 */
 	public TxProvider() {
 		this.repl = createReplicator();
+		//repl.init(listenAddr, listenPort, rcvHost, rcvPort);// XXX put setting where?
 	}
 	
 	// -----------------------------------------------------

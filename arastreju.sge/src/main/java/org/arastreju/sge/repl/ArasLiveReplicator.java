@@ -57,10 +57,22 @@ public abstract class ArasLiveReplicator {
 
 	public ArasLiveReplicator() {
 		replLog = new LinkedList<GraphOp>();
-		new Thread(new Receiver()).start();
-		new Thread(dispatcher = new Dispatcher()).start();
 	}
 
+	// -- General interface -------------------------------
+
+	/**
+	 * should only be called once
+	 * @param lstAddr the address/interface to listen() on. null == "any"
+	 * @param lstPort the port to listen() on. [1,65535]
+	 * @param rcvHost address or hostname the receiver connect()s against
+	 * @param rcvPort port used in said connect()
+	 */
+	public void init(String lstAddr, int lstPort, String rcvHost, int rcvPort) {
+		new Thread(new Receiver(lstAddr, lstPort)).start();
+		new Thread(dispatcher = new Dispatcher(rcvHost, rcvPort)).start();
+	}
+	
 	// -- Dispatcher interface ----------------------------
 
 	/**
@@ -103,7 +115,7 @@ public abstract class ArasLiveReplicator {
 	public void queueNodeOp(boolean add, ResourceID node) {
 		replLog.add(new NodeOp(add, node));
 	}
-	
+
 	// -- Receiver interface ----------------------------
 	
 	/** 
@@ -140,6 +152,16 @@ public abstract class ArasLiveReplicator {
 	private class Dispatcher implements Runnable {
 		private final List<String> sendQ = new LinkedList<String>();
 
+		private final String rcvHost;
+		private final int rcvPort;
+
+		// ------------------------------------------------
+
+		Dispatcher(String receiverHost, int receiverPort) {
+			rcvHost = receiverHost;
+			rcvPort = receiverPort;
+		}
+
 		// ------------------------------------------------
 
 		void queue(String s) {
@@ -152,8 +174,22 @@ public abstract class ArasLiveReplicator {
 		@Override
 		public void run() {
 			BufferedWriter w;
+			Socket s = null;
+			do {
+				try {
+					s = new Socket(rcvHost, rcvPort);
+				} catch (IOException e) {
+					e.printStackTrace();
+					try {
+						Thread.sleep(1000);
+					} catch (InterruptedException e1) {
+						e1.printStackTrace();
+					}
+				}
+			} while (s == null);
+
 			try {
-				Socket s = new Socket("localhost", 12345); // XXX
+				s.shutdownInput();
 				w = new BufferedWriter(new OutputStreamWriter(s.getOutputStream()));
 				for (;;) {
 					String item;
@@ -190,6 +226,25 @@ public abstract class ArasLiveReplicator {
 	 * @author Timo Buhrmester
 	 */
 	private class Receiver implements Runnable {
+		private final String lstAddr;
+		private final int lstPort;
+
+		// ------------------------------------------------
+
+		/**
+		 * 
+		 * @param listenAddr the interface to listen() on, may be null to
+		 *   listen on all available interfaces (a.k.a. INADDR_ANY (most 
+		 *   usually equivalent to "0.0.0.0").
+		 * @param receiverPort the port to listen() on, >= 1
+		 */
+		Receiver(String listenAddr, int listenPort) {
+			lstAddr = listenAddr;
+			lstPort = listenPort;
+		}
+
+		// ------------------------------------------------
+
 		private void process(String line) {
 			Matcher m = MatcherProvider.matcher(line);
 
@@ -254,10 +309,11 @@ public abstract class ArasLiveReplicator {
 			try {
 				/* this listens on all interfaces, should
 				 * be turned into a configuration setting */
-				ServerSocket s = new ServerSocket(12345, 0, null);
+
+				ServerSocket s = new ServerSocket(lstPort, 0, InetAddress.getByName(lstAddr));
 
 				Socket sck = s.accept();
-
+				sck.shutdownOutput();
 				r = new BufferedReader(new InputStreamReader(sck.getInputStream()));
 
 				for (;;) {
@@ -270,102 +326,6 @@ public abstract class ArasLiveReplicator {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-		}
-
-	}
-
-	
-	
-	/**
-	 * <p>
-	 *  Represents a (positive or negative) graph operation
-	 * </p>
-	 *
-	 * Created: 16.11.2012
-	 *
-	 * @author Timo Buhrmester
-	 */
-	private abstract class GraphOp {
-		private final boolean add;
-
-		// ------------------------------------------------
-
-		GraphOp(boolean add) {
-			this.add = add;
-		}
-
-		// ------------------------------------------------
-
-		public String toProtocolString() {
-			return (add ? "+" : "-") + getProtocolRep();
-		}
-
-		boolean isAdded() {
-			return add;
-		}
-
-		public abstract String getProtocolRep();
-	}
-
-	/**
-	 * <p>
-	 *  Represents adding/removal of a node
-	 * </p>
-	 *
-	 * Created: 16.11.2012
-	 *
-	 * @author Timo Buhrmester
-	 */
-	private class NodeOp extends GraphOp {
-		private final ResourceID node;
-
-		// ------------------------------------------------
-
-		NodeOp(boolean add, ResourceID node) {
-			super(add);
-			this.node = node;
-		}
-
-		// ------------------------------------------------
-
-		public String getProtocolRep() {
-			return "N " + node.toURI(); // N for Node, as opposed to Statement (below)
-		}
-	}
-
-	/**
-	 * <p>
-	 *  Represents adding/removal of a statement/relation
-	 * </p>
-	 *
-	 * Created: 16.11.2012
-	 *
-	 * @author Timo Buhrmester
-	 */
-	private class RelOp extends GraphOp {
-		private final Statement stmt;
-
-		// ------------------------------------------------
-
-		RelOp(boolean add, Statement stmt) {
-			super(add);
-			this.stmt = stmt;
-		}
-
-		// ------------------------------------------------
-
-		public String getProtocolRep() {
-			String rep = "S " // this is a statement, as opposed to a node
-			        + stmt.getSubject().toURI() + " " + stmt.getPredicate().toURI() + " ";
-
-			if (stmt.getObject().isResourceNode()) {
-				rep += "R " + stmt.getObject().asResource().toURI(); // R for Resource
-			} else {
-				rep += "V " + stmt.getObject().asValue().getDataType().name() // V for value
-				        + " " + stmt.getObject().asValue().getValue().toString(); // XXX
-			}
-
-			return rep;
 		}
 	}
 }
