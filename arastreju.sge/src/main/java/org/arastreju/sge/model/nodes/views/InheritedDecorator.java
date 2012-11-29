@@ -12,9 +12,6 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
-import static org.arastreju.sge.SNOPS.objectsAsResources;
-import static org.arastreju.sge.SNOPS.subjects;
-
 /**
  * <p>
  *  Decorator implementing aras:inheritsFrom.
@@ -69,13 +66,14 @@ public class InheritedDecorator extends ResourceView {
 
         for (ResourceNode inheritor : inheritors) {
             for (Statement inherited : inheritor.getAssociations()) {
+                HalfStatement halfStatement = HalfStatement.from(inherited);
                 if (revokedPredicates.contains(inherited.getPredicate())) {
                     continue;
                 }
-                if (revokedStatements.contains(HalfStatement.from(inherited)) ) {
+                if (revokedStatements.contains(halfStatement) ) {
                     continue;
                 }
-                result.add(inherited);
+                result.add(halfStatement.toFullStatement(this, inherited.getMetaInfo().inherit()));
             }
         }
 
@@ -108,6 +106,8 @@ public class InheritedDecorator extends ResourceView {
                 result.add(assoc.getObject().asResource());
             }
         }
+        // Remove this to avoid cycles
+        result.remove(this);
         return result;
     }
 

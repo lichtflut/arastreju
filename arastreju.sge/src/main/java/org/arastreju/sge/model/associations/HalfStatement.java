@@ -62,6 +62,10 @@ public class HalfStatement {
         return new DetachedStatement(subject, predicate, object, metaInfo);
     }
 
+    public Statement toFullStatement(ResourceID subject, StatementMetaInfo smi) {
+        return new DetachedStatement(subject, predicate, object, smi);
+    }
+
     // -----------------------------------------------------
 
     @Override
