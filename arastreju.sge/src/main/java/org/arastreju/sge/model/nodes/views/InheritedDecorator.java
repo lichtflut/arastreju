@@ -29,7 +29,7 @@ import static org.arastreju.sge.SNOPS.subjects;
 public class InheritedDecorator extends ResourceView {
 
     public static InheritedDecorator from(SemanticNode node) {
-        if (node instanceof SNClass) {
+        if (node instanceof InheritedDecorator) {
             return (InheritedDecorator) node;
         } else if (node instanceof ResourceNode) {
             return new InheritedDecorator((ResourceNode) node);
@@ -93,6 +93,10 @@ public class InheritedDecorator extends ResourceView {
 
     protected RevocationDef getRevocationDef() {
         return getRevocationDef(super.getAssociations());
+    }
+
+    protected Set<Statement> directAssociations() {
+        return super.getAssociations();
     }
 
     // ----------------------------------------------------

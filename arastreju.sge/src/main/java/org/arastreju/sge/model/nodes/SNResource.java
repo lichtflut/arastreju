@@ -151,11 +151,6 @@ public class SNResource implements ResourceNode, Serializable {
 	// -----------------------------------------------------
 
     @Override
-	public SNEntity asEntity() {
-		return new SNEntity(this);
-	}
-
-    @Override
 	public SNClass asClass() {
 		return new SNClass(this);
 	}
