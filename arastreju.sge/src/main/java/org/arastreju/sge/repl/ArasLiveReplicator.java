@@ -204,7 +204,7 @@ public abstract class ArasLiveReplicator {
 							} catch (InterruptedException e) {
 								logger.warn("Dispatcher interrupted");
 								e.printStackTrace();
-								s.close();
+								w.close();
 								return; // thread dies when interrupted
 							}
 						}
@@ -330,6 +330,7 @@ public abstract class ArasLiveReplicator {
 					String line = r.readLine();
 					if (line == null) { /* at EOF */
 						logger.warn("Receiver read EOF");
+						r.close();
 						return; // for now. TODO: make it relisten
 					}
 					process(line);
