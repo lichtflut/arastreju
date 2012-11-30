@@ -10,6 +10,8 @@ import java.util.regex.*;
 
 import org.arastreju.sge.model.*;
 import org.arastreju.sge.model.nodes.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * <p>
@@ -150,6 +152,8 @@ public abstract class ArasLiveReplicator {
 	 * @author Timo Buhrmester
 	 */
 	private class Dispatcher implements Runnable {
+		private final Logger logger = LoggerFactory.getLogger(ArasLiveReplicator.Dispatcher.class);
+
 		private final List<String> sendQ = new LinkedList<String>();
 
 		private final String rcvHost;
@@ -198,6 +202,7 @@ public abstract class ArasLiveReplicator {
 							try {
 								sendQ.wait();
 							} catch (InterruptedException e) {
+								logger.warn("Dispatcher interrupted");
 								e.printStackTrace();
 								s.close();
 								return; // thread dies when interrupted
@@ -209,8 +214,10 @@ public abstract class ArasLiveReplicator {
 					w.flush();
 				}
 			} catch (IOException e) {
+				logger.warn("Dispatcher caught IOException");
 				e.printStackTrace();
 			}
+			logger.warn("Dispatcher thread terminating");
 		}
 	}
 
@@ -226,6 +233,8 @@ public abstract class ArasLiveReplicator {
 	 * @author Timo Buhrmester
 	 */
 	private class Receiver implements Runnable {
+		private final Logger logger = LoggerFactory.getLogger(ArasLiveReplicator.Receiver.class);
+
 		private final String lstAddr;
 		private final int lstPort;
 
@@ -249,7 +258,8 @@ public abstract class ArasLiveReplicator {
 			Matcher m = MatcherProvider.matcher(line);
 
 			if (!m.matches()) {
-				return; //XXX warn
+				logger.warn("Input didn't match: '" + line + "'");
+				return;
 			}
 
 			/* pattern is:
@@ -319,13 +329,16 @@ public abstract class ArasLiveReplicator {
 				for (;;) {
 					String line = r.readLine();
 					if (line == null) { /* at EOF */
+						logger.warn("Receiver read EOF");
 						return; // for now. TODO: make it relisten
 					}
 					process(line);
 				}
 			} catch (IOException e) {
+				logger.warn("Receiver caught IOException");
 				e.printStackTrace();
 			}
+			logger.warn("Receiver thread terminating");
 		}
 	}
 }
