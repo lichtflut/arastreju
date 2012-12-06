@@ -17,7 +17,9 @@
 package org.arastreju.sge.persistence;
 
 import org.arastreju.sge.repl.ArasLiveReplicator;
-import org.arastreju.sge.repl.DummyReplicator;
+import org.arastreju.sge.repl.NoOpReplicator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * <p>
@@ -31,7 +33,7 @@ import org.arastreju.sge.repl.DummyReplicator;
  * @author Oliver Tigges
  */
 public abstract class TxProvider {
-
+	private final Logger logger = LoggerFactory.getLogger(TxProvider.class);
 	private TransactionControl tx;
 	private ArasLiveReplicator repl;
 
@@ -41,6 +43,10 @@ public abstract class TxProvider {
 	 * Constructor.
 	 */
 	public TxProvider() {
+		logger.debug("constructing");
+	}
+	
+	public void initRepl() {
 		this.repl = createReplicator();
 		//repl.init(listenAddr, listenPort, rcvHost, rcvPort);// XXX put setting where?
 	}
@@ -134,7 +140,7 @@ public abstract class TxProvider {
      * @return a newly created backend-specific replicator, or null for no replication facilities
      */
     protected ArasLiveReplicator createReplicator() {
-    	return new DummyReplicator();
+    	return new NoOpReplicator();
     }
 	
 }

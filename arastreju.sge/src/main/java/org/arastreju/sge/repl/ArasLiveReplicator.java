@@ -32,7 +32,7 @@ import org.slf4j.LoggerFactory;
  *  The dispatcher maintains a sequence number, which increments
  *    whenever a new transaction i.e. a bunch of related GraphOps
  *    begins.  This allows the receiver to recover that 'grouping'
- *    information.  This isn't used yet, however i do feel it will be.
+ *    information.
  *    Additionally, for ease of parsing and processing, every 
  *    transaction is terminated by an EOT a.k.a. End Of Transaction message.
  *
@@ -51,6 +51,8 @@ import org.slf4j.LoggerFactory;
  * @author Timo Buhrmester
  */
 public abstract class ArasLiveReplicator {
+	private final Logger logger = LoggerFactory.getLogger(ArasLiveReplicator.class);
+	
 	private List<GraphOp> replLog;
 	private Dispatcher dispatcher;
 	private int txSeq = 0;
@@ -59,6 +61,7 @@ public abstract class ArasLiveReplicator {
 
 	public ArasLiveReplicator() {
 		replLog = new LinkedList<GraphOp>();
+		logger.debug("ArasLiveReplicator()");
 	}
 
 	// -- General interface -------------------------------
@@ -70,7 +73,21 @@ public abstract class ArasLiveReplicator {
 	 * @param rcvHost address or hostname the receiver connect()s against
 	 * @param rcvPort port used in said connect()
 	 */
+
+	/* get in the addresses/ports /somehow/ for testing. see also below and TxProvider
+	static LinkedList<int[]> deq = new LinkedList<int[]>();
+	public static int[] pop() {
+		return deq.removeFirst();
+	}
+	public static void push(int[] is) {
+	    deq.addLast(is);
+    }*/
+
 	public void init(String lstAddr, int lstPort, String rcvHost, int rcvPort) {
+		logger.debug("init()");
+		//int [] p = pop();
+		//new Thread(new Receiver(lstAddr, p[0])).start();
+		//new Thread(dispatcher = new Dispatcher("127.0.0.1", p[1])).start();
 		new Thread(new Receiver(lstAddr, lstPort)).start();
 		new Thread(dispatcher = new Dispatcher(rcvHost, rcvPort)).start();
 	}
@@ -127,7 +144,7 @@ public abstract class ArasLiveReplicator {
 	 * @param added false if the statement is to be removed
 	 * @param stmt the statement in question
 	 */
-	protected abstract void onRelOp(boolean added, Statement stmt);
+	protected abstract void onRelOp(int txSeq, boolean added, Statement stmt);
 	
 	/**
 	 * called whenever the receiver receives a node operation, i.e.
@@ -135,7 +152,13 @@ public abstract class ArasLiveReplicator {
 	 * @param added false if the node is to be removed
 	 * @param node the node in question
 	 */
-	protected abstract void onNodeOp(boolean added, ResourceID node);
+	protected abstract void onNodeOp(int txSeq, boolean added, ResourceID node);
+	
+	/**
+	 * called at the end of every transaction
+	 * @param txSeq
+	 */
+	protected abstract void onEndOfTx(int txSeq);
 	
 	
 	// -- INNER CLASSES -----------------------------------
@@ -210,6 +233,7 @@ public abstract class ArasLiveReplicator {
 						}
 						item = sendQ.remove(0);
 					}
+					logger.debug("writing "+item);
 					w.write(item + "\n");
 					w.flush();
 				}
@@ -289,13 +313,14 @@ public abstract class ArasLiveReplicator {
 			@SuppressWarnings("unused")
 			int txSeq = Integer.parseInt(m.group(1));
 			if (m.group(2).equals("EOT")) {
-				return; // not used ATM
+				onEndOfTx(txSeq);
+				return;
 			}
 
 			boolean added = m.group(3).equals("+");
 
 			if (m.group(4).charAt(0) == 'N') {
-				onNodeOp(added, new SimpleResourceID(m.group(5)));
+				onNodeOp(txSeq, added, new SimpleResourceID(m.group(5)));
 				//onNodeOp(added, new SNResource(new QualifiedName(m.group(5)))); //XXX which one of these two?
 			} else { // m.group(4).charAt(0) == 'S', since regex matched
 				ResourceID sub = new SimpleResourceID(m.group(6));
@@ -309,7 +334,7 @@ public abstract class ArasLiveReplicator {
 					obj = new SNValue(ElementaryDataType.valueOf(m.group(10)), m.group(11));
 				}
 
-				onRelOp(added, new DetachedStatement(sub, pred, obj)); //what about contexts? XXX
+				onRelOp(txSeq, added, new DetachedStatement(sub, pred, obj)); //what about contexts? XXX
 			}
 		}
 
