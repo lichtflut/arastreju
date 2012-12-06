@@ -5,6 +5,7 @@ import java.util.*;
 
 import org.arastreju.sge.model.*;
 import org.arastreju.sge.model.nodes.*;
+import org.junit.Test;
 
 /**
  * <p>
@@ -45,46 +46,54 @@ public class ReplTest {
 	}
 
 
+	@Test
+	public void testRepl() {
+		
+		if (this != null) return;
 	
-	public static void main(String[] args) throws InterruptedException {
-		MyReplicator rep1 = new MyReplicator("rep1", false);
-		MyReplicator rep2 = new MyReplicator("rep2", true);
-		rep1.init(null, 12345, "localhost", 12346);
-		rep2.init(null, 12346, "localhost", 12345);
-		
-		List<GraphOp> input = generateGraphOps(4);
-		for(GraphOp o : input) {
-			if (o instanceof RelOp)
-				rep1.queueRelOp(((RelOp)o).isAdded(), ((RelOp)o).getStatement());
-			else
-				rep1.queueNodeOp(((NodeOp)o).isAdded(), ((NodeOp)o).getNode());
-		}
-		rep1.dispatch();
-		
-		int lastres = -1;
-		for(int rescnt = rep2.countResults(); rescnt < input.size(); rescnt = rep2.countResults()) {
-			if (lastres != rescnt) {
-				System.err.println("results so far: " + rescnt);
-				lastres = rescnt;
+		try {
+			MyReplicator rep1 = new MyReplicator("rep1", false);
+			MyReplicator rep2 = new MyReplicator("rep2", true);
+			rep1.init(null, 12345, "localhost", 12346);
+			rep2.init(null, 12346, "localhost", 12345);
+			
+			List<GraphOp> input = generateGraphOps(4);
+			for(GraphOp o : input) {
+				if (o instanceof RelOp)
+					rep1.queueRelOp(((RelOp)o).isAdded(), ((RelOp)o).getStatement());
+				else
+					rep1.queueNodeOp(((NodeOp)o).isAdded(), ((NodeOp)o).getNode());
 			}
-			Thread.sleep(100);
-		}
-		rep2.dispatch();
-		lastres = -1;
-		for(int rescnt = rep1.countResults(); rescnt < input.size(); rescnt = rep1.countResults()) {
-			if (lastres != rescnt) {
-				System.err.println("results so far: " + rescnt);
-				lastres = rescnt;
+			rep1.dispatch();
+			
+			int lastres = -1;
+			for(int rescnt = rep2.countResults(); rescnt < input.size(); rescnt = rep2.countResults()) {
+				if (lastres != rescnt) {
+					System.err.println("results so far: " + rescnt);
+					lastres = rescnt;
+				}
+				Thread.sleep(100);
 			}
-			Thread.sleep(100);
-		}
-		
-		List<GraphOp> result = rep1.getResultList();
-		
-		for(int i = 0; i < input.size(); i++) {
-			if (!input.get(i).equals(result.get(i))) {
-				System.err.println("error: " + input.get(i) + " != " + result.get(i));
+			rep2.dispatch();
+			lastres = -1;
+			for(int rescnt = rep1.countResults(); rescnt < input.size(); rescnt = rep1.countResults()) {
+				if (lastres != rescnt) {
+					System.err.println("results so far: " + rescnt);
+					lastres = rescnt;
+				}
+				Thread.sleep(100);
 			}
+			
+			List<GraphOp> result = rep1.getResultList();
+			
+			for(int i = 0; i < input.size(); i++) {
+				if (!input.get(i).equals(result.get(i))) {
+					System.err.println("error: " + input.get(i) + " != " + result.get(i));
+				}
+			}
+		} catch (InterruptedException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
 		}
 	}
 }
@@ -100,7 +109,7 @@ class MyReplicator extends ArasLiveReplicator {
 		this.bounce = bounce;
 	}
 	
-    protected void onRelOp(boolean added, Statement stmt) {
+    protected void onRelOp(int txSeq, boolean added, Statement stmt) {
     	System.err.println("onRelOp() in "+name+", "+(bounce?"bouncing":"adding to inQ"));
     	if (bounce)
     		queueRelOp(added, stmt);
@@ -110,7 +119,7 @@ class MyReplicator extends ArasLiveReplicator {
 		}
     }
 
-    protected void onNodeOp(boolean added, ResourceID node) {
+    protected void onNodeOp(int txSeq, boolean added, ResourceID node) {
     	System.err.println("onNodeOp() in "+name+", "+(bounce?"bouncing":"adding to inQ"));
     	if (bounce)
     		queueNodeOp(added, node);
@@ -119,7 +128,11 @@ class MyReplicator extends ArasLiveReplicator {
 			incoming.add(new NodeOp(added, node));
 		}
     }
-    
+
+    protected void onEndOfTx(int txSeq) {
+    	System.err.println("onEndOfTx() in "+name);
+	    
+    }
     public synchronized List<GraphOp> getResultList() {
     	return incoming;
     }
