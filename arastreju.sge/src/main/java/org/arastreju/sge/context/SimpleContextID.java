@@ -33,15 +33,17 @@ import org.arastreju.sge.naming.QualifiedName;
 public class SimpleContextID extends SimpleResourceID implements Context {
 
 	/**
-	 * @param qn
+     * Create a context with given qualified name.
+	 * @param qn The qualified name of the context.
 	 */
 	public SimpleContextID(QualifiedName qn) {
 		super(qn);
 	}
 
 	/**
-	 * @param nsUri
-	 * @param name
+     * Create a context with given qualified name.
+	 * @param nsUri T.he namespace part.
+	 * @param name The name part
 	 */
 	public SimpleContextID(String nsUri, String name) {
 		super(nsUri, name);
@@ -49,17 +51,11 @@ public class SimpleContextID extends SimpleResourceID implements Context {
 
 	// -----------------------------------------------------
 	
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public SNContext asResource() {
 		return new SNContext(super.asResource());
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	public int compareTo(final Context other) {
 		return getQualifiedName().compareTo(other.getQualifiedName());
 	}

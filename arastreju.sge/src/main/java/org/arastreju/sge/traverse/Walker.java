@@ -11,7 +11,6 @@ import java.util.Set;
 
 import org.arastreju.sge.SNOPS;
 import org.arastreju.sge.model.ResourceID;
-import org.arastreju.sge.model.nodes.ResourceNode;
 import org.arastreju.sge.model.nodes.SemanticNode;
 
 /**
@@ -27,106 +26,106 @@ import org.arastreju.sge.model.nodes.SemanticNode;
  */
 public class Walker {
 
-    private Set<SemanticNode> nodes = new HashSet<SemanticNode>();
+	private Set<SemanticNode> nodes = new HashSet<SemanticNode>();
 
-    // ----------------------------------------------------
+	// ----------------------------------------------------
 
-    protected Walker(SemanticNode... nodes) {
-        for (SemanticNode current : nodes) {
-            this.nodes.add(current);
-        }
-    }
+	protected Walker(final SemanticNode... nodes) {
+		for (SemanticNode current : nodes) {
+			this.nodes.add(current);
+		}
+	}
 
-    protected Walker(Collection<? extends SemanticNode> nodes) {
-        this.nodes.addAll(nodes);
-    }
+	protected Walker(final Collection<? extends SemanticNode> nodes) {
+		this.nodes.addAll(nodes);
+	}
 
-    // ----------------------------------------------------
+	// ----------------------------------------------------
 
-    public static Walker start(SemanticNode... startNodes) {
-        return new Walker(startNodes);
-    }
+	public static Walker start(final SemanticNode... startNodes) {
+		return new Walker(startNodes);
+	}
 
-    public static Walker start(Collection<? extends SemanticNode> startNodes) {
-        return new Walker(startNodes);
-    }
+	public static Walker start(final Collection<? extends SemanticNode> startNodes) {
+		return new Walker(startNodes);
+	}
 
-    // ----------------------------------------------------
+	// ----------------------------------------------------
 
-    public Walker walk(ResourceID predicate) {
-        Set<SemanticNode> result = new HashSet<SemanticNode>();
-        for (SemanticNode current : nodes) {
-            result.addAll(getObjects(current, predicate));
-        }
-        this.nodes = result;
-        return this;
-    }
+	public Walker walk(final ResourceID predicate) {
+		Set<SemanticNode> result = new HashSet<SemanticNode>();
+		for (SemanticNode current : nodes) {
+			result.addAll(getObjects(current, predicate));
+		}
+		this.nodes = result;
+		return this;
+	}
 
-    // ----------------------------------------------------
+	// ----------------------------------------------------
 
-    public Iterator<SemanticNode> iterator() {
-        return nodes.iterator();
-    }
+	public Iterator<SemanticNode> iterator() {
+		return nodes.iterator();
+	}
 
-    public int size() {
-        return nodes.size();
-    }
+	public int size() {
+		return nodes.size();
+	}
 
-    public boolean isEmpty() {
-        return nodes.isEmpty();
-    }
+	public boolean isEmpty() {
+		return nodes.isEmpty();
+	}
 
-    public boolean isSingle() {
-        return nodes.size() == 1;
-    }
+	public boolean isSingle() {
+		return nodes.size() == 1;
+	}
 
-    public SemanticNode getSingle() {
-        if (nodes.isEmpty()) {
-            return null;
-        } else {
-            return nodes.iterator().next();
-        }
-    }
+	public SemanticNode getSingle() {
+		if (nodes.isEmpty()) {
+			return null;
+		} else {
+			return nodes.iterator().next();
+		}
+	}
 
-    // ----------------------------------------------------
+	// ----------------------------------------------------
 
-    public boolean matches(String value) {
-        return matches(ValueMatcher.equals(value));
-    }
+	public boolean matches(final String value) {
+		return matches(ValueMatcher.equals(value));
+	}
 
-    public boolean matches(ResourceID rid) {
-        return matches(ResourceMatcher.equals(rid));
-    }
+	public boolean matches(final ResourceID rid) {
+		return matches(ResourceMatcher.equals(rid));
+	}
 
-    public boolean matches(Matcher matcher) {
-        return matcher.matches(nodes);
-    }
+	public boolean matches(final Matcher matcher) {
+		return matcher.matches(nodes);
+	}
 
-    // ----------------------------------------------------
+	// ----------------------------------------------------
 
-    @Override
-    public int hashCode() {
-        return nodes.hashCode();
-    }
+	@Override
+	public int hashCode() {
+		return nodes.hashCode();
+	}
 
-    @Override
-    public boolean equals(Object o) {
-        return nodes.equals(o);
-    }
+	@Override
+	public boolean equals(final Object o) {
+		return nodes.equals(o);
+	}
 
-    @Override
-    public String toString() {
-        return "Walker{" + nodes + '}';
-    }
+	@Override
+	public String toString() {
+		return "Walker{" + nodes + '}';
+	}
 
-    // ----------------------------------------------------
+	// ----------------------------------------------------
 
-    private Collection<SemanticNode> getObjects(SemanticNode src, ResourceID predicate) {
-        if (src == null || !src.isResourceNode()) {
-            return Collections.emptySet();
-        } else {
-            return SNOPS.objects(src.asResource(), predicate);
-        }
-    }
+	private Collection<SemanticNode> getObjects(final SemanticNode src, final ResourceID predicate) {
+		if (src == null || !src.isResourceNode()) {
+			return Collections.emptySet();
+		} else {
+			return SNOPS.objects(src.asResource(), predicate);
+		}
+	}
 
 }

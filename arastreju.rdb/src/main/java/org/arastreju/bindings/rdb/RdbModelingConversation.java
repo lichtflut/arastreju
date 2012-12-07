@@ -18,6 +18,7 @@ package org.arastreju.bindings.rdb;
 import java.lang.reflect.Field;
 import java.util.Set;
 
+import de.lichtflut.infra.exceptions.NotYetImplementedException;
 import org.arastreju.sge.model.ResourceID;
 import org.arastreju.sge.model.Statement;
 import org.arastreju.sge.model.associations.AssociationKeeper;
@@ -126,5 +127,10 @@ public class RdbModelingConversation extends AbstractModelingConversation {
 			e.printStackTrace();
 		}
 	}
+
+    @Override
+    public Set<Statement> findIncomingStatements(ResourceID object) {
+        throw new NotYetImplementedException();
+    }
 
 }

@@ -1,6 +1,5 @@
 package org.arastreju.sge.context;
 
-import org.arastreju.sge.naming.Namespace;
 
 /**
  **
@@ -16,34 +15,25 @@ import org.arastreju.sge.naming.Namespace;
  */
 public class VirtualDomain extends DomainIdentifier {
 
-    public static final String DEFAULT_STORAGE_NAME = "virtuals";
+	public static final String DEFAULT_STORAGE_NAME = "virtuals";
 
-    // ----------------------------------------------------
+	// ----------------------------------------------------
 
-    private String physicalStore;
+	private final String physicalStore;
 
-    private Context context;
+	// ----------------------------------------------------
 
-    // ----------------------------------------------------
+	public VirtualDomain(final String name) {
+		super(name);
+		this.physicalStore = DEFAULT_STORAGE_NAME;
+	}
 
-    public VirtualDomain(String name) {
-        super(name);
-        this.physicalStore = DEFAULT_STORAGE_NAME;
-        this.context = new SimpleContextID(Namespace.LOCAL_CONTEXTS, name);
-    }
-
-    // ----------------------------------------------------
+	// ----------------------------------------------------
 
 
-    @Override
-    public String getStorage() {
-        return physicalStore;
-    }
-
-    @Override
-    public Context getInitialContext() {
-        return context;
-    }
-
+	@Override
+	public String getStorage() {
+		return physicalStore;
+	}
 
 }

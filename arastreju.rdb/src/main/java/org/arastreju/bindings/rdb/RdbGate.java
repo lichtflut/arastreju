@@ -19,6 +19,7 @@ package org.arastreju.bindings.rdb;
 
 import org.arastreju.sge.ModelingConversation;
 import org.arastreju.sge.Organizer;
+import org.arastreju.sge.context.Context;
 import org.arastreju.sge.context.DomainIdentifier;
 import org.arastreju.sge.spi.abstracts.AbstractArastrejuGate;
 
@@ -42,7 +43,14 @@ public class RdbGate extends AbstractArastrejuGate {
 		return new RdbModelingConversation(ctx);
 	}
 
-	@Override
+    @Override
+    public ModelingConversation startConversation(Context primary, Context... readContexts) {
+        RdbConversationContext ctx = new RdbConversationContext(connectionProvider, getDomainIdentifier().getStorage(),
+                primary, readContexts);
+        return new RdbModelingConversation(ctx);
+    }
+
+    @Override
 	public Organizer getOrganizer() {
 		// TODO Auto-generated method stub
 		return null;

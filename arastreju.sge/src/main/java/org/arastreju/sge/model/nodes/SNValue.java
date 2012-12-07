@@ -33,7 +33,7 @@ import de.lichtflut.infra.Infra;
 
 /**
  * <p>
- * 	Base for data nodes. Data nodes may have no outgoing associations 
+ * 	Base for data nodes. Data nodes may have no outgoing associations
  *  but may only be associated from resource nodes.
  * </p>
  * 
@@ -44,17 +44,17 @@ import de.lichtflut.infra.Infra;
  * @author Oliver Tigges
  */
 public class SNValue implements ValueNode, Serializable {
-	
+
 	private static final DateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
-	
+
 	private final ElementaryDataType datatype;
-	
+
 	private final Object value;
-	
+
 	private final Locale locale;
-	
+
 	// -----------------------------------------------------
-	
+
 	/**
 	 * Constructor.
 	 * @param datatype The datatype.
@@ -63,14 +63,14 @@ public class SNValue implements ValueNode, Serializable {
 	public SNValue(final ElementaryDataType datatype, final Object value) {
 		this(datatype, value, null);
 	}
-	
+
 	/**
 	 * Constructor.
 	 * @param datatype The datatype.
 	 * @param value The value.
 	 * @param locale The locale
 	 */
-	public SNValue(ElementaryDataType datatype, Object value, Locale locale) {
+	public SNValue(final ElementaryDataType datatype, final Object value, final Locale locale) {
 		if (value == null) {
 			throw new IllegalArgumentException("Value may not be null");
 		}
@@ -82,12 +82,9 @@ public class SNValue implements ValueNode, Serializable {
 			throw new IllegalStateException("Value not of expected type", e);
 		}
 	}
-	
+
 	//-----------------------------------------------------
-	
-	/**
-	 * {@inheritDoc}
-	 */
+
 	public Object getValue(){
 		switch (datatype) {
 		case BOOLEAN:
@@ -107,61 +104,39 @@ public class SNValue implements ValueNode, Serializable {
 			throw new IllegalStateException("Cannot determine type of value: " + value + " (" + datatype + ")");
 		}
 	}
-	
-	/** 
-	 * {@inheritDoc}
-	 */
-	@Override
+
 	public Locale getLocale() {
 		return locale;
 	}
-	
-	/**
-	 * {@inheritDoc}
-	 */
+
 	public ElementaryDataType getDataType() {
 		return datatype;
 	}
-	
+
 	// ----------------------------------------------------
-	
-	/**
-	 * {@inheritDoc}
-	 */
+
 	public boolean isResourceNode() {
 		return false;
 	}
-	
-	/**
-	 * {@inheritDoc}
-	 */
+
 	public boolean isValueNode() {
 		return true;
 	}
-	
-	/**
-	 * {@inheritDoc}
-	 */
+
 	public ResourceNode asResource() {
 		throw new IllegalStateException("Not a resource: " + this);
 	}
-	
-	/**
-	 * {@inheritDoc}
-	 */
+
 	public ValueNode asValue() {
 		return this;
 	}
-	
+
 	// ------------------------------------------------------
-	
-	/**
-	 * {@inheritDoc}
-	 */
+
 	public String getStringValue() {
 		if (value == null){
 			return "";
-		} 
+		}
 		switch (datatype) {
 		case DATE:
 		case TIME_OF_DAY:
@@ -173,7 +148,7 @@ public class SNValue implements ValueNode, Serializable {
 			return value.toString();
 		}
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -184,70 +159,53 @@ public class SNValue implements ValueNode, Serializable {
 		return (BigDecimal) value;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	public BigInteger getIntegerValue() {
+        if (value instanceof BigInteger) {
+            return (BigInteger) value;
+        }
 		if (value instanceof String){
 			return new BigInteger((String) value);
 		}
-		return (BigInteger) value;
+        if (value instanceof Number) {
+            Number number = (Number) value;
+            return BigInteger.valueOf(number.longValue());
+        }
+        throw new IllegalStateException("Cannot convert '" + value + "' to an BigInteger.");
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	public Date getTimeValue() {
 		return (Date) value;
 	}
-	
-	/** 
-	* {@inheritDoc}
-	*/
+
 	public Boolean getBooleanValue() {
 		return (Boolean) value;
 	}
-	
+
 	// -----------------------------------------------------
-	
-	/**
-	 * {@inheritDoc}
-	 */
+
 	public SNTimeSpec asTimeSpec() {
 		return new SNTimeSpec(this);
 	}
-	
-	/**
-	 * {@inheritDoc}
-	 */
+
 	public SNScalar asScalar() {
 		return new SNScalar(this);
 	}
-	
-	/**
-	 * {@inheritDoc}
-	 */
+
 	public SNText asText() {
 		return new SNText(this);
 	}
-	
+
 	// -----------------------------------------------------
-	
-	/**
-	 * {@inheritDoc}
-	 */
+
 	@Override
 	public String toString() {
 		final StringBuilder sb = new StringBuilder(getStringValue());
 		if (locale != null) {
-			sb.append(" [" + locale + "]");
+			sb.append(" [").append(locale).append("]");
 		}
 		return sb.toString();
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -258,9 +216,6 @@ public class SNValue implements ValueNode, Serializable {
 		return result;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public boolean equals(final Object obj) {
 		if (obj instanceof ValueNode) {
@@ -278,35 +233,10 @@ public class SNValue implements ValueNode, Serializable {
 		}
 		return super.equals(obj);
 	}
-	
+
 	// -----------------------------------------------------
-	
-	/**
-	 * Converts a String value to needed type, if necessary.
-	 * @throws ParseException 
-	 */
-	private Object convert(final Object value, final ElementaryDataType datatype) throws ParseException {
-		if (!(value instanceof String)) {
-			return value;
-		}
-		final String sVal = (String) value;
-		switch (datatype) {
-		case DATE:
-		case TIME_OF_DAY:
-		case TIMESTAMP:
-			return DATE_FORMAT.parse(sVal);
-		case BOOLEAN:
-			return Boolean.parseBoolean(sVal);
 
-		default:
-			return sVal;
-		}
-	}
-
-	/** 
-	 * {@inheritDoc}
-	 */
-	public int compareTo(ValueNode other) {
+	public int compareTo(final ValueNode other) {
 		switch (datatype) {
 		case BOOLEAN:
 			return getBooleanValue().compareTo(other.getBooleanValue());
@@ -325,5 +255,45 @@ public class SNValue implements ValueNode, Serializable {
 			throw new IllegalStateException("Cannot determine type of value: " + value + " (" + datatype + ")");
 		}
 	}
-	
+
+    // -- CONVERSIONS -------------------------------------
+
+    /**
+     * Converts a String value to needed type, if necessary.
+     * @throws ParseException
+     */
+    private Object convert(final Object value, final ElementaryDataType datatype) throws ParseException {
+        if (value instanceof String) {
+            return convertString((String) value, datatype);
+        }
+        return value;
+    }
+
+    private Object convertString(final String value, final ElementaryDataType datatype) throws ParseException {
+        switch (datatype) {
+            case DATE:
+            case TIME_OF_DAY:
+            case TIMESTAMP:
+                return DATE_FORMAT.parse(value);
+            case BOOLEAN:
+                return Boolean.parseBoolean(value);
+            case DECIMAL:
+                return new BigDecimal(value);
+            case INTEGER:
+                return new BigInteger(value);
+            case URI:
+            case STRING:
+            case PROPER_NAME:
+            case TERM:
+            case UNDEFINED:
+                return value;
+
+            case RESOURCE:
+                throw new IllegalStateException("SNValue may not contain a value of type RESOURCE.");
+
+            default:
+                throw new IllegalStateException("Unsupported datatype: " + datatype);
+        }
+    }
+
 }

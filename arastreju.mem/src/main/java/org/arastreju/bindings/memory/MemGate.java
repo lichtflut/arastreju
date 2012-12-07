@@ -5,6 +5,7 @@ import org.arastreju.bindings.memory.conversation.MemConversationContext;
 import org.arastreju.bindings.memory.conversation.MemModelingConversation;
 import org.arastreju.sge.ModelingConversation;
 import org.arastreju.sge.Organizer;
+import org.arastreju.sge.context.Context;
 import org.arastreju.sge.context.DomainIdentifier;
 import org.arastreju.sge.spi.abstracts.AbstractArastrejuGate;
 
@@ -31,6 +32,12 @@ public class MemGate extends AbstractArastrejuGate {
     public ModelingConversation startConversation() {
         MemConversationContext cc = new MemConversationContext();
         initContext(cc);
+        return new MemModelingConversation(cc);
+    }
+
+    @Override
+    public ModelingConversation startConversation(Context primary, Context... readContexts) {
+        MemConversationContext cc = new MemConversationContext(primary, readContexts);
         return new MemModelingConversation(cc);
     }
 

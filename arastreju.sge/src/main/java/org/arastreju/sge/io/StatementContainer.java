@@ -16,7 +16,7 @@ import java.util.Collection;
  *
  * @author Oliver Tigges
  */
-public interface StatementProvider extends Iterable<Statement> {
+public interface StatementContainer extends Iterable<Statement> {
 
     Collection<Namespace> getNamespaces();
 

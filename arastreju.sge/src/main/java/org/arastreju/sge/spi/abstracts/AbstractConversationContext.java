@@ -21,6 +21,10 @@ import org.arastreju.sge.context.Context;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  * <p>
  *  Handler for resolving, adding and removing of a node's association.
@@ -36,19 +40,19 @@ public abstract class AbstractConversationContext implements ConversationContext
 
 	public static final Context[] NO_CTX = new Context[0];
 
-	private static final Logger logger = LoggerFactory.getLogger(AbstractConversationContext.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(AbstractConversationContext.class);
 
 	private static long ID_GEN = 0;
 
 	// ----------------------------------------------------
 
-	private Context writeContext;
+    private final long ctxId = ++ID_GEN;
 
-	private Context[] readContexts;
+    private Set<Context> readContexts = new HashSet<Context>();
+
+	private Context primaryContext;
 
 	private boolean active = true;
-
-	private final long ctxId = ++ID_GEN;
 
 	// ----------------------------------------------------
 
@@ -56,8 +60,17 @@ public abstract class AbstractConversationContext implements ConversationContext
 	 * Creates a new Working Context.
 	 */
 	public AbstractConversationContext() {
-		logger.info("New Conversation Context startet. " + ctxId);
+		LOGGER.debug("New Conversation Context startet. " + ctxId);
 	}
+
+    /**
+     * Creates a new Working Context.
+     */
+    public AbstractConversationContext(Context primaryContext, Context... readContexts) {
+        this();
+        setPrimaryContext(primaryContext);
+        setReadContexts(readContexts);
+    }
 
 	// ----------------------------------------------------
 	
@@ -77,7 +90,7 @@ public abstract class AbstractConversationContext implements ConversationContext
 		if (active) {
 			clear();
 			active = false;
-			logger.info("Conversation will be closed. " + ctxId);
+			LOGGER.info("Conversation will be closed. " + ctxId);
 		}
 	}
 	
@@ -90,44 +103,55 @@ public abstract class AbstractConversationContext implements ConversationContext
 	
 	// ----------------------------------------------------
 	
-	/** 
-	 * {@inheritDoc}
-	 */
 	public Context[] getReadContexts() {
 		assertActive();
 		if (readContexts != null) {
-			return readContexts;
+			return readContexts.toArray(new Context[readContexts.size()]);
 		} else {
 			return NO_CTX;
 		}
 	}
 	
-   /** 
-	 * {@inheritDoc}
-	 */
     public Context getPrimaryContext() {
-    	return writeContext;
+    	return primaryContext;
     }
 
-	/**
-	 * {@inheritDoc}
-	 */
     @Override
 	public ConversationContext setPrimaryContext(Context ctx) {
-		this.writeContext = ctx;
+		this.primaryContext = ctx;
+        if (primaryContext != null) {
+            readContexts.add(primaryContext);
+        }
 		return this;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
     @Override
 	public ConversationContext setReadContexts(Context... ctxs) {
-		this.readContexts = ctxs;
-		return this;
+        this.readContexts.clear();
+        if (ctxs != null) {
+            Collections.addAll(readContexts, ctxs);
+        }
+        if (primaryContext != null) {
+            readContexts.add(primaryContext);
+        }
+        return this;
 	}
 
     // ----------------------------------------------------
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        AbstractConversationContext that = (AbstractConversationContext) o;
+        return ctxId == that.ctxId;
+    }
+
+    @Override
+    public int hashCode() {
+        return (int) (ctxId ^ (ctxId >>> 32));
+    }
 
     @Override
     public String toString() {
@@ -142,18 +166,17 @@ public abstract class AbstractConversationContext implements ConversationContext
 	
 	protected void assertActive() {
 		if (!active) {
-			logger.warn("Conversation context already closed. " + ctxId);
+			LOGGER.warn("Conversation context already closed. " + ctxId);
 			throw new IllegalStateException("ConversationContext already closed.");
 		}
 	}
 	
-	/** 
-	 * {@inheritDoc}
-	 */
 	@Override
 	protected void finalize() throws Throwable {
+        super.finalize();
 		if (active) {
-			logger.warn("Conversation context will be removed by GC, but has not been closed. " + ctxId);
+			LOGGER.debug("Conversation context will be removed by GC, but has not been closed. " + ctxId);
 		}
 	}
+
 }

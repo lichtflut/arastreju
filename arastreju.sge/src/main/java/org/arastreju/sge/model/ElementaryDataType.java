@@ -56,22 +56,22 @@ import de.lichtflut.infra.exceptions.NotYetSupportedException;
 public enum ElementaryDataType {
 
 	UNDEFINED,
-	
+
 	BOOLEAN,
 	INTEGER,
 	DECIMAL,
-	STRING, 
+	STRING,
 	URI,
 	TIMESTAMP,
 	DATE,
 	TIME_OF_DAY,
 	TERM,
 	PROPER_NAME,
-	
+
 	RESOURCE;
-	
+
 	// ------------------------------------------------------
-	
+
 	public static ElementaryDataType typeForClass(final ResourceID node){
 		if(node == null){
 			return UNDEFINED;
@@ -101,7 +101,7 @@ public enum ElementaryDataType {
 			return RESOURCE;
 		}
 	}
-	
+
 	public static ResourceID classForType(final ElementaryDataType datatype){
 		switch (datatype) {
 		case BOOLEAN:
@@ -130,7 +130,7 @@ public enum ElementaryDataType {
 			throw new NotYetSupportedException(datatype);
 		}
 	}
-	
+
 	public static ElementaryDataType getCorresponding(final TimeMask mask){
 		switch(mask){
 		case DATE:
@@ -143,5 +143,5 @@ public enum ElementaryDataType {
 			throw new IllegalArgumentException("unknown time mask: " + mask);
 		}
 	}
-	
+
 }

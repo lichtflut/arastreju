@@ -137,7 +137,7 @@ public class AbstractStatement implements Statement {
 
 	@Override
 	public String toString() {
-		StringBuffer sb = new StringBuffer(subject.toString());
+        StringBuilder sb = new StringBuilder(subject.toString());
 		sb.append(" " + predicate + " ");
 		sb.append(object);
 		return sb.toString();

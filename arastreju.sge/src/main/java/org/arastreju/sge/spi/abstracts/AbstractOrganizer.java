@@ -19,6 +19,7 @@ import static org.arastreju.sge.SNOPS.assure;
 import static org.arastreju.sge.SNOPS.singleObject;
 import static org.arastreju.sge.SNOPS.string;
 
+import org.arastreju.sge.ModelingConversation;
 import org.arastreju.sge.Organizer;
 import org.arastreju.sge.apriori.Aras;
 import org.arastreju.sge.apriori.RDF;
@@ -31,6 +32,8 @@ import org.arastreju.sge.model.nodes.views.SNText;
 import org.arastreju.sge.naming.Namespace;
 import org.arastreju.sge.naming.QualifiedName;
 import org.arastreju.sge.naming.SimpleNamespace;
+import org.arastreju.sge.query.Query;
+import org.arastreju.sge.query.QueryResult;
 
 /**
  * <p>
@@ -44,6 +47,39 @@ import org.arastreju.sge.naming.SimpleNamespace;
  * @author Oliver Tigges
  */
 public abstract class AbstractOrganizer implements Organizer {
+
+    /**
+     * {@inheritDoc}
+     */
+    public Namespace registerNamespace(final String uri, final String prefix) {
+        ModelingConversation conversation = conversation();
+        final Query query = conversation.createQuery()
+                .addField(RDF.TYPE, Aras.NAMESPACE)
+                .and()
+                .addField(Aras.HAS_URI, uri);
+        final QueryResult result = query.getResult();
+        if (!result.isEmpty()) {
+            final ResourceNode node = conversation.resolve(result.iterator().next());
+            assure(node,  Aras.HAS_PREFIX, new SNText(prefix));
+            return new SimpleNamespace(uri, prefix);
+        } else {
+            final Namespace ns = new SimpleNamespace(uri, prefix);
+            final ResourceNode node = createNamespaceNode(ns);
+            conversation.attach(node);
+            return ns;
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Context registerContext(final QualifiedName qn) {
+        final ResourceNode node = createContextNode(qn);
+        conversation().attach(node);
+        return new SimpleContextID(qn);
+    }
+
+    // ----------------------------------------------------
 
 	protected Namespace createNamespace(final ResourceNode node) {
 		final String uri = string(singleObject(node, Aras.HAS_URI));
@@ -72,5 +108,9 @@ public abstract class AbstractOrganizer implements Organizer {
 		assure(node, RDF.TYPE, Aras.CONTEXT);
 		return node;
 	}
-	
+
+    // ----------------------------------------------------
+
+    protected abstract ModelingConversation conversation();
+
 }

@@ -70,24 +70,16 @@ public abstract class ValueView implements ValueNode, Serializable {
 	}
 	
 	// ----------------------------------------------------
-	
-	/** 
-	* {@inheritDoc}
-	*/
+
+    @Override
 	public ElementaryDataType getDataType() {
 		return value.getDataType();
 	}
-
-	/** 
-	* {@inheritDoc}
-	*/
+    @Override
 	public Object getValue() {
 		return value.getValue();
 	}
 	
-	/** 
-	 * {@inheritDoc}
-	 */
 	@Override
 	public Locale getLocale() {
 		return value.getLocale();
@@ -95,88 +87,64 @@ public abstract class ValueView implements ValueNode, Serializable {
 	
 	// -----------------------------------------------------
 
-	/** 
-	* {@inheritDoc}
-	*/
+    @Override
 	public boolean isResourceNode() {
 		return false;
 	}
 
-	/** 
-	* {@inheritDoc}
-	*/
+    @Override
 	public boolean isValueNode() {
 		return true;
 	}
-	
-	/** 
-	* {@inheritDoc}
-	*/
+
+    @Override
 	public BigDecimal getDecimalValue() {
 		return value.getDecimalValue();
 	}
-	
-	/** 
-	* {@inheritDoc}
-	*/
+
+    @Override
 	public BigInteger getIntegerValue() {
 		return value.getIntegerValue();
 	}
-	
-	/** 
-	* {@inheritDoc}
-	*/
+
+    @Override
 	public String getStringValue() {
 		return value.getStringValue();
 	}
-	
-	/** 
-	* {@inheritDoc}
-	*/
+
+    @Override
 	public Date getTimeValue() {
 		return value.getTimeValue();
 	}
-	
-	/** 
-	* {@inheritDoc}
-	*/
+
+    @Override
 	public Boolean getBooleanValue() {
 		return value.getBooleanValue();
 	}
 	
 	// -----------------------------------------------------
 
-	/** 
-	* {@inheritDoc}
-	*/
+    @Override
 	public SNScalar asScalar() {
 		return value.asScalar();
 	}
 
-	/** 
-	* {@inheritDoc}
-	*/
+    @Override
 	public SNText asText() {
 		return value.asText();
 	}
 
-	/** 
-	* {@inheritDoc}
-	*/
+    @Override
 	public SNTimeSpec asTimeSpec() {
 		return value.asTimeSpec();
 	}
 
-	/** 
-	* {@inheritDoc}
-	*/
+    @Override
 	public ResourceNode asResource() {
 		throw new IllegalStateException("Cannot convert a value to a resource node");
 	}
 
-	/** 
-	* {@inheritDoc}
-	*/
+    @Override
 	public ValueNode asValue() {
 		return this;
 	}
@@ -197,10 +165,8 @@ public abstract class ValueView implements ValueNode, Serializable {
 	public int hashCode() {
 		return value.hashCode();
 	}
-	
-	/** 
-	 * {@inheritDoc}
-	 */
+
+    @Override
 	public int compareTo(ValueNode other) {
 		return value.compareTo(other);
 	}

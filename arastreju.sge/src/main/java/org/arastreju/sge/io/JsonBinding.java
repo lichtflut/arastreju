@@ -83,7 +83,7 @@ public class JsonBinding implements SemanticGraphIO {
 	}
 
     @Override
-    public void write(StatementProvider provider, OutputStream out) {
+    public void write(StatementContainer container, OutputStream out) {
         throw new NotYetImplementedException();
     }
 

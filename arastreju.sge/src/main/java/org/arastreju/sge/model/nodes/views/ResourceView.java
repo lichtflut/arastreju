@@ -16,6 +16,7 @@
 package org.arastreju.sge.model.nodes.views;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.Set;
 
 import org.arastreju.sge.SNOPS;
@@ -28,9 +29,11 @@ import org.arastreju.sge.model.nodes.SemanticNode;
 import org.arastreju.sge.model.nodes.ValueNode;
 import org.arastreju.sge.naming.QualifiedName;
 
+import static org.arastreju.sge.SNOPS.associations;
+
 /**
  * <p>
- *	Abstract base for all classes that provide a view on a {@link SNResource}. 
+ *	Abstract base for all classes that provide a views on a {@link SNResource}.
  * </p>
  * 
  * <p>
@@ -46,7 +49,7 @@ public abstract class ResourceView implements ResourceNode, Serializable {
 	// ------------------------------------------------------
 	
 	/**
-	 * Creates a new view to the given resource.
+	 * Creates a new views to the given resource.
 	 * @param resource The resource to be wrapped.
 	 */
 	public ResourceView(final ResourceNode resource) {
@@ -57,145 +60,119 @@ public abstract class ResourceView implements ResourceNode, Serializable {
 	}
 	
 	/**
-	 * Creates a view to a resource to be created implicitly.
+	 * Creates a views to a resource to be created implicitly.
 	 */
 	protected ResourceView() {
 		this.resource = new SNResource();
 	}
 	
 	/**
-	 * Creates a view to a resource to be created implicitly.
+	 * Creates a views to a resource to be created implicitly.
 	 */
 	protected ResourceView(QualifiedName qn) {
 		this.resource = new SNResource(qn);
 	}
 	
 	// -----------------------------------------------------
-	
-	/**
-	 * {@inheritDoc}
-	 */
+
+    @Override
 	public QualifiedName getQualifiedName() {
 		return resource.getQualifiedName();
 	}
-	
-	/** 
-	 * {@inheritDoc}
-	 */
+
+    @Override
 	public String toURI() {
 		return resource.toURI();
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
+    @Override
 	public boolean isBlankNode() {
 		return resource.isBlankNode();
 	}
 	
 	// -----------------------------------------------------
-	
-	/**
-	 * {@inheritDoc}
-	 */
+
+    @Override
 	public Set<Statement> getAssociations() {
 		return resource.getAssociations();
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
-	public Set<Statement> getAssociations(final ResourceID predicate) {
-		return resource.getAssociations(predicate);
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
+    @Override
 	public Statement addAssociation(ResourceID predicate, SemanticNode object, Context... ctx) {
 		return resource.addAssociation(predicate, object, ctx);
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
+    @Override
 	public boolean removeAssociation(final Statement stmt) {
 		return resource.removeAssociation(stmt);
 	}
 	
 	// ------------------------------------------------------
 
-	/**
-	 * {@inheritDoc}
-	 */
+    @Override
 	public boolean isValueNode() {
 		return false;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
+    @Override
 	public boolean isResourceNode() {
 		return true;
 	}
-	
-	/**
-	 * {@inheritDoc}
-	 */
+
+    @Override
 	public boolean isAttached() {
 		return resource.isAttached();
 	}
 
 	// -----------------------------------------------------
 
-	/**
-	 * {@inheritDoc}
-	 */
+    @Override
 	public SNClass asClass() {
 		return resource.asClass();
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
-	public SNEntity asEntity() {
-		return resource.asEntity();
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
+    @Override
 	public SNProperty asProperty() {
 		return resource.asProperty();
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
+    @Override
 	public ResourceNode asResource() {
 		return resource;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
+    @Override
 	public ValueNode asValue() {
 		throw new IllegalStateException("Cannot convert a resource to a value node");
 	}
 	
 	// -----------------------------------------------------
 
-	/**
-	 * Returns the wrapped resource.
-	 * @return The resource wrapped by this view.
-	 */
-	protected ResourceNode getResource() {
-		return resource;
-	}
-	
+    protected Set<Statement> getAssociations(final ResourceID predicate) {
+        return associations(resource, predicate);
+    }
+
 	protected String stringValue(ResourceID attribute) {
 		return SNOPS.string(SNOPS.fetchObject(this, attribute));
 	}
+
+    protected ResourceID resourceValue(ResourceID attribute) {
+        final SemanticNode node = SNOPS.fetchObject(this, attribute);
+        if (node != null && node.isResourceNode()) {
+            return node.asResource();
+        } else {
+            return null;
+        }
+    }
+
+    protected Boolean booleanValue(ResourceID attribute) {
+        final SemanticNode value = SNOPS.fetchObject(this, attribute);
+        if (value != null && value.isValueNode()) {
+            return value.asValue().getBooleanValue();
+        } else {
+            return null;
+        }
+    }
 	
 	protected Integer intValue(ResourceID attribute) {
 		final SemanticNode value = SNOPS.fetchObject(this, attribute);
@@ -205,10 +182,27 @@ public abstract class ResourceView implements ResourceNode, Serializable {
 			return null;
 		}
 	}
+
+    protected Date timeValue(ResourceID attribute) {
+        final SemanticNode value = SNOPS.fetchObject(this, attribute);
+        if (value != null && value.isValueNode()) {
+            return value.asValue().getTimeValue();
+        } else {
+            return null;
+        }
+    }
 	
 	protected void setValue(ResourceID attribute, Object value) {
-		SNOPS.assure(this, attribute, value);
+        if (value != null) {
+		    SNOPS.assure(this, attribute, value);
+        } else {
+            removeValues(attribute);
+        }
 	}
+
+    protected void removeValues(ResourceID attribute) {
+        SNOPS.remove(this, attribute);
+    }
 	
 	// -----------------------------------------------------
 	

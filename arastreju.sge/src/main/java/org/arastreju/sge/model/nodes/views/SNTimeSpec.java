@@ -75,9 +75,6 @@ public class SNTimeSpec extends ValueView {
 	
 	// -----------------------------------------------------
 	
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public String toString() {
 		switch(getTimeMask()) {

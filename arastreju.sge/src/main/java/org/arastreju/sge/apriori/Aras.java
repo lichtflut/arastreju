@@ -27,23 +27,24 @@ import org.arastreju.sge.model.SimpleResourceID;
  * 	Created: 09.11.2009
  * </p>
  *
- * @author Oliver Tigges 
+ * @author Oliver Tigges
  */
 public interface Aras {
-	
+
 	String NAMESPACE_URI = "http://arastreju.org/kernel#";
-	
+
 	// -- TYPES -------------------------------------------
-	
+
 	ResourceID CONTEXT = new SimpleResourceID(NAMESPACE_URI, "Context");
 	ResourceID NAMESPACE = new SimpleResourceID(NAMESPACE_URI, "Namespace");
+	ResourceID REVOCATION_DEF = new SimpleResourceID(NAMESPACE_URI, "RevocationDefinition");
 
 	// -- DATATYPES ---------------------------------------
-	
+
 	ResourceID DATATYPE_STRING = new SimpleResourceID("http://arastreju.org/kernel#", "String");
 	ResourceID DATATYPE_BOOLEAN = new SimpleResourceID("http://arastreju.org/kernel#", "Boolean");
 	ResourceID DATATYPE_INTEGER = new SimpleResourceID("http://arastreju.org/kernel#", "Integer");
-	ResourceID DATATYPE_DECIMAL = new SimpleResourceID("http://arastreju.org/kernel#", "Decimal");;
+	ResourceID DATATYPE_DECIMAL = new SimpleResourceID("http://arastreju.org/kernel#", "Decimal");
 	ResourceID DATATYPE_TIMESTAMP = new SimpleResourceID("http://arastreju.org/kernel#", "Timestamp");
 	ResourceID DATATYPE_DATE = new SimpleResourceID("http://arastreju.org/kernel#", "Date");
 	ResourceID DATATYPE_TIME_OF_DAY = new SimpleResourceID("http://arastreju.org/kernel#", "TimeOfDay");
@@ -51,38 +52,46 @@ public interface Aras {
 	ResourceID DATATYPE_PROPER_NAME = new SimpleResourceID("http://arastreju.org/kernel#", "ProperName");
 	ResourceID DATATYPE_TERM = new SimpleResourceID("http://arastreju.org/kernel#", "Term");
 	ResourceID DATATYPE_RESOURCE = new SimpleResourceID("http://www.w3.org/2000/01/rdf-schema#", "Resource");
-	
+
 	// -- VALUES ---------------------------------------
-	
+
 	ResourceID TRUE = new SimpleResourceID("http://arastreju.org/kernel#", "True");
 	ResourceID FALSE = new SimpleResourceID("http://arastreju.org/kernel#", "False");
-	
+
+    ResourceID NIL = new SimpleResourceID("http://arastreju.org/kernel#", "Nil");
+
+    ResourceID ANY = new SimpleResourceID("http://arastreju.org/kernel#", "Any");
+
 	// -- ORGANIZATION --------------------------------
-	
+
 	ResourceID HAS_NAME = new SimpleResourceID(NAMESPACE_URI, "hasName");
 	ResourceID HAS_PREFIX = new SimpleResourceID(NAMESPACE_URI, "hasPrefix");
 	ResourceID HAS_URI = new SimpleResourceID(NAMESPACE_URI, "hasURI");
 
 	// -- CONSTRAINTS -------------------------------------
-	
+
 	ResourceID HAS_PROPER_NAME = new SimpleResourceID(NAMESPACE_URI, "hasProperName");
 	ResourceID HAS_FORENAME = new SimpleResourceID(NAMESPACE_URI, "hasForename");
 	ResourceID HAS_SURNAME = new SimpleResourceID(NAMESPACE_URI, "hasSurname");
 	ResourceID HAS_MIDDLE_NAME = new SimpleResourceID(NAMESPACE_URI, "hasMiddleName");
 	ResourceID HAS_NAME_PART = new SimpleResourceID(NAMESPACE_URI, "hasNamePart");
 	ResourceID HAS_BRAND_NAME = new SimpleResourceID(NAMESPACE_URI, "hasBrandName");
-	
+
 	// -- DATA_STRUCTURE ----------------------------------
-	
+
 	ResourceID IS_PREDECESSOR_OF = new SimpleResourceID(NAMESPACE_URI, "isPredecessorOf");
 	ResourceID IS_SUCCESSOR_OF = new SimpleResourceID(NAMESPACE_URI, "isSuccessorOf");
-	
+
 	ResourceID HAS_SERIAL_NUMBER = new SimpleResourceID(NAMESPACE_URI, "hasSerialNumber");
 
 	ResourceID IS_NATURALLY_ORDERED_BY = new SimpleResourceID(NAMESPACE_URI, "isNaturallyOrderedBy");
 
+    ResourceID REVOKES = new SimpleResourceID(NAMESPACE_URI, "revokes");
+
 	// -- INFERENCES --------------------------------------
-	
+
 	ResourceID INVERSE_OF = new SimpleResourceID(NAMESPACE_URI, "inverseOf");
+
+    ResourceID INHERITS_FROM = new SimpleResourceID(NAMESPACE_URI, "inheritsFrom");
 
 }
