@@ -26,6 +26,7 @@ import java.util.Set;
 import org.arastreju.sge.context.Context;
 import org.arastreju.sge.eh.ArastrejuRuntimeException;
 import org.arastreju.sge.eh.ErrorCodes;
+import org.arastreju.sge.model.DetachedStatement;
 import org.arastreju.sge.model.ResourceID;
 import org.arastreju.sge.model.SimpleResourceID;
 import org.arastreju.sge.model.Statement;
@@ -36,11 +37,9 @@ import org.arastreju.sge.model.nodes.views.SNScalar;
 import org.arastreju.sge.model.nodes.views.SNText;
 import org.arastreju.sge.naming.QualifiedName;
 
-import de.lichtflut.infra.Infra;
-
 /**
  * <p>
- *  Utility class with static mehtods for Semantic Network OPerationS.
+ *  Utility class with static methods for Semantic Network OPerationS.
  * </p>
  *
  * <p>
@@ -295,21 +294,22 @@ public class SNOPS {
 	 * @param contexts The contexts.
 	 */
 	public static Statement assure(final ResourceNode subject, final ResourceID predicate, final SemanticNode object, final Context... contexts){
+        final Statement statement = new DetachedStatement(subject, predicate, object, contexts);
 		final Set<Statement> all = associations(subject, predicate);
-		if (all.size() > 1) {
-			remove(subject, predicate);
-		}
-		if (all.isEmpty()) {
-			return associate(subject, predicate, object, contexts);	
-		} else {
-			final Statement existing = all.iterator().next();
-			if (!Infra.equals(existing.getObject(), object)) {
-				subject.removeAssociation(existing);
-				return associate(subject, predicate, object, contexts);
-			} else {
-				return existing;
-			}
-		}
+        if (all.isEmpty()) {
+            return subject.addAssociation(predicate, object, contexts);
+        }
+        else if (all.contains(statement)) {
+            for (Statement existing : all) {
+                if (!statement.equals(existing)) {
+                    subject.removeAssociation(existing);
+                }
+            }
+            return statement;
+        } else {
+            remove(subject, predicate);
+            return subject.addAssociation(predicate, object, contexts);
+        }
 	}
 	
 	/**
