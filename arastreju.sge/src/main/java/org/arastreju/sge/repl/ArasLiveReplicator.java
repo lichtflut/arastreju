@@ -137,6 +137,13 @@ public abstract class ArasLiveReplicator {
 
 	// -- Receiver interface ----------------------------
 	
+	/*
+	 * NOTE THAT the following three functions, once implemented in
+	 *   whatever subclasses this, will be called asynchronously by
+	 *   a separate, rogue thread.
+	 * Know thy synchronization is this is of concern!
+	 */
+	
 	/** 
 	 * called whenever the receiver receives a relation operation, i.e.
 	 *   an operation which adds or removes a statement (as opposed to
@@ -158,7 +165,7 @@ public abstract class ArasLiveReplicator {
 	 * called at the end of every transaction
 	 * @param txSeq
 	 */
-	protected abstract void onEndOfTx(int txSeq);
+	protected abstract void onEndOfTx(int txSeq, boolean success);
 	
 	
 	// -- INNER CLASSES -----------------------------------
@@ -220,7 +227,7 @@ public abstract class ArasLiveReplicator {
 		public void run() {
 			BufferedWriter w;
 			BufferedReader r;
-			Socket s;
+			Socket s = null;
 
 			int nextTxSeq; //stores the next tx we're going to send
 
@@ -305,17 +312,16 @@ public abstract class ArasLiveReplicator {
 					}
 				} catch (IOException e) { //thrown by get{In,Out}putStream(), readLine(), write(), flush()
 					e.printStackTrace();
-					try {
-						s.close();
-					} catch (IOException e1) {
-						/* we don't care for this one, we just want to
-						 *  get rid of the socket and start over. */
-					}
+				} finally {
+					closeSocket(s);
 				}
+				logger.info("at end of life loop - starting over");
 			}
 
 			logger.warn("terminating " + (shutdownRequested() ? "as requested" : "abnormally"));
 		}
+
+		// ------------------------------------------------
 
 		private boolean shutdownRequested() {
 			return false;//TODO
@@ -333,6 +339,14 @@ public abstract class ArasLiveReplicator {
 			} while (s == null);
 
 			return s;
+		}
+
+		/* wrapper for close(), to get rid of potential IOExceptions which may
+		 *  be thrown in close()'s implicit call to flush().
+		 * There are cases where it's important to catch and handle it,
+		 * but the replicator isn't one (as we have our own startover mechanism). */
+		private void closeSocket(Socket s) {
+			try { s.close(); } catch (IOException e) {}
 		}
 	}
 
@@ -353,6 +367,8 @@ public abstract class ArasLiveReplicator {
 		private final String lstAddr;
 		private final int lstPort;
 
+		private int lastComplTx = -1;
+
 		// ------------------------------------------------
 
 		/**
@@ -369,50 +385,135 @@ public abstract class ArasLiveReplicator {
 
 		// ------------------------------------------------
 
-		private void process(String line) {
+		@Override
+		public void run() {
+
+			/* first we try to get a server going */
+			ServerSocket srv = null;
+			while (!shutdownRequested()) {
+				try {
+					srv = makeListeningSocket();
+					logger.debug("bound to, and now listening on: " + lstAddr + ":" + lstPort);
+				} catch (InterruptedException e2) {
+					logger.warn("interrupted while trying to bind()/listen() on/to: " + lstAddr + ":" + lstPort);
+					continue; //re-evaluate shutdown condition
+				}
+			}
+
+			BufferedReader r;
+			BufferedWriter w;
+			Socket s = null;
+			
+			int inTx = -1;
+			
+			while (!shutdownRequested()) {
+				try {
+					s = acceptSocket(srv); //retries on failure, except when interrupted
+					logger.debug("accepted a socket (on " + lstAddr + ":" + lstPort + ", peer: " + s.getRemoteSocketAddress() + ":" + s.getPort() + ")");
+				} catch (InterruptedException e) {
+					logger.warn("interrupted while listening/accepting (on " + lstAddr + ":" + lstPort + ")");
+					continue; //re-evaluate shutdown condition
+				}
+				
+				if (inTx != -1) { //we were in the middle of a transaction
+					onEndOfTx(inTx, false);
+				}
+
+				try {
+					w = new BufferedWriter(new OutputStreamWriter(s.getOutputStream()));
+					r = new BufferedReader(new InputStreamReader(s.getInputStream()));
+
+					/* tell other end where to start */
+					w.write(lastComplTx + "\n");
+					w.flush();
+
+					while (!shutdownRequested()) {
+						String line = r.readLine();
+						if (line == null) { /* at EOF */
+							logger.warn("Receiver read EOF");
+							/* EOF is actually not supposed to show up, except
+							 * perhaps in case of peer's shutdown, anyway we're
+							 * nice and cleanly dispose of the connection too,
+							 * then start over like we would if the connection
+							 * broke the hard way */
+							r.close();
+							break;
+						}
+						
+						if ((line = line.trim()).length() == 0)
+							continue;
+
+						int curTx = process(line);
+						
+						boolean isEOT = line.endsWith("EOT");
+						inTx = isEOT ? -1 : curTx;
+						
+						if (isEOT) {
+							lastComplTx = curTx;
+							w.write(lastComplTx + "\n"); //tell dispatcher about it
+							w.flush();
+						}
+					}
+				} catch (IOException e) { //thrown by get{In,Out}putStream(), write(), flush(), readLine(), close()
+					e.printStackTrace();
+				} finally {
+					closeSocket(s);
+				}
+				
+				logger.info("at end of life loop - starting over");
+			}
+
+			logger.warn("terminating " + (shutdownRequested() ? "as requested" : "abnormally"));
+			closeSocket(srv);
+		}
+
+		// ------------------------------------------------
+
+		private boolean shutdownRequested() {
+			return false;//TODO
+		}
+
+		/* pattern is:
+		 * 		^([0-9]+) (EOT|(?:([+-])(N ([^ ]+)|S ([^ ]+) ([^ ]+) (R ([^ ]+)|V ([^ ]+) ([^ ]+)))))$
+		 *
+		 * node operation: e.g. "1337 +N http://so.me/node"
+		 * 	group 1: sequence number (1337)
+		 *  group 3: [+-] (+)
+		 *  group 5: URI (http://so.me/node)
+		 * 
+		 * rel operation with value object:  e.g.  "1337 -S http://so.me/subj http://the.pred/icate V STRING myfancystring"
+		 * 	group 1: sequence number (1337)
+		 *  group 3: [+-] (-)
+		 * 	group 6: subject (http://so.me/subj)
+		 *  group 7: predicate (http://the.pred/icate)
+		 *  group 10: type (STRING)
+		 *  group 11: value (myfancystring)
+		 * 
+		 * rel operation with resource object: e.g. "1337 -S http://so.me/subj http://the.pred/icate R http://so.me/resource
+		 * 	group 1: sequence number (1337)
+		 *  group 3: [+-] (-)
+		 * 	group 6: subject (http://so.me/subj)
+		 *  group 7: predicate (http://the.pred/icate)
+		 *  group 9: value (http://so.me/resource)
+		 */
+		private int process(String line) {
 			Matcher m = MatcherProvider.matcher(line);
 
 			if (!m.matches()) {
 				logger.warn("Input didn't match: '" + line + "'");
-				return;
+				throw new IllegalArgumentException("bogus input: '" + line + "')");
 			}
 
-			/* pattern is:
-			 * 		^([0-9]+) (EOT|(?:([+-])(N ([^ ]+)|S ([^ ]+) ([^ ]+) (R ([^ ]+)|V ([^ ]+) ([^ ]+)))))$
-			 *
-			 * node operation: e.g. "1337 +N http://so.me/node"
-			 * 	group 1: sequence number (1337)
-			 *  group 3: [+-] (+)
-			 *  group 5: URI (http://so.me/node)
-			 * 
-			 * rel operation with value object:  e.g.  "1337 -S http://so.me/subj http://the.pred/icate V STRING myfancystring"
-			 * 	group 1: sequence number (1337)
-			 *  group 3: [+-] (-)
-			 * 	group 6: subject (http://so.me/subj)
-			 *  group 7: predicate (http://the.pred/icate)
-			 *  group 10: type (STRING)
-			 *  group 11: value (myfancystring)
-			 * 
-			 * rel operation with resource object: e.g. "1337 -S http://so.me/subj http://the.pred/icate R http://so.me/resource
-			 * 	group 1: sequence number (1337)
-			 *  group 3: [+-] (-)
-			 * 	group 6: subject (http://so.me/subj)
-			 *  group 7: predicate (http://the.pred/icate)
-			 *  group 9: value (http://so.me/resource)
-			 */
-
-			@SuppressWarnings("unused")
 			int txSeq = Integer.parseInt(m.group(1));
 			if (m.group(2).equals("EOT")) {
-				onEndOfTx(txSeq);
-				return;
+				onEndOfTx(txSeq, true);
+				return txSeq;
 			}
 
 			boolean added = m.group(3).equals("+");
 
 			if (m.group(4).charAt(0) == 'N') {
 				onNodeOp(txSeq, added, new SimpleResourceID(m.group(5)));
-				//onNodeOp(added, new SNResource(new QualifiedName(m.group(5)))); //XXX which one of these two?
 			} else { // m.group(4).charAt(0) == 'S', since regex matched
 				ResourceID sub = new SimpleResourceID(m.group(6));
 				ResourceID pred = new SimpleResourceID(m.group(7));
@@ -427,35 +528,55 @@ public abstract class ArasLiveReplicator {
 
 				onRelOp(txSeq, added, new DetachedStatement(sub, pred, obj)); //what about contexts? XXX
 			}
+			
+			return txSeq;
 		}
 
-		@Override
-		public void run() {
-			BufferedReader r;
-			try {
-				/* this listens on all interfaces, should
-				 * be turned into a configuration setting */
-
-				ServerSocket s = new ServerSocket(lstPort, 0, InetAddress.getByName(lstAddr));
-
-				Socket sck = s.accept();
-				sck.shutdownOutput();
-				r = new BufferedReader(new InputStreamReader(sck.getInputStream()));
-
-				for (;;) {
-					String line = r.readLine();
-					if (line == null) { /* at EOF */
-						logger.warn("Receiver read EOF");
-						r.close();
-						return; // for now. TODO: make it relisten
-					}
-					process(line);
+		private ServerSocket makeListeningSocket() throws InterruptedException {
+			ServerSocket s = null;
+			do {
+				try {
+					s = new ServerSocket(lstPort, 0, InetAddress.getByName(lstAddr));
+				} catch (IOException e) {
+					logger.warn("could not bind()/listen() to/on " + lstAddr + ":" + lstPort + " - retrying");
+					Thread.sleep(1000);
 				}
-			} catch (IOException e) {
-				logger.warn("Receiver caught IOException");
-				e.printStackTrace();
-			}
-			logger.warn("Receiver thread terminating");
+				;
+			} while (s == null);
+
+			return s;
+		}
+
+		private Socket acceptSocket(ServerSocket srv) throws InterruptedException {
+			Socket s = null;
+			/*TODO make sure there's no way this loops forever 
+			 * (like when accept keeps throwing exceptions but nobody
+			 * interrupts since we're not shutting down in the first place */
+			do {
+				if (Thread.interrupted()) {
+					throw new InterruptedException("interrupted accept() loop");
+				}
+
+				try {
+					s = srv.accept();
+				} catch (IOException e) {
+					logger.warn("failed to accept a connection (on" + lstAddr + ":" + lstPort + " - retrying");
+				}
+			} while (s == null);
+
+			return s;
+		}
+
+		/* wrapper for close(), to get rid of potential IOExceptions which may
+		 *  be thrown in close()'s implicit call to flush().
+		 * There are cases where it's important to catch and handle it,
+		 * but the replicator isn't one (as we have our own startover mechanism). */
+		private void closeSocket(Socket s) {
+			try { if (s != null) s.close(); } catch (IOException e) {}
+		}
+
+		private void closeSocket(ServerSocket s) {
+			try { if (s != null) s.close(); } catch (IOException e) {}
 		}
 	}
 }

@@ -27,7 +27,7 @@ public class NoOpReplicator extends ArasLiveReplicator {
 	}
 
 	@Override
-	protected void onEndOfTx(int txSeq) {
+	protected void onEndOfTx(int txSeq, boolean success) {
 		// TODO Auto-generated method stub
 
 	}

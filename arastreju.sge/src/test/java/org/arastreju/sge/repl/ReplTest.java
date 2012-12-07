@@ -129,7 +129,7 @@ class MyReplicator extends ArasLiveReplicator {
 		}
     }
 
-    protected void onEndOfTx(int txSeq) {
+    protected void onEndOfTx(int txSeq, boolean success) {
     	System.err.println("onEndOfTx() in "+name);
 	    
     }
