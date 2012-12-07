@@ -61,7 +61,7 @@ public class InverseOfInferencer implements Inferencer {
 	 * {@inheritDoc}
 	 */
 	public void addInferenced(final Statement stmt, final Set<Statement> target) {
-		final SNProperty property = resolver.resolve(stmt.getPredicate()).asProperty();
+		final SNProperty property = SNProperty.from(resolver.resolve(stmt.getPredicate()));
 		Set<SemanticNode> invertedPredicates = SNOPS.objects(property, Aras.INVERSE_OF);
 		if (!invertedPredicates.isEmpty()) {
 			addInverted(stmt, invertedPredicates, target);

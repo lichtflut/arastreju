@@ -135,17 +135,6 @@ public class SNResource implements ResourceNode, Serializable {
 	}
 
     @Override
-	public Set<Statement> getAssociations(final ResourceID predicate) {
-		final Set<Statement> result = new HashSet<Statement>();
-		for (Statement assoc : getAssociations()) {
-			if (predicate.equals(assoc.getPredicate())) {
-				result.add(assoc);
-			}
-		}
-		return result;
-	}
-
-    @Override
 	public Statement addAssociation(ResourceID predicate, SemanticNode object, Context... ctx) {
 		final Statement statement = new DetachedStatement(this, predicate, object, ctx);
 		associationKeeper.addAssociation(statement);
@@ -160,11 +149,6 @@ public class SNResource implements ResourceNode, Serializable {
 	}
 	
 	// -----------------------------------------------------
-
-    @Override
-	public SNEntity asEntity() {
-		return new SNEntity(this);
-	}
 
     @Override
 	public SNClass asClass() {

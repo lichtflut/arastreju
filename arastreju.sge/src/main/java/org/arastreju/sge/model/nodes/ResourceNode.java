@@ -49,20 +49,13 @@ public interface ResourceNode extends ResourceID {
 	 */
 	boolean isAttached();
 	
-	// -----------------------------------------------------
+	// -- ASSOCIATIONS ------------------------------------
 
 	/**
 	 * Get all associations of this node.
 	 * @return Set of all associations.
 	 */
 	Set<Statement> getAssociations();
-
-	/**
-	 * Selects all associations with the given predicate.
-	 * @param predicate The relevant predicate.
-	 * @return Set of matching associations.
-	 */
-	Set<Statement> getAssociations(ResourceID predicate);
 
 	// -----------------------------------------------------
 
@@ -84,8 +77,6 @@ public interface ResourceNode extends ResourceID {
 	boolean removeAssociation(Statement stmt);
 	
 	// -----------------------------------------------------
-
-	SNEntity asEntity();
 
 	SNClass asClass();
 

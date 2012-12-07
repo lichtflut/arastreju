@@ -37,13 +37,14 @@ public interface Aras {
 
 	ResourceID CONTEXT = new SimpleResourceID(NAMESPACE_URI, "Context");
 	ResourceID NAMESPACE = new SimpleResourceID(NAMESPACE_URI, "Namespace");
+	ResourceID REVOCATION_DEF = new SimpleResourceID(NAMESPACE_URI, "RevocationDefinition");
 
 	// -- DATATYPES ---------------------------------------
 
 	ResourceID DATATYPE_STRING = new SimpleResourceID("http://arastreju.org/kernel#", "String");
 	ResourceID DATATYPE_BOOLEAN = new SimpleResourceID("http://arastreju.org/kernel#", "Boolean");
 	ResourceID DATATYPE_INTEGER = new SimpleResourceID("http://arastreju.org/kernel#", "Integer");
-	ResourceID DATATYPE_DECIMAL = new SimpleResourceID("http://arastreju.org/kernel#", "Decimal");;
+	ResourceID DATATYPE_DECIMAL = new SimpleResourceID("http://arastreju.org/kernel#", "Decimal");
 	ResourceID DATATYPE_TIMESTAMP = new SimpleResourceID("http://arastreju.org/kernel#", "Timestamp");
 	ResourceID DATATYPE_DATE = new SimpleResourceID("http://arastreju.org/kernel#", "Date");
 	ResourceID DATATYPE_TIME_OF_DAY = new SimpleResourceID("http://arastreju.org/kernel#", "TimeOfDay");
@@ -51,12 +52,15 @@ public interface Aras {
 	ResourceID DATATYPE_PROPER_NAME = new SimpleResourceID("http://arastreju.org/kernel#", "ProperName");
 	ResourceID DATATYPE_TERM = new SimpleResourceID("http://arastreju.org/kernel#", "Term");
 	ResourceID DATATYPE_RESOURCE = new SimpleResourceID("http://www.w3.org/2000/01/rdf-schema#", "Resource");
-	ResourceID DATATYPE_FILE = new SimpleResourceID("http://arastreju.org/kernel#", "File");
 
 	// -- VALUES ---------------------------------------
 
 	ResourceID TRUE = new SimpleResourceID("http://arastreju.org/kernel#", "True");
 	ResourceID FALSE = new SimpleResourceID("http://arastreju.org/kernel#", "False");
+
+    ResourceID NIL = new SimpleResourceID("http://arastreju.org/kernel#", "Nil");
+
+    ResourceID ANY = new SimpleResourceID("http://arastreju.org/kernel#", "Any");
 
 	// -- ORGANIZATION --------------------------------
 
@@ -82,8 +86,12 @@ public interface Aras {
 
 	ResourceID IS_NATURALLY_ORDERED_BY = new SimpleResourceID(NAMESPACE_URI, "isNaturallyOrderedBy");
 
+    ResourceID REVOKES = new SimpleResourceID(NAMESPACE_URI, "revokes");
+
 	// -- INFERENCES --------------------------------------
 
 	ResourceID INVERSE_OF = new SimpleResourceID(NAMESPACE_URI, "inverseOf");
+
+    ResourceID INHERITS_FROM = new SimpleResourceID(NAMESPACE_URI, "inheritsFrom");
 
 }
