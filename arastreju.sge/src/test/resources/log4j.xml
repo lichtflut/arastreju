@@ -34,6 +34,10 @@
 		<level value="warn" />
 	</logger>
 
+    <logger name="StopWatch">
+        <level value="INFO" />
+    </logger>
+
 	<root>
 		<priority value="warn" />
 		<appender-ref ref="console" />

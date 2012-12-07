@@ -16,7 +16,6 @@
 package org.arastreju.sge.model.nodes.views;
 
 import java.io.Serializable;
-import java.text.DateFormat;
 import java.util.Date;
 import java.util.Set;
 
@@ -30,9 +29,11 @@ import org.arastreju.sge.model.nodes.SemanticNode;
 import org.arastreju.sge.model.nodes.ValueNode;
 import org.arastreju.sge.naming.QualifiedName;
 
+import static org.arastreju.sge.SNOPS.associations;
+
 /**
  * <p>
- *	Abstract base for all classes that provide a view on a {@link SNResource}. 
+ *	Abstract base for all classes that provide a views on a {@link SNResource}.
  * </p>
  * 
  * <p>
@@ -48,7 +49,7 @@ public abstract class ResourceView implements ResourceNode, Serializable {
 	// ------------------------------------------------------
 	
 	/**
-	 * Creates a new view to the given resource.
+	 * Creates a new views to the given resource.
 	 * @param resource The resource to be wrapped.
 	 */
 	public ResourceView(final ResourceNode resource) {
@@ -59,14 +60,14 @@ public abstract class ResourceView implements ResourceNode, Serializable {
 	}
 	
 	/**
-	 * Creates a view to a resource to be created implicitly.
+	 * Creates a views to a resource to be created implicitly.
 	 */
 	protected ResourceView() {
 		this.resource = new SNResource();
 	}
 	
 	/**
-	 * Creates a view to a resource to be created implicitly.
+	 * Creates a views to a resource to be created implicitly.
 	 */
 	protected ResourceView(QualifiedName qn) {
 		this.resource = new SNResource(qn);
@@ -94,11 +95,6 @@ public abstract class ResourceView implements ResourceNode, Serializable {
     @Override
 	public Set<Statement> getAssociations() {
 		return resource.getAssociations();
-	}
-
-	@Override
-	public Set<Statement> getAssociations(final ResourceID predicate) {
-		return resource.getAssociations(predicate);
 	}
 
     @Override
@@ -136,11 +132,6 @@ public abstract class ResourceView implements ResourceNode, Serializable {
 	}
 
     @Override
-	public SNEntity asEntity() {
-		return resource.asEntity();
-	}
-
-    @Override
 	public SNProperty asProperty() {
 		return resource.asProperty();
 	}
@@ -157,9 +148,22 @@ public abstract class ResourceView implements ResourceNode, Serializable {
 	
 	// -----------------------------------------------------
 
+    protected Set<Statement> getAssociations(final ResourceID predicate) {
+        return associations(resource, predicate);
+    }
+
 	protected String stringValue(ResourceID attribute) {
 		return SNOPS.string(SNOPS.fetchObject(this, attribute));
 	}
+
+    protected ResourceID resourceValue(ResourceID attribute) {
+        final SemanticNode node = SNOPS.fetchObject(this, attribute);
+        if (node != null && node.isResourceNode()) {
+            return node.asResource();
+        } else {
+            return null;
+        }
+    }
 
     protected Boolean booleanValue(ResourceID attribute) {
         final SemanticNode value = SNOPS.fetchObject(this, attribute);

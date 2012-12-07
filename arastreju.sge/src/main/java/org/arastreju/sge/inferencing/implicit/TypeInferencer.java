@@ -56,9 +56,6 @@ public class TypeInferencer implements Inferencer {
 	
 	// ----------------------------------------------------
 	
-	/**
-	 * {@inheritDoc}
-	 */
 	public void addInferenced(Statement stmt, Set<Statement> target) {
 		if (!RDF.TYPE.equals(stmt.getPredicate())) {
 			throw new ArastrejuRuntimeException(ErrorCodes.GENERAL_CONSISTENCY_FAILURE, 

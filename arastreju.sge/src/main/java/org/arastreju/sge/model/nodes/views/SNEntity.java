@@ -19,7 +19,7 @@ import org.arastreju.sge.apriori.RDF;
 import org.arastreju.sge.model.ResourceID;
 import org.arastreju.sge.model.Statement;
 import org.arastreju.sge.model.nodes.ResourceNode;
-import org.arastreju.sge.model.nodes.SNResource;
+import org.arastreju.sge.model.nodes.SemanticNode;
 import org.arastreju.sge.naming.QualifiedName;
 
 import java.util.HashSet;
@@ -35,18 +35,30 @@ import java.util.Set;
  * @author Oliver Tigges
  */
 public class SNEntity extends ResourceView {
+
+    public static SNEntity from(SemanticNode node) {
+        if (node instanceof SNEntity) {
+            return (SNEntity) node;
+        } else if (node instanceof ResourceNode) {
+            return new SNEntity((ResourceNode) node);
+        } else {
+            return null;
+        }
+    }
+
+    // ----------------------------------------------------
 	
 	public SNEntity() {
-		super(new SNResource());
+		super();
 	}
 	
 	public SNEntity(final QualifiedName qn) {
-		super(new SNResource(qn));
+		super(qn);
 	}
 	
 	/**
-	 * Create a new entity view on given resource.
-	 * @param resource The resource to be wrapped by view.
+	 * Create a new entity views on given resource.
+	 * @param resource The resource to be wrapped by views.
 	 */
 	public SNEntity(final ResourceNode resource) {
 		super(resource);
@@ -61,7 +73,7 @@ public class SNEntity extends ResourceView {
 	public Set<SNClass> getDirectClasses() {
 		Set<SNClass> result = new HashSet<SNClass>();
 		for(Statement assoc: getAssociations(RDF.TYPE)){
-			result.add(assoc.getObject().asResource().asClass());
+			result.add(SNClass.from(assoc.getObject()));
 		}
 		return result;
 	}
