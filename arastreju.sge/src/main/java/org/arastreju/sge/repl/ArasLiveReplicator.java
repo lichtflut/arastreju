@@ -186,7 +186,7 @@ public abstract class ArasLiveReplicator {
 		 * thus, access to any of these may only happen inside of a
 		 *  synchronize(txBackup){}-block*/
 		private final Map<Integer, List<String>> txMap = new HashMap<Integer, List<String>>();
-		private int minTxSeq = -1; //stores the lowest (a.k.a. earliest) tx we remember
+		private int minTxSeq = 0; //stores the lowest (a.k.a. earliest) tx we remember
 		private int curTxSeq = -1; //stores the highest tx we saw, finished or not
 		private boolean curTxDone = false; //stores whether tx# curTxSeq has seen its "EOT" already
 
@@ -208,12 +208,10 @@ public abstract class ArasLiveReplicator {
 
 				l.add(s);
 
-				txMap.notifyAll();
-
 				curTxSeq = txSeq;
 				curTxDone = s.equals("EOT");
-				if (minTxSeq == -1)
-					minTxSeq = curTxSeq; //this is the first
+				
+				txMap.notifyAll();
 			}
 
 		}
