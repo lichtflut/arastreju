@@ -43,7 +43,7 @@ public class SNScalar extends ValueView {
 	
 	/**
 	 * Creates a new scalar integer value.
-	 * @param integerValue
+	 * @param integerValue The integer value.
 	 */
 	public SNScalar(final Integer integerValue){
 		this(BigInteger.valueOf(integerValue));
@@ -51,7 +51,7 @@ public class SNScalar extends ValueView {
 	
 	/**
 	 * Creates a new scalar decimal value.
-	 * @param decimalValue
+	 * @param decimalValue The decimal value.
 	 */
 	public SNScalar(final BigDecimal decimalValue){
 		super(ElementaryDataType.DECIMAL, decimalValue);

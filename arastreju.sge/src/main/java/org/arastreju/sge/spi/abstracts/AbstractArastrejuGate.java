@@ -17,23 +17,27 @@ import org.arastreju.sge.context.DomainIdentifier;
  */
 public abstract class AbstractArastrejuGate implements ArastrejuGate {
 
-    private final DomainIdentifier domainIdentifier;
+	private final DomainIdentifier domainIdentifier;
 
-    // ----------------------------------------------------
+	// ----------------------------------------------------
 
-    protected AbstractArastrejuGate(DomainIdentifier domainIdentifier) {
-        this.domainIdentifier = domainIdentifier;
-    }
+	protected AbstractArastrejuGate(final DomainIdentifier domainIdentifier) {
+		this.domainIdentifier = domainIdentifier;
+	}
 
-    protected DomainIdentifier getDomainIdentifier() {
-        return domainIdentifier;
-    }
+	protected DomainIdentifier getDomainIdentifier() {
+		return domainIdentifier;
+	}
 
-    protected void initContext(ConversationContext cc) {
-        if (domainIdentifier.getInitialContext() != null) {
-            cc.setPrimaryContext(domainIdentifier.getInitialContext());
-            cc.setReadContexts(domainIdentifier.getInitialContext());
-        }
-    }
+	/**
+	 * Intitialze this conversation context from the initial context.
+	 * @param cc The conversation context to be initialized.
+	 */
+	protected void initContext(final ConversationContext cc) {
+		if (domainIdentifier.getInitialContext() != null) {
+			cc.setPrimaryContext(domainIdentifier.getInitialContext());
+			cc.setReadContexts(domainIdentifier.getInitialContext());
+		}
+	}
 
 }

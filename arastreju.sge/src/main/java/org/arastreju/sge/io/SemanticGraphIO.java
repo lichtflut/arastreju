@@ -66,10 +66,10 @@ public interface SemanticGraphIO {
 
 
     /**
-     * Writed statments from given provider to output stream.
-     * @param provider The provider of statements.
+     * Writed statments from given container to output stream.
+     * @param container The container of statements.
      * @param out The output stream.
      */
-    void write(final StatementProvider provider, final OutputStream out)
+    void write(final StatementContainer container, final OutputStream out)
             throws IOException, SemanticIOException;
 }

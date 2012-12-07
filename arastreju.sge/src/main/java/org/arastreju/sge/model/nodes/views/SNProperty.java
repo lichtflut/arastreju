@@ -31,7 +31,7 @@ import org.arastreju.sge.naming.QualifiedName;
 
 /**
  * <p>
- * 	Resource view for Properties.
+ * 	Resource views for Properties.
  * 	Corresponds to rdfs:Property.
  * </p>
  * 
@@ -46,13 +46,25 @@ public class SNProperty extends ResourceView {
 	private Set<SNProperty> inverseProperties;
 	
 	// ------------------------------------------------------
+
+    public static SNProperty from(SemanticNode node) {
+        if (node instanceof SNProperty) {
+            return (SNProperty) node;
+        } else if (node instanceof ResourceNode) {
+            return new SNProperty((ResourceNode) node);
+        } else {
+            return null;
+        }
+    }
+
+    // ----------------------------------------------------
 	
 	public SNProperty(final QualifiedName qn) {
 		super(new SNResource(qn));
 	}
 	
 	/**
-	 * Creates a new Property view for given resource.
+	 * Creates a new Property views for given resource.
 	 */
 	public SNProperty(final ResourceNode resource) {
 		super(resource);
@@ -81,7 +93,7 @@ public class SNProperty extends ResourceView {
 		final Set<SNProperty> result = new HashSet<SNProperty>();
 		final Set<Statement> extensions = getAssociations(RDFS.SUB_PROPERTY_OF);
 		for (Statement current : extensions) {
-			final SNProperty directSuperProperty = current.getObject().asResource().asProperty();
+			final SNProperty directSuperProperty = SNProperty.from(current.getObject());
 			result.add(directSuperProperty);
 		}
 		return result;
@@ -96,7 +108,7 @@ public class SNProperty extends ResourceView {
 			inverseProperties = new HashSet<SNProperty>();
 			Set<? extends Statement> assocs = getAssociations(Aras.INVERSE_OF);
 			for (Statement current : assocs) {
-				SNProperty property = current.getObject().asResource().asProperty();
+				SNProperty property = SNProperty.from(current.getObject());
 				inverseProperties.add(property);
 			}
 		}
@@ -168,7 +180,7 @@ public class SNProperty extends ResourceView {
 		targetSet.add(this);
 		final Set<? extends Statement> extensions = getAssociations(RDFS.SUB_PROPERTY_OF);
 		for (Statement current : extensions) {
-			final SNProperty directSuperProperty = current.getObject().asResource().asProperty();
+			final SNProperty directSuperProperty = SNProperty.from(current.getObject());
 			if (!targetSet.contains(directSuperProperty)) {
 				directSuperProperty.addSuperProperties(targetSet);
 			}

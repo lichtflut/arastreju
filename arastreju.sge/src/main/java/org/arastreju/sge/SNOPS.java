@@ -26,20 +26,20 @@ import java.util.Set;
 import org.arastreju.sge.context.Context;
 import org.arastreju.sge.eh.ArastrejuRuntimeException;
 import org.arastreju.sge.eh.ErrorCodes;
+import org.arastreju.sge.model.DetachedStatement;
 import org.arastreju.sge.model.ResourceID;
 import org.arastreju.sge.model.SimpleResourceID;
 import org.arastreju.sge.model.Statement;
 import org.arastreju.sge.model.nodes.ResourceNode;
 import org.arastreju.sge.model.nodes.SemanticNode;
+import org.arastreju.sge.model.nodes.views.SNBoolean;
 import org.arastreju.sge.model.nodes.views.SNScalar;
 import org.arastreju.sge.model.nodes.views.SNText;
 import org.arastreju.sge.naming.QualifiedName;
 
-import de.lichtflut.infra.Infra;
-
 /**
  * <p>
- *  Utility class with static mehtods for Semantic Network OPerationS.
+ *  Utility class with static methods for Semantic Network OPerationS.
  * </p>
  *
  * <p>
@@ -117,6 +117,16 @@ public class SNOPS {
 	}
 	
 	// -- ASSOCIATIONS -------------------------------------
+
+    public static Set<Statement> associations(final ResourceNode subject, final ResourceID predicate) {
+        final Set<Statement> result = new HashSet<Statement>();
+        for (Statement assoc : subject.getAssociations()) {
+            if (predicate.equals(assoc.getPredicate())) {
+                result.add(assoc);
+            }
+        }
+        return result;
+    }
 	
 	/**
 	 * Fetch the first association corresponding to given predicate.
@@ -125,27 +135,12 @@ public class SNOPS {
 	 * @return The first matching association or null.
 	 */
 	public static Statement fetchAssociation(final ResourceNode subject, final ResourceID predicate) {
-		Set<Statement> associations = subject.getAssociations(predicate);
-		if (associations.isEmpty()) {
-			return null;
-		} else {
-			return associations.iterator().next();
-		}
-	}
-	
-	/**
-	 * Fetch the first association's object corresponding to given predicate.
-	 * @param subject The subject.
-	 * @param predicate The predicate.
-	 * @return The first matching object or null.
-	 */
-	public static SemanticNode fetchObject(final ResourceNode subject, final ResourceID predicate) {
-		Set<Statement> associations = subject.getAssociations(predicate);
-		if (associations.isEmpty()) {
-			return null;
-		} else {
-			return associations.iterator().next().getObject();
-		}
+        for (Statement assoc : subject.getAssociations()) {
+            if (predicate.equals(assoc.getPredicate())) {
+                return assoc;
+            }
+        }
+        return null;
 	}
 	
 	/**
@@ -156,7 +151,7 @@ public class SNOPS {
 	 * @throws ArastrejuRuntimeException if more than one association of given predicate present.
 	 */
 	public static Statement singleAssociation(final ResourceNode subject, final ResourceID predicate) {
-		Set<Statement> associations = subject.getAssociations(predicate);
+		Set<Statement> associations = associations(subject, predicate);
 		if (associations.isEmpty()) {
 			return null;
 		} else if (associations.size() > 1) {
@@ -166,6 +161,38 @@ public class SNOPS {
 			return associations.iterator().next();
 		}
 	}
+
+    // -- OBJECTS -----------------------------------------
+
+    /**
+     * Fetch the first association's object corresponding to given predicate.
+     * @param subject The subject.
+     * @param predicate The predicate.
+     * @return The first matching object or null.
+     */
+    public static SemanticNode fetchObject(final ResourceNode subject, final ResourceID predicate) {
+        Set<Statement> associations = associations(subject, predicate);
+        if (associations.isEmpty()) {
+            return null;
+        } else {
+            return associations.iterator().next().getObject();
+        }
+    }
+
+    /**
+     * Fetch the first association's object corresponding to given predicate.
+     * @param subject The subject.
+     * @param predicate The predicate.
+     * @return The first matching object or null.
+     */
+    public static ResourceNode fetchObjectAsResource(final ResourceNode subject, final ResourceID predicate) {
+        for (Statement statement : subject.getAssociations()) {
+            if (predicate.equals(statement.getPredicate()) && statement.getObject().isResourceNode()) {
+                return statement.getObject().asResource();
+            }
+        }
+        return null;
+    }
 	
 	/**
 	 * Fetch the only association corresponding to given predicate.
@@ -183,20 +210,64 @@ public class SNOPS {
 		}
 	}
 	
-	public static Set<ResourceID> subjects(final ResourceNode subject, final ResourceID predicate){
-		return subjects(subject.getAssociations(predicate));
-	}
-	
 	public static Set<SemanticNode> objects(final ResourceNode subject, final ResourceID predicate){
 		if (subject == null) {
 			return Collections.emptySet();
 		}
-		return objects(subject.getAssociations(predicate));
+		return objects(associations(subject, predicate));
 	}
+
+    public static Set<ResourceNode> objectsAsResources(final ResourceNode subject, final ResourceID predicate){
+        if (subject == null) {
+            return Collections.emptySet();
+        }
+        final Set<ResourceNode> result = new HashSet<ResourceNode>();
+        for (Statement assoc : subject.getAssociations()) {
+            if (assoc.getPredicate().equals(predicate) && assoc.getObject().isResourceNode()) {
+                result.add(assoc.getObject().asResource());
+            }
+        }
+        return result;
+    }
+
+    public static Set<SemanticNode> objects(final Collection<Statement> assocs){
+        final Set<SemanticNode> result = new HashSet<SemanticNode>(assocs.size());
+        for (Statement assoc : assocs) {
+            result.add(assoc.getObject());
+        }
+        return result;
+    }
+
+    public static Set<ResourceNode> objectsAsResources(final Collection<Statement> assocs){
+        final Set<ResourceNode> result = new HashSet<ResourceNode>(assocs.size());
+        for (Statement assoc : assocs) {
+            if (assoc.getObject().isResourceNode()) {
+                result.add(assoc.getObject().asResource());
+            }
+        }
+        return result;
+    }
+
+    // -- PREDICATES --------------------------------------
 	
 	public static Set<ResourceID> predicates(final ResourceNode subject, final ResourceID predicate){
-		return predicates(subject.getAssociations(predicate));
+		return predicates(associations(subject, predicate));
 	}
+
+
+    public static Set<ResourceID> predicates(final Collection<Statement> assocs){
+        final Set<ResourceID> result = new HashSet<ResourceID>(assocs.size());
+        for (Statement assoc : assocs) {
+            result.add(assoc.getPredicate());
+        }
+        return result;
+    }
+
+    // -- SUBJECTS ----------------------------------------
+
+    public static Set<ResourceID> subjects(final ResourceNode subject, final ResourceID predicate){
+        return subjects(associations(subject, predicate));
+    }
 	
 	public static Set<ResourceID> subjects(final Collection<Statement> assocs){
 		final Set<ResourceID> result = new HashSet<ResourceID>(assocs.size());
@@ -205,23 +276,7 @@ public class SNOPS {
 		}
 		return result;
 	}
-	
-	public static Set<SemanticNode> objects(final Collection<Statement> assocs){
-		final Set<SemanticNode> result = new HashSet<SemanticNode>(assocs.size());
-		for (Statement assoc : assocs) {
-			result.add(assoc.getObject());
-		}
-		return result;
-	}
-	
-	public static Set<ResourceID> predicates(final Collection<Statement> assocs){
-		final Set<ResourceID> result = new HashSet<ResourceID>(assocs.size());
-		for (Statement assoc : assocs) {
-			result.add(assoc.getPredicate());
-		}
-		return result;
-	}
-	
+
 	// -- MODIFICATIONS -----------------------------------
 
     /**
@@ -239,21 +294,22 @@ public class SNOPS {
 	 * @param contexts The contexts.
 	 */
 	public static Statement assure(final ResourceNode subject, final ResourceID predicate, final SemanticNode object, final Context... contexts){
-		final Set<Statement> all = subject.getAssociations(predicate);
-		if (all.size() > 1) {
-			remove(subject, predicate);
-		}
-		if (all.isEmpty()) {
-			return associate(subject, predicate, object, contexts);	
-		} else {
-			final Statement existing = all.iterator().next();
-			if (!Infra.equals(existing.getObject(), object)) {
-				subject.removeAssociation(existing);
-				return associate(subject, predicate, object, contexts);
-			} else {
-				return existing;
-			}
-		}
+        final Statement statement = new DetachedStatement(subject, predicate, object, contexts);
+		final Set<Statement> all = associations(subject, predicate);
+        if (all.isEmpty()) {
+            return subject.addAssociation(predicate, object, contexts);
+        }
+        else if (all.contains(statement)) {
+            for (Statement existing : all) {
+                if (!statement.equals(existing)) {
+                    subject.removeAssociation(existing);
+                }
+            }
+            return statement;
+        } else {
+            remove(subject, predicate);
+            return subject.addAssociation(predicate, object, contexts);
+        }
 	}
 	
 	/**
@@ -271,7 +327,9 @@ public class SNOPS {
 			node = new SNText((String) object);
 		} else if (object instanceof Integer) {
 			node = new SNScalar((Integer) object);
-		} else {
+        } else if (object instanceof Boolean) {
+            node = new SNBoolean((Boolean) object);
+        } else {
 			throw new IllegalArgumentException("Unsupported value: " + object);
 		}
 		return assure(subject, predicate, node, contexts);
@@ -287,7 +345,7 @@ public class SNOPS {
 	public static void assure(final ResourceNode subject, final ResourceID predicate, final Collection<? extends SemanticNode> objects, final Context... contexts){
 		final List<SemanticNode> existing = new ArrayList<SemanticNode>();
 		// 1st: remove no longer existing
-		for(Statement assoc: subject.getAssociations(predicate)){
+		for(Statement assoc: associations(subject, predicate)){
 			if (!objects.contains(assoc.getObject())){
 				subject.removeAssociation(assoc);
 			} else {
@@ -296,7 +354,7 @@ public class SNOPS {
 		}
 		// 2nd: add not yet existing
 		for (SemanticNode current: objects){
-			if (!existing.contains(objects)){
+			if (!existing.contains(current)){
 				associate(subject, predicate, current, contexts);
 			}
 		}
@@ -308,7 +366,7 @@ public class SNOPS {
 	 * @param predicate The predicate.
 	 */
 	public static void remove(final ResourceNode subject, ResourceID predicate) {
-		for(Statement assoc: subject.getAssociations(predicate)) {
+		for(Statement assoc: associations(subject, predicate)) {
 			subject.removeAssociation(assoc);
 		}
 	}
@@ -322,7 +380,7 @@ public class SNOPS {
 	 */
 	public static boolean remove(final ResourceNode subject, ResourceID predicate, SemanticNode object) {
 		boolean removed = false;
-		for(Statement assoc: subject.getAssociations(predicate)) {
+		for(Statement assoc: associations(subject, predicate)) {
 			if (assoc.getObject().equals(object)) {
 				subject.removeAssociation(assoc);	
 				removed = true;

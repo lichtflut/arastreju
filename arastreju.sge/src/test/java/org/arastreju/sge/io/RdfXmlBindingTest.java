@@ -15,14 +15,9 @@
  */
 package org.arastreju.sge.io;
 
-import java.io.IOException;
-import java.util.Arrays;
-
 import junit.framework.Assert;
-
 import org.arastreju.sge.SNOPS;
 import org.arastreju.sge.apriori.RDFS;
-import org.arastreju.sge.context.SimpleContextID;
 import org.arastreju.sge.model.DefaultSemanticGraph;
 import org.arastreju.sge.model.SemanticGraph;
 import org.arastreju.sge.model.Statement;
@@ -31,6 +26,9 @@ import org.arastreju.sge.model.nodes.SNResource;
 import org.arastreju.sge.naming.QualifiedName;
 import org.junit.Test;
 import org.openrdf.rio.RDFHandlerException;
+
+import java.io.IOException;
+import java.util.Arrays;
 
 /**
  * <p>

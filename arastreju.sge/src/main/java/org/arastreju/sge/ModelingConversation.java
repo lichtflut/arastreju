@@ -15,13 +15,6 @@
  */
 package org.arastreju.sge;
 
-import org.arastreju.sge.model.ResourceID;
-import org.arastreju.sge.model.SemanticGraph;
-import org.arastreju.sge.model.Statement;
-import org.arastreju.sge.model.nodes.ResourceNode;
-import org.arastreju.sge.naming.QualifiedName;
-import org.arastreju.sge.persistence.TransactionControl;
-import org.arastreju.sge.query.Query;
 
 /**
  * <p>
@@ -34,109 +27,6 @@ import org.arastreju.sge.query.Query;
  *
  * @author Oliver Tigges
  */
-public interface ModelingConversation {
-	
-	/**
-	 * Adds a statement to the semantic model.
-	 * @param stmt The statement.
-	 * @return The attached association.
-	 */
-	void addStatement(Statement stmt);
-	
-	/**
-	 * Removed a statement from the semantic model.
-	 * @param stmt The statement.
-	 * @return boolean indicating if a statement has been removed.
-	 */
-	boolean removeStatement(Statement stmt);
-	
-	// -- QUERY -------------------------------------------
-	
-	/**
-	 * Creates a new query.
-	 * @return The query.
-	 */
-	Query createQuery();
-	
-	// -- RESOURCE NODE -----------------------------------
-	
-	/**
-	 * Tries to find an existing resource with given qualified name. The returned node will be attached.
-	 * If no resource is found null will be returned. 
-	 * @param qn The qualified name.
-	 * @return The corresponding resource or <code>null</code>.
-	 */
-	ResourceNode findResource(QualifiedName qn);
-	
-	/**
-	 * Resolves the resource referenced by given resource identifier. The returned node will be attached.
-	 * If there does not exist a corresponding resource, it will be created.
-	 * Thus there will never be returned null. 
-	 * @param resourceID The resource identifier.
-	 * @return The corresponding resource node.
-	 */
-	ResourceNode resolve(ResourceID resourceID);
-	
-	/**
-	 * Attach the resource to the conversation. 
-	 * All changes to the attached node will immediately be persistent.
-	 * @param node The node to be attached.
-	 * @return The attached node.
-	 */
-	void attach(ResourceNode node);
-	
-	/**
-	 * Detach the given node from the conversation.
-	 * All following changes will not affect the underlying store.
-	 * @param node The node to be detached.
-	 */
-	void detach(ResourceNode node);
-	
-	/**
-	 * Reset a detached node to the state in the persisted state.
-	 * If the node is attached this call will have no effect.
-	 * @param node The node to be reseted.
-	 */
-	void reset(ResourceNode node);
-	
-	/**
-	 * Removes the resource identified by given ID and all of it's incoming
-	 * and outgoing associations. 
-	 * @param id The ID of the resource to be removed.
-	 */
-	void remove(ResourceID id);
-	
-	// -- SEMANTIC GRAPH ----------------------------------
-	
-	/**
-	 * Attach all statements of the graph.
-	 * @param graph The graph to be attached.
-	 */
-	void attach(SemanticGraph graph);
-	
-	/**
-	 * Detach all statements of the graph.
-	 * @param graph The graph to be detached.
-	 */
-	void detach(SemanticGraph graph);
-	
-	// -----------------------------------------------------
-	
-	/**
-	 * Get the context of the current conversation.
-	 * @return The conversation context.
-	 */
-	ConversationContext getConversationContext();
-	
-	/**
-	 * Begins a new transaction and returns the corresponding control object.
-	 * @return The tx control object.
-	 */
-	TransactionControl beginTransaction();
-	
-	/**
-	 * Finish the conversation and release all resources.
-	 */
-	void close();
+public interface ModelingConversation extends Conversation {
 
 }

@@ -60,9 +60,7 @@ public abstract class AbstractAssociationKeeper implements AssociationKeeper, Se
 	
 	// -----------------------------------------------------
 	
-	/**
-	 * {@inheritDoc}
-	 */
+	@Override
 	public Set<Statement> getAssociations() {
 		if (!resolved){
 			if (associations != null && !associations.isEmpty()){
@@ -74,18 +72,14 @@ public abstract class AbstractAssociationKeeper implements AssociationKeeper, Se
 		return getAssociationsDirectly();
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
+    @Override
 	public void addAssociation(final Statement assoc) {
 		getAssociations().add(assoc);
 	}
 	
 	// ----------------------------------------------------
 
-	/**
-	 * {@inheritDoc}
-	 */
+    @Override
 	public boolean removeAssociation(final Statement assoc) {
 		if (removedAssociations == null) {
 			removedAssociations = new HashSet<Statement>();
@@ -93,10 +87,8 @@ public abstract class AbstractAssociationKeeper implements AssociationKeeper, Se
 		removedAssociations.add(assoc);
 		return getAssociations().remove(assoc);
 	}
-	
-	/**
-	 * {@inheritDoc}
-	 */
+
+    @Override
 	public Set<Statement> getAssociationsForRemoval() {
 		if (removedAssociations == null) {
 			return Collections.emptySet();
@@ -106,9 +98,6 @@ public abstract class AbstractAssociationKeeper implements AssociationKeeper, Se
 	
 	// -----------------------------------------------------
 	
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public String toString() {
 		final StringBuilder sb = new StringBuilder(getClass().getSimpleName());
@@ -143,10 +132,6 @@ public abstract class AbstractAssociationKeeper implements AssociationKeeper, Se
 	protected AbstractAssociationKeeper markResolved(){
 		resolved = true;
 		return this;
-	}
-	
-	protected boolean isResolved() {
-		return resolved;
 	}
 	
 }
