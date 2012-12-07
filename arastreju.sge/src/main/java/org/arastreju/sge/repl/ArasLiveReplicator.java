@@ -110,9 +110,9 @@ public abstract class ArasLiveReplicator {
 	 */
 	public void dispatch() {
 		for (GraphOp g : replLog) {
-			dispatcher.queue(txSeq + " " + g.toProtocolString());
+			dispatcher.queue(txSeq, g.toProtocolString());
 		}
-		dispatcher.queue((txSeq++) + " EOT"); //end of transaction marker
+		dispatcher.queue(txSeq++, "EOT"); //end of transaction marker
 	}
 
 	/**
@@ -177,10 +177,18 @@ public abstract class ArasLiveReplicator {
 	private class Dispatcher implements Runnable {
 		private final Logger logger = LoggerFactory.getLogger(ArasLiveReplicator.Dispatcher.class);
 
-		private final List<String> sendQ = new LinkedList<String>();
-
 		private final String rcvHost;
 		private final int rcvPort;
+
+		/* the following four members are fiddled with by multiple threads.
+		 * txBackup, our main structure used to store transactions in, also 
+		 *  functions as the lock to serialize access with.
+		 * thus, access to any of these may only happen inside of a
+		 *  synchronize(txBackup){}-block*/
+		private final Map<Integer, List<String>> txMap = new HashMap<Integer, List<String>>();
+		private int minTxSeq = -1; //stores the lowest (a.k.a. earliest) tx we remember
+		private int curTxSeq = -1; //stores the highest tx we saw, finished or not
+		private boolean curTxDone = false; //stores whether tx# curTxSeq has seen its "EOT" already
 
 		// ------------------------------------------------
 
@@ -191,57 +199,142 @@ public abstract class ArasLiveReplicator {
 
 		// ------------------------------------------------
 
-		void queue(String s) {
-			synchronized (sendQ) {
-				sendQ.add(s);
-				sendQ.notifyAll();
+		void queue(int txSeq, String s) {
+			synchronized (txMap) {
+				List<String> l = txMap.get(txSeq);
+
+				if (l == null)
+					txMap.put(txSeq, (l = new LinkedList<String>()));
+
+				l.add(s);
+
+				txMap.notifyAll();
+
+				curTxSeq = txSeq;
+				curTxDone = s.equals("EOT");
+				if (minTxSeq == -1)
+					minTxSeq = curTxSeq; //this is the first
 			}
+
 		}
 
 		@Override
 		public void run() {
 			BufferedWriter w;
+			BufferedReader r;
+			Socket s;
+
+			int nextTxSeq; //stores the next tx we're going to send
+
+			while (!shutdownRequested()) {
+				try {
+					s = connectSocket(); //retries on failure, except when interrupted
+					logger.debug("connected a socket (to " + rcvHost + ":" + rcvPort + ")");
+				} catch (InterruptedException e) {
+					logger.warn("interrupted while connecting (to " + rcvHost + ":" + rcvPort + ")");
+					continue; //re-evaluate shutdown condition
+				}
+
+				try {
+					w = new BufferedWriter(new OutputStreamWriter(s.getOutputStream()));
+					r = new BufferedReader(new InputStreamReader(s.getInputStream()));
+
+					/* receiver tells us the last complete transaction it saw,
+					 * or -1 if it didn't see any transaction complete so far.
+					 * therefore we know where to resume operation:	 */
+					nextTxSeq = Integer.parseInt(r.readLine()) + 1;
+
+					logger.debug("(re)starting replication with tx#" + nextTxSeq);
+
+					while (!shutdownRequested()) {
+						boolean shutdown = false;
+						List<String> opList = null;
+
+						/* the receiver is free to tell us about his successes,
+						 * allowing us to purge the table of transactions we
+						 * won't need anymore. */
+						if (r.ready()) {
+							int good = Integer.parseInt(r.readLine());
+
+							logger.debug("receiver acknowledged tx#" + good);
+
+							synchronized (txMap) {
+								/* minTxSeq does have a value >= 0 by now, since 
+								 * /something/ must have been queue()d in the past
+								 * for the receiver to tell us about that he got it */
+								for (int i = minTxSeq; i <= good; i++) {
+									txMap.remove(i);
+								}
+								minTxSeq = good + 1;
+							}
+
+						}
+
+						synchronized (txMap) {
+							/* there isn't anything to do for us as long as
+							 * ``nextTxSeq > curTxSeq'' (meaning we're waiting
+							 *  for another tx to show up), or as long as the tx 
+							 *  we're about to send isn't fully queue()'d yet.
+							 * so we wait until there's work to do.
+							 * in case of a requested shutdown we abort anyway.*/
+							while (!(shutdown = shutdownRequested())
+							        && (nextTxSeq > curTxSeq
+							                || (nextTxSeq == curTxSeq && !curTxDone))) {
+								try {
+									txMap.wait(1000); //arbitrary timeout, 1s
+								} catch (InterruptedException e) {
+									logger.warn("interrupted while waiting for data");
+									continue; //just for clarity
+								}
+							}
+
+							if (shutdown)
+								break;
+
+							/* the other thread won't touch this list
+							 * anymore (since the transaction is done)
+							 * so it's safe to deal with it outside the lock */
+							opList = txMap.get(nextTxSeq);
+						}
+
+						for (String line : opList) {
+							logger.debug("writing " + line);
+							w.write(line + "\n");
+						}
+						w.flush();
+						logger.debug("dispatched tx#" + nextTxSeq);
+						nextTxSeq++;
+					}
+				} catch (IOException e) { //thrown by get{In,Out}putStream(), readLine(), write(), flush()
+					e.printStackTrace();
+					try {
+						s.close();
+					} catch (IOException e1) {
+						/* we don't care for this one, we just want to
+						 *  get rid of the socket and start over. */
+					}
+				}
+			}
+
+			logger.warn("terminating " + (shutdownRequested() ? "as requested" : "abnormally"));
+		}
+
+		private boolean shutdownRequested() {
+			return false;//TODO
+		}
+
+		private Socket connectSocket() throws InterruptedException {
 			Socket s = null;
 			do {
 				try {
 					s = new Socket(rcvHost, rcvPort);
 				} catch (IOException e) {
-					e.printStackTrace();
-					try {
-						Thread.sleep(1000);
-					} catch (InterruptedException e1) {
-						e1.printStackTrace();
-					}
+					logger.warn("could not connect to receiver at " + rcvHost + ":" + rcvPort + " - retrying");
+					Thread.sleep(1000);
 				}
 			} while (s == null);
 
-			try {
-				s.shutdownInput();
-				w = new BufferedWriter(new OutputStreamWriter(s.getOutputStream()));
-				for (;;) {
-					String item;
-					synchronized (sendQ) {
-						while (sendQ.isEmpty()) {
-							try {
-								sendQ.wait();
-							} catch (InterruptedException e) {
-								logger.warn("Dispatcher interrupted");
-								e.printStackTrace();
-								w.close();
-								return; // thread dies when interrupted
-							}
-						}
-						item = sendQ.remove(0);
-					}
-					logger.debug("writing "+item);
-					w.write(item + "\n");
-					w.flush();
-				}
-			} catch (IOException e) {
-				logger.warn("Dispatcher caught IOException");
-				e.printStackTrace();
-			}
-			logger.warn("Dispatcher thread terminating");
+			return s;
 		}
 	}
 
