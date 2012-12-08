@@ -126,7 +126,13 @@ public final class Arastreju {
             identifier = createDomainIdentifier(domain);
             contextMap.put(ctxKey, identifier);
         }
-        return factory.create(identifier);
+        ArastrejuGate g = factory.create(identifier);
+        
+        if (g.getTxProvider() != null) { //XXX remove the conditional once the rdb backend got its txprovider right
+        	g.getTxProvider().initRepl(profile);
+        }
+        
+        return g;
     }
 
     /**

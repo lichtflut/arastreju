@@ -54,6 +54,14 @@ public class ArastrejuProfile implements GateLifecycleListener {
 
     public static final String ENABLE_VIRTUAL_DOMAINS = "org.arastreju.enable-virtual-domains";
 	
+	public static final String REPLICATOR_RECEIVER_PORT = "org.arastreju.repl.rcv.port";
+
+	public static final String REPLICATOR_RECEIVER_ADDR = "org.arastreju.repl.rcv.addr";
+
+	public static final String REPLICATOR_DISPATCHER_PORT = "org.arastreju.repl.dsp.port";
+
+	public static final String REPLICATOR_DISPATCHER_HOST = "org.arastreju.repl.dsp.host";
+
 	// ----------------------------------------------------
 	
 	private static final String FILE_SUFFIX = ".profile";

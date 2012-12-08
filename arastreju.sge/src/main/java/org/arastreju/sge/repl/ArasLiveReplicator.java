@@ -61,7 +61,6 @@ public abstract class ArasLiveReplicator {
 
 	public ArasLiveReplicator() {
 		replLog = new LinkedList<GraphOp>();
-		logger.debug("ArasLiveReplicator()");
 	}
 
 	// -- General interface -------------------------------
@@ -74,22 +73,13 @@ public abstract class ArasLiveReplicator {
 	 * @param rcvPort port used in said connect()
 	 */
 
-	/* get in the addresses/ports /somehow/ for testing. see also below and TxProvider
-	static LinkedList<int[]> deq = new LinkedList<int[]>();
-	public static int[] pop() {
-		return deq.removeFirst();
-	}
-	public static void push(int[] is) {
-	    deq.addLast(is);
-    }*/
 
 	public void init(String lstAddr, int lstPort, String rcvHost, int rcvPort) {
-		logger.debug("init()");
-		//int [] p = pop();
-		//new Thread(new Receiver(lstAddr, p[0])).start();
-		//new Thread(dispatcher = new Dispatcher("127.0.0.1", p[1])).start();
-		new Thread(new Receiver(lstAddr, lstPort)).start();
-		new Thread(dispatcher = new Dispatcher(rcvHost, rcvPort)).start();
+		new Thread(new Receiver(lstAddr, lstPort), "RCV-"+lstPort).start();
+		new Thread(dispatcher = new Dispatcher(rcvHost, rcvPort), "DSP-"+rcvPort).start();
+		logger.info("replication threads started. "
+				+ "receiver listens on "+lstAddr+":"+lstPort+", "
+				+ "dispatcher connects to "+rcvHost+":"+rcvPort);
 	}
 	
 	// -- Dispatcher interface ----------------------------
@@ -303,8 +293,8 @@ public abstract class ArasLiveReplicator {
 						}
 
 						for (String line : opList) {
-							logger.debug("writing " + line);
-							w.write(line + "\n");
+							logger.debug("writing '" + line + "'");
+							w.write(nextTxSeq + " " + line + "\n");
 						}
 						w.flush();
 						logger.debug("dispatched tx#" + nextTxSeq);
@@ -396,8 +386,10 @@ public abstract class ArasLiveReplicator {
 					logger.debug("bound to, and now listening on: " + lstAddr + ":" + lstPort);
 				} catch (InterruptedException e2) {
 					logger.warn("interrupted while trying to bind()/listen() on/to: " + lstAddr + ":" + lstPort);
-					continue; //re-evaluate shutdown condition
 				}
+				
+				if (srv != null)
+					break;
 			}
 
 			BufferedReader r;
@@ -443,6 +435,8 @@ public abstract class ArasLiveReplicator {
 						if ((line = line.trim()).length() == 0)
 							continue;
 
+						logger.debug("read: '" + line + "'");
+						
 						int curTx = process(line);
 						
 						boolean isEOT = line.endsWith("EOT");

@@ -16,6 +16,7 @@
  */
 package org.arastreju.sge.persistence;
 
+import org.arastreju.sge.ArastrejuProfile;
 import org.arastreju.sge.repl.ArasLiveReplicator;
 import org.arastreju.sge.repl.NoOpReplicator;
 import org.slf4j.Logger;
@@ -43,12 +44,15 @@ public abstract class TxProvider {
 	 * Constructor.
 	 */
 	public TxProvider() {
-		logger.debug("constructing");
 	}
 	
-	public void initRepl() {
+	public void initRepl(ArastrejuProfile profile) {
 		this.repl = createReplicator();
-		//repl.init(listenAddr, listenPort, rcvHost, rcvPort);// XXX put setting where?
+		String rcvAddr = profile.getProperty(ArastrejuProfile.REPLICATOR_RECEIVER_ADDR);
+		String dspHost = profile.getProperty(ArastrejuProfile.REPLICATOR_DISPATCHER_HOST);
+		int rcvPort = Integer.parseInt(profile.getProperty(ArastrejuProfile.REPLICATOR_RECEIVER_PORT));
+		int dspPort = Integer.parseInt(profile.getProperty(ArastrejuProfile.REPLICATOR_DISPATCHER_PORT));
+		repl.init(rcvAddr, rcvPort, dspHost, dspPort);
 	}
 	
 	// -----------------------------------------------------

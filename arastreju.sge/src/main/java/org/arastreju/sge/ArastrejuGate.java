@@ -17,6 +17,7 @@ package org.arastreju.sge;
 
 
 import org.arastreju.sge.context.Context;
+import org.arastreju.sge.persistence.TxProvider;
 
 /**
  * <p>
@@ -58,4 +59,5 @@ public interface ArastrejuGate {
      */
     void close();
 	
+    TxProvider getTxProvider();
 }

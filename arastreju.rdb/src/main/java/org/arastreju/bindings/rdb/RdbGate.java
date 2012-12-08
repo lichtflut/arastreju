@@ -21,6 +21,7 @@ import org.arastreju.sge.ModelingConversation;
 import org.arastreju.sge.Organizer;
 import org.arastreju.sge.context.Context;
 import org.arastreju.sge.context.DomainIdentifier;
+import org.arastreju.sge.persistence.TxProvider;
 import org.arastreju.sge.spi.abstracts.AbstractArastrejuGate;
 
 public class RdbGate extends AbstractArastrejuGate {
@@ -62,4 +63,10 @@ public class RdbGate extends AbstractArastrejuGate {
 
 	}
 
+	@Override
+	public TxProvider getTxProvider() {
+		/* TODO we need a way to get the txprovider at this point.
+		 * see how Neo4jGate.java does it */
+		return null; //we return null for now
+	}
 }

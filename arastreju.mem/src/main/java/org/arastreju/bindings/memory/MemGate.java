@@ -7,6 +7,7 @@ import org.arastreju.sge.ModelingConversation;
 import org.arastreju.sge.Organizer;
 import org.arastreju.sge.context.Context;
 import org.arastreju.sge.context.DomainIdentifier;
+import org.arastreju.sge.persistence.TxProvider;
 import org.arastreju.sge.spi.abstracts.AbstractArastrejuGate;
 
 /**
@@ -50,4 +51,9 @@ public class MemGate extends AbstractArastrejuGate {
     public void close() {
         throw new NotYetImplementedException();
     }
+
+	@Override
+	public TxProvider getTxProvider() {
+		throw new NotYetImplementedException();
+	}
 }
