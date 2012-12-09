@@ -357,7 +357,6 @@ public abstract class ArasLiveReplicator implements ProfileCloseListener {
 					logger.debug("(re)starting replication with tx#" + nextTxSeq);
 
 					while (!shutdownRequested()) {
-						boolean shutdown = false;
 						List<String> opList = null;
 
 						/* the receiver is free to tell us about his successes,
@@ -387,7 +386,7 @@ public abstract class ArasLiveReplicator implements ProfileCloseListener {
 							 *  we're about to send isn't fully queue()'d yet.
 							 * so we wait until there's work to do.
 							 * in case of a requested shutdown we abort anyway.*/
-							while (!(shutdown = shutdownRequested())
+							while (!shutdownRequested()
 							        && (nextTxSeq > curTxSeq
 							                || (nextTxSeq == curTxSeq && !curTxDone))) {
 								try {
@@ -398,7 +397,7 @@ public abstract class ArasLiveReplicator implements ProfileCloseListener {
 								}
 							}
 
-							if (shutdown)
+							if (shutdownRequested())
 								break;
 
 							/* the other thread won't touch this list
