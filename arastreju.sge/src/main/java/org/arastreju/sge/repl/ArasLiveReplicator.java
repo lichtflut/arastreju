@@ -8,8 +8,10 @@ import java.net.*;
 import java.util.*;
 import java.util.regex.*;
 
+import org.arastreju.sge.ArastrejuProfile;
 import org.arastreju.sge.model.*;
 import org.arastreju.sge.model.nodes.*;
+import org.arastreju.sge.spi.ProfileCloseListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -50,11 +52,12 @@ import org.slf4j.LoggerFactory;
  *
  * @author Timo Buhrmester
  */
-public abstract class ArasLiveReplicator {
+public abstract class ArasLiveReplicator implements ProfileCloseListener {
 	private final Logger logger = LoggerFactory.getLogger(ArasLiveReplicator.class);
 	
 	private List<GraphOp> replLog;
 	private Dispatcher dispatcher;
+	private Receiver receiver;
 	private int txSeq = 0;
 
 	// -- CONSTRUCTOR -------------------------------------
@@ -75,13 +78,24 @@ public abstract class ArasLiveReplicator {
 
 
 	public void init(String lstAddr, int lstPort, String rcvHost, int rcvPort) {
-		new Thread(new Receiver(lstAddr, lstPort), "RCV-"+lstPort).start();
-		new Thread(dispatcher = new Dispatcher(rcvHost, rcvPort), "DSP-"+rcvPort).start();
+		(receiver = new Receiver(lstAddr, lstPort, "RCV-" + lstPort)).start();
+		(dispatcher = new Dispatcher(rcvHost, rcvPort, "DSP-" + rcvPort)).start();
 		logger.info("replication threads started. "
 				+ "receiver listens on "+lstAddr+":"+lstPort+", "
 				+ "dispatcher connects to "+rcvHost+":"+rcvPort);
 	}
-	
+
+	public void shutdown() {
+		dispatcher.requestShutdown();
+		receiver.requestShutdown();
+	}
+
+	/* if you override this again, be sure to call super.onClosed()! */
+	@Override
+	public void onClosed(final ArastrejuProfile profile) {
+		shutdown();
+	}
+
 	// -- Dispatcher interface ----------------------------
 
 	/**
@@ -162,6 +176,132 @@ public abstract class ArasLiveReplicator {
 
 	/**
 	 * <p>
+	 *  Superclass of both Receiver and Dispatcher.
+	 *  Commonly shared features are socket operations and the
+	 *    ability to request/check for shutdown
+	 * </p>
+	 *
+	 * Created: 16.11.2012
+	 *
+	 * @author Timo Buhrmester
+	 */
+	private abstract class ReplicatorThread extends Thread {
+
+		private boolean shutdown = false;
+
+		public ReplicatorThread(String threadName) {
+			super(threadName);
+		}
+
+		public void requestShutdown() {
+			synchronized (this) {
+				shutdown = true;
+			}
+			logger().warn("shutdown requested, setting flag and interrupting thread");
+			interrupt();
+		}
+
+		protected abstract Logger logger(); //for meaningful debug messages
+
+		protected synchronized boolean shutdownRequested() {
+			return shutdown;
+		}
+
+		/* try hard (i.e. retry on failure) to connect a socket. */
+		protected Socket connectSocket(String host, int port) throws InterruptedException {
+			Socket s = null;
+			do {
+				try {
+					s = new Socket(host, port);
+				} catch (IOException e) {
+					logger.warn("could not connect to " + host + ":" + port + " - retrying");
+					Thread.sleep(1000);
+				}
+			} while (s == null);
+
+			return s;
+		}
+
+		/* try hard (i.e. retry on failure) to spawn a ServerSocket on ifaddr:port. */
+		protected ServerSocket makeListeningSocket(String ifaddr, int port) throws InterruptedException {
+			ServerSocket srv = null;
+			
+			do {
+				try {
+					srv = new ServerSocket(port, 0, InetAddress.getByName(ifaddr));
+					/* we need a separate try/catch block to distinguish
+					 * the exception from those potentially thrown by
+					 * the ServerSocket() ctor. */
+					try {
+						srv.setSoTimeout(1000); //accept() timeout
+						srv.setReuseAddress(true);
+					} catch (SocketException e) {
+						logger.warn("failed to enable SO_TIMEOUT or SO_REUSEADDR on ServerSocket."
+						        + "We might get stuck on shutdown.");
+					}
+					
+					logger.debug("bound to, and now listening on: " + ifaddr + ":" + port);
+					
+				} catch (IOException e) {
+					logger.warn("could not bind()/listen() to/on "
+					        + ifaddr + ":" + port + " - retrying");
+					Thread.sleep(1000);
+				}
+			} while (srv == null);
+			
+			return srv;
+		}
+
+		/* try hard (i.e. retry on failure) to accept a connection 
+		 * may throw ListenerException if the given ServerSocket breaks. */ 
+		protected Socket acceptSocket(ServerSocket srv) throws InterruptedException, ListenerException {
+			Socket s = null;
+			do {
+				if (Thread.interrupted()) {
+					throw new InterruptedException("interrupted accept() loop");
+				}
+				
+				if (srv.isClosed() || !srv.isBound()) {
+					throw new ListenerException();
+				}
+				
+				try {
+					s = srv.accept();
+					try {
+						s.setSoTimeout(1000);
+					} catch (SocketException e) {
+						logger.warn("failed to enable SO_TIMEOUT on accept()ed Socket."
+						        + "We might get stuck on shutdown.");
+					}
+				} catch (SocketTimeoutException e) {
+					// ignore, just re-eval interrupt condition
+				} catch (IOException e) {
+					logger.warn("failed to accept a connection (on "
+					        + srv.getLocalSocketAddress() + ":"
+					        + srv.getLocalPort() + " - retrying");
+				}
+			} while (s == null);
+
+			return s;
+		}
+
+		/* wrapper for close(), to get rid of potential IOExceptions which may
+		 *  be thrown in close()'s implicit call to flush().
+		 * There are cases where it's important to catch and handle it,
+		 * but the replicator isn't one (as we have our own startover mechanism). */
+		protected void closeSocket(Socket s) {
+			try { if (s != null) s.close(); } catch (IOException e) {}
+		}
+
+		protected void closeSocket(ServerSocket s) {
+			try { if (s != null) s.close(); } catch (IOException e) {}
+		}
+		
+		protected class ListenerException extends Exception {}
+	}
+
+	/**
+	 * <p>
 	 *  Maintains a socket connection to the receiving part,
 	 *  single task is to transmit whatever appears on our sendQ
 	 *  See doc of parent for more information
@@ -171,17 +311,14 @@ public abstract class ArasLiveReplicator {
 	 *
 	 * @author Timo Buhrmester
 	 */
-	private class Dispatcher implements Runnable {
+	private class Dispatcher extends ReplicatorThread {
 		private final Logger logger = LoggerFactory.getLogger(ArasLiveReplicator.Dispatcher.class);
 
 		private final String rcvHost;
 		private final int rcvPort;
 
 		/* the following four members are fiddled with by multiple threads.
-		 * txBackup, our main structure used to store transactions in, also 
-		 *  functions as the lock to serialize access with.
-		 * thus, access to any of these may only happen inside of a
-		 *  synchronize(txBackup){}-block*/
+		 * we synchronize on 'this' when accessing any of them. */
 		private final Map<Integer, List<String>> txMap = new HashMap<Integer, List<String>>();
 		private int minTxSeq = 0; //stores the lowest (a.k.a. earliest) tx we remember
 		private int curTxSeq = -1; //stores the highest tx we saw, finished or not
@@ -189,29 +326,13 @@ public abstract class ArasLiveReplicator {
 
 		// ------------------------------------------------
 
-		Dispatcher(String receiverHost, int receiverPort) {
+		Dispatcher(String receiverHost, int receiverPort, String threadName) {
+			super(threadName);
 			rcvHost = receiverHost;
 			rcvPort = receiverPort;
 		}
 
 		// ------------------------------------------------
-
-		void queue(int txSeq, String s) {
-			synchronized (txMap) {
-				List<String> l = txMap.get(txSeq);
-
-				if (l == null)
-					txMap.put(txSeq, (l = new LinkedList<String>()));
-
-				l.add(s);
-
-				curTxSeq = txSeq;
-				curTxDone = s.equals("EOT");
-				
-				txMap.notifyAll();
-			}
-
-		}
 
 		@Override
 		public void run() {
@@ -223,7 +344,7 @@ public abstract class ArasLiveReplicator {
 
 			while (!shutdownRequested()) {
 				try {
-					s = connectSocket(); //retries on failure, except when interrupted
+					s = connectSocket(rcvHost, rcvPort); //retries on failure, except when interrupted
 					logger.debug("connected a socket (to " + rcvHost + ":" + rcvPort + ")");
 				} catch (InterruptedException e) {
 					logger.warn("interrupted while connecting (to " + rcvHost + ":" + rcvPort + ")");
@@ -253,8 +374,8 @@ public abstract class ArasLiveReplicator {
 
 							logger.debug("receiver acknowledged tx#" + good);
 
-							synchronized (txMap) {
-								/* minTxSeq does have a value >= 0 by now, since 
+							synchronized (this) {
+								/* minTxSeq does have a value >= 0 by now, since
 								 * /something/ must have been queue()d in the past
 								 * for the receiver to tell us about that he got it */
 								for (int i = minTxSeq; i <= good; i++) {
@@ -265,7 +386,7 @@ public abstract class ArasLiveReplicator {
 
 						}
 
-						synchronized (txMap) {
+						synchronized (this) {
 							/* there isn't anything to do for us as long as
 							 * ``nextTxSeq > curTxSeq'' (meaning we're waiting
 							 *  for another tx to show up), or as long as the tx 
@@ -276,7 +397,7 @@ public abstract class ArasLiveReplicator {
 							        && (nextTxSeq > curTxSeq
 							                || (nextTxSeq == curTxSeq && !curTxDone))) {
 								try {
-									txMap.wait(1000); //arbitrary timeout, 1s
+									wait(1000); //arbitrary timeout, 1s
 								} catch (InterruptedException e) {
 									logger.warn("interrupted while waiting for data");
 									continue; //just for clarity
@@ -313,30 +434,25 @@ public abstract class ArasLiveReplicator {
 
 		// ------------------------------------------------
 
-		private boolean shutdownRequested() {
-			return false;//TODO
+		synchronized void queue(int txSeq, String s) {
+			List<String> l = txMap.get(txSeq);
+
+			if (l == null)
+				txMap.put(txSeq, (l = new LinkedList<String>()));
+
+			l.add(s);
+
+			curTxSeq = txSeq;
+			curTxDone = s.equals("EOT");
+
+			notifyAll();
 		}
 
-		private Socket connectSocket() throws InterruptedException {
-			Socket s = null;
-			do {
-				try {
-					s = new Socket(rcvHost, rcvPort);
-				} catch (IOException e) {
-					logger.warn("could not connect to receiver at " + rcvHost + ":" + rcvPort + " - retrying");
-					Thread.sleep(1000);
-				}
-			} while (s == null);
+		// ------------------------------------------------
 
-			return s;
-		}
-
-		/* wrapper for close(), to get rid of potential IOExceptions which may
-		 *  be thrown in close()'s implicit call to flush().
-		 * There are cases where it's important to catch and handle it,
-		 * but the replicator isn't one (as we have our own startover mechanism). */
-		private void closeSocket(Socket s) {
-			try { s.close(); } catch (IOException e) {}
+		@Override
+		protected Logger logger() {
+			return logger;
 		}
 	}
 
@@ -351,7 +467,7 @@ public abstract class ArasLiveReplicator {
 	 *
 	 * @author Timo Buhrmester
 	 */
-	private class Receiver implements Runnable {
+	private class Receiver extends ReplicatorThread {
 		private final Logger logger = LoggerFactory.getLogger(ArasLiveReplicator.Receiver.class);
 
 		private final String lstAddr;
@@ -368,7 +484,8 @@ public abstract class ArasLiveReplicator {
 		 *   usually equivalent to "0.0.0.0").
 		 * @param receiverPort the port to listen() on, >= 1
 		 */
-		Receiver(String listenAddr, int listenPort) {
+		Receiver(String listenAddr, int listenPort, String threadName) {
+			super(threadName);
 			lstAddr = listenAddr;
 			lstPort = listenPort;
 		}
@@ -378,26 +495,22 @@ public abstract class ArasLiveReplicator {
 		@Override
 		public void run() {
 
-			/* first we try to get a server going */
-			ServerSocket srv = null;
-			while (!shutdownRequested()) {
-				try {
-					srv = makeListeningSocket();
-					logger.debug("bound to, and now listening on: " + lstAddr + ":" + lstPort);
-				} catch (InterruptedException e2) {
-					logger.warn("interrupted while trying to bind()/listen() on/to: " + lstAddr + ":" + lstPort);
-				}
-				
-				if (srv != null)
-					break;
-			}
-
 			BufferedReader r;
 			BufferedWriter w;
 			Socket s = null;
+			ServerSocket srv = null;
 			
 			int inTx = -1;
 			
+			/* first we try to get a server going */
+			while (srv == null && !shutdownRequested()) {
+				try {
+					srv = makeListeningSocket(lstAddr, lstPort);
+				} catch (InterruptedException e) {
+					//re-eval shutdown condition
+				}
+			}
+
 			while (!shutdownRequested()) {
 				try {
 					s = acceptSocket(srv); //retries on failure, except when interrupted
@@ -405,6 +518,23 @@ public abstract class ArasLiveReplicator {
 				} catch (InterruptedException e) {
 					logger.warn("interrupted while listening/accepting (on " + lstAddr + ":" + lstPort + ")");
 					continue; //re-evaluate shutdown condition
+				} catch (ListenerException e) {
+					logger.warn("something's wrong with the ServerSocket. "
+					        + "bound: " + srv.isBound() + ", closed: " + srv.isClosed());
+
+					/* try to reinit the listener */
+					closeSocket(srv);
+					srv = null;
+
+					while (srv == null && !shutdownRequested()) {
+						try {
+							srv = makeListeningSocket(lstAddr, lstPort);
+						} catch (InterruptedException e2) {
+							//re-eval shutdown condition
+						}
+					}
+
+					continue;
 				}
 				
 				if (inTx != -1) { //we were in the middle of a transaction
@@ -420,7 +550,13 @@ public abstract class ArasLiveReplicator {
 					w.flush();
 
 					while (!shutdownRequested()) {
-						String line = r.readLine();
+						String line;
+						try {
+							line = r.readLine();
+						} catch (SocketTimeoutException e) {
+							continue; //re-eval shutdown condition
+						}
+
 						if (line == null) { /* at EOF */
 							logger.warn("Receiver read EOF");
 							/* EOF is actually not supposed to show up, except
@@ -457,14 +593,19 @@ public abstract class ArasLiveReplicator {
 				logger.info("at end of life loop - starting over");
 			}
 
+			if (inTx != -1) { //we were in the middle of a transaction
+				onEndOfTx(inTx, false);
+			}
+
 			logger.warn("terminating " + (shutdownRequested() ? "as requested" : "abnormally"));
 			closeSocket(srv);
 		}
 
 		// ------------------------------------------------
 
-		private boolean shutdownRequested() {
-			return false;//TODO
+		@Override
+		protected Logger logger() {
+			return logger;
 		}
 
 		/* pattern is:
@@ -522,55 +663,8 @@ public abstract class ArasLiveReplicator {
 
 				onRelOp(txSeq, added, new DetachedStatement(sub, pred, obj)); //what about contexts? XXX
 			}
-			
+
 			return txSeq;
-		}
-
-		private ServerSocket makeListeningSocket() throws InterruptedException {
-			ServerSocket s = null;
-			do {
-				try {
-					s = new ServerSocket(lstPort, 0, InetAddress.getByName(lstAddr));
-				} catch (IOException e) {
-					logger.warn("could not bind()/listen() to/on " + lstAddr + ":" + lstPort + " - retrying");
-					Thread.sleep(1000);
-				}
-				;
-			} while (s == null);
-
-			return s;
-		}
-
-		private Socket acceptSocket(ServerSocket srv) throws InterruptedException {
-			Socket s = null;
-			/*TODO make sure there's no way this loops forever 
-			 * (like when accept keeps throwing exceptions but nobody
-			 * interrupts since we're not shutting down in the first place */
-			do {
-				if (Thread.interrupted()) {
-					throw new InterruptedException("interrupted accept() loop");
-				}
-
-				try {
-					s = srv.accept();
-				} catch (IOException e) {
-					logger.warn("failed to accept a connection (on" + lstAddr + ":" + lstPort + " - retrying");
-				}
-			} while (s == null);
-
-			return s;
-		}
-
-		/* wrapper for close(), to get rid of potential IOExceptions which may
-		 *  be thrown in close()'s implicit call to flush().
-		 * There are cases where it's important to catch and handle it,
-		 * but the replicator isn't one (as we have our own startover mechanism). */
-		private void closeSocket(Socket s) {
-			try { if (s != null) s.close(); } catch (IOException e) {}
-		}
-
-		private void closeSocket(ServerSocket s) {
-			try { if (s != null) s.close(); } catch (IOException e) {}
 		}
 	}
 }

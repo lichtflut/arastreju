@@ -130,6 +130,7 @@ public final class Arastreju {
         
         if (g.getTxProvider() != null) { //XXX remove the conditional once the rdb backend got its txprovider right
         	g.getTxProvider().initRepl(profile);
+        	profile.addListener(g.getTxProvider().getRepl());
         }
         
         return g;
