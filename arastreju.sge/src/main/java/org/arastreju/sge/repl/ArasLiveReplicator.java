@@ -18,14 +18,14 @@ import org.slf4j.LoggerFactory;
 /**
  * <p>
  *  Socket-based transaction replicator.
- *  
+ *
  *  The dispatcher part hooks into transactions and transmits
  *    string representations of the performed semantic graph
  *    operations to another instance of this very class (but
  *    possibly of a different backend-type (and likely on a
  *    different host).
- *    
- *  The receiver part reverses that process, constructing 
+ *
+ *  The receiver part reverses that process, constructing
  *    Statements or ResourceIDs, for relation or node operations,
  *    respectively.  The abstract methods onNodeOp() and onRelOp()
  *    are then called, which are responsible for performing
@@ -35,17 +35,14 @@ import org.slf4j.LoggerFactory;
  *    whenever a new transaction i.e. a bunch of related GraphOps
  *    begins.  This allows the receiver to recover that 'grouping'
  *    information.
- *    Additionally, for ease of parsing and processing, every 
+ *    Additionally, for ease of parsing and processing, every
  *    transaction is terminated by an EOT a.k.a. End Of Transaction message.
  *
  *  This class, or rather subclasses of it, is to be instantiated
  *    in the backend-specific subclass of TxProvider, by overriding
  *    TxProvider.createReplicator().  If this is not done, no
  *    replication facilities are available.
- *    
- *  TODO: -robustness, dispatcher should reconnect on disconnect, 
- *           receiver is to relisten/accept
- *        -host and port settings are hardcoded for now
+ *
  * </p>
  *
  * Created: 16.11.2012
@@ -54,7 +51,7 @@ import org.slf4j.LoggerFactory;
  */
 public abstract class ArasLiveReplicator implements ProfileCloseListener {
 	private final Logger logger = LoggerFactory.getLogger(ArasLiveReplicator.class);
-	
+
 	private List<GraphOp> replLog;
 	private Dispatcher dispatcher;
 	private Receiver receiver;
@@ -75,14 +72,12 @@ public abstract class ArasLiveReplicator implements ProfileCloseListener {
 	 * @param rcvHost address or hostname the receiver connect()s against
 	 * @param rcvPort port used in said connect()
 	 */
-
-
 	public void init(String lstAddr, int lstPort, String rcvHost, int rcvPort) {
 		(receiver = new Receiver(lstAddr, lstPort, "RCV-" + lstPort)).start();
 		(dispatcher = new Dispatcher(rcvHost, rcvPort, "DSP-" + rcvPort)).start();
 		logger.info("replication threads started. "
-				+ "receiver listens on "+lstAddr+":"+lstPort+", "
-				+ "dispatcher connects to "+rcvHost+":"+rcvPort);
+		        + "receiver listens on " + lstAddr + ":" + lstPort + ", "
+		        + "dispatcher connects to " + rcvHost + ":" + rcvPort);
 	}
 
 	public void shutdown() {
@@ -110,7 +105,7 @@ public abstract class ArasLiveReplicator implements ProfileCloseListener {
 	/**
 	 * Turn the list of collected graph operations into a
 	 * sequence of their textual representations, and queue
-	 * everything for actual dispatching 
+	 * everything for actual dispatching
 	 */
 	public void dispatch() {
 		for (GraphOp g : replLog) {
@@ -140,15 +135,15 @@ public abstract class ArasLiveReplicator implements ProfileCloseListener {
 	}
 
 	// -- Receiver interface ----------------------------
-	
+
 	/*
 	 * NOTE THAT the following three functions, once implemented in
 	 *   whatever subclasses this, will be called asynchronously by
 	 *   a separate, rogue thread.
 	 * Know thy synchronization is this is of concern!
 	 */
-	
-	/** 
+
+	/**
 	 * called whenever the receiver receives a relation operation, i.e.
 	 *   an operation which adds or removes a statement (as opposed to
 	 *   a single resource).
@@ -156,7 +151,7 @@ public abstract class ArasLiveReplicator implements ProfileCloseListener {
 	 * @param stmt the statement in question
 	 */
 	protected abstract void onRelOp(int txSeq, boolean added, Statement stmt);
-	
+
 	/**
 	 * called whenever the receiver receives a node operation, i.e.
 	 *   an operation which adds or removes a node (as opppsed to a statement)
@@ -164,14 +159,13 @@ public abstract class ArasLiveReplicator implements ProfileCloseListener {
 	 * @param node the node in question
 	 */
 	protected abstract void onNodeOp(int txSeq, boolean added, ResourceID node);
-	
+
 	/**
 	 * called at the end of every transaction
 	 * @param txSeq
 	 */
 	protected abstract void onEndOfTx(int txSeq, boolean success);
-	
-	
+
 	// -- INNER CLASSES -----------------------------------
 
 	/**
@@ -225,7 +219,7 @@ public abstract class ArasLiveReplicator implements ProfileCloseListener {
 		/* try hard (i.e. retry on failure) to spawn a ServerSocket on ifaddr:port. */
 		protected ServerSocket makeListeningSocket(String ifaddr, int port) throws InterruptedException {
 			ServerSocket srv = null;
-			
+
 			do {
 				try {
 					srv = new ServerSocket(port, 0, InetAddress.getByName(ifaddr));
@@ -239,32 +233,32 @@ public abstract class ArasLiveReplicator implements ProfileCloseListener {
 						logger.warn("failed to enable SO_TIMEOUT or SO_REUSEADDR on ServerSocket."
 						        + "We might get stuck on shutdown.");
 					}
-					
+
 					logger.debug("bound to, and now listening on: " + ifaddr + ":" + port);
-					
+
 				} catch (IOException e) {
 					logger.warn("could not bind()/listen() to/on "
 					        + ifaddr + ":" + port + " - retrying");
 					Thread.sleep(1000);
 				}
 			} while (srv == null);
-			
+
 			return srv;
 		}
 
-		/* try hard (i.e. retry on failure) to accept a connection 
-		 * may throw ListenerException if the given ServerSocket breaks. */ 
+		/* try hard (i.e. retry on failure) to accept a connection
+		 * may throw ListenerException if the given ServerSocket breaks. */
 		protected Socket acceptSocket(ServerSocket srv) throws InterruptedException, ListenerException {
 			Socket s = null;
 			do {
 				if (Thread.interrupted()) {
 					throw new InterruptedException("interrupted accept() loop");
 				}
-				
+
 				if (srv.isClosed() || !srv.isBound()) {
 					throw new ListenerException();
 				}
-				
+
 				try {
 					s = srv.accept();
 					try {
@@ -296,7 +290,7 @@ public abstract class ArasLiveReplicator implements ProfileCloseListener {
 		protected void closeSocket(ServerSocket s) {
 			try { if (s != null) s.close(); } catch (IOException e) {}
 		}
-		
+
 		protected class ListenerException extends Exception {}
 	}
 
@@ -389,7 +383,7 @@ public abstract class ArasLiveReplicator implements ProfileCloseListener {
 						synchronized (this) {
 							/* there isn't anything to do for us as long as
 							 * ``nextTxSeq > curTxSeq'' (meaning we're waiting
-							 *  for another tx to show up), or as long as the tx 
+							 *  for another tx to show up), or as long as the tx
 							 *  we're about to send isn't fully queue()'d yet.
 							 * so we wait until there's work to do.
 							 * in case of a requested shutdown we abort anyway.*/
@@ -478,10 +472,11 @@ public abstract class ArasLiveReplicator implements ProfileCloseListener {
 		// ------------------------------------------------
 
 		/**
-		 * 
+		 *
 		 * @param listenAddr the interface to listen() on, may be null to
-		 *   listen on all available interfaces (a.k.a. INADDR_ANY (most 
+		 *   listen on all available interfaces (a.k.a. INADDR_ANY (most
 		 *   usually equivalent to "0.0.0.0").
+		 * @param string
 		 * @param receiverPort the port to listen() on, >= 1
 		 */
 		Receiver(String listenAddr, int listenPort, String threadName) {
@@ -499,9 +494,9 @@ public abstract class ArasLiveReplicator implements ProfileCloseListener {
 			BufferedWriter w;
 			Socket s = null;
 			ServerSocket srv = null;
-			
+
 			int inTx = -1;
-			
+
 			/* first we try to get a server going */
 			while (srv == null && !shutdownRequested()) {
 				try {
@@ -514,9 +509,12 @@ public abstract class ArasLiveReplicator implements ProfileCloseListener {
 			while (!shutdownRequested()) {
 				try {
 					s = acceptSocket(srv); //retries on failure, except when interrupted
-					logger.debug("accepted a socket (on " + lstAddr + ":" + lstPort + ", peer: " + s.getRemoteSocketAddress() + ":" + s.getPort() + ")");
+
+					logger.debug("accepted a socket (on " + lstAddr + ":" + lstPort
+					        + ", peer: " + s.getRemoteSocketAddress() + ":" + s.getPort() + ")");
 				} catch (InterruptedException e) {
-					logger.warn("interrupted while listening/accepting (on " + lstAddr + ":" + lstPort + ")");
+					logger.warn("interrupted while listening/accepting (on "
+					        + lstAddr + ":" + lstPort + ")");
 					continue; //re-evaluate shutdown condition
 				} catch (ListenerException e) {
 					logger.warn("something's wrong with the ServerSocket. "
@@ -536,8 +534,8 @@ public abstract class ArasLiveReplicator implements ProfileCloseListener {
 
 					continue;
 				}
-				
-				if (inTx != -1) { //we were in the middle of a transaction
+
+				if (inTx != -1) { //we were in the middle of a transaction, ditch it
 					onEndOfTx(inTx, false);
 				}
 
@@ -567,17 +565,17 @@ public abstract class ArasLiveReplicator implements ProfileCloseListener {
 							r.close();
 							break;
 						}
-						
+
 						if ((line = line.trim()).length() == 0)
 							continue;
 
 						logger.debug("read: '" + line + "'");
-						
+
 						int curTx = process(line);
-						
+
 						boolean isEOT = line.endsWith("EOT");
 						inTx = isEOT ? -1 : curTx;
-						
+
 						if (isEOT) {
 							lastComplTx = curTx;
 							w.write(lastComplTx + "\n"); //tell dispatcher about it
@@ -589,7 +587,7 @@ public abstract class ArasLiveReplicator implements ProfileCloseListener {
 				} finally {
 					closeSocket(s);
 				}
-				
+
 				logger.info("at end of life loop - starting over");
 			}
 
@@ -608,6 +606,8 @@ public abstract class ArasLiveReplicator implements ProfileCloseListener {
 			return logger;
 		}
 
+		// ------------------------------------------------
+
 		/* pattern is:
 		 * 		^([0-9]+) (EOT|(?:([+-])(N ([^ ]+)|S ([^ ]+) ([^ ]+) (R ([^ ]+)|V ([^ ]+) ([^ ]+)))))$
 		 *
@@ -615,7 +615,7 @@ public abstract class ArasLiveReplicator implements ProfileCloseListener {
 		 * 	group 1: sequence number (1337)
 		 *  group 3: [+-] (+)
 		 *  group 5: URI (http://so.me/node)
-		 * 
+		 *
 		 * rel operation with value object:  e.g.  "1337 -S http://so.me/subj http://the.pred/icate V STRING myfancystring"
 		 * 	group 1: sequence number (1337)
 		 *  group 3: [+-] (-)
@@ -623,8 +623,8 @@ public abstract class ArasLiveReplicator implements ProfileCloseListener {
 		 *  group 7: predicate (http://the.pred/icate)
 		 *  group 10: type (STRING)
 		 *  group 11: value (myfancystring)
-		 * 
-		 * rel operation with resource object: e.g. "1337 -S http://so.me/subj http://the.pred/icate R http://so.me/resource
+		 *
+		 * rel operation with resource object: e.g. "1337 -S http://so.me/subj http://the.pred/icate R http://so.me/resource"
 		 * 	group 1: sequence number (1337)
 		 *  group 3: [+-] (-)
 		 * 	group 6: subject (http://so.me/subj)
@@ -672,10 +672,10 @@ public abstract class ArasLiveReplicator implements ProfileCloseListener {
 /*
  * The sole purpose of this class is to hold a compiled regex to parse the
  * replication protocol, and hand out matchers to anyone who bothers.
- * 
+ *
  * The sole reason for this to be a separate class at all, is java's disapproval
  * of final static fields in inner classes (like Receiver, where it belongs)
- * which aren't initialized from a constant expression (like 'pat' below isn't) 
+ * which aren't initialized from a constant expression (like 'pat' below isn't)
  */
 class MatcherProvider {
 	static final String PATTERN_STMT_RESOBJ = "R ([^ ]+)"; //R <obj uri>
