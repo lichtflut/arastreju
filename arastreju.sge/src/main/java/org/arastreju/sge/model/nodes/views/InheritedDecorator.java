@@ -1,10 +1,12 @@
 package org.arastreju.sge.model.nodes.views;
 
+import org.arastreju.sge.SNOPS;
 import org.arastreju.sge.apriori.Aras;
 import org.arastreju.sge.model.ResourceID;
 import org.arastreju.sge.model.Statement;
 import org.arastreju.sge.model.associations.HalfStatement;
 import org.arastreju.sge.model.nodes.ResourceNode;
+import org.arastreju.sge.model.nodes.SNResource;
 import org.arastreju.sge.model.nodes.SemanticNode;
 import org.arastreju.sge.naming.QualifiedName;
 
@@ -33,6 +35,15 @@ public class InheritedDecorator extends ResourceView {
         } else {
             return null;
         }
+    }
+
+    public static void revoke(ResourceNode node, HalfStatement revokedStmt) {
+        SemanticNode revokeDef = SNOPS.fetchObject(node, Aras.REVOKES);
+        if (revokeDef == null) {
+            revokeDef = new SNResource();
+            node.addAssociation(Aras.REVOKES, revokeDef);
+        }
+        revokeDef.asResource().addAssociation(revokedStmt.getPredicate(), revokedStmt.getObject());
     }
 
     // ----------------------------------------------------

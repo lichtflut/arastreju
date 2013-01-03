@@ -52,7 +52,10 @@ public class SNProperty extends ResourceView {
             return (SNProperty) node;
         } else if (node instanceof ResourceNode) {
             return new SNProperty((ResourceNode) node);
-        } else {
+        } else if (node instanceof ResourceID) {
+            ResourceID rid = (ResourceID) node;
+            return new SNProperty(rid.asResource());
+        }else {
             return null;
         }
     }
