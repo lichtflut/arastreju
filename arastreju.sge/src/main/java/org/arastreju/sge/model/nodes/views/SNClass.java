@@ -69,7 +69,7 @@ public class SNClass extends ResourceView {
 		final Set<SNClass> allSuperClasses = new HashSet<SNClass>();
 		Set<? extends Statement> extensions = getAssociations(RDFS.SUB_CLASS_OF);
 		for (Statement current : extensions) {
-			SNClass directSuperClass = current.getObject().asResource().asClass();
+			SNClass directSuperClass = SNClass.from(current.getObject());
 			allSuperClasses.add(directSuperClass);
 			allSuperClasses.addAll(directSuperClass.getSuperClasses());
 		}
@@ -79,7 +79,7 @@ public class SNClass extends ResourceView {
 	public Set<SNClass> getDirectSuperClasses() {
 		final Set<SNClass> superClasses = new HashSet<SNClass>();
 		for (Statement current : SNOPS.associations(this, RDFS.SUB_CLASS_OF)) {
-			final SNClass directImplementedClass = current.getObject().asResource().asClass();
+			final SNClass directImplementedClass = SNClass.from(current.getObject());
 			superClasses.add(directImplementedClass);
 		}
 		return superClasses;
