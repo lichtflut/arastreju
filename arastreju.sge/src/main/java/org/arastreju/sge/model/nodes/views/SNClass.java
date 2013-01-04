@@ -43,6 +43,8 @@ public class SNClass extends ResourceView {
             return (SNClass) node;
         } else if (node instanceof ResourceNode) {
             return new SNClass((ResourceNode) node);
+        } else if (node instanceof ResourceID) {
+            return new SNClass(node.asResource());
         } else {
             return null;
         }

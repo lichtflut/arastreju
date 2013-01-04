@@ -55,7 +55,7 @@ public class SNProperty extends ResourceView {
         } else if (node instanceof ResourceID) {
             ResourceID rid = (ResourceID) node;
             return new SNProperty(rid.asResource());
-        }else {
+        } else {
             return null;
         }
     }
