@@ -23,9 +23,7 @@ import org.arastreju.sge.model.nodes.SemanticNode;
  */
 public class OrderBySerialNumber implements Comparator<ResourceNode> {
 
-	/** 
-	 * {@inheritDoc}
-	 */
+    @Override
 	public int compare(ResourceNode a, ResourceNode b) {
 		SemanticNode serialA = SNOPS.fetchObject(a, Aras.HAS_SERIAL_NUMBER);
 		SemanticNode serialB = SNOPS.fetchObject(b, Aras.HAS_SERIAL_NUMBER);

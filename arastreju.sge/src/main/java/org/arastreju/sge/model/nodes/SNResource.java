@@ -21,15 +21,11 @@ import org.arastreju.sge.model.ResourceID;
 import org.arastreju.sge.model.Statement;
 import org.arastreju.sge.model.associations.AssociationKeeper;
 import org.arastreju.sge.model.associations.DetachedAssociationKeeper;
-import org.arastreju.sge.model.nodes.views.SNClass;
-import org.arastreju.sge.model.nodes.views.SNEntity;
-import org.arastreju.sge.model.nodes.views.SNProperty;
 import org.arastreju.sge.naming.Namespace;
 import org.arastreju.sge.naming.QualifiedName;
 
 import java.io.Serializable;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
@@ -75,7 +71,7 @@ public class SNResource implements ResourceNode, Serializable {
 	/**
 	 * Constructor for SPI subclasses.
 	 * @param qn The qualified name.
-	 * @param associationKeeper
+	 * @param associationKeeper The keeper for the associations.
 	 */
 	protected SNResource(final QualifiedName qn, final AssociationKeeper associationKeeper) {
 		this.qn = qn;
@@ -150,18 +146,6 @@ public class SNResource implements ResourceNode, Serializable {
 	
 	// -----------------------------------------------------
 
-    @Override
-	public SNClass asClass() {
-		return new SNClass(this);
-	}
-
-    @Override
-	public SNProperty asProperty(){
-		return new SNProperty(this);
-	}
-	
-	// ------------------------------------------------------
-	
 	@Override
 	public String toString() {
 		return toURI();

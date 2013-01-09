@@ -76,10 +76,4 @@ public interface ResourceNode extends ResourceID {
 	 */
 	boolean removeAssociation(Statement stmt);
 	
-	// -----------------------------------------------------
-
-	SNClass asClass();
-
-	SNProperty asProperty();
-
 }

@@ -15,10 +15,7 @@
  */
 package org.arastreju.sge.spi.abstracts;
 
-import static org.arastreju.sge.SNOPS.assure;
-import static org.arastreju.sge.SNOPS.singleObject;
-import static org.arastreju.sge.SNOPS.string;
-
+import org.arastreju.sge.Conversation;
 import org.arastreju.sge.ModelingConversation;
 import org.arastreju.sge.Organizer;
 import org.arastreju.sge.apriori.Aras;
@@ -35,6 +32,10 @@ import org.arastreju.sge.naming.SimpleNamespace;
 import org.arastreju.sge.query.Query;
 import org.arastreju.sge.query.QueryResult;
 
+import static org.arastreju.sge.SNOPS.assure;
+import static org.arastreju.sge.SNOPS.singleObject;
+import static org.arastreju.sge.SNOPS.string;
+
 /**
  * <p>
  *  Abstract base for {@link Organizer} implementations.
@@ -48,11 +49,8 @@ import org.arastreju.sge.query.QueryResult;
  */
 public abstract class AbstractOrganizer implements Organizer {
 
-    /**
-     * {@inheritDoc}
-     */
     public Namespace registerNamespace(final String uri, final String prefix) {
-        ModelingConversation conversation = conversation();
+        final Conversation conversation = conversation();
         final Query query = conversation.createQuery()
                 .addField(RDF.TYPE, Aras.NAMESPACE)
                 .and()
@@ -70,9 +68,6 @@ public abstract class AbstractOrganizer implements Organizer {
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public Context registerContext(final QualifiedName qn) {
         final ResourceNode node = createContextNode(qn);
         conversation().attach(node);
