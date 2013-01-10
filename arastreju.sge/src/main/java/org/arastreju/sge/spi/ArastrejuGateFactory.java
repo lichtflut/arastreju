@@ -18,6 +18,7 @@ package org.arastreju.sge.spi;
 import org.arastreju.sge.ArastrejuGate;
 import org.arastreju.sge.ArastrejuProfile;
 import org.arastreju.sge.context.DomainIdentifier;
+import org.arastreju.sge.persistence.TxProvider;
 
 /**
  * <p>
@@ -46,7 +47,9 @@ public abstract class ArastrejuGateFactory {
 	// -----------------------------------------------------
 
 	public abstract ArastrejuGate create(final DomainIdentifier identifier) throws GateInitializationException;
-	
+
+	protected abstract TxProvider createTxProvider();
+
 	// -----------------------------------------------------+
 	
 	/**

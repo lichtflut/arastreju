@@ -146,5 +146,4 @@ public abstract class TxProvider {
     protected ArasLiveReplicator createReplicator() {
     	return new NoOpReplicator();
     }
-	
 }

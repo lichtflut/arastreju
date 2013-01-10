@@ -10,6 +10,7 @@ import org.junit.Test;
 /**
  * <p>
  *  soon-to-be unit test for arastreju.sge's replication facilities 
+ *  (not finished)
  * </p>
  *
  * Created: 27.11.2012

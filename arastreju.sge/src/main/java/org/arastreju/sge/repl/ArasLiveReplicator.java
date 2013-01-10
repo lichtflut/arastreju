@@ -391,6 +391,9 @@ public abstract class ArasLiveReplicator implements ProfileCloseListener {
 							                || (nextTxSeq == curTxSeq && !curTxDone))) {
 								try {
 									wait(1000); //arbitrary timeout, 1s
+									/*XXX perhaps add some keep-alive logic - we don't
+									 * notice a disconnected receiver until we actually
+									 * send something.  this might not be a problem at all.*/
 								} catch (InterruptedException e) {
 									logger.warn("interrupted while waiting for data");
 									continue; //just for clarity

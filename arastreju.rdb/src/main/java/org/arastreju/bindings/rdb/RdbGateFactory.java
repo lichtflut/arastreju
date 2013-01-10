@@ -22,6 +22,7 @@ import org.arastreju.bindings.rdb.jdbc.DBOperations;
 import org.arastreju.sge.ArastrejuGate;
 import org.arastreju.sge.ArastrejuProfile;
 import org.arastreju.sge.context.DomainIdentifier;
+import org.arastreju.sge.persistence.TxProvider;
 import org.arastreju.sge.spi.ArastrejuGateFactory;
 import org.arastreju.sge.spi.GateInitializationException;
 
@@ -65,4 +66,9 @@ public class RdbGateFactory extends ArastrejuGateFactory {
 		return new RdbGate(provider, identifier);
 	}
 
+	/* return type is covariant - can be JdbcTxProvider */
+	public TxProvider createTxProvider() {
+		System.err.println("RdbGateFactory::createTxProvider - implementme");
+		return null;
+	}
 }
