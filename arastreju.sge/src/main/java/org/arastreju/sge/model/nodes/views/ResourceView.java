@@ -127,16 +127,6 @@ public abstract class ResourceView implements ResourceNode, Serializable {
 	// -----------------------------------------------------
 
     @Override
-	public SNClass asClass() {
-		return resource.asClass();
-	}
-
-    @Override
-	public SNProperty asProperty() {
-		return resource.asProperty();
-	}
-
-    @Override
 	public ResourceNode asResource() {
 		return resource;
 	}
