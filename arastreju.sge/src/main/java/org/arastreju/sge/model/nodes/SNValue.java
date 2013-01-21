@@ -149,9 +149,6 @@ public class SNValue implements ValueNode, Serializable {
 		}
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	public BigDecimal getDecimalValue() {
 		if (value instanceof String){
 			return new BigDecimal((String) value);
