@@ -6,7 +6,7 @@ import org.arastreju.bindings.rdb.jdbc.SQLQueryBuilder;
 import org.arastreju.sge.Arastreju;
 import org.arastreju.sge.ArastrejuGate;
 import org.arastreju.sge.ArastrejuProfile;
-import org.arastreju.sge.ModelingConversation;
+import org.arastreju.sge.Conversation;
 import org.arastreju.sge.SNOPS;
 import org.arastreju.sge.model.ElementaryDataType;
 import org.arastreju.sge.model.nodes.ResourceNode;
@@ -86,7 +86,7 @@ public class RdbTest {
 		Arastreju aras = Arastreju.getInstance(profile);
 		ArastrejuGate gate = aras.openMasterGate();
 		
-		ModelingConversation mc = gate.startConversation();
+		Conversation mc = gate.startConversation();
 		Map<String, String> c = new HashMap<String, String>();
 		c.put(Column.SUBJECT.value(), "SUBJECT");
 		c.put(Column.PREDICATE.value(), "PREDICATE");
@@ -107,7 +107,7 @@ public class RdbTest {
 		Arastreju aras = Arastreju.getInstance(profile);
 		ArastrejuGate gate = aras.openMasterGate();
 		
-		ModelingConversation mc = gate.startConversation();
+		Conversation mc = gate.startConversation();
 		mc.resolve(SNOPS.id(qnCar));
 	}
 
