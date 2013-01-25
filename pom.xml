@@ -118,33 +118,54 @@
 			</plugin>
 		</plugins>
 	</build>
-	
-	<reporting>
-		<plugins>
-	    </plugins>
-	</reporting>
+
 	<dependencyManagement>
 		<dependencies>
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-log4j12</artifactId>
+                <version>1.6.1</version>
+            </dependency>
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-api</artifactId>
+                <version>1.6.1</version>
+            </dependency>
+            <dependency>
+                <groupId>de.lichtflut</groupId>
+                <artifactId>lf.foundation.infra</artifactId>
+                <version>1.1.1</version>
+            </dependency>
+            <dependency>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+                <version>4.5</version>
+                <scope>test</scope>
+            </dependency>
 		</dependencies>
 	</dependencyManagement>
+
 	<dependencies>
 		<dependency>
 			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-log4j12</artifactId>
-			<version>1.6.1</version>
+			<artifactId>slf4j-api</artifactId>
 		</dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+            <scope>runtime</scope>
+        </dependency>
 		<dependency>
 			<groupId>de.lichtflut</groupId>
 			<artifactId>lf.foundation.infra</artifactId>
-			<version>1.1.1</version>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>4.5</version>
-			<scope>test</scope>
 		</dependency>
 	</dependencies>
+
 	<repositories>
 		<repository>
 			<id>maven2-repository.dev.java.net</id>
