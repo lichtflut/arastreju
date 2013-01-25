@@ -32,6 +32,10 @@ public class MemConversationContext extends AbstractConversationContext {
     }
 
     @Override
+    protected void onClose() {
+    }
+
+    @Override
     public TxProvider getTxProvider() {
         return new MemTransactionProvider();
     }
