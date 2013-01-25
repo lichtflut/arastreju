@@ -45,18 +45,9 @@ public abstract class TxProvider {
 	 */
 	public TxProvider() {
 	}
-	
-	public void initRepl(ArastrejuProfile profile) {
-		this.repl = createReplicator();
-		String rcvAddr = profile.getProperty(ArastrejuProfile.REPLICATOR_RECEIVER_ADDR);
-		String dspHost = profile.getProperty(ArastrejuProfile.REPLICATOR_DISPATCHER_HOST);
-		int rcvPort = Integer.parseInt(profile.getProperty(ArastrejuProfile.REPLICATOR_RECEIVER_PORT));
-		int dspPort = Integer.parseInt(profile.getProperty(ArastrejuProfile.REPLICATOR_DISPATCHER_PORT));
-		repl.init(rcvAddr, rcvPort, dspHost, dspPort);
-	}
-	
+
 	// -----------------------------------------------------
-	
+
 	/**
 	 * Begin a new transaction if not already one open.
 	 * @return An active transaction.
@@ -64,13 +55,14 @@ public abstract class TxProvider {
 	public TransactionControl begin() {
 		if (!inTransaction()) {
 			tx = newTx();
-			repl.reset();
+			if (repl != null)
+				repl.reset();
 			return tx;
 		} else {
 			return newSubTx(tx);
 		}
 	}
-	
+
 	/**
 	 * Check if there is a transaction running.
 	 * @return true if there is a transaction.
@@ -78,9 +70,9 @@ public abstract class TxProvider {
 	public boolean inTransaction() {
 		return tx != null && tx.isActive();
 	}
-	
+
 	// -----------------------------------------------------
-	
+
 	public void doTransacted(final TxAction action){
 		final TransactionControl tx = begin();
 		try {
@@ -94,7 +86,7 @@ public abstract class TxProvider {
 			tx.finish();
 		}
 	}
-	
+
 	public <T> T doTransacted(final TxResultAction<T> action){
 		final TransactionControl tx = begin();
 		try {
@@ -114,23 +106,26 @@ public abstract class TxProvider {
 	 * @return reference to the replicator (source part)
 	 */
 	public ArasLiveReplicator getRepl() {
+		if (repl == null) {
+			repl = createReplicator();
+		}
 		return repl;
 	}
-	
-	/** 
+
+	/**
 	 * called by finished transactions. If successful, the replicator
 	 * is triggered to send out the data it acquired in the course
 	 * of this transaction
 	 */
 	public void onTransactionFinish(TransactionControl tx, boolean success) {
-		if (this.tx == tx) { //root- or sub-transaction?
+		if (repl != null && this.tx == tx) { //root- or sub-transaction?
 			if (success) //root-transaction succeeded
 				repl.dispatch();
-			
+
 			repl.reset();
 		}
 	}
-	
+
     // ----------------------------------------------------
 
     protected abstract TransactionControl newTx();
@@ -138,7 +133,7 @@ public abstract class TxProvider {
     protected TransactionControl newSubTx(TransactionControl parent) {
     	return new SubTransaction(parent);
     }
-    
+
     /**
      * subclasses should override this in case they want replication
      * @return a newly created backend-specific replicator, or null for no replication facilities

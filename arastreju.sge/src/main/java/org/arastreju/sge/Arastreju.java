@@ -129,7 +129,7 @@ public final class Arastreju {
         ArastrejuGate g = factory.create(identifier);
         
         if (g.getTxProvider() != null) { //XXX remove the conditional once the rdb backend got its txprovider right
-        	g.getTxProvider().initRepl(profile);
+        	g.getTxProvider().getRepl().init(profile);
         	profile.addListener(g.getTxProvider().getRepl());
         }
         

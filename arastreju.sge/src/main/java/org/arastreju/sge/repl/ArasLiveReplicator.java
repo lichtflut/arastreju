@@ -72,7 +72,20 @@ public abstract class ArasLiveReplicator implements ProfileCloseListener {
 	 * @param rcvHost address or hostname the receiver connect()s against
 	 * @param rcvPort port used in said connect()
 	 */
-	public void init(String lstAddr, int lstPort, String rcvHost, int rcvPort) {
+	public void init(ArastrejuProfile profile) {
+		String lstAddr = profile.getProperty(ArastrejuProfile.REPLICATOR_RECEIVER_ADDR);
+		String lstPortStr = profile.getProperty(ArastrejuProfile.REPLICATOR_RECEIVER_PORT);
+		String rcvHost = profile.getProperty(ArastrejuProfile.REPLICATOR_DISPATCHER_HOST);
+		String rcvPortStr = profile.getProperty(ArastrejuProfile.REPLICATOR_DISPATCHER_PORT);
+
+		if (lstAddr == null || rcvHost == null || lstPortStr == null || rcvPortStr == null) {
+			logger.info("replication not enabled");
+			return; //no replication
+		}
+
+		int lstPort = Integer.parseInt(lstPortStr);
+		int rcvPort = Integer.parseInt(rcvPortStr);
+
 		(receiver = new Receiver(lstAddr, lstPort, "RCV-" + lstPort)).start();
 		(dispatcher = new Dispatcher(rcvHost, rcvPort, "DSP-" + rcvPort)).start();
 		logger.info("replication threads started. "
@@ -81,8 +94,11 @@ public abstract class ArasLiveReplicator implements ProfileCloseListener {
 	}
 
 	public void shutdown() {
-		dispatcher.requestShutdown();
-		receiver.requestShutdown();
+		if (dispatcher != null)
+			dispatcher.requestShutdown();
+
+		if (receiver != null)
+			receiver.requestShutdown();
 	}
 
 	/* if you override this again, be sure to call super.onClosed()! */
@@ -108,12 +124,13 @@ public abstract class ArasLiveReplicator implements ProfileCloseListener {
 	 * everything for actual dispatching
 	 */
 	public void dispatch() {
-		for (GraphOp g : replLog) {
-			dispatcher.queue(txSeq, g.toProtocolString());
+		if (dispatcher != null) {
+			for (GraphOp g : replLog) {
+				dispatcher.queue(txSeq, g.toProtocolString());
+			}
+			dispatcher.queue(txSeq++, "EOT"); //end of transaction marker
 		}
-		dispatcher.queue(txSeq++, "EOT"); //end of transaction marker
 	}
-
 	/**
 	 * Indicate a relation/statement has been added or removed.
 	 * Call from TxAction::execute().

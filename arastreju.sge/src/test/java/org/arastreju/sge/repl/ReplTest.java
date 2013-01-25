@@ -3,13 +3,14 @@ package org.arastreju.sge.repl;
 import java.math.BigDecimal;
 import java.util.*;
 
+import org.arastreju.sge.ArastrejuProfile;
 import org.arastreju.sge.model.*;
 import org.arastreju.sge.model.nodes.*;
 import org.junit.Test;
 
 /**
  * <p>
- *  soon-to-be unit test for arastreju.sge's replication facilities 
+ *  soon-to-be unit test for arastreju.sge's replication facilities
  *  (not finished)
  * </p>
  *
@@ -19,10 +20,10 @@ import org.junit.Test;
  */
 public class ReplTest {
 	static long randSeed = System.currentTimeMillis();
-	
+
 	static List<GraphOp> generateGraphOps(int N) {
 		List<GraphOp> res = new LinkedList<GraphOp>();
-		
+
 		MyRandom r = new MyRandom(randSeed);
 
 		while(N-- > 0) {
@@ -49,15 +50,17 @@ public class ReplTest {
 
 	@Test
 	public void testRepl() {
-		
+
 		if (this != null) return;
-	
+
 		try {
+			ArastrejuProfile  p1 = ArastrejuProfile.read(); //XXX
+			ArastrejuProfile  p2 = ArastrejuProfile.read(); //XXX
 			MyReplicator rep1 = new MyReplicator("rep1", false);
 			MyReplicator rep2 = new MyReplicator("rep2", true);
-			rep1.init(null, 12345, "localhost", 12346);
-			rep2.init(null, 12346, "localhost", 12345);
-			
+			rep1.init(p1);
+			rep2.init(p2);
+
 			List<GraphOp> input = generateGraphOps(4);
 			for(GraphOp o : input) {
 				if (o instanceof RelOp)
@@ -66,7 +69,7 @@ public class ReplTest {
 					rep1.queueNodeOp(((NodeOp)o).isAdded(), ((NodeOp)o).getNode());
 			}
 			rep1.dispatch();
-			
+
 			int lastres = -1;
 			for(int rescnt = rep2.countResults(); rescnt < input.size(); rescnt = rep2.countResults()) {
 				if (lastres != rescnt) {
@@ -84,9 +87,9 @@ public class ReplTest {
 				}
 				Thread.sleep(100);
 			}
-			
+
 			List<GraphOp> result = rep1.getResultList();
-			
+
 			for(int i = 0; i < input.size(); i++) {
 				if (!input.get(i).equals(result.get(i))) {
 					System.err.println("error: " + input.get(i) + " != " + result.get(i));
@@ -104,17 +107,17 @@ class MyReplicator extends ArasLiveReplicator {
 	private String name;
 	private boolean bounce;
 	private List<GraphOp> incoming = new LinkedList<GraphOp>();
-	
+
 	public MyReplicator(String name, boolean bounce) {
 		this.name = name;
 		this.bounce = bounce;
 	}
-	
+
     protected void onRelOp(int txSeq, boolean added, Statement stmt) {
     	System.err.println("onRelOp() in "+name+", "+(bounce?"bouncing":"adding to inQ"));
     	if (bounce)
     		queueRelOp(added, stmt);
-    	
+
 		synchronized (this) {
 			incoming.add(new RelOp(added, stmt));
 		}
@@ -124,7 +127,7 @@ class MyReplicator extends ArasLiveReplicator {
     	System.err.println("onNodeOp() in "+name+", "+(bounce?"bouncing":"adding to inQ"));
     	if (bounce)
     		queueNodeOp(added, node);
-    	
+
 		synchronized (this) {
 			incoming.add(new NodeOp(added, node));
 		}
@@ -132,12 +135,12 @@ class MyReplicator extends ArasLiveReplicator {
 
     protected void onEndOfTx(int txSeq, boolean success) {
     	System.err.println("onEndOfTx() in "+name);
-	    
+
     }
     public synchronized List<GraphOp> getResultList() {
     	return incoming;
     }
-    
+
     public synchronized int countResults() {
    		return incoming.size();
     }
@@ -147,7 +150,7 @@ class MyRandom extends Random {
 	MyRandom(long seed) {
 		setSeed(seed);
 	}
-	
+
 	String nextAlphaString(int len) {
 		char[] c = new char[len];
 		while(len-- > 0) {
@@ -155,19 +158,19 @@ class MyRandom extends Random {
 		}
 		return new String(c);
 	}
-	
+
 	String nextURI(int pathLen) {
 		return "http://example.org/"+nextAlphaString(pathLen);
 	}
-	
+
 	Date nextDate() {
 		return new Date(nextLong());
 	}
-	
+
 	Object[] nextSemanticValueObject() {
 		ElementaryDataType type = null;
 		Object val = null;
-		// TERM and PROPER_NAME not supported in SNValue (?) XXX 
+		// TERM and PROPER_NAME not supported in SNValue (?) XXX
 		switch(nextInt(8)) {
 		case 0:
 			type = ElementaryDataType.BOOLEAN;
@@ -180,7 +183,7 @@ class MyRandom extends Random {
 		case 2:
 			type = ElementaryDataType.DECIMAL;
 			val = (new BigDecimal(Double.MAX_VALUE)).multiply(new BigDecimal(nextInt(100)+1));
-			break; 
+			break;
 		case 3:
 			type = ElementaryDataType.STRING;
 			val = nextAlphaString(nextInt(32));
