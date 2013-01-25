@@ -89,6 +89,7 @@ public abstract class AbstractConversationContext implements ConversationContext
 	public void close() {
 		if (active) {
 			clear();
+            onClose();
 			active = false;
 			LOGGER.info("Conversation will be closed. " + ctxId);
 		}
@@ -161,6 +162,8 @@ public abstract class AbstractConversationContext implements ConversationContext
     // ----------------------------------------------------
 
     protected abstract void clearCaches();
+
+    protected abstract void onClose();
 
     // ----------------------------------------------------
 	

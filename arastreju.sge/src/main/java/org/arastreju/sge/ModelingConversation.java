@@ -26,7 +26,9 @@ package org.arastreju.sge;
  * </p>
  *
  * @author Oliver Tigges
+ *
+ * @deprecated Use 'Conversation' instead.
  */
+@Deprecated
 public interface ModelingConversation extends Conversation {
-
 }

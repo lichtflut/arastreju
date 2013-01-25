@@ -44,13 +44,10 @@ import org.slf4j.LoggerFactory;
  */
 public abstract class AbstractRioBinding implements SemanticGraphIO {
     
-    private final Logger logger = LoggerFactory.getLogger(AbstractRioBinding.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(AbstractRioBinding.class);
     
     // -----------------------------------------------------
     
-    /**
-     * {@inheritDoc}
-     */
      public void read(final InputStream in, ReadStatementListener listener) throws IOException, SemanticIOException {
          RDFParser parser = parserFactory().getParser();
          try {
@@ -64,24 +61,18 @@ public abstract class AbstractRioBinding implements SemanticGraphIO {
          }
      }
     
-   /**
-    * {@inheritDoc}
-    */
     public SemanticGraph read(final InputStream in) throws IOException, SemanticIOException {
         final StatementCollector collector = new StatementCollector();
         read(in, collector);
         return collector.toSemanticGraph();
     }
     
-    /**
-     * {@inheritDoc}
-     */
     public void write(final SemanticGraph graph, final OutputStream out)
             throws IOException, SemanticIOException {
         try {
             final RDFWriter writer = writerFactory().getWriter(out);
             final NamespaceMap nsMap = new NamespaceMap(graph.getNamespaces());
-            logger.debug("PrefixMap: \n" + nsMap);
+            LOGGER.debug("PrefixMap: \n" + nsMap);
             for(String prefix : nsMap.getPrefixes()){
                 writer.handleNamespace(prefix, nsMap.getNamespace(prefix).getUri());
             }
@@ -99,15 +90,12 @@ public abstract class AbstractRioBinding implements SemanticGraphIO {
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public void write(final StatementContainer container, final OutputStream out)
             throws IOException, SemanticIOException {
         try {
             final RDFWriter writer = writerFactory().getWriter(out);
             final NamespaceMap nsMap = new NamespaceMap(container.getNamespaces());
-            logger.debug("PrefixMap: \n" + nsMap);
+            LOGGER.debug("PrefixMap: \n" + nsMap);
             for(String prefix : nsMap.getPrefixes()){
                 writer.handleNamespace(prefix, nsMap.getNamespace(prefix).getUri());
             }

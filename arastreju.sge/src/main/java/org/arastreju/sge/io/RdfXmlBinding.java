@@ -39,21 +39,14 @@ public class RdfXmlBinding extends AbstractRioBinding {
      */
     public RdfXmlBinding() {
     }
-    
-    
+
     // ----------------------------------------------------
 
- 	/** 
- 	* {@inheritDoc}
- 	*/
  	@Override
  	protected RDFWriterFactory writerFactory() {
  		return new RDFXMLWriterFactory();
  	}
 
- 	/** 
- 	* {@inheritDoc}
- 	*/
  	@Override
  	protected RDFParserFactory parserFactory() {
  		return new RDFXMLParserFactory();

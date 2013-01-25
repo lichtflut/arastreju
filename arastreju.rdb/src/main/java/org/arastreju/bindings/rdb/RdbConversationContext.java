@@ -49,8 +49,12 @@ public class RdbConversationContext extends AbstractConversationContext {
 	@Override
 	protected void clearCaches() {
 	}
-	
-	public RdbConnectionProvider getConnectionProvider() {
+
+    @Override
+    protected void onClose() {
+    }
+
+    public RdbConnectionProvider getConnectionProvider() {
 		return connectionProvider;
 	}
 	

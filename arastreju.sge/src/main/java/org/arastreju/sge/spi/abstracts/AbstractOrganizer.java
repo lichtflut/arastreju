@@ -16,7 +16,6 @@
 package org.arastreju.sge.spi.abstracts;
 
 import org.arastreju.sge.Conversation;
-import org.arastreju.sge.ModelingConversation;
 import org.arastreju.sge.Organizer;
 import org.arastreju.sge.apriori.Aras;
 import org.arastreju.sge.apriori.RDF;
@@ -106,6 +105,6 @@ public abstract class AbstractOrganizer implements Organizer {
 
     // ----------------------------------------------------
 
-    protected abstract ModelingConversation conversation();
+    protected abstract Conversation conversation();
 
 }

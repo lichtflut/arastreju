@@ -8,7 +8,7 @@ import org.arastreju.sge.persistence.TxProvider;
 
 /**
  * <p>
- *  Context of a {@link ModelingConversation}.
+ *  Context of a {@link Conversation}.
  * </p>
  *
  * <p>
