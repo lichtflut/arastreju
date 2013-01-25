@@ -17,6 +17,7 @@ package org.arastreju.sge.model.associations;
 
 import java.util.Set;
 
+import org.arastreju.sge.ConversationContext;
 import org.arastreju.sge.model.Statement;
 import org.arastreju.sge.model.nodes.ResourceNode;
 
@@ -50,12 +51,19 @@ public interface AssociationKeeper {
 	 */
 	boolean removeAssociation(Statement stmt);
 	
-	// ----------------------------------------------------
-	
 	/**
 	 * @return The Associations to be removed on attachment.
 	 */
 	Set<Statement> getAssociationsForRemoval();
+
+    // ----------------------------------------------------
+
+    /**
+     * Get the conversation context this association keeper is bound to.
+     * If this keeper is detached, there will be no conversation context.
+     * @return The conversation context or null.
+     */
+    ConversationContext getConversationContext();
 	
 	/**
 	 * Check if this keeper is attached or detached.

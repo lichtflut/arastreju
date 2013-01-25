@@ -1,6 +1,9 @@
 package org.arastreju.bindings.memory.keepers;
 
+import org.arastreju.bindings.memory.conversation.MemConversationContext;
+import org.arastreju.sge.ConversationContext;
 import org.arastreju.sge.model.associations.AbstractAssociationKeeper;
+import org.arastreju.sge.model.associations.DetachedAssociationKeeper;
 
 /**
  * <p>
@@ -15,14 +18,43 @@ import org.arastreju.sge.model.associations.AbstractAssociationKeeper;
  */
 public class MemAssocKeeper extends AbstractAssociationKeeper {
 
+    private MemConversationContext context;
+
+    // ----------------------------------------------------
+
     @Override
     protected void resolveAssociations() {
-        //To change body of implemented methods use File | Settings | File Templates.
+        // do nothing - always resolved.
     }
 
     @Override
     public boolean isAttached() {
-        return true;
+        return context != null;
+    }
+
+    // ----------------------------------------------------
+
+    @Override
+    public MemConversationContext getConversationContext() {
+        return context;
+    }
+
+    public void setConversationContext(MemConversationContext context) {
+        this.context = context;
+    }
+
+    public void detach() {
+        context = null;
+    }
+
+    // ----------------------------------------------------
+
+    /**
+     * Called when being serialized --> Replace by detached association keeper.
+     * @return A Detached Association Keeper.
+     */
+    private Object writeReplace() {
+        return new DetachedAssociationKeeper(getAssociationsDirectly());
     }
 
 }

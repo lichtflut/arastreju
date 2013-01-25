@@ -87,8 +87,9 @@ public interface Conversation {
 	ResourceNode resolve(ResourceID resourceID);
 	
 	/**
-	 * Attach the resource to the conversation. 
+	 * Attach the resource to this conversation.
 	 * All changes to the attached node will immediately be persistent.
+     * If the node is attached to another conversation, it will be reattached here.
 	 * @param node The node to be attached.
 	 * @return The attached node.
 	 */

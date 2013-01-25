@@ -5,10 +5,12 @@ import org.arastreju.sge.ModelingConversation;
 import org.arastreju.sge.SNOPS;
 import org.arastreju.sge.model.SemanticGraph;
 import org.arastreju.sge.model.Statement;
+import org.arastreju.sge.model.associations.AssociationKeeper;
 import org.arastreju.sge.model.nodes.ResourceNode;
 import org.arastreju.sge.model.nodes.SemanticNode;
 import org.arastreju.sge.persistence.TransactionControl;
 import org.arastreju.sge.persistence.TxResultAction;
+import org.arastreju.sge.spi.AssocKeeperAccess;
 
 /**
  * <p>
@@ -101,5 +103,19 @@ public abstract class AbstractModelingConversation implements ModelingConversati
 
 	// ----------------------------------------------------
 
-	protected abstract void assertActive();
+    /**
+     * Check if the given node is attached to this conversation.
+     */
+    protected boolean isAttached(ResourceNode resource) {
+        AssociationKeeper given = AssocKeeperAccess.getInstance().getAssociationKeeper(resource);
+        ConversationContext givenCtx = given.getConversationContext();
+        return givenCtx != null && givenCtx.equals(getConversationContext());
+    }
+
+    protected void assertActive() {
+        if (!conversationContext.isActive()) {
+            throw new IllegalStateException("Conversation already closed.");
+        }
+    }
+
 }

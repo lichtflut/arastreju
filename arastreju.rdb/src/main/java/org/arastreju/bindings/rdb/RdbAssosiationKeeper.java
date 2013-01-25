@@ -16,6 +16,7 @@ import java.util.Set;
 
 import org.arastreju.bindings.rdb.jdbc.Column;
 import org.arastreju.bindings.rdb.jdbc.TableOperations;
+import org.arastreju.sge.ConversationContext;
 import org.arastreju.sge.SNOPS;
 import org.arastreju.sge.model.ElementaryDataType;
 import org.arastreju.sge.model.ResourceID;
@@ -139,6 +140,9 @@ public class RdbAssosiationKeeper extends AbstractAssociationKeeper {
 		}
 
 	}
-	
 
+    @Override
+    public ConversationContext getConversationContext() {
+        return null;
+    }
 }
