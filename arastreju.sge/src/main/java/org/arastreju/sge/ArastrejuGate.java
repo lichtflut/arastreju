@@ -35,7 +35,7 @@ public interface ArastrejuGate {
 	 * Starts a new Modeling Conversation allowing to read and change the model.
 	 * @return The modeling conversation.
 	 */
-	ModelingConversation startConversation();
+	Conversation startConversation();
 
     /**
      * Starts a new Modeling Conversation using the given contexts.
@@ -43,7 +43,7 @@ public interface ArastrejuGate {
      * @param readContexts The additional contexts to be regarded when traversing through the graph.
      * @return The modeling conversation.
      */
-    ModelingConversation startConversation(Context primary, Context... readContexts);
+    Conversation startConversation(Context primary, Context... readContexts);
 	
 	/**
 	 * Obtain the Organizer for Contexts and Namespaces.

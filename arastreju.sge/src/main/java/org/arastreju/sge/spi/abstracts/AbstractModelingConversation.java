@@ -1,7 +1,7 @@
 package org.arastreju.sge.spi.abstracts;
 
+import org.arastreju.sge.Conversation;
 import org.arastreju.sge.ConversationContext;
-import org.arastreju.sge.ModelingConversation;
 import org.arastreju.sge.SNOPS;
 import org.arastreju.sge.model.SemanticGraph;
 import org.arastreju.sge.model.Statement;
@@ -23,7 +23,7 @@ import org.arastreju.sge.spi.AssocKeeperAccess;
  *
  * @author Oliver Tigges
  */
-public abstract class AbstractModelingConversation implements ModelingConversation {
+public abstract class AbstractModelingConversation implements Conversation {
 
 	private final ConversationContext conversationContext;
 
@@ -31,14 +31,6 @@ public abstract class AbstractModelingConversation implements ModelingConversati
 
 	public AbstractModelingConversation(final ConversationContext conversationContext) {
 		this.conversationContext = conversationContext;
-	}
-
-	/**
-	 * @deprecated Use other constructor with conversation.
-	 */
-	@Deprecated
-	public AbstractModelingConversation() {
-		this.conversationContext = null;
 	}
 
 	// ----------------------------------------------------
