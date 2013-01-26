@@ -1,5 +1,7 @@
 package org.arastreju.bindings.memory.storage;
 
+import org.arastreju.sge.spi.GraphDataStore;
+
 /**
  * <p>
  *  The in memory database for resource nodes.
@@ -11,6 +13,6 @@ package org.arastreju.bindings.memory.storage;
  *
  * @author Oliver Tigges
  */
-public class MemStorage {
+public class MemStorage implements GraphDataStore {
 
 }

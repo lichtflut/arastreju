@@ -19,7 +19,7 @@ import org.arastreju.sge.ArastrejuProfile;
 
 /**
  * <p>
- *  [DESCRIPTION]
+ *  Listener for events in the arastreju profile.
  * </p>
  *
  * <p>
@@ -30,5 +30,5 @@ import org.arastreju.sge.ArastrejuProfile;
  */
 public interface ProfileCloseListener {
 
-	void onClosed(final ArastrejuProfile profile);
+	void onClosed(ArastrejuProfile profile);
 }
