@@ -1,15 +1,12 @@
 package org.arastreju.bindings.memory.conversation;
 
 import org.arastreju.bindings.memory.keepers.MemAssocKeeper;
-import org.arastreju.bindings.memory.storage.MemStorage;
+import org.arastreju.bindings.memory.storage.MemConnection;
 import org.arastreju.bindings.memory.tx.MemTransactionProvider;
 import org.arastreju.sge.context.Context;
 import org.arastreju.sge.naming.QualifiedName;
 import org.arastreju.sge.persistence.TxProvider;
 import org.arastreju.sge.spi.abstracts.AbstractConversationContext;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * <p>
@@ -22,65 +19,61 @@ import java.util.Map;
  *
  * @author Oliver Tigges
  */
-public class MemConversationContext extends AbstractConversationContext {
+public class MemConversationContext extends AbstractConversationContext<MemAssocKeeper> {
 
-    private final Map<QualifiedName, MemAssocKeeper> register = new HashMap<QualifiedName, MemAssocKeeper>();
-
-    private final MemStorage storage;
+    private final MemConnection connection;
 
     // ----------------------------------------------------
 
-    public MemConversationContext(MemStorage storage) {
-        this.storage = storage;
+    public MemConversationContext(MemConnection connection) {
+        this.connection = connection;
     }
 
-    public MemConversationContext(MemStorage storage, Context primary, Context... readContexts) {
+    public MemConversationContext(MemConnection connection, Context primary, Context... readContexts) {
        super(primary, readContexts);
-        this.storage = storage;
+       this.connection = connection;
     }
 
     // ----------------------------------------------------
+
+    /**
+     * Find the resource in this conversation context or in underlying data store.
+     * @param qn The resource's qualified name.
+     * @return The association keeper or null.
+     */
+    public MemAssocKeeper find(QualifiedName qn) {
+        assertActive();
+        MemAssocKeeper registered = lookup(qn);
+        if (registered != null) {
+            return registered;
+        }
+        MemAssocKeeper existing = connection.find(qn);
+        if (existing != null) {
+            MemAssocKeeper keeper = connection.find(qn);
+            attach(qn, keeper);
+            return keeper;
+        } else {
+            return null;
+        }
+    }
 
     /**
      * @param qn The resource's qualified name.
      * @return The association keeper or null;
      */
-    public MemAssocKeeper getAssociationKeeper(QualifiedName qn) {
+    public MemAssocKeeper create(QualifiedName qn) {
         assertActive();
-        return register.get(qn);
-    }
-
-    /**
-     * @param qn The resource's qualified name.
-     * @param keeper The keeper to be accessed.
-     */
-    public void attach(QualifiedName qn, MemAssocKeeper keeper) {
-        assertActive();
-        register.put(qn, keeper);
-        keeper.setConversationContext(this);
-    }
-
-    /**
-     * @param qn The resource's qualified name.
-     */
-    public void detach(QualifiedName qn) {
-        assertActive();
-        final MemAssocKeeper removed = register.remove(qn);
-        if (removed != null) {
-            removed.detach();
-        }
+        MemAssocKeeper keeper = connection.create(qn);
+        attach(qn, keeper);
+        return keeper;
     }
 
     // ----------------------------------------------------
 
-    @Override
-    protected void clearCaches() {
-        register.clear();
-    }
 
     @Override
     protected void onClose() {
-        register.clear();
+        clearCaches();
     }
 
     @Override

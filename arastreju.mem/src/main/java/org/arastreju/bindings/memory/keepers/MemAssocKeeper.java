@@ -2,8 +2,12 @@ package org.arastreju.bindings.memory.keepers;
 
 import org.arastreju.bindings.memory.conversation.MemConversationContext;
 import org.arastreju.sge.ConversationContext;
+import org.arastreju.sge.model.Statement;
 import org.arastreju.sge.model.associations.AbstractAssociationKeeper;
 import org.arastreju.sge.model.associations.DetachedAssociationKeeper;
+import org.arastreju.sge.naming.QualifiedName;
+
+import java.util.Set;
 
 /**
  * <p>
@@ -18,7 +22,22 @@ import org.arastreju.sge.model.associations.DetachedAssociationKeeper;
  */
 public class MemAssocKeeper extends AbstractAssociationKeeper {
 
-    private MemConversationContext context;
+    private ConversationContext context;
+    private QualifiedName qn;
+
+    // ----------------------------------------------------
+
+    public MemAssocKeeper(QualifiedName qn) {
+        this.qn = qn;
+    }
+
+    public MemAssocKeeper(Set<Statement> associations) {
+        super(associations);
+    }
+
+    public MemAssocKeeper(MemConversationContext context) {
+        this.context = context;
+    }
 
     // ----------------------------------------------------
 
@@ -35,11 +54,12 @@ public class MemAssocKeeper extends AbstractAssociationKeeper {
     // ----------------------------------------------------
 
     @Override
-    public MemConversationContext getConversationContext() {
+    public ConversationContext getConversationContext() {
         return context;
     }
 
-    public void setConversationContext(MemConversationContext context) {
+    @Override
+    public void setConversationContext(ConversationContext context) {
         this.context = context;
     }
 

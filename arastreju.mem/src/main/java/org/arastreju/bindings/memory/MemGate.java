@@ -1,9 +1,9 @@
 package org.arastreju.bindings.memory;
 
 import de.lichtflut.infra.exceptions.NotYetImplementedException;
+import org.arastreju.bindings.memory.conversation.MemConversation;
 import org.arastreju.bindings.memory.conversation.MemConversationContext;
-import org.arastreju.bindings.memory.conversation.MemModelingConversation;
-import org.arastreju.bindings.memory.storage.MemStorage;
+import org.arastreju.bindings.memory.storage.MemConnection;
 import org.arastreju.sge.Conversation;
 import org.arastreju.sge.Organizer;
 import org.arastreju.sge.context.Context;
@@ -23,28 +23,28 @@ import org.arastreju.sge.spi.abstracts.AbstractArastrejuGate;
  */
 public class MemGate extends AbstractArastrejuGate {
 
-    private MemStorage storage;
+    private MemConnection connection;
 
     // ----------------------------------------------------
 
-    public MemGate(MemStorage storage, DomainIdentifier domainIdentifier) {
+    public MemGate(MemConnection connection, DomainIdentifier domainIdentifier) {
         super(domainIdentifier);
-        this.storage = storage;
+        this.connection = connection;
     }
 
     // ----------------------------------------------------
 
     @Override
     public Conversation startConversation() {
-        MemConversationContext cc = new MemConversationContext(storage);
+        MemConversationContext cc = new MemConversationContext(connection);
         initContext(cc);
-        return new MemModelingConversation(cc);
+        return new MemConversation(cc);
     }
 
     @Override
     public Conversation startConversation(Context primary, Context... readContexts) {
-        MemConversationContext cc = new MemConversationContext(storage, primary, readContexts);
-        return new MemModelingConversation(cc);
+        MemConversationContext cc = new MemConversationContext(connection, primary, readContexts);
+        return new MemConversation(cc);
     }
 
     @Override

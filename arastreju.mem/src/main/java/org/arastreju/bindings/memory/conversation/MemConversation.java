@@ -6,11 +6,12 @@ import org.arastreju.bindings.memory.nodes.SNMemResource;
 import org.arastreju.sge.model.ResourceID;
 import org.arastreju.sge.model.Statement;
 import org.arastreju.sge.model.associations.AssociationKeeper;
+import org.arastreju.sge.model.associations.DetachedAssociationKeeper;
 import org.arastreju.sge.model.nodes.ResourceNode;
 import org.arastreju.sge.naming.QualifiedName;
 import org.arastreju.sge.query.Query;
 import org.arastreju.sge.spi.AssocKeeperAccess;
-import org.arastreju.sge.spi.abstracts.AbstractModelingConversation;
+import org.arastreju.sge.spi.abstracts.AbstractConversation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,13 +28,13 @@ import java.util.Set;
  *
  * @author Oliver Tigges
  */
-public class MemModelingConversation extends AbstractModelingConversation {
+public class MemConversation extends AbstractConversation {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(MemModelingConversation.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(MemConversation.class);
 
     // ----------------------------------------------------
 
-	public MemModelingConversation(final MemConversationContext conversationContext) {
+	public MemConversation(final MemConversationContext conversationContext) {
 		super(conversationContext);
 	}
 
@@ -41,24 +42,22 @@ public class MemModelingConversation extends AbstractModelingConversation {
 
 	@Override
 	public ResourceNode findResource(final QualifiedName qn) {
-        MemAssocKeeper foundInConversation = getConversationContext().getAssociationKeeper(qn);
-        if (foundInConversation != null) {
-            return new SNMemResource(qn, foundInConversation);
+        MemAssocKeeper existing = getConversationContext().find(qn);
+        if (existing != null) {
+            return new SNMemResource(qn, existing);
         }
-        // TODO: look in storage
-
         return null;
     }
 
 	@Override
 	public ResourceNode resolve(final ResourceID resourceID) {
-        MemAssocKeeper foundInConversation = getConversationContext().getAssociationKeeper(resourceID.getQualifiedName());
-        if (foundInConversation != null) {
-            return new SNMemResource(resourceID.getQualifiedName(), foundInConversation);
+        MemAssocKeeper existing = getConversationContext().find(resourceID.getQualifiedName());
+        if (existing != null) {
+            return new SNMemResource(resourceID.getQualifiedName(), existing);
+        } else {
+            AssociationKeeper created = getConversationContext().create(resourceID.getQualifiedName());
+            return new SNMemResource(resourceID.getQualifiedName(), created);
         }
-        // TODO: look in storage
-
-        return null;
 	}
 
 	@Override
@@ -67,19 +66,26 @@ public class MemModelingConversation extends AbstractModelingConversation {
             // already attached to this conversation - nothing to do
             return;
         }
-        AssociationKeeper given = AssocKeeperAccess.getInstance().getAssociationKeeper(node);
-        MemAssocKeeper foundInConversation = getConversationContext().getAssociationKeeper(node.getQualifiedName());
-        if (foundInConversation != null) {
-            // TODO: merge
+        AssocKeeperAccess accessor = AssocKeeperAccess.getInstance();
+        AssociationKeeper given = accessor.getAssociationKeeper(node);
+        MemAssocKeeper existing = getConversationContext().find(node.getQualifiedName());
+        if (existing != null) {
+            accessor.merge(existing, given);
+            accessor.setAssociationKeeper(node, existing);
         } else {
-            // TODO: create new node
+            AssociationKeeper created = getConversationContext().create(node.getQualifiedName());
+            accessor.setAssociationKeeper(node, created);
         }
 	}
 
 	@Override
 	public void detach(final ResourceNode node) {
-		throw new NotYetImplementedException();
+        AssocKeeperAccess.getInstance().setAssociationKeeper(
+                node, new DetachedAssociationKeeper(node.getAssociations()));
+        getConversationContext().detach(node.getQualifiedName());
 	}
+
+    // ----------------------------------------------------
 
 	@Override
 	public void reset(final ResourceNode node) {
@@ -100,7 +106,6 @@ public class MemModelingConversation extends AbstractModelingConversation {
     public Set<Statement> findIncomingStatements(final ResourceID object) {
         throw new NotYetImplementedException();
     }
-
 
     // ----------------------------------------------------
 

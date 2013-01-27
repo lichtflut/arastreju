@@ -63,6 +63,16 @@ public class DetachedAssociationKeeper extends AbstractAssociationKeeper {
     }
 
     @Override
+    public void setConversationContext(ConversationContext ctx) {
+        // do nothing
+    }
+
+    @Override
+    public void detach() {
+        // do nothing
+    }
+
+    @Override
 	protected void resolveAssociations() {
 		throw new ArastrejuRuntimeException(ErrorCodes.GENERAL_CONSISTENCY_FAILURE, 
 				"DetachedAssociationKeeper cannot resolve Associations: " + this);

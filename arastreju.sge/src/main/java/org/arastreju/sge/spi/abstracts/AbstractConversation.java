@@ -23,13 +23,13 @@ import org.arastreju.sge.spi.AssocKeeperAccess;
  *
  * @author Oliver Tigges
  */
-public abstract class AbstractModelingConversation implements Conversation {
+public abstract class AbstractConversation implements Conversation {
 
 	private final ConversationContext conversationContext;
 
 	// ----------------------------------------------------
 
-	public AbstractModelingConversation(final ConversationContext conversationContext) {
+	public AbstractConversation(final ConversationContext conversationContext) {
 		this.conversationContext = conversationContext;
 	}
 

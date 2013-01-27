@@ -64,11 +64,23 @@ public interface AssociationKeeper {
      * @return The conversation context or null.
      */
     ConversationContext getConversationContext();
+
+    /**
+     * Set the conversation context this association keeper is bound to.
+     * If this keeper is detached, there will be no conversation context.
+     * @return The conversation context or null.
+     */
+    void setConversationContext(ConversationContext ctx);
 	
 	/**
 	 * Check if this keeper is attached or detached.
 	 * @return true when the keeper is detached.
 	 */
 	boolean isAttached();
+
+    /**
+     * Detach this association keeper.
+     */
+    void detach();
 
 }

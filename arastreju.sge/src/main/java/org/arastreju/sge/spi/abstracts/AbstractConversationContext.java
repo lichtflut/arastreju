@@ -18,11 +18,15 @@ package org.arastreju.sge.spi.abstracts;
 
 import org.arastreju.sge.ConversationContext;
 import org.arastreju.sge.context.Context;
+import org.arastreju.sge.model.associations.AssociationKeeper;
+import org.arastreju.sge.naming.QualifiedName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -36,7 +40,7 @@ import java.util.Set;
  *
  * @author Oliver Tigges
  */
-public abstract class AbstractConversationContext implements ConversationContext {
+public abstract class AbstractConversationContext<T extends AssociationKeeper> implements ConversationContext {
 
 	public static final Context[] NO_CTX = new Context[0];
 
@@ -47,6 +51,8 @@ public abstract class AbstractConversationContext implements ConversationContext
 	// ----------------------------------------------------
 
     private final long ctxId = ++ID_GEN;
+
+    private final Map<QualifiedName, T> register = new HashMap<QualifiedName, T>();
 
     private Set<Context> readContexts = new HashSet<Context>();
 
@@ -73,6 +79,38 @@ public abstract class AbstractConversationContext implements ConversationContext
     }
 
 	// ----------------------------------------------------
+
+    /**
+     * Lookup the qualified name in the register.
+     * @param qn The qualified name.
+     * @return The association keeper or null.
+     */
+    public T lookup(QualifiedName qn) {
+        return register.get(qn);
+    }
+
+    /**
+     * @param qn The resource's qualified name.
+     * @param keeper The keeper to be accessed.
+     */
+    public void attach(QualifiedName qn, T keeper) {
+        assertActive();
+        register.put(qn, keeper);
+        keeper.setConversationContext(this);
+    }
+
+    /**
+     * @param qn The resource's qualified name.
+     */
+    public void detach(QualifiedName qn) {
+        assertActive();
+        final T removed = register.remove(qn);
+        if (removed != null) {
+            removed.detach();
+        }
+    }
+
+    // ----------------------------------------------------
 	
 	/**
 	 * Clear the cache.
@@ -161,11 +199,16 @@ public abstract class AbstractConversationContext implements ConversationContext
 
     // ----------------------------------------------------
 
-    protected abstract void clearCaches();
-
     protected abstract void onClose();
 
     // ----------------------------------------------------
+
+    protected void clearCaches() {
+        for (T keeper : register.values()) {
+            keeper.detach();
+        }
+        register.clear();
+    }
 	
 	protected void assertActive() {
 		if (!active) {
