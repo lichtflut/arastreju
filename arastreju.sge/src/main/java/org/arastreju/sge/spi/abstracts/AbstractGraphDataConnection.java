@@ -1,7 +1,10 @@
 package org.arastreju.sge.spi.abstracts;
 
-import org.arastreju.sge.ConversationContext;
+import org.arastreju.sge.model.associations.AssociationKeeper;
+import org.arastreju.sge.naming.QualifiedName;
+import org.arastreju.sge.persistence.TxProvider;
 import org.arastreju.sge.spi.GraphDataConnection;
+import org.arastreju.sge.spi.GraphDataStore;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -19,17 +22,48 @@ import java.util.Set;
  *
  * @author Oliver Tigges
  */
-public abstract class AbstractGraphDataConnection<T extends ConversationContext> implements GraphDataConnection {
+public abstract class AbstractGraphDataConnection<T extends AssociationKeeper> implements GraphDataConnection<T> {
 
-    private final Set<T> openConversations = new HashSet<T>();
+    private final Set<AbstractConversationContext<T>> openConversations = new HashSet<AbstractConversationContext<T>>();
+
+    private final GraphDataStore<T> store;
+
+    private final TxProvider txProvider;
 
     // ----------------------------------------------------
 
-    public void register(T conversationContext) {
+    protected AbstractGraphDataConnection(GraphDataStore<T> store, TxProvider txProvider) {
+        this.store = store;
+        this.txProvider = txProvider;
+    }
+
+    // ----------------------------------------------------
+
+    /**
+     * Find a resource.
+     * @param qn The resource's qualified name.
+     * @return The association keeper or null.
+     */
+    public T find(QualifiedName qn) {
+        return store.find(qn);
+    }
+
+    /**
+     * Create a new resource.
+     * @param qn The resource's qualified name.
+     * @return The new association keeper.
+     */
+    public T create(QualifiedName qn) {
+        return store.create(qn);
+    }
+
+    // ----------------------------------------------------
+
+    public void register(AbstractConversationContext<T> conversationContext) {
         openConversations.add(conversationContext);
     }
 
-    public void unregister(T conversationContext) {
+    public void unregister(AbstractConversationContext<T> conversationContext) {
         openConversations.remove(conversationContext);
     }
 
@@ -43,16 +77,26 @@ public abstract class AbstractGraphDataConnection<T extends ConversationContext>
      * Close the connection and free all resources.
      */
     public void close() {
-        List<T> copy = new ArrayList<T>(openConversations);
+        List<AbstractConversationContext<T>> copy = new ArrayList<AbstractConversationContext<T>>(openConversations);
         // iterating over copy because original will be remove itself while closing.
-        for (T cc : copy) {
+        for (AbstractConversationContext<T> cc : copy) {
             cc.close();
         }
     }
 
     // ----------------------------------------------------
 
-    protected Set<T> getOpenConversations() {
+    public GraphDataStore<T> getStore() {
+        return store;
+    }
+
+    public TxProvider getTxProvider() {
+        return txProvider;
+    }
+
+    // ----------------------------------------------------
+
+    protected Set<AbstractConversationContext<T>> getOpenConversations() {
         return openConversations;
     }
 }

@@ -20,6 +20,8 @@ import org.arastreju.sge.ConversationContext;
 import org.arastreju.sge.context.Context;
 import org.arastreju.sge.model.associations.AssociationKeeper;
 import org.arastreju.sge.naming.QualifiedName;
+import org.arastreju.sge.persistence.TxProvider;
+import org.arastreju.sge.spi.GraphDataConnection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -52,9 +54,11 @@ public abstract class AbstractConversationContext<T extends AssociationKeeper> i
 
     private final long ctxId = ++ID_GEN;
 
+    private final GraphDataConnection<T> connection;
+
     private final Map<QualifiedName, T> register = new HashMap<QualifiedName, T>();
 
-    private Set<Context> readContexts = new HashSet<Context>();
+    private final Set<Context> readContexts = new HashSet<Context>();
 
 	private Context primaryContext;
 
@@ -65,15 +69,16 @@ public abstract class AbstractConversationContext<T extends AssociationKeeper> i
 	/**
 	 * Creates a new Working Context.
 	 */
-	public AbstractConversationContext() {
+	public AbstractConversationContext(GraphDataConnection<T> connection) {
 		LOGGER.debug("New Conversation Context startet. " + ctxId);
+        this.connection = connection;
 	}
 
     /**
      * Creates a new Working Context.
      */
-    public AbstractConversationContext(Context primaryContext, Context... readContexts) {
-        this();
+    public AbstractConversationContext(GraphDataConnection<T> connection, Context primaryContext, Context... readContexts) {
+        this(connection);
         setPrimaryContext(primaryContext);
         setReadContexts(readContexts);
     }
@@ -87,6 +92,37 @@ public abstract class AbstractConversationContext<T extends AssociationKeeper> i
      */
     public T lookup(QualifiedName qn) {
         return register.get(qn);
+    }
+
+    /**
+     * Find the resource in this conversation context or in underlying data store.
+     * @param qn The resource's qualified name.
+     * @return The association keeper or null.
+     */
+    public T find(QualifiedName qn) {
+        assertActive();
+        T registered = lookup(qn);
+        if (registered != null) {
+            return registered;
+        }
+        T existing = connection.find(qn);
+        if (existing != null) {
+            attach(qn, existing);
+            return existing;
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * @param qn The resource's qualified name.
+     * @return The association keeper or null;
+     */
+    public T create(QualifiedName qn) {
+        assertActive();
+        T keeper = connection.create(qn);
+        attach(qn, keeper);
+        return keeper;
     }
 
     /**
@@ -111,7 +147,15 @@ public abstract class AbstractConversationContext<T extends AssociationKeeper> i
     }
 
     // ----------------------------------------------------
-	
+
+    public TxProvider getTxProvider() {
+        return connection.getTxProvider();
+    }
+
+    public GraphDataConnection<T> getConnection() {
+        return connection;
+    }
+
 	/**
 	 * Clear the cache.
 	 */
@@ -199,9 +243,18 @@ public abstract class AbstractConversationContext<T extends AssociationKeeper> i
 
     // ----------------------------------------------------
 
-    protected abstract void onClose();
+    /**
+     * Called when a resource has been modified by another conversation context with same graph data connection.
+     * @param qualifiedName The qualified name of the modified resource.
+     * @param otherContext The other context, where the modification occurred.
+     */
+    public abstract void onModification(QualifiedName qualifiedName, ConversationContext otherContext);
 
     // ----------------------------------------------------
+
+    protected void onClose() {
+        connection.unregister(this);
+    }
 
     protected void clearCaches() {
         for (T keeper : register.values()) {
