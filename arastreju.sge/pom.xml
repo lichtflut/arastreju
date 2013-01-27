@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>org.arastreju</groupId>
 		<artifactId>arastreju</artifactId>
-		<version>0.8.1</version>
+		<version>0.8.2-SNAPSHOT</version>
 	</parent>
 	<groupId>org.arastreju</groupId>
 	<artifactId>arastreju.sge</artifactId>
