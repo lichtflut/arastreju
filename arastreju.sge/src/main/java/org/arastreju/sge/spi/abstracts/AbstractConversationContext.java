@@ -21,6 +21,7 @@ import org.arastreju.sge.context.Context;
 import org.arastreju.sge.model.associations.AssociationKeeper;
 import org.arastreju.sge.naming.QualifiedName;
 import org.arastreju.sge.persistence.TxProvider;
+import org.arastreju.sge.persistence.TxResultAction;
 import org.arastreju.sge.spi.GraphDataConnection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -118,9 +119,14 @@ public abstract class AbstractConversationContext<T extends AssociationKeeper> i
      * @param qn The resource's qualified name.
      * @return The association keeper or null;
      */
-    public T create(QualifiedName qn) {
+    public T create(final QualifiedName qn) {
         assertActive();
-        T keeper = connection.create(qn);
+        T keeper = getTxProvider().doTransacted(new TxResultAction<T>() {
+            @Override
+            public T execute() {
+                return connection.create(qn);
+            }
+        });
         attach(qn, keeper);
         return keeper;
     }
