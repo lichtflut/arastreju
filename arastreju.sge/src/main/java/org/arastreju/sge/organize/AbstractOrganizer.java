@@ -13,10 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.arastreju.sge.spi.abstracts;
+package org.arastreju.sge.organize;
 
 import org.arastreju.sge.Conversation;
-import org.arastreju.sge.Organizer;
 import org.arastreju.sge.apriori.Aras;
 import org.arastreju.sge.apriori.RDF;
 import org.arastreju.sge.context.Context;

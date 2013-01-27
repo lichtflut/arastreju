@@ -105,7 +105,7 @@ public interface Conversation {
 	/**
 	 * Reset a detached node to the state in the persisted state.
 	 * If the node is attached this call will have no effect.
-	 * @param node The node to be reseted.
+	 * @param node The node to be reset.
 	 */
 	void reset(ResourceNode node);
 	

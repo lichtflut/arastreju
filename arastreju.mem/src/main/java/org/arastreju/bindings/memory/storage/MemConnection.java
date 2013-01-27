@@ -1,12 +1,7 @@
 package org.arastreju.bindings.memory.storage;
 
-import org.arastreju.bindings.memory.conversation.MemConversationContext;
-import org.arastreju.bindings.memory.keepers.MemAssocKeeper;
+import org.arastreju.bindings.memory.keepers.MemAssociationKeeper;
 import org.arastreju.bindings.memory.tx.MemTransactionProvider;
-import org.arastreju.sge.ConversationContext;
-import org.arastreju.sge.naming.QualifiedName;
-import org.arastreju.sge.persistence.TxProvider;
-import org.arastreju.sge.spi.GraphDataStore;
 import org.arastreju.sge.spi.abstracts.AbstractGraphDataConnection;
 
 /**
@@ -20,7 +15,7 @@ import org.arastreju.sge.spi.abstracts.AbstractGraphDataConnection;
  *
  * @author Oliver Tigges
  */
-public class MemConnection extends AbstractGraphDataConnection<MemAssocKeeper> {
+public class MemConnection extends AbstractGraphDataConnection<MemAssociationKeeper> {
 
     public MemConnection(MemStorage storage) {
         super(storage, new MemTransactionProvider());

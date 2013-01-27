@@ -43,7 +43,7 @@ import java.util.Set;
  *
  * @author Oliver Tigges
  */
-public abstract class AbstractConversationContext<T extends AssociationKeeper> implements ConversationContext {
+public abstract class AbstractConversationContext<T extends AssociationKeeper> implements WorkingContext {
 
 	public static final Context[] NO_CTX = new Context[0];
 

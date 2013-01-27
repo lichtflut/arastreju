@@ -1,6 +1,5 @@
 package org.arastreju.bindings.memory.nodes;
 
-import org.arastreju.bindings.memory.keepers.MemAssocKeeper;
 import org.arastreju.sge.model.associations.AssociationKeeper;
 import org.arastreju.sge.model.nodes.SNResource;
 import org.arastreju.sge.naming.QualifiedName;

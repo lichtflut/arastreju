@@ -20,22 +20,22 @@ import java.util.Set;
  *
  * @author Oliver Tigges
  */
-public class MemAssocKeeper extends AbstractAssociationKeeper {
+public class MemAssociationKeeper extends AbstractAssociationKeeper {
 
     private ConversationContext context;
     private QualifiedName qn;
 
     // ----------------------------------------------------
 
-    public MemAssocKeeper(QualifiedName qn) {
+    public MemAssociationKeeper(QualifiedName qn) {
         this.qn = qn;
     }
 
-    public MemAssocKeeper(Set<Statement> associations) {
+    public MemAssociationKeeper(Set<Statement> associations) {
         super(associations);
     }
 
-    public MemAssocKeeper(MemConversationContext context) {
+    public MemAssociationKeeper(MemConversationContext context) {
         this.context = context;
     }
 

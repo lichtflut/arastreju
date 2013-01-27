@@ -1,7 +1,7 @@
 package org.arastreju.bindings.memory.conversation;
 
 import de.lichtflut.infra.exceptions.NotYetImplementedException;
-import org.arastreju.bindings.memory.keepers.MemAssocKeeper;
+import org.arastreju.bindings.memory.keepers.MemAssociationKeeper;
 import org.arastreju.bindings.memory.nodes.SNMemResource;
 import org.arastreju.sge.model.ResourceID;
 import org.arastreju.sge.model.Statement;
@@ -42,7 +42,7 @@ public class MemConversation extends AbstractConversation {
 
 	@Override
 	public ResourceNode findResource(final QualifiedName qn) {
-        MemAssocKeeper existing = getConversationContext().find(qn);
+        MemAssociationKeeper existing = getConversationContext().find(qn);
         if (existing != null) {
             return new SNMemResource(qn, existing);
         }
@@ -51,7 +51,7 @@ public class MemConversation extends AbstractConversation {
 
 	@Override
 	public ResourceNode resolve(final ResourceID resourceID) {
-        MemAssocKeeper existing = getConversationContext().find(resourceID.getQualifiedName());
+        MemAssociationKeeper existing = getConversationContext().find(resourceID.getQualifiedName());
         if (existing != null) {
             return new SNMemResource(resourceID.getQualifiedName(), existing);
         } else {
@@ -68,7 +68,7 @@ public class MemConversation extends AbstractConversation {
         }
         AssocKeeperAccess accessor = AssocKeeperAccess.getInstance();
         AssociationKeeper given = accessor.getAssociationKeeper(node);
-        MemAssocKeeper existing = getConversationContext().find(node.getQualifiedName());
+        MemAssociationKeeper existing = getConversationContext().find(node.getQualifiedName());
         if (existing != null) {
             accessor.merge(existing, given);
             accessor.setAssociationKeeper(node, existing);
@@ -89,13 +89,23 @@ public class MemConversation extends AbstractConversation {
 
 	@Override
 	public void reset(final ResourceNode node) {
-		throw new NotYetImplementedException();
+        if (isAttached(node)) {
+            return;
+        }
+        MemAssociationKeeper existing = getConversationContext().find(node.getQualifiedName());
+        if (existing != null) {
+            AssocKeeperAccess.getInstance().setAssociationKeeper(node, existing);
+        } else {
+            throw new IllegalStateException("Detached node cannot be reset.");
+        }
 	}
 
 	@Override
 	public void remove(final ResourceID id) {
-		throw new NotYetImplementedException();
+        getConversationContext().detach(id.getQualifiedName());
 	}
+
+    // ----------------------------------------------------
 
     @Override
     public Query createQuery() {

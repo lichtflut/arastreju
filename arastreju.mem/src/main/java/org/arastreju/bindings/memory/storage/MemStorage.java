@@ -1,6 +1,6 @@
 package org.arastreju.bindings.memory.storage;
 
-import org.arastreju.bindings.memory.keepers.MemAssocKeeper;
+import org.arastreju.bindings.memory.keepers.MemAssociationKeeper;
 import org.arastreju.sge.naming.QualifiedName;
 import org.arastreju.sge.spi.GraphDataStore;
 
@@ -18,26 +18,26 @@ import java.util.Map;
  *
  * @author Oliver Tigges
  */
-public class MemStorage implements GraphDataStore<MemAssocKeeper> {
+public class MemStorage implements GraphDataStore<MemAssociationKeeper> {
 
     private final Map<QualifiedName, StoredResource> store = new HashMap<QualifiedName, StoredResource>();
 
     // ----------------------------------------------------
 
     @Override
-    public MemAssocKeeper find(QualifiedName qn) {
+    public MemAssociationKeeper find(QualifiedName qn) {
         StoredResource storedResource = store.get(qn);
         if (storedResource != null) {
-            return new MemAssocKeeper(storedResource.getStatements());
+            return new MemAssociationKeeper(storedResource.getStatements());
         } else {
             return null;
         }
     }
 
     @Override
-    public MemAssocKeeper create(QualifiedName qn) {
+    public MemAssociationKeeper create(QualifiedName qn) {
         store.put(qn, new StoredResource(qn));
-        return new MemAssocKeeper(qn);
+        return new MemAssociationKeeper(qn);
     }
 
 }

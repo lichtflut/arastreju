@@ -1,6 +1,6 @@
 package org.arastreju.bindings.memory.conversation;
 
-import org.arastreju.bindings.memory.keepers.MemAssocKeeper;
+import org.arastreju.bindings.memory.keepers.MemAssociationKeeper;
 import org.arastreju.bindings.memory.storage.MemConnection;
 import org.arastreju.sge.ConversationContext;
 import org.arastreju.sge.context.Context;
@@ -18,7 +18,7 @@ import org.arastreju.sge.spi.abstracts.AbstractConversationContext;
  *
  * @author Oliver Tigges
  */
-public class MemConversationContext extends AbstractConversationContext<MemAssocKeeper> {
+public class MemConversationContext extends AbstractConversationContext<MemAssociationKeeper> {
 
     public MemConversationContext(MemConnection connection) {
         super(connection);

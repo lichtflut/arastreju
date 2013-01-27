@@ -17,6 +17,7 @@ package org.arastreju.sge;
 
 
 import org.arastreju.sge.context.Context;
+import org.arastreju.sge.organize.Organizer;
 
 /**
  * <p>
