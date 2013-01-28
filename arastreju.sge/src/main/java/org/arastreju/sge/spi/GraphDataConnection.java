@@ -1,6 +1,5 @@
 package org.arastreju.sge.spi;
 
-import org.arastreju.sge.ConversationContext;
 import org.arastreju.sge.model.associations.AssociationKeeper;
 import org.arastreju.sge.naming.QualifiedName;
 import org.arastreju.sge.persistence.TxProvider;
@@ -41,5 +40,8 @@ public interface GraphDataConnection<T extends AssociationKeeper> {
 
     // ----------------------------------------------------
 
+    void register(AbstractConversationContext<T> conversationContext);
+
     void unregister(AbstractConversationContext<T> conversationContext);
+
 }

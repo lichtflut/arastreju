@@ -40,4 +40,9 @@ public class MemStorage implements GraphDataStore<MemAssociationKeeper> {
         return new MemAssociationKeeper(qn);
     }
 
+    @Override
+    public void remove(QualifiedName qn) {
+        store.remove(qn);
+    }
+
 }

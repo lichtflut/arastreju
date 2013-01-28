@@ -24,7 +24,7 @@ import java.util.Set;
  */
 public abstract class AbstractGraphDataConnection<T extends AssociationKeeper> implements GraphDataConnection<T> {
 
-    private final Set<AbstractConversationContext<T>> openConversations = new HashSet<AbstractConversationContext<T>>();
+    private final Set<WorkingContext<T>> openConversations = new HashSet<WorkingContext<T>>();
 
     private final GraphDataStore<T> store;
 
@@ -39,64 +39,55 @@ public abstract class AbstractGraphDataConnection<T extends AssociationKeeper> i
 
     // ----------------------------------------------------
 
-    /**
-     * Find a resource.
-     * @param qn The resource's qualified name.
-     * @return The association keeper or null.
-     */
+    @Override
     public T find(QualifiedName qn) {
         return store.find(qn);
     }
 
-    /**
-     * Create a new resource.
-     * @param qn The resource's qualified name.
-     * @return The new association keeper.
-     */
+    @Override
     public T create(QualifiedName qn) {
         return store.create(qn);
     }
 
     // ----------------------------------------------------
 
+    @Override
     public void register(AbstractConversationContext<T> conversationContext) {
         openConversations.add(conversationContext);
     }
 
+    @Override
     public void unregister(AbstractConversationContext<T> conversationContext) {
         openConversations.remove(conversationContext);
-    }
-
-    /**
-     * (re-)open the connection.
-     */
-    public void open() {
     }
 
     /**
      * Close the connection and free all resources.
      */
     public void close() {
-        List<AbstractConversationContext<T>> copy = new ArrayList<AbstractConversationContext<T>>(openConversations);
+        List<WorkingContext<T>> copy = new ArrayList<WorkingContext<T>>(openConversations);
         // iterating over copy because original will be remove itself while closing.
-        for (AbstractConversationContext<T> cc : copy) {
+        for (WorkingContext<T> cc : copy) {
             cc.close();
         }
     }
 
     // ----------------------------------------------------
 
+    @Override
     public GraphDataStore<T> getStore() {
         return store;
     }
 
+    @Override
     public TxProvider getTxProvider() {
         return txProvider;
     }
 
     // ----------------------------------------------------
 
-    protected Set<AbstractConversationContext<T>> getOpenConversations() {
+    protected Set<WorkingContext<T>> getOpenConversations() {
         return openConversations;
     }
+
 }

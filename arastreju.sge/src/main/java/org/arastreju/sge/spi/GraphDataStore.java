@@ -29,4 +29,10 @@ public interface GraphDataStore<T extends AssociationKeeper> {
      * @return The new association keeper.
      */
     T create(QualifiedName qn);
+
+    /**
+     * Remove the resource identified by qualified name from the store.
+     * @param qn The qualified name.
+     */
+    void remove(QualifiedName qn);
 }

@@ -29,8 +29,6 @@ public interface ConversationContext {
 
 	void clear();
 
-    void close();
-
     // ----------------------------------------------------
 
     TxProvider getTxProvider();

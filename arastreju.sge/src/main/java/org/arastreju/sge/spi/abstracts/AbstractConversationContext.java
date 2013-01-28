@@ -43,7 +43,7 @@ import java.util.Set;
  *
  * @author Oliver Tigges
  */
-public abstract class AbstractConversationContext<T extends AssociationKeeper> implements WorkingContext {
+public abstract class AbstractConversationContext<T extends AssociationKeeper> implements WorkingContext<T> {
 
 	public static final Context[] NO_CTX = new Context[0];
 
@@ -73,6 +73,7 @@ public abstract class AbstractConversationContext<T extends AssociationKeeper> i
 	public AbstractConversationContext(GraphDataConnection<T> connection) {
 		LOGGER.debug("New Conversation Context startet. " + ctxId);
         this.connection = connection;
+        connection.register(this);
 	}
 
     /**
@@ -174,6 +175,7 @@ public abstract class AbstractConversationContext<T extends AssociationKeeper> i
 	/**
 	 * Close and invalidate this context.
 	 */
+    @Override
 	public void close() {
 		if (active) {
 			clear();
@@ -189,6 +191,10 @@ public abstract class AbstractConversationContext<T extends AssociationKeeper> i
     public boolean isActive() {
 		return active;
 	}
+
+    @Override
+    public void onModification(QualifiedName qualifiedName, WorkingContext otherContext) {
+    }
 	
 	// ----------------------------------------------------
 	
@@ -246,15 +252,6 @@ public abstract class AbstractConversationContext<T extends AssociationKeeper> i
     public String toString() {
         return "ConversationContext[" +  ctxId + "]";
     }
-
-    // ----------------------------------------------------
-
-    /**
-     * Called when a resource has been modified by another conversation context with same graph data connection.
-     * @param qualifiedName The qualified name of the modified resource.
-     * @param otherContext The other context, where the modification occurred.
-     */
-    public abstract void onModification(QualifiedName qualifiedName, ConversationContext otherContext);
 
     // ----------------------------------------------------
 

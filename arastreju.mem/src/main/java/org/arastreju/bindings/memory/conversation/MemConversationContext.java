@@ -6,6 +6,7 @@ import org.arastreju.sge.ConversationContext;
 import org.arastreju.sge.context.Context;
 import org.arastreju.sge.naming.QualifiedName;
 import org.arastreju.sge.spi.abstracts.AbstractConversationContext;
+import org.arastreju.sge.spi.abstracts.WorkingContext;
 
 /**
  * <p>
@@ -28,10 +29,4 @@ public class MemConversationContext extends AbstractConversationContext<MemAssoc
        super(connection, primary, readContexts);
     }
 
-    // ----------------------------------------------------
-
-    @Override
-    public void onModification(QualifiedName qualifiedName, ConversationContext otherContext) {
-        // TODO: implement
-    }
 }
