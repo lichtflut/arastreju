@@ -1,7 +1,7 @@
 package org.arastreju.sge.index;
 
-import de.lichtflut.infra.exceptions.NotYetImplementedException;
 import de.lichtflut.infra.exceptions.NotYetSupportedException;
+import org.arastreju.sge.naming.QualifiedName;
 import org.arastreju.sge.query.QueryBuilder;
 import org.arastreju.sge.query.QueryException;
 import org.arastreju.sge.query.QueryExpression;
@@ -26,8 +26,9 @@ public class LuceneQueryBuilder extends QueryBuilder {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(LuceneQueryBuilder.class);
 
-    private IndexSearcher searcher;
-    private QNResolver resolver;
+    private final IndexSearcher searcher;
+
+    private final QNResolver resolver;
 
     // -----------------------------------------------------
 
@@ -45,7 +46,8 @@ public class LuceneQueryBuilder extends QueryBuilder {
 
     @Override
     public QueryResult getResult() {
-        throw new NotYetImplementedException();
+        final Iterable<QualifiedName> hits = searcher.search(toQueryString());
+        return new LuceneQueryResult(hits, resolver);
     }
 
     // -----------------------------------------------------
