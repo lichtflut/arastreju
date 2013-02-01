@@ -57,6 +57,49 @@ public abstract class AttachedAssociationKeeper extends AbstractAssociationKeepe
     // ----------------------------------------------------
 
     @Override
+    public void addAssociation(final Statement assoc) {
+        if (getAssociations().contains(assoc)) {
+            return;
+        }
+        if (isAttached()) {
+            getConversationContext().addAssociation(this, assoc);
+        } else {
+            super.addAssociation(assoc);
+        }
+    }
+
+    @Override
+    public boolean removeAssociation(final Statement assoc) {
+        if (isAttached()) {
+            getAssociations().remove(assoc);
+            return getConversationContext().removeAssociation(this, assoc);
+        } else {
+            return super.removeAssociation(assoc);
+        }
+    }
+
+    @Override
+    protected void resolveAssociations() {
+        if (isAttached()) {
+            getConversationContext().resolveAssociations(this);
+        } else {
+            throw new IllegalStateException("This node is no longer attached. Cannot resolve associations.");
+        }
+    }
+
+    // ----------------------------------------------------
+
+    /**
+     * Called when the underlying neo node has been changed in another conversation.
+     * The state of this node must be reset to trigger a reload later.
+     */
+    public void notifyChanged() {
+        reset();
+    }
+
+    // ----------------------------------------------------
+
+    @Override
     public boolean isAttached() {
         return context != null && context.isActive();
     }

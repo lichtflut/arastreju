@@ -194,9 +194,14 @@ public abstract class AbstractConversationContext<T extends AttachedAssociationK
 
     @Override
     public void onModification(QualifiedName qualifiedName, WorkingContext otherContext) {
+        T existing = lookup(qualifiedName);
+        if (existing != null) {
+            LOGGER.info("Concurrent change on node {} in other context {}.", qualifiedName, otherContext);
+            existing.notifyChanged();
+        }
     }
-	
-	// ----------------------------------------------------
+
+    // ----------------------------------------------------
 	
 	public Context[] getReadContexts() {
 		assertActive();
