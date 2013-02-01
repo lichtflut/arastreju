@@ -84,10 +84,6 @@
 			<groupId>org.apache.lucene</groupId>
 			<artifactId>lucene-core</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>org.apache.lucene</groupId>
-			<artifactId>lucene-analyzers-common</artifactId>
-		</dependency>
 	</dependencies>
 	<repositories>
 		<repository>
