@@ -47,107 +47,78 @@ public abstract class QueryBuilder implements Query {
 	public QueryBuilder() {}
 	
 	// -----------------------------------------------------
+
+    /**
+     * Get the single node from the query result.
+     * @return A single node.
+     */
+    public ResourceNode getSingleNode() {
+        return getResult().getSingleNode();
+    }
+
+    // ----------------------------------------------------
 	
-	/**
-	 * {@inheritDoc}
-	 */
-	public abstract QueryResult getResult();
-	
-	/** 
-	 * {@inheritDoc}
-	 */
-	public abstract ResourceNode getSingleNode();
-	
-	// -----------------------------------------------------
-	
-	/** 
-	 * {@inheritDoc}
-	 */
+	@Override
 	public QueryBuilder add(final QueryParam param) {
 		return append(param);
 	}
-	
-	/** 
-	 * {@inheritDoc}
-	 */
+
+    @Override
 	public Query addField(String name, Object value) {
 		return append(new FieldParam(name, value));
 	}
 
-	/** 
-	 * {@inheritDoc}
-	 */
+    @Override
 	public Query addField(ResourceID name, Object value) {
 		return append(new FieldParam(name, value));
 	}
 
-	/** 
-	 * {@inheritDoc}
-	 */
+    @Override
 	public Query addField(QualifiedName name, Object value) {
 		return append(new FieldParam(name, value));
 	}
 
-	/** 
-	 * {@inheritDoc}
-	 */
+    @Override
 	public Query addURI(String term) {
 		return append(new UriParam(term));
 	}
 
-	/** 
-	 * {@inheritDoc}
-	 */
+    @Override
 	public Query addValue(String term) {
 		return append(new ValueParam(term));
 	}
-	
-	/** 
-	 * {@inheritDoc}
-	 */
-	@Override
+
+    @Override
 	public Query addRelation(String term) {
 		return append(new RelationQuery(term));
 	}
-	
-	/** 
-	 * {@inheritDoc}
-	 */
+
+    @Override
 	public QueryBuilder and() {
 		return prepend(AbstractQueryExpression.and());
 	}
-	
-	/** 
-	 * {@inheritDoc}
-	 */
+
+    @Override
 	public QueryBuilder or() {
 		return prepend(AbstractQueryExpression.or());
 	}
-	
-	/** 
-	 * {@inheritDoc}
-	 */
+
+    @Override
 	public QueryBuilder not() {
 		return append(AbstractQueryExpression.not());
 	}
-	
-	/** 
-	 * {@inheritDoc}
-	 */
+
+    @Override
 	public QueryBuilder beginAnd() {
 		return append(AbstractQueryExpression.and());
 	}
-	
-	/** 
-	 * {@inheritDoc}
-	 */
+
+    @Override
 	public QueryBuilder beginOr() {
 		return append(AbstractQueryExpression.or());
 	}
 	
-	/** 
-	 * {@inheritDoc}
-	 */
+	@Override
 	public QueryBuilder end() {
 		if (stack.size() > 1) {
 			stack.pop();
@@ -163,10 +134,7 @@ public abstract class QueryBuilder implements Query {
 	}
 	
 	// -----------------------------------------------------
-	
-	/** 
-	 * {@inheritDoc}
-	 */
+
 	@Override
 	public String toString() {
 		if (!stack.isEmpty()) {
