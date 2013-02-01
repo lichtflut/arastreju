@@ -1,6 +1,7 @@
 package org.arastreju.sge.spi.abstracts;
 
 import org.arastreju.sge.model.associations.AssociationKeeper;
+import org.arastreju.sge.model.associations.AttachedAssociationKeeper;
 import org.arastreju.sge.naming.QualifiedName;
 import org.arastreju.sge.persistence.TxProvider;
 import org.arastreju.sge.spi.GraphDataConnection;
@@ -22,7 +23,7 @@ import java.util.Set;
  *
  * @author Oliver Tigges
  */
-public abstract class AbstractGraphDataConnection<T extends AssociationKeeper> implements GraphDataConnection<T> {
+public abstract class AbstractGraphDataConnection<T extends AttachedAssociationKeeper> implements GraphDataConnection<T> {
 
     private final Set<WorkingContext<T>> openConversations = new HashSet<WorkingContext<T>>();
 

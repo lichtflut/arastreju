@@ -1,6 +1,6 @@
 package org.arastreju.sge.spi;
 
-import org.arastreju.sge.model.associations.AssociationKeeper;
+import org.arastreju.sge.model.associations.AttachedAssociationKeeper;
 import org.arastreju.sge.naming.QualifiedName;
 import org.arastreju.sge.persistence.TxProvider;
 import org.arastreju.sge.spi.abstracts.AbstractConversationContext;
@@ -16,7 +16,7 @@ import org.arastreju.sge.spi.abstracts.AbstractConversationContext;
  *
  * @author Oliver Tigges
  */
-public interface GraphDataConnection<T extends AssociationKeeper> {
+public interface GraphDataConnection<T extends AttachedAssociationKeeper> {
 
     /**
      * Find a resource.

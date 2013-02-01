@@ -1,11 +1,10 @@
 package org.arastreju.bindings.memory.keepers;
 
-import org.arastreju.bindings.memory.conversation.MemConversationContext;
-import org.arastreju.sge.ConversationContext;
 import org.arastreju.sge.model.Statement;
-import org.arastreju.sge.model.associations.AbstractAssociationKeeper;
+import org.arastreju.sge.model.associations.AttachedAssociationKeeper;
 import org.arastreju.sge.model.associations.DetachedAssociationKeeper;
 import org.arastreju.sge.naming.QualifiedName;
+import org.arastreju.sge.spi.abstracts.WorkingContext;
 
 import java.util.Set;
 
@@ -20,23 +19,14 @@ import java.util.Set;
  *
  * @author Oliver Tigges
  */
-public class MemAssociationKeeper extends AbstractAssociationKeeper {
-
-    private ConversationContext context;
-    private QualifiedName qn;
-
-    // ----------------------------------------------------
+public class MemAssociationKeeper extends AttachedAssociationKeeper {
 
     public MemAssociationKeeper(QualifiedName qn) {
-        this.qn = qn;
+        super(qn);
     }
 
-    public MemAssociationKeeper(Set<Statement> associations) {
-        super(associations);
-    }
-
-    public MemAssociationKeeper(MemConversationContext context) {
-        this.context = context;
+    public MemAssociationKeeper(QualifiedName qn, Set<Statement> associations) {
+        super(qn, associations);
     }
 
     // ----------------------------------------------------
@@ -44,27 +34,6 @@ public class MemAssociationKeeper extends AbstractAssociationKeeper {
     @Override
     protected void resolveAssociations() {
         // do nothing - always resolved.
-    }
-
-    @Override
-    public boolean isAttached() {
-        return context != null;
-    }
-
-    // ----------------------------------------------------
-
-    @Override
-    public ConversationContext getConversationContext() {
-        return context;
-    }
-
-    @Override
-    public void setConversationContext(ConversationContext context) {
-        this.context = context;
-    }
-
-    public void detach() {
-        context = null;
     }
 
     // ----------------------------------------------------

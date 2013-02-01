@@ -28,7 +28,7 @@ public class MemStorage implements GraphDataStore<MemAssociationKeeper> {
     public MemAssociationKeeper find(QualifiedName qn) {
         StoredResource storedResource = store.get(qn);
         if (storedResource != null) {
-            return new MemAssociationKeeper(storedResource.getStatements());
+            return new MemAssociationKeeper(qn, storedResource.getStatements());
         } else {
             return null;
         }

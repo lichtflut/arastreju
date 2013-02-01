@@ -18,7 +18,7 @@ package org.arastreju.sge.spi.abstracts;
 
 import org.arastreju.sge.ConversationContext;
 import org.arastreju.sge.context.Context;
-import org.arastreju.sge.model.associations.AssociationKeeper;
+import org.arastreju.sge.model.associations.AttachedAssociationKeeper;
 import org.arastreju.sge.naming.QualifiedName;
 import org.arastreju.sge.persistence.TxProvider;
 import org.arastreju.sge.persistence.TxResultAction;
@@ -43,7 +43,7 @@ import java.util.Set;
  *
  * @author Oliver Tigges
  */
-public abstract class AbstractConversationContext<T extends AssociationKeeper> implements WorkingContext<T> {
+public abstract class AbstractConversationContext<T extends AttachedAssociationKeeper> implements WorkingContext<T> {
 
 	public static final Context[] NO_CTX = new Context[0];
 

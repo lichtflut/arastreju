@@ -16,12 +16,12 @@
 package org.arastreju.sge.model.associations;
 
 
-import java.util.Set;
-
-import org.arastreju.sge.ConversationContext;
 import org.arastreju.sge.eh.ArastrejuRuntimeException;
 import org.arastreju.sge.eh.ErrorCodes;
 import org.arastreju.sge.model.Statement;
+import org.arastreju.sge.spi.abstracts.WorkingContext;
+
+import java.util.Set;
 
 /**
  * <p>
@@ -57,19 +57,9 @@ public class DetachedAssociationKeeper extends AbstractAssociationKeeper {
 	}
 
     @Override
-    public ConversationContext getConversationContext() {
+    public WorkingContext getConversationContext() {
         // always return null, as there will never be a conversation for detached nodes.
         return null;
-    }
-
-    @Override
-    public void setConversationContext(ConversationContext ctx) {
-        // do nothing
-    }
-
-    @Override
-    public void detach() {
-        // do nothing
     }
 
     @Override
