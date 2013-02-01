@@ -4,6 +4,7 @@ import org.arastreju.sge.model.Statement;
 import org.arastreju.sge.model.associations.AttachedAssociationKeeper;
 import org.arastreju.sge.model.associations.DetachedAssociationKeeper;
 import org.arastreju.sge.naming.QualifiedName;
+import org.arastreju.sge.spi.PhysicalNodeID;
 import org.arastreju.sge.spi.abstracts.WorkingContext;
 
 import java.util.Set;
@@ -21,12 +22,12 @@ import java.util.Set;
  */
 public class MemAssociationKeeper extends AttachedAssociationKeeper {
 
-    public MemAssociationKeeper(QualifiedName qn) {
-        super(qn);
+    public MemAssociationKeeper(QualifiedName qn, PhysicalNodeID id) {
+        super(qn, id);
     }
 
-    public MemAssociationKeeper(QualifiedName qn, Set<Statement> associations) {
-        super(qn, associations);
+    public MemAssociationKeeper(QualifiedName qn, PhysicalNodeID id, Set<Statement> associations) {
+        super(qn, id, associations);
     }
 
     // ----------------------------------------------------

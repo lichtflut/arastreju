@@ -1,11 +1,13 @@
 package org.arastreju.sge.spi.abstracts;
 
-import org.arastreju.sge.model.associations.AssociationKeeper;
+import de.lichtflut.infra.exceptions.NotYetImplementedException;
+import org.arastreju.sge.model.Statement;
 import org.arastreju.sge.model.associations.AttachedAssociationKeeper;
 import org.arastreju.sge.naming.QualifiedName;
 import org.arastreju.sge.persistence.TxProvider;
 import org.arastreju.sge.spi.GraphDataConnection;
 import org.arastreju.sge.spi.GraphDataStore;
+import org.arastreju.sge.spi.PhysicalNodeID;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -50,6 +52,21 @@ public abstract class AbstractGraphDataConnection<T extends AttachedAssociationK
         return store.create(qn);
     }
 
+    @Override
+    public boolean addAssociation(PhysicalNodeID id, Statement assoc) {
+        return store.addAssociation(id, assoc);
+    }
+
+    @Override
+    public boolean removeAssociation(PhysicalNodeID id, Statement assoc) {
+        throw new NotYetImplementedException();
+    }
+
+    @Override
+    public void resolveAssociations(T associationKeeper) {
+        throw new NotYetImplementedException();
+    }
+
     // ----------------------------------------------------
 
     @Override
@@ -60,6 +77,20 @@ public abstract class AbstractGraphDataConnection<T extends AttachedAssociationK
     @Override
     public void unregister(AbstractConversationContext<T> conversationContext) {
         openConversations.remove(conversationContext);
+    }
+
+    /**
+     * Called when a resource has been modified by conversation context belonging to this graph data connection.
+     * @param qn The qualified name of the modified resource.
+     * @param context The context, where the modification occurred.
+     */
+    public void notifyModification(QualifiedName qn, WorkingContext context) {
+        List<WorkingContext<T>> copy = new ArrayList<WorkingContext<T>>(openConversations);
+        for (WorkingContext<T> conversation : copy) {
+            if (!conversation.equals(context)) {
+                conversation.onModification(qn, context);
+            }
+        }
     }
 
     /**
@@ -83,12 +114,6 @@ public abstract class AbstractGraphDataConnection<T extends AttachedAssociationK
     @Override
     public TxProvider getTxProvider() {
         return txProvider;
-    }
-
-    // ----------------------------------------------------
-
-    protected Set<WorkingContext<T>> getOpenConversations() {
-        return openConversations;
     }
 
 }

@@ -2,6 +2,7 @@ package org.arastreju.bindings.memory.storage;
 
 import org.arastreju.sge.model.Statement;
 import org.arastreju.sge.naming.QualifiedName;
+import org.arastreju.sge.spi.PhysicalNodeID;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -19,6 +20,8 @@ import java.util.Set;
  */
 public class StoredResource {
 
+    private PhysicalNodeID id;
+
     private final QualifiedName qn;
 
     private final Set<Statement> statements = new HashSet<Statement>();
@@ -31,8 +34,19 @@ public class StoredResource {
 
     // ----------------------------------------------------
 
+    public PhysicalNodeID getId() {
+        return id;
+    }
+
+    public QualifiedName getQn() {
+        return qn;
+    }
+
     public Set<Statement> getStatements() {
         return statements;
     }
 
+    public void addAssociation(Statement stmt) {
+        statements.add(stmt);
+    }
 }

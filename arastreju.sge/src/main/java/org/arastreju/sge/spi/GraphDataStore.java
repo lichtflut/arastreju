@@ -1,5 +1,6 @@
 package org.arastreju.sge.spi;
 
+import org.arastreju.sge.model.Statement;
 import org.arastreju.sge.model.associations.AssociationKeeper;
 import org.arastreju.sge.naming.QualifiedName;
 
@@ -35,4 +36,12 @@ public interface GraphDataStore<T extends AssociationKeeper> {
      * @param qn The qualified name.
      */
     void remove(QualifiedName qn);
+
+    /**
+     * Add an association.
+     * @param id Physical ID of the new association's subject.
+     * @param assoc The association.
+     * @return true, if the association has been created.
+     */
+    boolean addAssociation(PhysicalNodeID id, Statement assoc);
 }

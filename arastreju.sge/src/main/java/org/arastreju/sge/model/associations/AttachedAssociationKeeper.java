@@ -2,6 +2,7 @@ package org.arastreju.sge.model.associations;
 
 import org.arastreju.sge.model.Statement;
 import org.arastreju.sge.naming.QualifiedName;
+import org.arastreju.sge.spi.PhysicalNodeID;
 import org.arastreju.sge.spi.abstracts.WorkingContext;
 
 import java.util.Set;
@@ -21,23 +22,31 @@ public abstract class AttachedAssociationKeeper extends AbstractAssociationKeepe
 
     private final QualifiedName qn;
 
+    private final PhysicalNodeID physicalID;
+
     private WorkingContext context;
 
     // ----------------------------------------------------
 
-    protected AttachedAssociationKeeper(QualifiedName qn) {
+    protected AttachedAssociationKeeper(QualifiedName qn, PhysicalNodeID physicalID) {
         this.qn = qn;
+        this.physicalID = physicalID;
     }
 
-    protected AttachedAssociationKeeper(QualifiedName qn, Set<Statement> associations) {
+    protected AttachedAssociationKeeper(QualifiedName qn, PhysicalNodeID physicalID, Set<Statement> associations) {
         super(associations);
         this.qn = qn;
+        this.physicalID = physicalID;
     }
 
     // ----------------------------------------------------
 
     public QualifiedName getQualifiedName() {
         return qn;
+    }
+
+    public PhysicalNodeID getPhysicalID() {
+        return physicalID;
     }
 
     @Override
@@ -88,6 +97,14 @@ public abstract class AttachedAssociationKeeper extends AbstractAssociationKeepe
     }
 
     // ----------------------------------------------------
+
+    /**
+     * Add an association directly to the set, without resolving.
+     * @param assoc The association to add.
+     */
+    public void addAssociationDirectly(final Statement assoc) {
+        getAssociationsDirectly().add(assoc);
+    }
 
     /**
      * Called when the underlying neo node has been changed in another conversation.

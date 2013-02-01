@@ -1,5 +1,6 @@
 package org.arastreju.sge.spi;
 
+import org.arastreju.sge.model.Statement;
 import org.arastreju.sge.model.associations.AttachedAssociationKeeper;
 import org.arastreju.sge.naming.QualifiedName;
 import org.arastreju.sge.persistence.TxProvider;
@@ -31,6 +32,27 @@ public interface GraphDataConnection<T extends AttachedAssociationKeeper> {
      * @return The new association keeper.
      */
     T create(QualifiedName qn);
+
+    /**
+     * Add a new association to a node.
+     * @param id The physical id of the node.
+     * @param assoc The Association.
+     */
+    boolean addAssociation(PhysicalNodeID id, Statement assoc);
+
+    /**
+     * Remove the given association.
+     * @param id The physical id of the node.
+     * @param assoc The association.
+     * @return true if the association has been removed.
+     */
+    boolean removeAssociation(PhysicalNodeID id, Statement assoc);
+
+    /**
+     * Resolve the associations of given association keeper.
+     * @param associationKeeper The association keeper to be resolved.
+     */
+    void resolveAssociations(T associationKeeper);
 
     // ----------------------------------------------------
 

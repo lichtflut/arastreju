@@ -79,7 +79,7 @@ public abstract class AbstractConversation implements Conversation {
 	// ----------------------------------------------------
 
 	@Override
-	public ConversationContext getConversationContext() {
+	public WorkingContext getConversationContext() {
 		return workingContext;
 	}
 

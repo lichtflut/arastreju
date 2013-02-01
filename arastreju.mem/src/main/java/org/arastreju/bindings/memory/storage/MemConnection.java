@@ -2,6 +2,8 @@ package org.arastreju.bindings.memory.storage;
 
 import org.arastreju.bindings.memory.keepers.MemAssociationKeeper;
 import org.arastreju.bindings.memory.tx.MemTransactionProvider;
+import org.arastreju.sge.model.Statement;
+import org.arastreju.sge.spi.PhysicalNodeID;
 import org.arastreju.sge.spi.abstracts.AbstractGraphDataConnection;
 
 /**

@@ -34,13 +34,14 @@ public class MemConversationContext extends AbstractConversationContext<MemAssoc
     // ----------------------------------------------------
 
     @Override
-    public void addAssociation(MemAssociationKeeper associationKeeper, Statement assoc) {
-        throw new NotYetImplementedException();
+    public void addAssociation(MemAssociationKeeper keeper, Statement assoc) {
+        getConnection().addAssociation(keeper.getPhysicalID(), assoc);
+        keeper.addAssociationDirectly(assoc);
     }
 
     @Override
-    public boolean removeAssociation(MemAssociationKeeper associationKeeper, Statement assoc) {
-        throw new NotYetImplementedException();
+    public boolean removeAssociation(MemAssociationKeeper keeper, Statement assoc) {
+        return getConnection().addAssociation(keeper.getPhysicalID(), assoc);
     }
 
     @Override
