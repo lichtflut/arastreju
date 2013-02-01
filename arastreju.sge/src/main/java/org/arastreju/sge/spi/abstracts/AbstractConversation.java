@@ -25,12 +25,12 @@ import org.arastreju.sge.spi.AssocKeeperAccess;
  */
 public abstract class AbstractConversation implements Conversation {
 
-	private final ConversationContext conversationContext;
+	private final WorkingContext workingContext;
 
 	// ----------------------------------------------------
 
-	public AbstractConversation(final ConversationContext conversationContext) {
-		this.conversationContext = conversationContext;
+	public AbstractConversation(final WorkingContext workingContext) {
+		this.workingContext = workingContext;
 	}
 
 	// ----------------------------------------------------
@@ -54,7 +54,7 @@ public abstract class AbstractConversation implements Conversation {
 	@Override
 	public void attach(final SemanticGraph graph) {
 		assertActive();
-		conversationContext.getTxProvider().doTransacted(new TxResultAction<SemanticGraph>() {
+		workingContext.getTxProvider().doTransacted(new TxResultAction<SemanticGraph>() {
 			@Override
 			public SemanticGraph execute() {
 				for(Statement stmt : graph.getStatements()) {
@@ -80,17 +80,17 @@ public abstract class AbstractConversation implements Conversation {
 
 	@Override
 	public ConversationContext getConversationContext() {
-		return conversationContext;
+		return workingContext;
 	}
+
+    @Override
+    public TransactionControl beginTransaction() {
+        return workingContext.getTxProvider().begin();
+    }
 
 	@Override
 	public void close() {
-		conversationContext.clear();
-	}
-
-	@Override
-	public TransactionControl beginTransaction() {
-		return conversationContext.getTxProvider().begin();
+		workingContext.clear();
 	}
 
 	// ----------------------------------------------------
@@ -105,7 +105,7 @@ public abstract class AbstractConversation implements Conversation {
     }
 
     protected void assertActive() {
-        if (!conversationContext.isActive()) {
+        if (!workingContext.isActive()) {
             throw new IllegalStateException("Conversation already closed.");
         }
     }
