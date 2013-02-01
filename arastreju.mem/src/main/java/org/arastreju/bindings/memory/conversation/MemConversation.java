@@ -1,8 +1,11 @@
 package org.arastreju.bindings.memory.conversation;
 
 import de.lichtflut.infra.exceptions.NotYetImplementedException;
+import org.arastreju.bindings.memory.index.MockIndex;
 import org.arastreju.bindings.memory.keepers.MemAssociationKeeper;
 import org.arastreju.bindings.memory.nodes.SNMemResource;
+import org.arastreju.sge.index.LuceneQueryBuilder;
+import org.arastreju.sge.index.QNResolver;
 import org.arastreju.sge.model.ResourceID;
 import org.arastreju.sge.model.Statement;
 import org.arastreju.sge.model.associations.AssociationKeeper;
@@ -30,10 +33,10 @@ import java.util.Set;
  */
 public class MemConversation extends AbstractConversation {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(MemConversation.class);
-
-    // ----------------------------------------------------
-
+    /**
+     * Create a new conversation.
+     * @param conversationContext The context of this conversation.
+     */
 	public MemConversation(final MemConversationContext conversationContext) {
 		super(conversationContext);
 	}
@@ -109,7 +112,12 @@ public class MemConversation extends AbstractConversation {
 
     @Override
     public Query createQuery() {
-        throw new NotYetImplementedException();
+        return new LuceneQueryBuilder(new MockIndex(), new QNResolver() {
+            @Override
+            public ResourceNode resolve(QualifiedName qn) {
+                return findResource(qn);
+            }
+        });
     }
 
     @Override
