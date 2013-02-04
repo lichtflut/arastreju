@@ -154,12 +154,14 @@ class LuceneIndex {
 	/* create index if nonexistent */
 	public static LuceneIndex forContext(Context ctx) {
 		LuceneIndex index;
-		if ((index = indexMap.get(ctx)) == null) {
-			try {
-				indexMap.put(ctx, (index = new LuceneIndex(indexRoot, ctx)));
-			} catch (IOException e) {
-				e.printStackTrace();
-				throw new RuntimeException("failed to create index for context " + ctx.toURI());
+		synchronized(indexMap) {
+			if ((index = indexMap.get(ctx)) == null) {
+				try {
+					indexMap.put(ctx, (index = new LuceneIndex(indexRoot, ctx)));
+				} catch (IOException e) {
+					e.printStackTrace();
+					throw new RuntimeException("failed to create index for context " + ctx.toURI());
+				}
 			}
 		}
 
