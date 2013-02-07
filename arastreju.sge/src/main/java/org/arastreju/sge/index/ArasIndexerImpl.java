@@ -109,7 +109,14 @@ public class ArasIndexerImpl implements IndexUpdator, IndexSearcher {
 	 */
 	@Override
 	public void remove(QualifiedName qn) {
-		// TODO Auto-generated method stub
+		LuceneIndex index = LuceneIndex.forContext(conversationContext.getPrimaryContext());
+		try {
+			index.getWriter().deleteDocuments(new Term("uri", qn.toURI()));
+			index.getWriter().commit();
+		} catch (IOException e) {
+			e.printStackTrace();
+			throw new RuntimeException("caught IOException while removing " + qn.toURI());
+		}
 	}
 
 	@Override
