@@ -65,7 +65,6 @@ public class ArasIndexerImpl implements IndexUpdator, IndexSearcher {
 		conversationContext = cc;
 	}
 
-
 	/**
 	 * Index this node with all it's statements, regarding the current primary context.
 	 * If the node already has been indexed, it will be updated.
@@ -97,7 +96,7 @@ public class ArasIndexerImpl implements IndexUpdator, IndexSearcher {
 			index.getWriter().commit(); // XXX to be revised when transactions enter the play
 		} catch (IOException e) {
 			e.printStackTrace();
-			throw new RuntimeException("failed indexing resource " + node.toURI());
+			throw new RuntimeException("caught IOException while indexing resource " + node.toURI());
 		}
 	}
 
@@ -182,7 +181,6 @@ class LuceneIndex {
 	/* placeholder - to be turned into a proper configuration setting */
 	private static String indexRoot = "/tmp/myindex";
 
-
 	private final Directory dir;
 	private final IndexWriter writer;
 	private IndexReader reader;
@@ -191,20 +189,19 @@ class LuceneIndex {
 	/* create index if nonexistent */
 	public static LuceneIndex forContext(Context ctx) {
 		LuceneIndex index;
-		synchronized(indexMap) {
+		synchronized (indexMap) {
 			if ((index = indexMap.get(ctx)) == null) {
 				try {
 					indexMap.put(ctx, (index = new LuceneIndex(indexRoot, ctx)));
 				} catch (IOException e) {
 					e.printStackTrace();
-					throw new RuntimeException("failed to create index for context " + ctx.toURI());
+					throw new RuntimeException("caught IOException while creating index for context " + ctx.toURI());
 				}
 			}
 		}
 
 		return index;
 	}
-
 
 	/* create/open index for context ctx */
 	private LuceneIndex(String indexRoot, Context ctx) throws IOException {
