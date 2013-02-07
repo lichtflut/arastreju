@@ -14,12 +14,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package org.arastreju.sge.index;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
@@ -31,6 +32,9 @@ import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.index.Term;
+import org.apache.lucene.queryParser.ParseException;
+import org.apache.lucene.queryParser.QueryParser;
+import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.util.Version;
@@ -52,8 +56,10 @@ import org.arastreju.sge.naming.QualifiedName;
  * @author Timo Buhrmester
  */
 public class ArasIndexerImpl implements IndexUpdator, IndexSearcher {
-	private final ConversationContext conversationContext;
+	/* turn this into a configuration setting */
+	private static final int MAX_RESULTS = 100;
 
+	private final ConversationContext conversationContext;
 
 	public ArasIndexerImpl(ConversationContext cc) {
 		conversationContext = cc;
@@ -122,13 +128,35 @@ public class ArasIndexerImpl implements IndexUpdator, IndexSearcher {
 
 	@Override
 	public Iterable<QualifiedName> search(String query) {
-		// TODO Auto-generated method stub
-		return null;
+		LuceneIndex index = LuceneIndex.forContext(conversationContext.getPrimaryContext());
+		org.apache.lucene.search.IndexSearcher searcher = index.getSearcher();
+		IndexReader reader = searcher.getIndexReader();
+
+		/* default field is 'uri' as this is the only field common to all resources.
+		 * (not that we're going to need a default field, anyway.) */
+		QueryParser qp = new QueryParser(Version.LUCENE_35, "uri", new StandardAnalyzer(Version.LUCENE_35));
+
+		TopDocs top;
+		List<QualifiedName> resultList = new LinkedList<QualifiedName>();
+		try {
+			/* we can use searcher.search(String, Collector) if we need all them results */
+			top = searcher.search(qp.parse(query), MAX_RESULTS);
+			for (int i = 0; i < top.totalHits; i++) {
+				Document hit = reader.document(top.scoreDocs[i].doc);
+				resultList.add(new QualifiedName(hit.get("uri")));
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+			throw new RuntimeException("caught IOException while processing query '" + query + "'");
+		} catch (ParseException e) {
+			e.printStackTrace();
+			throw new RuntimeException("caught ParseException while processing query '" + query + "'");
+		}
+
+		return resultList;
 	}
 
-
 	// ----------------------------------------------------
-
 
 	private boolean regardContext(Context[] contexts) {
 		Context primCtx = conversationContext.getPrimaryContext();
