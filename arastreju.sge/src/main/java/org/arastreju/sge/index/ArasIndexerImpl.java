@@ -27,6 +27,7 @@ import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.document.Field.Index;
 import org.apache.lucene.document.Field.Store;
+import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.index.Term;
@@ -156,7 +157,8 @@ class LuceneIndex {
 
 	private final Directory dir;
 	private final IndexWriter writer;
-
+	private IndexReader reader;
+	private org.apache.lucene.search.IndexSearcher searcher; //XXX name collision with our interface
 
 	/* create index if nonexistent */
 	public static LuceneIndex forContext(Context ctx) {
@@ -183,11 +185,39 @@ class LuceneIndex {
 
 		IndexWriterConfig cfg = new IndexWriterConfig(Version.LUCENE_35, new StandardAnalyzer(Version.LUCENE_35));
 		this.writer = new IndexWriter(dir, cfg);
+		this.reader = IndexReader.open(dir, true);
+		this.searcher = new org.apache.lucene.search.IndexSearcher(reader);
 	}
 
+	public org.apache.lucene.search.IndexSearcher getSearcher() {
+		refreshReader();
+		return searcher;
+	}
+
+	public IndexReader getReader() {
+		refreshReader();
+		return reader;
+	}
 
 	public IndexWriter getWriter() {
 		return writer;
 	}
 
+	private void refreshReader() {
+		try {
+			if (reader.isCurrent())
+				return;
+			IndexReader nr;
+			nr = IndexReader.openIfChanged(reader, true);
+			if (nr != null) {
+				searcher.close();
+				reader.close();
+				reader = nr;
+				searcher = new org.apache.lucene.search.IndexSearcher(reader);
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+			throw new RuntimeException("caught IOException while refreshing IndexReader");
+		}
+	}
 }
