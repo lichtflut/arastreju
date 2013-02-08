@@ -48,6 +48,8 @@ import org.arastreju.sge.model.SimpleResourceID;
 import org.arastreju.sge.model.Statement;
 import org.arastreju.sge.model.nodes.ResourceNode;
 import org.arastreju.sge.naming.QualifiedName;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * <p>
@@ -61,6 +63,8 @@ import org.arastreju.sge.naming.QualifiedName;
  * @author Timo Buhrmester
  */
 public class ArasIndexerImpl implements IndexUpdator, IndexSearcher {
+	private static final Logger LOGGER = LoggerFactory.getLogger(ArasIndexerImpl.class);
+
 	/* turn this into a configuration setting */
 	private static final int MAX_RESULTS = 100;
 
@@ -77,6 +81,7 @@ public class ArasIndexerImpl implements IndexUpdator, IndexSearcher {
 	 */
 	@Override
 	public void index(ResourceNode node) {
+		LOGGER.debug("LUCENEINDEX: index(" + node + ")");
 		Document doc = new Document();
 		doc.add(new Field("uri", node.toURI(), Store.YES, Index.NOT_ANALYZED));
 
@@ -89,8 +94,9 @@ public class ArasIndexerImpl implements IndexUpdator, IndexSearcher {
 			index.getWriter().updateDocument(new Term("uri", node.toURI()), doc); //creates if nonexistent
 			index.getWriter().commit(); // XXX to be revised when transactions enter the play
 		} catch (IOException e) {
-			e.printStackTrace();
-			throw new RuntimeException("caught IOException while indexing resource " + node.toURI());
+			String msg = "caught IOException while indexing resource " + node.toURI();
+			LOGGER.error(msg, e);
+			throw new RuntimeException(msg, e);
 		}
 	}
 
@@ -100,6 +106,7 @@ public class ArasIndexerImpl implements IndexUpdator, IndexSearcher {
 	 */
 	@Override
 	public void index(Statement statement) {
+		LOGGER.debug("LUCENEINDEX: index(" + statement + ")");
 		LuceneIndex index = LuceneIndex.forContext(conversationContext.getPrimaryContext());
 		IndexWriter writer = index.getWriter();
 		org.apache.lucene.search.IndexSearcher searcher = index.getSearcher();
@@ -126,8 +133,9 @@ public class ArasIndexerImpl implements IndexUpdator, IndexSearcher {
 			writer.updateDocument(new Term("uri", subject.toURI()), doc);
 			writer.commit();
 		} catch (IOException e) {
-			e.printStackTrace();
-			throw new RuntimeException("caught IOException while indexing statement " + statement);
+			String msg = "caught IOException while indexing statement " + statement;
+			LOGGER.error(msg, e);
+			throw new RuntimeException(msg, e);
 		}
 	}
 
@@ -137,18 +145,23 @@ public class ArasIndexerImpl implements IndexUpdator, IndexSearcher {
 	 */
 	@Override
 	public void remove(QualifiedName qn) {
+		LOGGER.debug("LUCENEINDEX: remove(" + qn + ")");
 		LuceneIndex index = LuceneIndex.forContext(conversationContext.getPrimaryContext());
 		try {
+			LOGGER.debug("deleting c");
 			index.getWriter().deleteDocuments(new Term("uri", qn.toURI()));
+			LOGGER.debug("committing c");
 			index.getWriter().commit();
 		} catch (IOException e) {
-			e.printStackTrace();
-			throw new RuntimeException("caught IOException while removing " + qn.toURI());
+			String msg = "caught IOException while removing " + qn.toURI();
+			LOGGER.error(msg, e);
+			throw new RuntimeException(msg, e);
 		}
 	}
 
 	@Override
 	public Iterable<QualifiedName> search(String query) {
+		LOGGER.debug("search(" + query + ")");
 		LuceneIndex index = LuceneIndex.forContext(conversationContext.getPrimaryContext());
 		org.apache.lucene.search.IndexSearcher searcher = index.getSearcher();
 		IndexReader reader = searcher.getIndexReader();
@@ -167,11 +180,13 @@ public class ArasIndexerImpl implements IndexUpdator, IndexSearcher {
 				resultList.add(new QualifiedName(hit.get("uri")));
 			}
 		} catch (IOException e) {
-			e.printStackTrace();
-			throw new RuntimeException("caught IOException while processing query '" + query + "'");
+			String msg = "caught IOException while processing query '" + query + "'";
+			LOGGER.error(msg, e);
+			throw new RuntimeException(msg, e);
 		} catch (ParseException e) {
-			e.printStackTrace();
-			throw new RuntimeException("caught ParseException while processing query '" + query + "'");
+			String msg = "caught ParseException while processing query '" + query + "'";
+			LOGGER.error(msg, e);
+			throw new RuntimeException(msg, e);
 		}
 
 		return resultList;
@@ -200,6 +215,8 @@ public class ArasIndexerImpl implements IndexUpdator, IndexSearcher {
  * also takes care of mapping contexts to indexes and providing them
  * to ArasIndexerImpl */
 class LuceneIndex {
+	private static final Logger LOGGER = LoggerFactory.getLogger(LuceneIndex.class);
+
 	/* stores one index per context */
 	private static final Map<Context, LuceneIndex> indexMap = new HashMap<Context, LuceneIndex>();
 
@@ -223,8 +240,9 @@ class LuceneIndex {
 				try {
 					indexMap.put(ctx, (index = new LuceneIndex(indexRoot, ctx)));
 				} catch (IOException e) {
-					e.printStackTrace();
-					throw new RuntimeException("caught IOException while creating index for context " + ctx.toURI());
+					String msg = "caught IOException while creating index for context " + ctx.toURI();
+					LOGGER.error(msg, e);
+					throw new RuntimeException(msg, e);
 				}
 			}
 		}
@@ -285,8 +303,9 @@ class LuceneIndex {
 				searcher = new org.apache.lucene.search.IndexSearcher(reader);
 			}
 		} catch (IOException e) {
-			e.printStackTrace();
-			throw new RuntimeException("caught IOException while refreshing IndexReader");
+			String msg = "caught IOException while refreshing IndexReader";
+			LOGGER.error(msg, e);
+			throw new RuntimeException(msg, e);
 		}
 	}
 }
