@@ -63,7 +63,7 @@ public class TypeInferencer implements Inferencer {
 		}
 		if (stmt.getObject().isResourceNode()) {
 			final ResourceNode resolved = resolver.resolve(stmt.getObject().asResource());
-			final SNClass clazz = resolved.asClass();
+			final SNClass clazz = SNClass.from(resolved);
 			final Set<SNClass> allClasses = clazz.getSuperClasses();
 			for (SNClass current : allClasses) {
 				target.add(new DetachedStatement(stmt.getSubject(), RDF.TYPE, current, stmt.getContexts()));

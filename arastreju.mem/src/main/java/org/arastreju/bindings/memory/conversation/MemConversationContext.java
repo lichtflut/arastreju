@@ -1,9 +1,14 @@
 package org.arastreju.bindings.memory.conversation;
 
-import org.arastreju.bindings.memory.tx.MemTransactionProvider;
+import de.lichtflut.infra.exceptions.NotYetImplementedException;
+import org.arastreju.bindings.memory.keepers.MemAssociationKeeper;
+import org.arastreju.bindings.memory.storage.MemConnection;
+import org.arastreju.sge.ConversationContext;
 import org.arastreju.sge.context.Context;
-import org.arastreju.sge.persistence.TxProvider;
+import org.arastreju.sge.model.Statement;
+import org.arastreju.sge.naming.QualifiedName;
 import org.arastreju.sge.spi.abstracts.AbstractConversationContext;
+import org.arastreju.sge.spi.abstracts.WorkingContext;
 
 /**
  * <p>
@@ -16,23 +21,31 @@ import org.arastreju.sge.spi.abstracts.AbstractConversationContext;
  *
  * @author Oliver Tigges
  */
-public class MemConversationContext extends AbstractConversationContext {
+public class MemConversationContext extends AbstractConversationContext<MemAssociationKeeper> {
 
-    public MemConversationContext(Context primary, Context... readContexts) {
-       super(primary, readContexts);
+    public MemConversationContext(MemConnection connection) {
+        super(connection);
     }
 
-    public MemConversationContext() {
+    public MemConversationContext(MemConnection connection, Context primary, Context... readContexts) {
+       super(connection, primary, readContexts);
     }
 
     // ----------------------------------------------------
 
     @Override
-    protected void clearCaches() {
+    public void addAssociation(MemAssociationKeeper keeper, Statement assoc) {
+        getConnection().addAssociation(keeper.getPhysicalID(), assoc);
+        keeper.addAssociationDirectly(assoc);
     }
 
     @Override
-    public TxProvider getTxProvider() {
-        return new MemTransactionProvider();
+    public boolean removeAssociation(MemAssociationKeeper keeper, Statement assoc) {
+        return getConnection().addAssociation(keeper.getPhysicalID(), assoc);
+    }
+
+    @Override
+    public void resolveAssociations(MemAssociationKeeper associationKeeper) {
+        throw new NotYetImplementedException();
     }
 }

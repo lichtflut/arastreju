@@ -133,5 +133,14 @@ public abstract class AbstractAssociationKeeper implements AssociationKeeper, Se
 		resolved = true;
 		return this;
 	}
-	
+
+    /**
+     * Reset the state of this keeper. Will be marked as not resolved and loose all associations.
+     */
+    protected void reset() {
+        resolved = false;
+        associations = null;
+    }
+
+
 }

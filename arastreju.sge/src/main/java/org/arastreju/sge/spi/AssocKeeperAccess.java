@@ -16,11 +16,14 @@
  */
 package org.arastreju.sge.spi;
 
+import org.arastreju.sge.model.Statement;
 import org.arastreju.sge.model.associations.AssociationKeeper;
 import org.arastreju.sge.model.nodes.ResourceNode;
 import org.arastreju.sge.model.nodes.SNResource;
 
 import java.lang.reflect.Field;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * <p>
@@ -72,6 +75,25 @@ public class AssocKeeperAccess {
 			throw new IllegalArgumentException("Cannot get AssociationKeeper", e);
 		}
 	}
+
+    // ----------------------------------------------------
+
+    /**
+     * Merge the status of source to target. Replicate added and removed associations.
+     * @param target The target keeper.
+     * @param source The source keeper.
+     */
+    public void merge(final AssociationKeeper target, final AssociationKeeper source) {
+        final Set<Statement> existingAssocs = new HashSet<Statement>(target.getAssociations());
+        for (Statement toBeRemoved : source.getAssociationsForRemoval()) {
+            target.removeAssociation(toBeRemoved);
+        }
+        for(Statement assoc : source.getAssociations()){
+            if (!existingAssocs.contains(assoc)){
+                target.addAssociation(assoc);
+            }
+        }
+    }
 
 	// -----------------------------------------------------
 

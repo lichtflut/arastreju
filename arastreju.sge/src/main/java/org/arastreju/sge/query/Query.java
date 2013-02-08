@@ -77,7 +77,6 @@ public interface Query {
 	
 	/**
 	 * Add a parameter for a related resource.
-	 * @param name The name.
 	 * @param term The term.
 	 */
 	Query addRelation(String term);

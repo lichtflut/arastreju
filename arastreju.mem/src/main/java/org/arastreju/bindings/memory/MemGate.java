@@ -1,10 +1,11 @@
 package org.arastreju.bindings.memory;
 
 import de.lichtflut.infra.exceptions.NotYetImplementedException;
+import org.arastreju.bindings.memory.conversation.MemConversation;
 import org.arastreju.bindings.memory.conversation.MemConversationContext;
-import org.arastreju.bindings.memory.conversation.MemModelingConversation;
-import org.arastreju.sge.ModelingConversation;
-import org.arastreju.sge.Organizer;
+import org.arastreju.bindings.memory.storage.MemConnection;
+import org.arastreju.sge.Conversation;
+import org.arastreju.sge.organize.Organizer;
 import org.arastreju.sge.context.Context;
 import org.arastreju.sge.context.DomainIdentifier;
 import org.arastreju.sge.spi.abstracts.AbstractArastrejuGate;
@@ -22,23 +23,28 @@ import org.arastreju.sge.spi.abstracts.AbstractArastrejuGate;
  */
 public class MemGate extends AbstractArastrejuGate {
 
-    public MemGate(DomainIdentifier domainIdentifier) {
+    private MemConnection connection;
+
+    // ----------------------------------------------------
+
+    public MemGate(MemConnection connection, DomainIdentifier domainIdentifier) {
         super(domainIdentifier);
+        this.connection = connection;
     }
 
     // ----------------------------------------------------
 
     @Override
-    public ModelingConversation startConversation() {
-        MemConversationContext cc = new MemConversationContext();
+    public Conversation startConversation() {
+        MemConversationContext cc = new MemConversationContext(connection);
         initContext(cc);
-        return new MemModelingConversation(cc);
+        return new MemConversation(cc);
     }
 
     @Override
-    public ModelingConversation startConversation(Context primary, Context... readContexts) {
-        MemConversationContext cc = new MemConversationContext(primary, readContexts);
-        return new MemModelingConversation(cc);
+    public Conversation startConversation(Context primary, Context... readContexts) {
+        MemConversationContext cc = new MemConversationContext(connection, primary, readContexts);
+        return new MemConversation(cc);
     }
 
     @Override

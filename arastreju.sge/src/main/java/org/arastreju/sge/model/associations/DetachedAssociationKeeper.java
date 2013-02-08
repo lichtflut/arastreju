@@ -16,11 +16,12 @@
 package org.arastreju.sge.model.associations;
 
 
-import java.util.Set;
-
 import org.arastreju.sge.eh.ArastrejuRuntimeException;
 import org.arastreju.sge.eh.ErrorCodes;
 import org.arastreju.sge.model.Statement;
+import org.arastreju.sge.spi.abstracts.WorkingContext;
+
+import java.util.Set;
 
 /**
  * <p>
@@ -50,17 +51,18 @@ public class DetachedAssociationKeeper extends AbstractAssociationKeeper {
 	
 	// -----------------------------------------------------
 	
-	/**
-	 * {@inheritDoc}
-	 */
+	@Override
 	public boolean isAttached() {
 		return false;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
+    @Override
+    public WorkingContext getConversationContext() {
+        // always return null, as there will never be a conversation for detached nodes.
+        return null;
+    }
+
+    @Override
 	protected void resolveAssociations() {
 		throw new ArastrejuRuntimeException(ErrorCodes.GENERAL_CONSISTENCY_FAILURE, 
 				"DetachedAssociationKeeper cannot resolve Associations: " + this);

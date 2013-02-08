@@ -18,11 +18,18 @@ package org.arastreju.sge.spi.abstracts;
 
 import org.arastreju.sge.ConversationContext;
 import org.arastreju.sge.context.Context;
+import org.arastreju.sge.model.associations.AttachedAssociationKeeper;
+import org.arastreju.sge.naming.QualifiedName;
+import org.arastreju.sge.persistence.TxProvider;
+import org.arastreju.sge.persistence.TxResultAction;
+import org.arastreju.sge.spi.GraphDataConnection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -36,7 +43,7 @@ import java.util.Set;
  *
  * @author Oliver Tigges
  */
-public abstract class AbstractConversationContext implements ConversationContext {
+public abstract class AbstractConversationContext<T extends AttachedAssociationKeeper> implements WorkingContext<T> {
 
 	public static final Context[] NO_CTX = new Context[0];
 
@@ -48,7 +55,11 @@ public abstract class AbstractConversationContext implements ConversationContext
 
     private final long ctxId = ++ID_GEN;
 
-    private Set<Context> readContexts = new HashSet<Context>();
+    private final GraphDataConnection<T> connection;
+
+    private final Map<QualifiedName, T> register = new HashMap<QualifiedName, T>();
+
+    private final Set<Context> readContexts = new HashSet<Context>();
 
 	private Context primaryContext;
 
@@ -59,21 +70,99 @@ public abstract class AbstractConversationContext implements ConversationContext
 	/**
 	 * Creates a new Working Context.
 	 */
-	public AbstractConversationContext() {
+	public AbstractConversationContext(GraphDataConnection<T> connection) {
 		LOGGER.debug("New Conversation Context startet. " + ctxId);
+        this.connection = connection;
+        connection.register(this);
 	}
 
     /**
      * Creates a new Working Context.
      */
-    public AbstractConversationContext(Context primaryContext, Context... readContexts) {
-        this();
+    public AbstractConversationContext(GraphDataConnection<T> connection, Context primaryContext, Context... readContexts) {
+        this(connection);
         setPrimaryContext(primaryContext);
         setReadContexts(readContexts);
     }
 
 	// ----------------------------------------------------
-	
+
+    /**
+     * Lookup the qualified name in the register.
+     * @param qn The qualified name.
+     * @return The association keeper or null.
+     */
+    public T lookup(QualifiedName qn) {
+        return register.get(qn);
+    }
+
+    /**
+     * Find the resource in this conversation context or in underlying data store.
+     * @param qn The resource's qualified name.
+     * @return The association keeper or null.
+     */
+    public T find(QualifiedName qn) {
+        assertActive();
+        T registered = lookup(qn);
+        if (registered != null) {
+            return registered;
+        }
+        T existing = connection.find(qn);
+        if (existing != null) {
+            attach(qn, existing);
+            return existing;
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * @param qn The resource's qualified name.
+     * @return The association keeper or null;
+     */
+    public T create(final QualifiedName qn) {
+        assertActive();
+        T keeper = getTxProvider().doTransacted(new TxResultAction<T>() {
+            @Override
+            public T execute() {
+                return connection.create(qn);
+            }
+        });
+        attach(qn, keeper);
+        return keeper;
+    }
+
+    /**
+     * @param qn The resource's qualified name.
+     * @param keeper The keeper to be accessed.
+     */
+    public void attach(QualifiedName qn, T keeper) {
+        assertActive();
+        register.put(qn, keeper);
+        keeper.setConversationContext(this);
+    }
+
+    /**
+     * @param qn The resource's qualified name.
+     */
+    public void detach(QualifiedName qn) {
+        assertActive();
+        final T removed = register.remove(qn);
+        if (removed != null) {
+            removed.detach();
+        }
+    }
+
+    // ----------------------------------------------------
+
+    public TxProvider getTxProvider() {
+        return connection.getTxProvider();
+    }
+
+    public GraphDataConnection<T> getConnection() {
+        return connection;
+    }
+
 	/**
 	 * Clear the cache.
 	 */
@@ -86,9 +175,11 @@ public abstract class AbstractConversationContext implements ConversationContext
 	/**
 	 * Close and invalidate this context.
 	 */
+    @Override
 	public void close() {
 		if (active) {
 			clear();
+            onClose();
 			active = false;
 			LOGGER.info("Conversation will be closed. " + ctxId);
 		}
@@ -100,8 +191,17 @@ public abstract class AbstractConversationContext implements ConversationContext
     public boolean isActive() {
 		return active;
 	}
-	
-	// ----------------------------------------------------
+
+    @Override
+    public void onModification(QualifiedName qualifiedName, WorkingContext otherContext) {
+        T existing = lookup(qualifiedName);
+        if (existing != null) {
+            LOGGER.info("Concurrent change on node {} in other context {}.", qualifiedName, otherContext);
+            existing.notifyChanged();
+        }
+    }
+
+    // ----------------------------------------------------
 	
 	public Context[] getReadContexts() {
 		assertActive();
@@ -160,9 +260,16 @@ public abstract class AbstractConversationContext implements ConversationContext
 
     // ----------------------------------------------------
 
-    protected abstract void clearCaches();
+    protected void onClose() {
+        connection.unregister(this);
+    }
 
-    // ----------------------------------------------------
+    protected void clearCaches() {
+        for (T keeper : register.values()) {
+            keeper.detach();
+        }
+        register.clear();
+    }
 	
 	protected void assertActive() {
 		if (!active) {

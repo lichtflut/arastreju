@@ -3,7 +3,7 @@
  */
 package org.arastreju.sge.io;
 
-import org.arastreju.sge.ModelingConversation;
+import org.arastreju.sge.Conversation;
 import org.arastreju.sge.model.Statement;
 
 /**
@@ -19,25 +19,22 @@ import org.arastreju.sge.model.Statement;
  */
 public class StatementStorer implements ReadStatementListener {
 	
-	private final ModelingConversation mc;
+	private final Conversation conversation;
 	
 	// ----------------------------------------------------
 
 	/**
-	 * @param mc The modelling conversation.
+	 * @param conversation The modelling conversation.
 	 */
-	public StatementStorer(ModelingConversation mc) {
-		this.mc = mc;
+	public StatementStorer(Conversation conversation) {
+		this.conversation = conversation;
 	}
 
 	// ----------------------------------------------------
 
-	/** 
-	 * {@inheritDoc}
-	 */
 	@Override
 	public void onNewStatement(Statement stmt) {
-		mc.addStatement(stmt);
+		conversation.addStatement(stmt);
 	}
 
 }

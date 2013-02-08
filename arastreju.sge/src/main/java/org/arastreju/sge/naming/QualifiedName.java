@@ -91,7 +91,8 @@ public class QualifiedName implements Comparable<QualifiedName>, Serializable {
 	
 	/**
 	 * Create a new QualifiedName for this URI - regarding a cache.
-	 * @param uri The URI.
+	 * @param namespace The namespace part
+     * @param name The name part
 	 * @return A new URI or the corresponding from cache.
 	 */
 	public static QualifiedName create(final String namespace, final String name) {
@@ -109,7 +110,7 @@ public class QualifiedName implements Comparable<QualifiedName>, Serializable {
 	
 	/**
 	 * Creates a qualified name for resource reference.
-	 * @param ref The {@link ResourceID}.
+	 * @param uri The URI.
 	 */
 	public QualifiedName(final String uri){
 		this.uri = uri;

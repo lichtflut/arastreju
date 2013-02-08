@@ -1,16 +1,17 @@
 package org.arastreju.bindings.memory.tx;
 
 import de.lichtflut.infra.exceptions.NotYetImplementedException;
+import org.arastreju.sge.persistence.PseudoTransaction;
 import org.arastreju.sge.persistence.TransactionControl;
 import org.arastreju.sge.persistence.TxProvider;
 
 /**
  * <p>
- * DESCRITPION.
+ *  In-Memory specific TX provider.
  * </p>
- * <p/>
+ *
  * <p>
- * Created 20.07.12
+ *  Created 20.07.12
  * </p>
  *
  * @author Oliver Tigges
@@ -19,11 +20,7 @@ public class MemTransactionProvider extends TxProvider {
 
     @Override
     protected TransactionControl newTx() {
-        throw new NotYetImplementedException();
+        return new PseudoTransaction();
     }
 
-    @Override
-    protected TransactionControl newSubTx(TransactionControl parent) {
-        throw new NotYetImplementedException();
-    }
 }
