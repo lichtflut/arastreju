@@ -79,10 +79,6 @@ public class ArasIndexerImpl implements IndexUpdator, IndexSearcher {
 		doc.add(new Field("uri", node.toURI(), Store.YES, Index.NOT_ANALYZED));
 
 		for (Statement stmt : node.getAssociations()) {
-//			if (!regardContext(stmt.getContexts())) {
-//				continue;
-//			}
-
 			doc.add(makeField(stmt));
 		}
 
@@ -182,18 +178,6 @@ public class ArasIndexerImpl implements IndexUpdator, IndexSearcher {
 	}
 
 	// ----------------------------------------------------
-
-	private boolean regardContext(Context[] contexts) {
-		Context primCtx = conversationContext.getPrimaryContext();
-
-		for (Context c : contexts) {
-			if (c.equals(primCtx)) {
-				return true;
-			}
-		}
-
-		return false;
-	}
 
 	private Field makeField(Statement stmt) {
 		Field f;
