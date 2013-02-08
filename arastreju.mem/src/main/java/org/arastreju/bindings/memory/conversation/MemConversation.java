@@ -130,4 +130,8 @@ public class MemConversation extends AbstractConversation {
         return (MemConversationContext) super.getConversationContext();
     }
 
+	@Override
+	protected QNResolver getQNResolver() {
+		throw new NotYetImplementedException();
+	}
 }

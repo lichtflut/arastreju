@@ -3,6 +3,9 @@ package org.arastreju.sge.spi.abstracts;
 import org.arastreju.sge.Conversation;
 import org.arastreju.sge.ConversationContext;
 import org.arastreju.sge.SNOPS;
+import org.arastreju.sge.index.ArasIndexerImpl;
+import org.arastreju.sge.index.LuceneQueryBuilder;
+import org.arastreju.sge.index.QNResolver;
 import org.arastreju.sge.model.SemanticGraph;
 import org.arastreju.sge.model.Statement;
 import org.arastreju.sge.model.associations.AssociationKeeper;
@@ -10,6 +13,7 @@ import org.arastreju.sge.model.nodes.ResourceNode;
 import org.arastreju.sge.model.nodes.SemanticNode;
 import org.arastreju.sge.persistence.TransactionControl;
 import org.arastreju.sge.persistence.TxResultAction;
+import org.arastreju.sge.query.Query;
 import org.arastreju.sge.spi.AssocKeeperAccess;
 
 /**
@@ -77,6 +81,13 @@ public abstract class AbstractConversation implements Conversation {
 	}
 
 	// ----------------------------------------------------
+
+	@Override
+	public Query createQuery() {
+		return new LuceneQueryBuilder(new ArasIndexerImpl(workingContext), getQNResolver());
+	}
+
+	protected abstract QNResolver getQNResolver();
 
 	@Override
 	public WorkingContext getConversationContext() {
