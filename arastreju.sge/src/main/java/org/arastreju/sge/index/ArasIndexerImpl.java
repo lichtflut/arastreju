@@ -80,14 +80,7 @@ public class ArasIndexerImpl implements IndexUpdator, IndexSearcher {
 //				continue;
 //			}
 
-			if (stmt.getObject().isResourceNode()) {
-				doc.add(new Field(stmt.getPredicate().toURI(), stmt.getObject().asResource().toURI(), Store.YES, Index.NOT_ANALYZED));
-			} else {
-				/* This replicates the behaviour of the old neo index, for now.
-				 * TODO: Should probably use different sorts of fields  (like
-				 * NumericField) where applicable to leverage more of lucenes functionality */
-				doc.add(new Field(stmt.getPredicate().toURI(), stmt.getObject().asValue().getStringValue(), Store.YES, Index.ANALYZED)); //analyzed, right?
-			}
+			doc.add(makeField(stmt));
 		}
 
 		LuceneIndex index = LuceneIndex.forContext(conversationContext.getPrimaryContext());
@@ -167,6 +160,21 @@ public class ArasIndexerImpl implements IndexUpdator, IndexSearcher {
 		}
 
 		return false;
+	}
+
+	private Field makeField(Statement stmt) {
+		Field f;
+
+		if (stmt.getObject().isResourceNode()) {
+			f = new Field(stmt.getPredicate().toURI(), stmt.getObject().asResource().toURI(), Store.YES, Index.NOT_ANALYZED);
+		} else {
+			/* This replicates the behaviour of the old neo index, for now.
+			 * TODO: Should probably use different sorts of fields  (like
+			 * NumericField) where applicable to leverage more of lucenes functionality */
+			f = new Field(stmt.getPredicate().toURI(), stmt.getObject().asValue().getStringValue(), Store.YES, Index.ANALYZED); //analyzed, right?
+		}
+
+		return f;
 	}
 }
 
