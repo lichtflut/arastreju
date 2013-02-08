@@ -34,12 +34,15 @@ import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.queryParser.ParseException;
 import org.apache.lucene.queryParser.QueryParser;
+import org.apache.lucene.search.Query;
+import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.util.Version;
 import org.arastreju.sge.ConversationContext;
 import org.arastreju.sge.context.Context;
+import org.arastreju.sge.model.ResourceID;
 import org.arastreju.sge.model.Statement;
 import org.arastreju.sge.model.nodes.ResourceNode;
 import org.arastreju.sge.naming.QualifiedName;
@@ -99,7 +102,37 @@ public class ArasIndexerImpl implements IndexUpdator, IndexSearcher {
 	 */
 	@Override
 	public void index(Statement statement) {
-		// TODO Auto-generated method stub
+		LuceneIndex index = LuceneIndex.forContext(conversationContext.getPrimaryContext());
+		IndexWriter writer = index.getWriter();
+		org.apache.lucene.search.IndexSearcher searcher = index.getSearcher();
+		IndexReader reader = searcher.getIndexReader();
+
+		ResourceID subject = statement.getSubject();
+		ResourceID pred = statement.getPredicate();
+
+		Query q = new TermQuery(new Term("uri", subject.toURI()));
+
+		try {
+			TopDocs top = searcher.search(q, 1);
+			Document doc;
+
+			if (top.totalHits == 0) {
+				doc = new Document();
+			} else {
+				doc = reader.document(top.scoreDocs[0].doc);
+				if (doc.get(pred.toURI()) != null) {
+					doc.removeFields(pred.toURI());
+				}
+			}
+
+			doc.add(makeField(statement));
+
+			writer.updateDocument(new Term("uri", subject.toURI()), doc);
+			writer.commit();
+		} catch (IOException e) {
+			e.printStackTrace();
+			throw new RuntimeException("caught IOException while indexing statement " + statement);
+		}
 	}
 
 	/**
