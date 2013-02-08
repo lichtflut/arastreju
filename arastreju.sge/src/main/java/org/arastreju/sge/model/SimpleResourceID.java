@@ -74,51 +74,35 @@ public class SimpleResourceID implements ResourceID, Serializable {
 	}
 	
 	// ----------------------------------------------------
-	
+
+    @Override
 	public QualifiedName getQualifiedName() {
 		return qualifiedName;
 	}
-	
-	/** 
-	 * {@inheritDoc}
-	 */
+
+    @Override
 	public String toURI() {
 		return qualifiedName.toURI();
 	}
 	
 	// ----------------------------------------------------
-	
-	/**
-	 * {@inheritDoc}
-	 */
+
+    @Override
 	public boolean isResourceNode() {
 		return true;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
+    @Override
 	public boolean isValueNode() {
 		return false;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
-	public boolean isAttached() {
-		return false;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
+    @Override
 	public ResourceNode asResource() {
 		return new SNResource(qualifiedName);
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
+    @Override
 	public ValueNode asValue() {
 		throw new UnsupportedOperationException();
 	}

@@ -51,7 +51,7 @@ public class LuceneQueryResult implements QueryResult {
 
     @Override
     public List<ResourceNode> toList() {
-        final List<ResourceNode> result = new ArrayList<ResourceNode>(size());
+        final List<ResourceNode> result = new ArrayList<ResourceNode>();
         for (QualifiedName node : hits) {
             result.add(resolver.resolve(node));
         }

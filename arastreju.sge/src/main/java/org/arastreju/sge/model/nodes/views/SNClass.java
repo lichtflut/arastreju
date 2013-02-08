@@ -15,9 +15,7 @@
  */
 package org.arastreju.sge.model.nodes.views;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import org.arastreju.sge.SNOPS;
@@ -107,17 +105,6 @@ public class SNClass extends ResourceView {
 
 	public boolean isInstance(final SNEntity individual){
 		return individual.isInstanceOf(this);
-	}
-
-	// -- INTENSIONS --------------------------------------
-
-	public List<SNText> getTerms(){
-		Set<? extends Statement> intensions = getAssociations(RDFS.LABEL);
-		List<SNText> terms = new ArrayList<SNText>(intensions.size());
-		for (Statement assoc : intensions) {
-			terms.add(assoc.getObject().asValue().asText());
-		}
-		return terms;
 	}
 
 }

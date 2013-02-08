@@ -84,10 +84,9 @@ public abstract class AbstractConversation implements Conversation {
 
 	@Override
 	public Query createQuery() {
+        assertActive();
 		return new LuceneQueryBuilder(new ArasIndexerImpl(workingContext), getQNResolver());
 	}
-
-	protected abstract QNResolver getQNResolver();
 
 	@Override
 	public WorkingContext getConversationContext() {
@@ -105,6 +104,14 @@ public abstract class AbstractConversation implements Conversation {
 	}
 
 	// ----------------------------------------------------
+
+    /**
+     * To be overridden by concrete classes.
+     * @return The resolver for qualified names.
+     */
+    protected abstract QNResolver getQNResolver();
+
+    // ----------------------------------------------------
 
     /**
      * Check if the given node is attached to this conversation.
