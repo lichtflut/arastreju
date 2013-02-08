@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 by lichtflut Forschungs- und Entwicklungsgesellschaft mbH
+ * Copyright 2013 by lichtflut Forschungs- und Entwicklungsgesellschaft mbH
  */
 package org.arastreju.sge.structure;
 
@@ -52,7 +52,8 @@ public class LinkedOrderedNodesTest {
 		
 		List<? extends ResourceNode> sorted = LinkedOrderedNodes.sortResources(all);
 		for(int i=0; i < SIZE; i++) {
-			Assert.assertEquals(i, getID(sorted.get(i)));
+            int id = getID(sorted.get(i));
+            Assert.assertEquals("expected id to be " + i + " but was " + id, i, id);
 		}
 	}
 	
@@ -70,7 +71,8 @@ public class LinkedOrderedNodesTest {
 		
 		List<? extends ResourceNode> sorted = LinkedOrderedNodes.sortResources(all);
 		for(int i=0; i < SIZE; i++) {
-			Assert.assertEquals(i, getID(sorted.get(i)));
+            int id = getID(sorted.get(i));
+            Assert.assertEquals("expected id to be " + i + " but was " + id, i, id);
 		}
 		
 	}
@@ -89,7 +91,6 @@ public class LinkedOrderedNodesTest {
 		} else {
 			return 0;
 		}
-		
 	}
 	
 }
