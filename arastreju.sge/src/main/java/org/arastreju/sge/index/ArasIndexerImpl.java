@@ -42,7 +42,9 @@ import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.util.Version;
 import org.arastreju.sge.ConversationContext;
 import org.arastreju.sge.context.Context;
+import org.arastreju.sge.context.SimpleContextID;
 import org.arastreju.sge.model.ResourceID;
+import org.arastreju.sge.model.SimpleResourceID;
 import org.arastreju.sge.model.Statement;
 import org.arastreju.sge.model.nodes.ResourceNode;
 import org.arastreju.sge.naming.QualifiedName;
@@ -106,19 +108,17 @@ public class ArasIndexerImpl implements IndexUpdator, IndexSearcher {
 		ResourceID subject = statement.getSubject();
 		ResourceID pred = statement.getPredicate();
 
-		Query q = new TermQuery(new Term("uri", subject.toURI()));
-
 		try {
-			TopDocs top = searcher.search(q, 1);
 			Document doc;
-
-			if (top.totalHits == 0) {
-				doc = new Document();
-			} else {
+			Query q = new TermQuery(new Term("uri", subject.toURI()));
+			TopDocs top = searcher.search(q, 1);
+			if (top.totalHits > 0) {
 				doc = reader.document(top.scoreDocs[0].doc);
 				if (doc.get(pred.toURI()) != null) {
 					doc.removeFields(pred.toURI());
 				}
+			} else {
+				doc = new Document();
 			}
 
 			doc.add(makeField(statement));
@@ -211,8 +211,12 @@ class LuceneIndex {
 	private IndexReader reader;
 	private org.apache.lucene.search.IndexSearcher searcher; //XXX name collision with our interface
 
+	private static final Context nullCtxDummy = new SimpleContextID(new SimpleResourceID().getQualifiedName());
+
 	/* create index if nonexistent */
 	public static LuceneIndex forContext(Context ctx) {
+		if (ctx == null)
+			ctx = nullCtxDummy;
 		LuceneIndex index;
 		synchronized (indexMap) {
 			if ((index = indexMap.get(ctx)) == null) {
@@ -235,8 +239,23 @@ class LuceneIndex {
 
 		IndexWriterConfig cfg = new IndexWriterConfig(Version.LUCENE_35, new StandardAnalyzer(Version.LUCENE_35));
 		this.writer = new IndexWriter(dir, cfg);
+		//		writer.setInfoStream(System.err);
+
+		/* add a dummy document to a fresh index so as to avoid having to
+		 * check indexExists() every time
+		 */
+		if (!IndexReader.indexExists(dir)) {
+			Document dummyDoc = new Document();
+			dummyDoc.add(new Field("dummy_key", "dummy_value", Store.NO, Index.NOT_ANALYZED));
+			writer.addDocument(dummyDoc);
+			writer.commit();
+		}
 		this.reader = IndexReader.open(dir, true);
 		this.searcher = new org.apache.lucene.search.IndexSearcher(reader);
+	}
+
+	public Directory getDir() {
+		return dir;
 	}
 
 	public org.apache.lucene.search.IndexSearcher getSearcher() {
