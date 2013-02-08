@@ -76,9 +76,9 @@ public class ArasIndexerImpl implements IndexUpdator, IndexSearcher {
 		doc.add(new Field("uri", node.toURI(), Store.YES, Index.NOT_ANALYZED));
 
 		for (Statement stmt : node.getAssociations()) {
-			if (!regardContext(stmt.getContexts())) {
-				continue;
-			}
+//			if (!regardContext(stmt.getContexts())) {
+//				continue;
+//			}
 
 			if (stmt.getObject().isResourceNode()) {
 				doc.add(new Field(stmt.getPredicate().toURI(), stmt.getObject().asResource().toURI(), Store.YES, Index.NOT_ANALYZED));
