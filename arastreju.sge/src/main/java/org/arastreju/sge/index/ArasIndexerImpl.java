@@ -23,7 +23,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.lucene.analysis.standard.StandardAnalyzer;
+import org.apache.lucene.analysis.WhitespaceAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.document.Field.Index;
@@ -169,7 +169,7 @@ public class ArasIndexerImpl implements IndexUpdator, IndexSearcher {
 
 		/* default field is 'uri' as this is the only field common to all resources.
 		 * (not that we're going to need a default field, anyway.) */
-		QueryParser qp = new QueryParser(Version.LUCENE_35, "uri", new StandardAnalyzer(Version.LUCENE_35));
+		QueryParser qp = new QueryParser(Version.LUCENE_35, "uri", new WhitespaceAnalyzer(Version.LUCENE_35));
 
 		TopDocs top;
 		List<QualifiedName> resultList = new LinkedList<QualifiedName>();
@@ -256,7 +256,7 @@ class LuceneIndex {
 		String path = indexRoot + File.separatorChar + new sun.misc.BASE64Encoder().encode(ctx.toURI().getBytes());
 		this.dir = FSDirectory.open(new File(path));
 
-		IndexWriterConfig cfg = new IndexWriterConfig(Version.LUCENE_35, new StandardAnalyzer(Version.LUCENE_35));
+		IndexWriterConfig cfg = new IndexWriterConfig(Version.LUCENE_35, new WhitespaceAnalyzer(Version.LUCENE_35));
 		this.writer = new IndexWriter(dir, cfg);
 		//		writer.setInfoStream(System.err);
 
