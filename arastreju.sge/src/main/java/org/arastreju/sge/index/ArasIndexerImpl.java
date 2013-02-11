@@ -209,6 +209,21 @@ public class ArasIndexerImpl implements IndexUpdator, IndexSearcher {
 
 		return f;
 	}
+
+	/* no more calls to this object after close() */
+	public void close() {
+		LOGGER.debug("close()");
+		LuceneIndex index = LuceneIndex.forContext(conversationContext.getPrimaryContext());
+		LuceneIndex.drop(conversationContext.getPrimaryContext());
+		try {
+			index.getReader().close();
+			index.getWriter().close();
+		} catch (IOException e) {
+			String msg = "caught IOException while closing reader/writer";
+			LOGGER.error(msg, e);
+			throw new RuntimeException(msg, e);
+		}
+	}
 }
 
 
@@ -249,6 +264,12 @@ class LuceneIndex {
 		}
 
 		return index;
+	}
+
+	public static void drop(Context ctx) {
+		synchronized (indexMap) {
+			indexMap.remove(ctx == null ? nullCtxDummy : ctx);
+		}
 	}
 
 	/* create/open index for context ctx */
