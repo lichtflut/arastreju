@@ -126,6 +126,7 @@ public class ArasIndexerImpl implements IndexUpdator, IndexSearcher {
 				}
 			} else {
 				doc = new Document();
+				doc.add(new Field("uri", subject.toURI(), Store.YES, Index.NOT_ANALYZED));
 			}
 
 			doc.add(makeField(statement));
