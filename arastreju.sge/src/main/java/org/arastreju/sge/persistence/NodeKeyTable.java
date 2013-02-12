@@ -20,4 +20,6 @@ public interface NodeKeyTable {
 
     void put(QualifiedName qn, PhysicalNodeID physicalID);
 
+    void remove(QualifiedName qn);
+
 }

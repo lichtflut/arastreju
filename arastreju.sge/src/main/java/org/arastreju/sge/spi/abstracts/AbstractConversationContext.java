@@ -93,6 +93,7 @@ public abstract class AbstractConversationContext<T extends AttachedAssociationK
      * @return The association keeper or null.
      */
     public T lookup(QualifiedName qn) {
+        assertActive();
         return register.get(qn);
     }
 
