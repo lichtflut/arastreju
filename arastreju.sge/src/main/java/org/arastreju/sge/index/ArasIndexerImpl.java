@@ -178,6 +178,7 @@ public class ArasIndexerImpl implements IndexUpdator, IndexSearcher {
 		/* default field is 'qn' as this is the only field common to all resources.
 		 * (not that we're going to need a default field, anyway.) */
 		QueryParser qp = new QueryParser(Version.LUCENE_35, IndexFields.QUALIFIED_NAME, new LowercaseWhitespaceAnalyzer(Version.LUCENE_35));
+		qp.setAllowLeadingWildcard(true); //such queries should be avoided where possible nevertheless
 
 		TopDocs top;
 		List<QualifiedName> resultList = new LinkedList<QualifiedName>();
