@@ -87,6 +87,10 @@ public class ArasIndexerImpl implements IndexUpdator, IndexSearcher {
 
 		for (Statement stmt : node.getAssociations()) {
 			doc.add(makeField(stmt));
+			Field f = makeGenField(stmt);
+			if (!findValue(doc, f.name(), f.stringValue())) {
+				doc.add(f);
+			}
 		}
 
 		LuceneIndex index = LuceneIndex.forContext(conversationContext.getPrimaryContext());
@@ -130,6 +134,11 @@ public class ArasIndexerImpl implements IndexUpdator, IndexSearcher {
 			}
 
 			doc.add(makeField(statement));
+
+			Field genField = makeGenField(statement);
+			if (!findValue(doc, genField.name(), genField.stringValue())) {
+				doc.add(genField);
+			}
 
 			writer.updateDocument(new Term(IndexFields.QUALIFIED_NAME, normalizeQN(subject.toURI())), doc);
 			writer.commit();
@@ -193,6 +202,18 @@ public class ArasIndexerImpl implements IndexUpdator, IndexSearcher {
 
 	// ----------------------------------------------------
 
+	private Field makeGenField(Statement stmt) {
+		Field f;
+
+		if (stmt.getObject().isResourceNode()) {
+			f = new Field(IndexFields.RESOURCE_RELATION, stmt.getObject().asResource().toURI(), Store.YES, Index.ANALYZED);
+		} else {
+			f = new Field(IndexFields.RESOURCE_VALUE, stmt.getObject().asValue().getStringValue(), Store.YES, Index.ANALYZED); //analyzed, right?
+		}
+
+		return f;
+	}
+
 	private Field makeField(Statement stmt) {
 		Field f;
 
@@ -206,6 +227,17 @@ public class ArasIndexerImpl implements IndexUpdator, IndexSearcher {
 		}
 
 		return f;
+	}
+
+	private boolean findValue(Document doc, String fieldName, String val) {
+		String[] vals = doc.getValues(fieldName);
+		for (String v : vals) {
+			if (v.equals(val)) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	/* this is applied whenever we search for a qn.
