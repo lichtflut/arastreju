@@ -34,6 +34,7 @@ import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.queryParser.ParseException;
 import org.apache.lucene.queryParser.QueryParser;
+import org.apache.lucene.search.MatchAllDocsQuery;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.TopDocs;
@@ -224,6 +225,19 @@ public class ArasIndexerImpl implements IndexUpdator, IndexSearcher {
 			throw new RuntimeException(msg, e);
 		}
 	}
+
+	public void clear() {
+		LOGGER.debug("clear()");
+		LuceneIndex index = LuceneIndex.forContext(conversationContext.getPrimaryContext());
+		try {
+			index.getWriter().deleteAll();
+			index.getWriter().commit();
+		} catch (IOException e) {
+			String msg = "caught IOException while clearing index";
+			LOGGER.error(msg, e);
+			throw new RuntimeException(msg, e);
+		}
+	}
 }
 
 
@@ -281,13 +295,13 @@ class LuceneIndex {
 		this.writer = new IndexWriter(dir, cfg);
 		//		writer.setInfoStream(System.err);
 
-		/* add a dummy document to a fresh index so as to avoid having to
-		 * check indexExists() every time
-		 */
 		if (!IndexReader.indexExists(dir)) {
+			/* cause the index to be created, this saves us a couple indexExists() checks */
 			Document dummyDoc = new Document();
 			dummyDoc.add(new Field("dummy_key", "dummy_value", Store.NO, Index.NOT_ANALYZED));
 			writer.addDocument(dummyDoc);
+			writer.commit();
+			writer.deleteAll();
 			writer.commit();
 		}
 		this.reader = IndexReader.open(dir, true);
