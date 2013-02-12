@@ -34,6 +34,14 @@ public interface GraphDataConnection<T extends AttachedAssociationKeeper> {
     T create(QualifiedName qn);
 
     /**
+     * Remove a resource.
+     * @param qn The resource's qualified name.
+     */
+    void remove(QualifiedName qn);
+
+    // ----------------------------------------------------
+
+    /**
      * Add a new association to a node.
      * @param id The physical id of the node.
      * @param assoc The Association.

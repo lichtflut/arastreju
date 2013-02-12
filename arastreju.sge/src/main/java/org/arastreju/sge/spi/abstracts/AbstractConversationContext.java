@@ -20,6 +20,7 @@ import org.arastreju.sge.ConversationContext;
 import org.arastreju.sge.context.Context;
 import org.arastreju.sge.model.associations.AttachedAssociationKeeper;
 import org.arastreju.sge.naming.QualifiedName;
+import org.arastreju.sge.persistence.TxAction;
 import org.arastreju.sge.persistence.TxProvider;
 import org.arastreju.sge.persistence.TxResultAction;
 import org.arastreju.sge.spi.GraphDataConnection;
@@ -118,6 +119,7 @@ public abstract class AbstractConversationContext<T extends AttachedAssociationK
     }
 
     /**
+     * Create a new resource.
      * @param qn The resource's qualified name.
      * @return The association keeper or null;
      */
@@ -132,6 +134,25 @@ public abstract class AbstractConversationContext<T extends AttachedAssociationK
         attach(qn, keeper);
         return keeper;
     }
+
+    /**
+     * Remove the resource identified by given qualified name.
+     * @param qn The resource's qualified name.
+     * @return The association keeper or null;
+     */
+    public void remove(final QualifiedName qn) {
+        assertActive();
+        detach(qn);
+        getTxProvider().doTransacted(new TxAction() {
+            @Override
+            public void execute() {
+                connection.remove(qn);
+            }
+        });
+
+    }
+
+    // ----------------------------------------------------
 
     /**
      * @param qn The resource's qualified name.

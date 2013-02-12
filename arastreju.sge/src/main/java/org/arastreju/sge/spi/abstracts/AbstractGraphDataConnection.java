@@ -53,6 +53,11 @@ public abstract class AbstractGraphDataConnection<T extends AttachedAssociationK
     }
 
     @Override
+    public void remove(QualifiedName qn) {
+        store.remove(qn);
+    }
+
+    @Override
     public boolean addAssociation(PhysicalNodeID id, Statement assoc) {
         return store.addAssociation(id, assoc);
     }
