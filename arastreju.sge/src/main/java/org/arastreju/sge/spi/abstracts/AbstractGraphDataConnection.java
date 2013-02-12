@@ -1,10 +1,10 @@
 package org.arastreju.sge.spi.abstracts;
 
 import de.lichtflut.infra.exceptions.NotYetImplementedException;
+import org.arastreju.sge.index.IndexProvider;
 import org.arastreju.sge.model.Statement;
 import org.arastreju.sge.model.associations.AttachedAssociationKeeper;
 import org.arastreju.sge.naming.QualifiedName;
-import org.arastreju.sge.persistence.TxProvider;
 import org.arastreju.sge.spi.GraphDataConnection;
 import org.arastreju.sge.spi.GraphDataStore;
 import org.arastreju.sge.spi.PhysicalNodeID;
@@ -31,13 +31,13 @@ public abstract class AbstractGraphDataConnection<T extends AttachedAssociationK
 
     private final GraphDataStore<T> store;
 
-    private final TxProvider txProvider;
+    private final IndexProvider indexProvider;
 
     // ----------------------------------------------------
 
-    protected AbstractGraphDataConnection(GraphDataStore<T> store, TxProvider txProvider) {
+    protected AbstractGraphDataConnection(GraphDataStore<T> store, IndexProvider indexProvider) {
         this.store = store;
-        this.txProvider = txProvider;
+        this.indexProvider = indexProvider;
     }
 
     // ----------------------------------------------------
@@ -89,7 +89,7 @@ public abstract class AbstractGraphDataConnection<T extends AttachedAssociationK
      * @param qn The qualified name of the modified resource.
      * @param context The context, where the modification occurred.
      */
-    public void notifyModification(QualifiedName qn, WorkingContext context) {
+    public void notifyModification(QualifiedName qn, WorkingContext<T> context) {
         List<WorkingContext<T>> copy = new ArrayList<WorkingContext<T>>(openConversations);
         for (WorkingContext<T> conversation : copy) {
             if (!conversation.equals(context)) {
@@ -117,8 +117,7 @@ public abstract class AbstractGraphDataConnection<T extends AttachedAssociationK
     }
 
     @Override
-    public TxProvider getTxProvider() {
-        return txProvider;
+    public IndexProvider getIndexProvider() {
+        return indexProvider;
     }
-
 }

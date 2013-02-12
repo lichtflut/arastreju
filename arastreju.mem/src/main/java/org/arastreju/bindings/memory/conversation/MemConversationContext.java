@@ -3,12 +3,10 @@ package org.arastreju.bindings.memory.conversation;
 import de.lichtflut.infra.exceptions.NotYetImplementedException;
 import org.arastreju.bindings.memory.keepers.MemAssociationKeeper;
 import org.arastreju.bindings.memory.storage.MemConnection;
-import org.arastreju.sge.ConversationContext;
 import org.arastreju.sge.context.Context;
+import org.arastreju.sge.index.IndexProvider;
 import org.arastreju.sge.model.Statement;
-import org.arastreju.sge.naming.QualifiedName;
 import org.arastreju.sge.spi.abstracts.AbstractConversationContext;
-import org.arastreju.sge.spi.abstracts.WorkingContext;
 
 /**
  * <p>
@@ -46,6 +44,11 @@ public class MemConversationContext extends AbstractConversationContext<MemAssoc
 
     @Override
     public void resolveAssociations(MemAssociationKeeper associationKeeper) {
+        throw new NotYetImplementedException();
+    }
+
+    @Override
+    public IndexProvider getIndexProvider() {
         throw new NotYetImplementedException();
     }
 }

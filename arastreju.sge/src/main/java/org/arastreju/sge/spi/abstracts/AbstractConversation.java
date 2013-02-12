@@ -85,7 +85,9 @@ public abstract class AbstractConversation implements Conversation {
 	@Override
 	public Query createQuery() {
         assertActive();
-		return new LuceneQueryBuilder(new ArasIndexerImpl(workingContext), getQNResolver());
+        ArasIndexerImpl arasIndexer = new ArasIndexerImpl(workingContext, workingContext.getIndexProvider());
+		return new LuceneQueryBuilder( arasIndexer, getQNResolver());
+
 	}
 
 	@Override

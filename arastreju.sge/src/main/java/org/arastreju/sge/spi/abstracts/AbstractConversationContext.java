@@ -18,6 +18,7 @@ package org.arastreju.sge.spi.abstracts;
 
 import org.arastreju.sge.ConversationContext;
 import org.arastreju.sge.context.Context;
+import org.arastreju.sge.index.IndexProvider;
 import org.arastreju.sge.model.associations.AttachedAssociationKeeper;
 import org.arastreju.sge.naming.QualifiedName;
 import org.arastreju.sge.persistence.TxAction;
@@ -221,6 +222,11 @@ public abstract class AbstractConversationContext<T extends AttachedAssociationK
             LOGGER.info("Concurrent change on node {} in other context {}.", qualifiedName, otherContext);
             existing.notifyChanged();
         }
+    }
+
+    @Override
+    public IndexProvider getIndexProvider() {
+        return connection.getIndexProvider();
     }
 
     // ----------------------------------------------------

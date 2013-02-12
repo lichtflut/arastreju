@@ -17,8 +17,9 @@ public interface IndexSearcher {
 
     /**
      * Search the index.
+     *
      * @param query The lucene query.
      * @return An iterator over the search results.
      */
-    Iterable<QualifiedName> search(String query);
+    IndexSearchResult search(String query);
 }

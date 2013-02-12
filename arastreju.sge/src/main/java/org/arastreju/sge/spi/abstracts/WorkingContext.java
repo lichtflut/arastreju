@@ -1,9 +1,11 @@
 package org.arastreju.sge.spi.abstracts;
 
 import org.arastreju.sge.ConversationContext;
+import org.arastreju.sge.index.IndexProvider;
 import org.arastreju.sge.model.Statement;
 import org.arastreju.sge.model.associations.AssociationKeeper;
 import org.arastreju.sge.naming.QualifiedName;
+import org.arastreju.sge.persistence.TxProvider;
 
 /**
  * <p>
@@ -50,5 +52,11 @@ public interface WorkingContext<T extends AssociationKeeper> extends Conversatio
      * @param otherContext The other context, where the modification occurred.
      */
     void onModification(QualifiedName qn, WorkingContext<T> otherContext);
+
+    // ----------------------------------------------------
+
+    TxProvider getTxProvider();
+
+    IndexProvider getIndexProvider();
 
 }

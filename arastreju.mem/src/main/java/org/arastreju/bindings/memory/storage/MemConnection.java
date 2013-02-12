@@ -2,8 +2,8 @@ package org.arastreju.bindings.memory.storage;
 
 import org.arastreju.bindings.memory.keepers.MemAssociationKeeper;
 import org.arastreju.bindings.memory.tx.MemTransactionProvider;
-import org.arastreju.sge.model.Statement;
-import org.arastreju.sge.spi.PhysicalNodeID;
+import org.arastreju.sge.index.IndexProvider;
+import org.arastreju.sge.persistence.TxProvider;
 import org.arastreju.sge.spi.abstracts.AbstractGraphDataConnection;
 
 /**
@@ -19,8 +19,20 @@ import org.arastreju.sge.spi.abstracts.AbstractGraphDataConnection;
  */
 public class MemConnection extends AbstractGraphDataConnection<MemAssociationKeeper> {
 
-    public MemConnection(MemStorage storage) {
-        super(storage, new MemTransactionProvider());
+    private final MemTransactionProvider txProvider;
+
+    // ----------------------------------------------------
+
+    public MemConnection(MemStorage storage, IndexProvider indexProvider) {
+        super(storage, indexProvider);
+        txProvider = new MemTransactionProvider();
+    }
+
+    // ----------------------------------------------------
+
+    @Override
+    public TxProvider getTxProvider() {
+        return txProvider;
     }
 
 }

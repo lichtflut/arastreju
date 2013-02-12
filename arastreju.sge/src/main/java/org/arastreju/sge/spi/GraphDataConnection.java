@@ -1,5 +1,6 @@
 package org.arastreju.sge.spi;
 
+import org.arastreju.sge.index.IndexProvider;
 import org.arastreju.sge.model.Statement;
 import org.arastreju.sge.model.associations.AttachedAssociationKeeper;
 import org.arastreju.sge.naming.QualifiedName;
@@ -65,6 +66,8 @@ public interface GraphDataConnection<T extends AttachedAssociationKeeper> {
     // ----------------------------------------------------
 
     GraphDataStore<T> getStore();
+
+    IndexProvider getIndexProvider();
 
     TxProvider getTxProvider();
 

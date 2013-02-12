@@ -16,13 +16,6 @@
  */
 package org.arastreju.sge.index;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.document.Field.Index;
@@ -30,7 +23,6 @@ import org.apache.lucene.document.Field.Store;
 import org.apache.lucene.document.Fieldable;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexWriter;
-import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.queryParser.ParseException;
 import org.apache.lucene.queryParser.QueryParser;
@@ -38,19 +30,18 @@ import org.apache.lucene.search.MatchAllDocsQuery;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.TopDocs;
-import org.apache.lucene.store.Directory;
-import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.util.Version;
 import org.arastreju.sge.ConversationContext;
-import org.arastreju.sge.context.Context;
-import org.arastreju.sge.context.SimpleContextID;
 import org.arastreju.sge.model.ResourceID;
-import org.arastreju.sge.model.SimpleResourceID;
 import org.arastreju.sge.model.Statement;
 import org.arastreju.sge.model.nodes.ResourceNode;
 import org.arastreju.sge.naming.QualifiedName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.IOException;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * <p>
@@ -70,10 +61,17 @@ public class ArasIndexerImpl implements IndexUpdator, IndexSearcher {
 	private static final int MAX_RESULTS = 100;
 
 	private final ConversationContext conversationContext;
+    
+    private final IndexProvider provider;
 
-	public ArasIndexerImpl(ConversationContext cc) {
-		conversationContext = cc;
-	}
+    // ----------------------------------------------------
+
+	public ArasIndexerImpl(ConversationContext cc, IndexProvider provider) {
+		this.conversationContext = cc;
+        this.provider = provider;
+    }
+
+    // ----------------------------------------------------
 
 	/**
 	 * Index this node with all it's statements, regarding the current primary context.
@@ -94,7 +92,7 @@ public class ArasIndexerImpl implements IndexUpdator, IndexSearcher {
 			}
 		}
 
-		LuceneIndex index = LuceneIndex.forContext(conversationContext.getPrimaryContext());
+		LuceneIndex index = provider.forContext(conversationContext.getPrimaryContext());
 		try {
 			index.getWriter().updateDocument(new Term(IndexFields.QUALIFIED_NAME, normalizeQN(node.toURI())), doc); //creates if nonexistent
 			index.getWriter().commit(); // XXX to be revised when transactions enter the play
@@ -112,7 +110,7 @@ public class ArasIndexerImpl implements IndexUpdator, IndexSearcher {
 	@Override
 	public void index(Statement statement) {
 		LOGGER.debug("index(" + statement + ")");
-		LuceneIndex index = LuceneIndex.forContext(conversationContext.getPrimaryContext());
+		LuceneIndex index = provider.forContext(conversationContext.getPrimaryContext());
 		IndexWriter writer = index.getWriter();
 		org.apache.lucene.search.IndexSearcher searcher = index.getSearcher();
 		IndexReader reader = searcher.getIndexReader();
@@ -157,7 +155,7 @@ public class ArasIndexerImpl implements IndexUpdator, IndexSearcher {
 	@Override
 	public void remove(QualifiedName qn) {
 		LOGGER.debug("remove(" + qn + ")");
-		LuceneIndex index = LuceneIndex.forContext(conversationContext.getPrimaryContext());
+		LuceneIndex index = provider.forContext(conversationContext.getPrimaryContext());
 		try {
 			index.getWriter().deleteDocuments(new Term(IndexFields.QUALIFIED_NAME, normalizeQN(qn.toURI())));
 			index.getWriter().commit();
@@ -169,9 +167,9 @@ public class ArasIndexerImpl implements IndexUpdator, IndexSearcher {
 	}
 
 	@Override
-	public Iterable<QualifiedName> search(String query) {
+	public IndexSearchResult search(String query) {
 		LOGGER.debug("search(" + query + ")");
-		LuceneIndex index = LuceneIndex.forContext(conversationContext.getPrimaryContext());
+		LuceneIndex index = provider.forContext(conversationContext.getPrimaryContext());
 		org.apache.lucene.search.IndexSearcher searcher = index.getSearcher();
 		IndexReader reader = searcher.getIndexReader();
 
@@ -199,11 +197,11 @@ public class ArasIndexerImpl implements IndexUpdator, IndexSearcher {
 			throw new RuntimeException(msg, e);
 		}
 
-		return resultList;
+		return new FixedIndexSearchResult(resultList);
 	}
 
 	public void dump() {
-		LuceneIndex index = LuceneIndex.forContext(conversationContext.getPrimaryContext());
+		LuceneIndex index = provider.forContext(conversationContext.getPrimaryContext());
 		org.apache.lucene.search.IndexSearcher searcher = index.getSearcher();
 		IndexReader reader = searcher.getIndexReader();
 
@@ -275,8 +273,8 @@ public class ArasIndexerImpl implements IndexUpdator, IndexSearcher {
 
 	/* no more calls to this object after close() */
 	public void close() {
-		LuceneIndex index = LuceneIndex.forContext(conversationContext.getPrimaryContext());
-		LuceneIndex.drop(conversationContext.getPrimaryContext());
+		LuceneIndex index = provider.forContext(conversationContext.getPrimaryContext());
+		provider.release(conversationContext.getPrimaryContext());
 		try {
 			index.getReader().close();
 			index.getWriter().close();
@@ -288,7 +286,7 @@ public class ArasIndexerImpl implements IndexUpdator, IndexSearcher {
 	}
 
 	public void clear() {
-		LuceneIndex index = LuceneIndex.forContext(conversationContext.getPrimaryContext());
+		LuceneIndex index = provider.forContext(conversationContext.getPrimaryContext());
 		try {
 			index.getWriter().deleteAll();
 			index.getWriter().commit();
@@ -301,109 +299,3 @@ public class ArasIndexerImpl implements IndexUpdator, IndexSearcher {
 }
 
 
-/* holds together everything needed to operate a lucene index.
- * also takes care of mapping contexts to indexes and providing them
- * to ArasIndexerImpl */
-class LuceneIndex {
-	private static final Logger LOGGER = LoggerFactory.getLogger(LuceneIndex.class);
-
-	/* stores one index per context */
-	private static final Map<Context, LuceneIndex> indexMap = new HashMap<Context, LuceneIndex>();
-
-	/* placeholder - to be turned into a proper configuration setting */
-	private static String indexRoot = "/tmp/myindex";
-
-	private final Directory dir;
-	private final IndexWriter writer;
-	private IndexReader reader;
-	private org.apache.lucene.search.IndexSearcher searcher; //XXX name collision with our interface
-
-	private static final Context nullCtxDummy = new SimpleContextID(new SimpleResourceID().getQualifiedName());
-
-	/* create index if nonexistent */
-	public static LuceneIndex forContext(Context ctx) {
-		if (ctx == null)
-			ctx = nullCtxDummy;
-		LuceneIndex index;
-		synchronized (indexMap) {
-			if ((index = indexMap.get(ctx)) == null) {
-				try {
-					indexMap.put(ctx, (index = new LuceneIndex(indexRoot, ctx)));
-				} catch (IOException e) {
-					String msg = "caught IOException while creating index for context " + ctx.toURI();
-					LOGGER.error(msg, e);
-					throw new RuntimeException(msg, e);
-				}
-			}
-		}
-
-		return index;
-	}
-
-	public static void drop(Context ctx) {
-		synchronized (indexMap) {
-			indexMap.remove(ctx == null ? nullCtxDummy : ctx);
-		}
-	}
-
-	/* create/open index for context ctx */
-	private LuceneIndex(String indexRoot, Context ctx) throws IOException {
-		String path = indexRoot + File.separatorChar + new sun.misc.BASE64Encoder().encode(ctx.toURI().getBytes());
-		LOGGER.debug("creating LuceneIndex, root='" + indexRoot + "'; ctx='" + ctx.toString() + "'; (path='" + path + "')");
-		this.dir = FSDirectory.open(new File(path));
-
-		IndexWriterConfig cfg = new IndexWriterConfig(Version.LUCENE_35, new LowercaseWhitespaceAnalyzer(Version.LUCENE_35));
-		this.writer = new IndexWriter(dir, cfg);
-		//		writer.setInfoStream(System.err);
-
-		if (!IndexReader.indexExists(dir)) {
-			/* cause the index to be created, this saves us a couple indexExists() checks */
-			Document dummyDoc = new Document();
-			dummyDoc.add(new Field("dummy_key", "dummy_value", Store.NO, Index.NOT_ANALYZED));
-			writer.addDocument(dummyDoc);
-			writer.commit();
-			writer.deleteAll();
-			writer.commit();
-		}
-		this.reader = IndexReader.open(dir, true);
-		this.searcher = new org.apache.lucene.search.IndexSearcher(reader);
-	}
-
-	public Directory getDir() {
-		return dir;
-	}
-
-	public org.apache.lucene.search.IndexSearcher getSearcher() {
-		refreshReader();
-		return searcher;
-	}
-
-	public IndexReader getReader() {
-		refreshReader();
-		return reader;
-	}
-
-	public IndexWriter getWriter() {
-		return writer;
-	}
-
-	private void refreshReader() {
-		try {
-			if (reader.isCurrent()) {
-				return;
-			}
-			IndexReader nr;
-			nr = IndexReader.openIfChanged(reader, true);
-			if (nr != null) {
-				searcher.close();
-				reader.close();
-				reader = nr;
-				searcher = new org.apache.lucene.search.IndexSearcher(reader);
-			}
-		} catch (IOException e) {
-			String msg = "caught IOException while refreshing IndexReader";
-			LOGGER.error(msg, e);
-			throw new RuntimeException(msg, e);
-		}
-	}
-}

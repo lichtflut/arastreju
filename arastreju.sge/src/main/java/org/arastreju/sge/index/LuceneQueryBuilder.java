@@ -48,7 +48,7 @@ public class LuceneQueryBuilder extends QueryBuilder {
 
     @Override
     public QueryResult getResult() {
-        final Iterable<QualifiedName> hits = searcher.search(toQueryString());
+        final IndexSearchResult hits = searcher.search(toQueryString());
         return new LuceneQueryResult(hits, resolver);
     }
 

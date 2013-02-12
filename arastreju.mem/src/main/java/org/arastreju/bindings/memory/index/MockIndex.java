@@ -1,8 +1,8 @@
 package org.arastreju.bindings.memory.index;
 
 import de.lichtflut.infra.exceptions.NotYetImplementedException;
+import org.arastreju.sge.index.IndexSearchResult;
 import org.arastreju.sge.index.IndexSearcher;
-import org.arastreju.sge.naming.QualifiedName;
 
 /**
  * <p>
@@ -18,7 +18,7 @@ import org.arastreju.sge.naming.QualifiedName;
 public class MockIndex implements IndexSearcher {
 
     @Override
-    public Iterable<QualifiedName> search(String query) {
+    public IndexSearchResult search(String query) {
         throw new NotYetImplementedException();
     }
 

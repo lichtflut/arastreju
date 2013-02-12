@@ -29,10 +29,6 @@ public interface ConversationContext {
 
 	void clear();
 
-    // ----------------------------------------------------
-
-    TxProvider getTxProvider();
-
 	boolean isActive();
 
 }

@@ -21,6 +21,7 @@ import org.arastreju.sge.apriori.RDF;
 import org.arastreju.sge.context.Context;
 import org.arastreju.sge.context.SimpleContextID;
 import org.arastreju.sge.model.ResourceID;
+import org.arastreju.sge.model.Statement;
 import org.arastreju.sge.model.nodes.ResourceNode;
 import org.arastreju.sge.model.nodes.SNResource;
 import org.arastreju.sge.model.nodes.views.SNText;
@@ -29,6 +30,11 @@ import org.arastreju.sge.naming.QualifiedName;
 import org.arastreju.sge.naming.SimpleNamespace;
 import org.arastreju.sge.query.Query;
 import org.arastreju.sge.query.QueryResult;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
 
 import static org.arastreju.sge.SNOPS.assure;
 import static org.arastreju.sge.SNOPS.singleObject;
@@ -47,22 +53,48 @@ import static org.arastreju.sge.SNOPS.string;
  */
 public abstract class AbstractOrganizer implements Organizer {
 
+    @Override
+    public Collection<Namespace> getNamespaces() {
+        final List<Namespace> result = new ArrayList<Namespace>();
+        final Query query = conversation().createQuery().addField(RDF.TYPE, Aras.NAMESPACE);
+        for (ResourceNode node : query.getResult()) {
+            result.add(createNamespace(node));
+        }
+        return result;
+    }
+
+    @Override
+    public Collection<Context> getContexts() {
+        final List<Context> result = new ArrayList<Context>();
+        final Query query = conversation().createQuery().addField(RDF.TYPE, Aras.CONTEXT);
+        for (ResourceNode node : query.getResult()) {
+            result.add(createContext(node));
+        }
+        return result;
+    }
+
+    // ----------------------------------------------------
+
     public Namespace registerNamespace(final String uri, final String prefix) {
         final Conversation conversation = conversation();
-        final Query query = conversation.createQuery()
-                .addField(RDF.TYPE, Aras.NAMESPACE)
-                .and()
-                .addField(Aras.HAS_URI, uri);
-        final QueryResult result = query.getResult();
-        if (!result.isEmpty()) {
-            final ResourceNode node = conversation.resolve(result.iterator().next());
-            assure(node,  Aras.HAS_PREFIX, new SNText(prefix));
-            return new SimpleNamespace(uri, prefix);
-        } else {
-            final Namespace ns = new SimpleNamespace(uri, prefix);
-            final ResourceNode node = createNamespaceNode(ns);
-            conversation.attach(node);
-            return ns;
+        try {
+            final Query query = conversation.createQuery()
+                    .addField(RDF.TYPE, Aras.NAMESPACE)
+                    .and()
+                    .addField(Aras.HAS_URI, uri);
+            final QueryResult result = query.getResult();
+            if (!result.isEmpty()) {
+                final ResourceNode node = conversation.resolve(result.iterator().next());
+                assure(node,  Aras.HAS_PREFIX, new SNText(prefix));
+                return new SimpleNamespace(uri, prefix);
+            } else {
+                final Namespace ns = new SimpleNamespace(uri, prefix);
+                final ResourceNode node = createNamespaceNode(ns);
+                conversation.attach(node);
+                return ns;
+            }
+        } finally {
+            conversation.close();
         }
     }
 
@@ -102,8 +134,62 @@ public abstract class AbstractOrganizer implements Organizer {
 		return node;
 	}
 
+    protected Iterator<Statement> newStatementIterator(Iterator<ResourceNode> nodeIterator) {
+        return new StatementIterator(nodeIterator);
+    }
+
     // ----------------------------------------------------
 
     protected abstract Conversation conversation();
+
+    // ----------------------------------------------------
+
+    private static class StatementIterator implements Iterator<Statement> {
+
+        private Iterator<Statement> stmtIterator;
+        private final Iterator<ResourceNode> nodeIterator;
+
+        public StatementIterator(Iterator<ResourceNode> nodeIterator) {
+            this.nodeIterator = nodeIterator;
+        }
+
+        @Override
+        public boolean hasNext() {
+            if (stmtIterator == null) {
+                forwardToNextResourceNode();
+            }
+            while (stmtIterator != null) {
+                if (stmtIterator.hasNext()) {
+                    return true;
+                } else {
+                    forwardToNextResourceNode();
+                }
+
+            }
+            return false;
+        }
+
+        @Override
+        public Statement next() {
+            return stmtIterator.next();
+        }
+
+        @Override
+        public void remove() {
+            throw new UnsupportedOperationException();
+        }
+
+        private void forwardToNextResourceNode() {
+            while (nodeIterator.hasNext()) {
+                ResourceNode node = nodeIterator.next();
+                if (node != null) {
+                    stmtIterator = node.getAssociations().iterator();
+                    return;
+                }
+            }
+
+            stmtIterator = null;
+        }
+    }
 
 }

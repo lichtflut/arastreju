@@ -26,14 +26,13 @@ import java.util.List;
  */
 public class LuceneQueryResult implements QueryResult {
 
-    private final Iterable<QualifiedName> hits;
-    private int size = -1; //lazy
+    private final IndexSearchResult hits;
 
     private final QNResolver resolver;
 
     // ----------------------------------------------------
 
-    public LuceneQueryResult(Iterable<QualifiedName> indexHits, QNResolver resolver) {
+    public LuceneQueryResult(IndexSearchResult indexHits, QNResolver resolver) {
         this.hits = indexHits;
         this.resolver = resolver;
     }
@@ -47,14 +46,7 @@ public class LuceneQueryResult implements QueryResult {
 
     @Override
     public int size() {
-        if (size == -1) {
-            size = 0;
-            for(@SuppressWarnings("unused") QualifiedName qn : hits) {
-                size++;
-                }
-        }
-
-        return size;
+        return hits.size();
     }
 
     @Override

@@ -38,7 +38,7 @@ public class MemConversationTest {
     @Before
     public void setUp() {
         MemStorage storage = new MemStorage();
-        MemConnection connection = new MemConnection(storage);
+        MemConnection connection = new MemConnection(storage, null);
         MemConversationContext context = new MemConversationContext(connection);
         conversation = new MemConversation(context);
     }
