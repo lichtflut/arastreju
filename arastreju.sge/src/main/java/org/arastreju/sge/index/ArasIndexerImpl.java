@@ -27,6 +27,7 @@ import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.document.Field.Index;
 import org.apache.lucene.document.Field.Store;
+import org.apache.lucene.document.Fieldable;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
@@ -81,7 +82,7 @@ public class ArasIndexerImpl implements IndexUpdator, IndexSearcher {
 	 */
 	@Override
 	public void index(ResourceNode node) {
-		LOGGER.debug("LUCENEINDEX: index(" + node + ")");
+		LOGGER.debug("index(" + node + ")");
 		Document doc = new Document();
 		doc.add(new Field(IndexFields.QUALIFIED_NAME, node.toURI(), Store.YES, Index.ANALYZED));
 
@@ -110,7 +111,7 @@ public class ArasIndexerImpl implements IndexUpdator, IndexSearcher {
 	 */
 	@Override
 	public void index(Statement statement) {
-		LOGGER.debug("LUCENEINDEX: index(" + statement + ")");
+		LOGGER.debug("index(" + statement + ")");
 		LuceneIndex index = LuceneIndex.forContext(conversationContext.getPrimaryContext());
 		IndexWriter writer = index.getWriter();
 		org.apache.lucene.search.IndexSearcher searcher = index.getSearcher();
@@ -155,7 +156,7 @@ public class ArasIndexerImpl implements IndexUpdator, IndexSearcher {
 	 */
 	@Override
 	public void remove(QualifiedName qn) {
-		LOGGER.debug("LUCENEINDEX: remove(" + qn + ")");
+		LOGGER.debug("remove(" + qn + ")");
 		LuceneIndex index = LuceneIndex.forContext(conversationContext.getPrimaryContext());
 		try {
 			index.getWriter().deleteDocuments(new Term(IndexFields.QUALIFIED_NAME, normalizeQN(qn.toURI())));
@@ -198,6 +199,30 @@ public class ArasIndexerImpl implements IndexUpdator, IndexSearcher {
 		}
 
 		return resultList;
+	}
+
+	public void dump() {
+		LuceneIndex index = LuceneIndex.forContext(conversationContext.getPrimaryContext());
+		org.apache.lucene.search.IndexSearcher searcher = index.getSearcher();
+		IndexReader reader = searcher.getIndexReader();
+
+		try {
+			TopDocs top = searcher.search(new MatchAllDocsQuery(), 100);
+			for (int i = 0; i < top.totalHits; i++) {
+				Document doc = reader.document(top.scoreDocs[i].doc);
+				LOGGER.info("---Document--- id: " + top.scoreDocs[i].doc);
+				List<Fieldable> fields = doc.getFields();
+				for (Fieldable f : fields) {
+					LOGGER.info("\tField: name='" + f.name() + "', val='" + f.stringValue() + "'");
+				}
+
+			}
+		} catch (IOException e) {
+			String msg = "caught IOException while dumping index";
+			LOGGER.error(msg, e);
+			throw new RuntimeException(msg, e);
+		}
+
 	}
 
 	// ----------------------------------------------------
@@ -249,7 +274,6 @@ public class ArasIndexerImpl implements IndexUpdator, IndexSearcher {
 
 	/* no more calls to this object after close() */
 	public void close() {
-		LOGGER.debug("close()");
 		LuceneIndex index = LuceneIndex.forContext(conversationContext.getPrimaryContext());
 		LuceneIndex.drop(conversationContext.getPrimaryContext());
 		try {
@@ -263,7 +287,6 @@ public class ArasIndexerImpl implements IndexUpdator, IndexSearcher {
 	}
 
 	public void clear() {
-		LOGGER.debug("clear()");
 		LuceneIndex index = LuceneIndex.forContext(conversationContext.getPrimaryContext());
 		try {
 			index.getWriter().deleteAll();
@@ -365,8 +388,9 @@ class LuceneIndex {
 
 	private void refreshReader() {
 		try {
-			if (reader.isCurrent())
+			if (reader.isCurrent()) {
 				return;
+			}
 			IndexReader nr;
 			nr = IndexReader.openIfChanged(reader, true);
 			if (nr != null) {
