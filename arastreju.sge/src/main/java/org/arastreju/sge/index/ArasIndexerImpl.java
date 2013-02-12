@@ -23,7 +23,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.lucene.analysis.WhitespaceAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.document.Field.Index;
@@ -84,7 +83,7 @@ public class ArasIndexerImpl implements IndexUpdator, IndexSearcher {
 	public void index(ResourceNode node) {
 		LOGGER.debug("LUCENEINDEX: index(" + node + ")");
 		Document doc = new Document();
-		doc.add(new Field("uri", node.toURI(), Store.YES, Index.NOT_ANALYZED));
+		doc.add(new Field(IndexFields.QUALIFIED_NAME, node.toURI(), Store.YES, Index.ANALYZED));
 
 		for (Statement stmt : node.getAssociations()) {
 			doc.add(makeField(stmt));
@@ -92,7 +91,7 @@ public class ArasIndexerImpl implements IndexUpdator, IndexSearcher {
 
 		LuceneIndex index = LuceneIndex.forContext(conversationContext.getPrimaryContext());
 		try {
-			index.getWriter().updateDocument(new Term("uri", node.toURI()), doc); //creates if nonexistent
+			index.getWriter().updateDocument(new Term(IndexFields.QUALIFIED_NAME, normalizeQN(node.toURI())), doc); //creates if nonexistent
 			index.getWriter().commit(); // XXX to be revised when transactions enter the play
 		} catch (IOException e) {
 			String msg = "caught IOException while indexing resource " + node.toURI();
@@ -118,7 +117,7 @@ public class ArasIndexerImpl implements IndexUpdator, IndexSearcher {
 
 		try {
 			Document doc;
-			Query q = new TermQuery(new Term("uri", subject.toURI()));
+			Query q = new TermQuery(new Term(IndexFields.QUALIFIED_NAME, normalizeQN(subject.toURI())));
 			TopDocs top = searcher.search(q, 1);
 			if (top.totalHits > 0) {
 				doc = reader.document(top.scoreDocs[0].doc);
@@ -127,12 +126,12 @@ public class ArasIndexerImpl implements IndexUpdator, IndexSearcher {
 				}
 			} else {
 				doc = new Document();
-				doc.add(new Field("uri", subject.toURI(), Store.YES, Index.NOT_ANALYZED));
+				doc.add(new Field(IndexFields.QUALIFIED_NAME, subject.toURI(), Store.YES, Index.ANALYZED));
 			}
 
 			doc.add(makeField(statement));
 
-			writer.updateDocument(new Term("uri", subject.toURI()), doc);
+			writer.updateDocument(new Term(IndexFields.QUALIFIED_NAME, normalizeQN(subject.toURI())), doc);
 			writer.commit();
 		} catch (IOException e) {
 			String msg = "caught IOException while indexing statement " + statement;
@@ -150,9 +149,7 @@ public class ArasIndexerImpl implements IndexUpdator, IndexSearcher {
 		LOGGER.debug("LUCENEINDEX: remove(" + qn + ")");
 		LuceneIndex index = LuceneIndex.forContext(conversationContext.getPrimaryContext());
 		try {
-			LOGGER.debug("deleting c");
-			index.getWriter().deleteDocuments(new Term("uri", qn.toURI()));
-			LOGGER.debug("committing c");
+			index.getWriter().deleteDocuments(new Term(IndexFields.QUALIFIED_NAME, normalizeQN(qn.toURI())));
 			index.getWriter().commit();
 		} catch (IOException e) {
 			String msg = "caught IOException while removing " + qn.toURI();
@@ -168,9 +165,9 @@ public class ArasIndexerImpl implements IndexUpdator, IndexSearcher {
 		org.apache.lucene.search.IndexSearcher searcher = index.getSearcher();
 		IndexReader reader = searcher.getIndexReader();
 
-		/* default field is 'uri' as this is the only field common to all resources.
+		/* default field is 'qn' as this is the only field common to all resources.
 		 * (not that we're going to need a default field, anyway.) */
-		QueryParser qp = new QueryParser(Version.LUCENE_35, "uri", new WhitespaceAnalyzer(Version.LUCENE_35));
+		QueryParser qp = new QueryParser(Version.LUCENE_35, IndexFields.QUALIFIED_NAME, new LowercaseWhitespaceAnalyzer(Version.LUCENE_35));
 
 		TopDocs top;
 		List<QualifiedName> resultList = new LinkedList<QualifiedName>();
@@ -179,7 +176,7 @@ public class ArasIndexerImpl implements IndexUpdator, IndexSearcher {
 			top = searcher.search(qp.parse(query), MAX_RESULTS);
 			for (int i = 0; i < top.totalHits; i++) {
 				Document hit = reader.document(top.scoreDocs[i].doc);
-				resultList.add(new QualifiedName(hit.get("uri")));
+				resultList.add(new QualifiedName(hit.get(IndexFields.QUALIFIED_NAME)));
 			}
 		} catch (IOException e) {
 			String msg = "caught IOException while processing query '" + query + "'";
@@ -200,7 +197,7 @@ public class ArasIndexerImpl implements IndexUpdator, IndexSearcher {
 		Field f;
 
 		if (stmt.getObject().isResourceNode()) {
-			f = new Field(stmt.getPredicate().toURI(), stmt.getObject().asResource().toURI(), Store.YES, Index.NOT_ANALYZED);
+			f = new Field(stmt.getPredicate().toURI(), stmt.getObject().asResource().toURI(), Store.YES, Index.ANALYZED);
 		} else {
 			/* This replicates the behaviour of the old neo index, for now.
 			 * TODO: Should probably use different sorts of fields  (like
@@ -209,6 +206,13 @@ public class ArasIndexerImpl implements IndexUpdator, IndexSearcher {
 		}
 
 		return f;
+	}
+
+	/* this is applied whenever we search for a qn.
+	 * XXX do we actually want case-insensitive search on URI?
+	 * LuceneQueryBuilder.normalizeValue() sort of enforces/suggests this. */
+	private String normalizeQN(String qn) {
+		return qn.toLowerCase();
 	}
 
 	/* no more calls to this object after close() */
@@ -289,9 +293,10 @@ class LuceneIndex {
 	/* create/open index for context ctx */
 	private LuceneIndex(String indexRoot, Context ctx) throws IOException {
 		String path = indexRoot + File.separatorChar + new sun.misc.BASE64Encoder().encode(ctx.toURI().getBytes());
+		LOGGER.debug("creating LuceneIndex, root='" + indexRoot + "'; ctx='" + ctx.toString() + "'; (path='" + path + "')");
 		this.dir = FSDirectory.open(new File(path));
 
-		IndexWriterConfig cfg = new IndexWriterConfig(Version.LUCENE_35, new WhitespaceAnalyzer(Version.LUCENE_35));
+		IndexWriterConfig cfg = new IndexWriterConfig(Version.LUCENE_35, new LowercaseWhitespaceAnalyzer(Version.LUCENE_35));
 		this.writer = new IndexWriter(dir, cfg);
 		//		writer.setInfoStream(System.err);
 
