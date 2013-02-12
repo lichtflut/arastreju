@@ -96,7 +96,11 @@ public abstract class AbstractConversationContext<T extends AttachedAssociationK
      */
     public T lookup(QualifiedName qn) {
         assertActive();
-        return register.get(qn);
+        T registered = register.get(qn);
+        if (registered != null && !registered.isAttached()) {
+            LOGGER.warn("There is a detached AssociationKeeper in the conversation register: {}.", qn);
+        }
+        return registered;
     }
 
     /**
@@ -139,7 +143,6 @@ public abstract class AbstractConversationContext<T extends AttachedAssociationK
     /**
      * Remove the resource identified by given qualified name.
      * @param qn The resource's qualified name.
-     * @return The association keeper or null;
      */
     public void remove(final QualifiedName qn) {
         assertActive();
