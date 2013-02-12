@@ -27,6 +27,7 @@ import java.util.List;
 public class LuceneQueryResult implements QueryResult {
 
     private final Iterable<QualifiedName> hits;
+    private int size = -1; //lazy
 
     private final QNResolver resolver;
 
@@ -46,7 +47,14 @@ public class LuceneQueryResult implements QueryResult {
 
     @Override
     public int size() {
-        return -1;
+        if (size == -1) {
+            size = 0;
+            for(@SuppressWarnings("unused") QualifiedName qn : hits) {
+                size++;
+                }
+        }
+
+        return size;
     }
 
     @Override
@@ -89,7 +97,7 @@ public class LuceneQueryResult implements QueryResult {
 
     @Override
     public boolean isEmpty() {
-        throw new NotYetSupportedException();
+        return !hits.iterator().hasNext();
     }
 
     @Override

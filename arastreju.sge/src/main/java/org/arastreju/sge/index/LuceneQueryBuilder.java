@@ -1,5 +1,7 @@
 package org.arastreju.sge.index;
 
+import java.util.regex.Matcher;
+
 import de.lichtflut.infra.exceptions.NotYetSupportedException;
 import org.arastreju.sge.naming.QualifiedName;
 import org.arastreju.sge.query.QueryBuilder;
@@ -119,7 +121,7 @@ public class LuceneQueryBuilder extends QueryBuilder {
     }
 
     private String normalizeKey(final String key) {
-        return key.replaceAll(":", "\\\\:");
+        return key.replaceAll(":", Matcher.quoteReplacement("\\:"));
     }
 
     private String normalizeValue(final Object value) {
@@ -130,7 +132,7 @@ public class LuceneQueryBuilder extends QueryBuilder {
         if (normalized.contains(" ")) {
             normalized = "\"" + normalized + "\"";
         }
-        return normalized.replaceAll(":", "\\\\:");
+        return normalized.replaceAll(":", Matcher.quoteReplacement("\\:"));
     }
 
 }
