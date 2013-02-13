@@ -6,6 +6,7 @@ import org.arastreju.sge.model.associations.AttachedAssociationKeeper;
 import org.arastreju.sge.naming.QualifiedName;
 import org.arastreju.sge.persistence.TxProvider;
 import org.arastreju.sge.spi.abstracts.AbstractConversationContext;
+import org.arastreju.sge.spi.abstracts.WorkingContext;
 
 /**
  * <p>
@@ -73,8 +74,16 @@ public interface GraphDataConnection<T extends AttachedAssociationKeeper> {
 
     // ----------------------------------------------------
 
+    /**
+     * Notify the connection about a change for the resource with given qualified name.
+     * @param qn The qualified name.
+     * @param context The context in which occurred the change.
+     */
+    void notifyModification(QualifiedName qn, WorkingContext<T> context);
+
     void register(AbstractConversationContext<T> conversationContext);
 
     void unregister(AbstractConversationContext<T> conversationContext);
 
+    void close();
 }

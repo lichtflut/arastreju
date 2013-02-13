@@ -89,6 +89,7 @@ public abstract class AbstractGraphDataConnection<T extends AttachedAssociationK
      * @param qn The qualified name of the modified resource.
      * @param context The context, where the modification occurred.
      */
+    @Override
     public void notifyModification(QualifiedName qn, WorkingContext<T> context) {
         List<WorkingContext<T>> copy = new ArrayList<WorkingContext<T>>(openConversations);
         for (WorkingContext<T> conversation : copy) {
@@ -101,6 +102,7 @@ public abstract class AbstractGraphDataConnection<T extends AttachedAssociationK
     /**
      * Close the connection and free all resources.
      */
+    @Override
     public void close() {
         List<WorkingContext<T>> copy = new ArrayList<WorkingContext<T>>(openConversations);
         // iterating over copy because original will be remove itself while closing.
