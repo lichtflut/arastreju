@@ -6,6 +6,7 @@ import org.arastreju.sge.model.Statement;
 import org.arastreju.sge.model.associations.AssociationKeeper;
 import org.arastreju.sge.naming.QualifiedName;
 import org.arastreju.sge.persistence.TxProvider;
+import org.arastreju.sge.spi.GraphDataConnection;
 
 /**
  * <p>
@@ -19,6 +20,48 @@ import org.arastreju.sge.persistence.TxProvider;
  * @author Oliver Tigges
  */
 public interface WorkingContext<T extends AssociationKeeper> extends ConversationContext {
+
+    /**
+     * Lookup the qualified name in the register.
+     * @param qn The qualified name.
+     * @return The association keeper or null.
+     */
+    T lookup(QualifiedName qn);
+
+    /**
+     * Find the resource in this conversation context or in underlying data store.
+     * @param qn The resource's qualified name.
+     * @return The association keeper or null.
+     */
+    T find(QualifiedName qn);
+
+    /**
+     * Create a new resource.
+     * @param qn The resource's qualified name.
+     * @return The attached association keeper or null;
+     */
+    T create(QualifiedName qn);
+
+    /**
+     * Remove the resource identified by given qualified name.
+     * @param qn The resource's qualified name.
+     */
+    void remove(QualifiedName qn);
+
+    /**
+     * Attach the keeper to this context. The resource will be created if it does not exist yet.
+     * @param qn The resource's qualified name.
+     * @param keeper The keeper to be accessed.
+     */
+    void attach(QualifiedName qn, T keeper);
+
+    /**
+     * Detach the keeper from the context.
+     * @param qn The resource's qualified name.
+     */
+    void detach(QualifiedName qn);
+
+    // ----------------------------------------------------
 
     /**
      * Add a new Association to given keeper and store it.
@@ -41,6 +84,14 @@ public interface WorkingContext<T extends AssociationKeeper> extends Conversatio
      */
     void resolveAssociations(T associationKeeper);
 
+
+
+    // ----------------------------------------------------
+
+    TxProvider getTxProvider();
+
+    IndexProvider getIndexProvider();
+
     /**
      * Close this context and clear all registered resources.
      */
@@ -53,21 +104,4 @@ public interface WorkingContext<T extends AssociationKeeper> extends Conversatio
      */
     void onModification(QualifiedName qn, WorkingContext<T> otherContext);
 
-    // ----------------------------------------------------
-
-    TxProvider getTxProvider();
-
-    IndexProvider getIndexProvider();
-
-    T lookup(QualifiedName qn);
-
-    T find(QualifiedName qn);
-
-    T create(QualifiedName qn);
-
-    void remove(QualifiedName qn);
-
-    void attach(QualifiedName qn, T keeper);
-
-    void detach(QualifiedName qn);
 }

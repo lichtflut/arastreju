@@ -89,11 +89,6 @@ public abstract class AbstractConversationContext<T extends AttachedAssociationK
 
 	// ----------------------------------------------------
 
-    /**
-     * Lookup the qualified name in the register.
-     * @param qn The qualified name.
-     * @return The association keeper or null.
-     */
     @Override
     public T lookup(QualifiedName qn) {
         assertActive();
@@ -104,11 +99,6 @@ public abstract class AbstractConversationContext<T extends AttachedAssociationK
         return registered;
     }
 
-    /**
-     * Find the resource in this conversation context or in underlying data store.
-     * @param qn The resource's qualified name.
-     * @return The association keeper or null.
-     */
     @Override
     public T find(QualifiedName qn) {
         assertActive();
@@ -125,11 +115,6 @@ public abstract class AbstractConversationContext<T extends AttachedAssociationK
         }
     }
 
-    /**
-     * Create a new resource.
-     * @param qn The resource's qualified name.
-     * @return The association keeper or null;
-     */
     @Override
     public T create(final QualifiedName qn) {
         assertActive();
@@ -143,10 +128,6 @@ public abstract class AbstractConversationContext<T extends AttachedAssociationK
         return keeper;
     }
 
-    /**
-     * Remove the resource identified by given qualified name.
-     * @param qn The resource's qualified name.
-     */
     @Override
     public void remove(final QualifiedName qn) {
         assertActive();
@@ -162,10 +143,6 @@ public abstract class AbstractConversationContext<T extends AttachedAssociationK
 
     // ----------------------------------------------------
 
-    /**
-     * @param qn The resource's qualified name.
-     * @param keeper The keeper to be accessed.
-     */
     @Override
     public void attach(QualifiedName qn, T keeper) {
         assertActive();
@@ -173,9 +150,6 @@ public abstract class AbstractConversationContext<T extends AttachedAssociationK
         keeper.setConversationContext(this);
     }
 
-    /**
-     * @param qn The resource's qualified name.
-     */
     @Override
     public void detach(QualifiedName qn) {
         assertActive();
@@ -187,12 +161,9 @@ public abstract class AbstractConversationContext<T extends AttachedAssociationK
 
     // ----------------------------------------------------
 
+    @Override
     public TxProvider getTxProvider() {
         return connection.getTxProvider();
-    }
-
-    public GraphDataConnection<T> getConnection() {
-        return connection;
     }
 
 	/**
@@ -296,6 +267,10 @@ public abstract class AbstractConversationContext<T extends AttachedAssociationK
     }
 
     // ----------------------------------------------------
+
+    protected GraphDataConnection<T> getConnection() {
+        return connection;
+    }
 
     protected void onClose() {
         connection.unregister(this);
