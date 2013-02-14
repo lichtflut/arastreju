@@ -94,6 +94,7 @@ public abstract class AbstractConversationContext<T extends AttachedAssociationK
      * @param qn The qualified name.
      * @return The association keeper or null.
      */
+    @Override
     public T lookup(QualifiedName qn) {
         assertActive();
         T registered = register.get(qn);
@@ -108,6 +109,7 @@ public abstract class AbstractConversationContext<T extends AttachedAssociationK
      * @param qn The resource's qualified name.
      * @return The association keeper or null.
      */
+    @Override
     public T find(QualifiedName qn) {
         assertActive();
         T registered = lookup(qn);
@@ -128,6 +130,7 @@ public abstract class AbstractConversationContext<T extends AttachedAssociationK
      * @param qn The resource's qualified name.
      * @return The association keeper or null;
      */
+    @Override
     public T create(final QualifiedName qn) {
         assertActive();
         T keeper = getTxProvider().doTransacted(new TxResultAction<T>() {
@@ -144,6 +147,7 @@ public abstract class AbstractConversationContext<T extends AttachedAssociationK
      * Remove the resource identified by given qualified name.
      * @param qn The resource's qualified name.
      */
+    @Override
     public void remove(final QualifiedName qn) {
         assertActive();
         detach(qn);
@@ -162,6 +166,7 @@ public abstract class AbstractConversationContext<T extends AttachedAssociationK
      * @param qn The resource's qualified name.
      * @param keeper The keeper to be accessed.
      */
+    @Override
     public void attach(QualifiedName qn, T keeper) {
         assertActive();
         register.put(qn, keeper);
@@ -171,6 +176,7 @@ public abstract class AbstractConversationContext<T extends AttachedAssociationK
     /**
      * @param qn The resource's qualified name.
      */
+    @Override
     public void detach(QualifiedName qn) {
         assertActive();
         final T removed = register.remove(qn);

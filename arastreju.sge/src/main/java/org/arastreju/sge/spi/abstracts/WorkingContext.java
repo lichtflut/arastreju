@@ -59,4 +59,15 @@ public interface WorkingContext<T extends AssociationKeeper> extends Conversatio
 
     IndexProvider getIndexProvider();
 
+    T lookup(QualifiedName qn);
+
+    T find(QualifiedName qn);
+
+    T create(QualifiedName qn);
+
+    void remove(QualifiedName qn);
+
+    void attach(QualifiedName qn, T keeper);
+
+    void detach(QualifiedName qn);
 }
