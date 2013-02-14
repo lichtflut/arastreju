@@ -4,6 +4,7 @@ import org.arastreju.sge.Conversation;
 import org.arastreju.sge.ConversationContext;
 import org.arastreju.sge.SNOPS;
 import org.arastreju.sge.index.ArasIndexerImpl;
+import org.arastreju.sge.index.IndexSearcher;
 import org.arastreju.sge.index.LuceneQueryBuilder;
 import org.arastreju.sge.index.QNResolver;
 import org.arastreju.sge.model.SemanticGraph;
@@ -29,12 +30,16 @@ import org.arastreju.sge.spi.AssocKeeperAccess;
  */
 public abstract class AbstractConversation implements Conversation {
 
-	private final WorkingContext workingContext;
+	private final WorkingContext context;
 
 	// ----------------------------------------------------
 
-	public AbstractConversation(final WorkingContext workingContext) {
-		this.workingContext = workingContext;
+    /**
+     * Constructor.
+     * @param context The context of this conversation.
+     */
+	public AbstractConversation(WorkingContext context) {
+		this.context = context;
 	}
 
 	// ----------------------------------------------------
@@ -53,12 +58,12 @@ public abstract class AbstractConversation implements Conversation {
 		return SNOPS.remove(subject, stmt.getPredicate(), stmt.getObject());
 	}
 
-	// ----------------------------------------------------
+	// -- Semantic Graph operations -----------------------
 
 	@Override
 	public void attach(final SemanticGraph graph) {
 		assertActive();
-		workingContext.getTxProvider().doTransacted(new TxResultAction<SemanticGraph>() {
+		context.getTxProvider().doTransacted(new TxResultAction<SemanticGraph>() {
 			@Override
 			public SemanticGraph execute() {
 				for(Statement stmt : graph.getStatements()) {
@@ -80,29 +85,30 @@ public abstract class AbstractConversation implements Conversation {
 		}
 	}
 
-	// ----------------------------------------------------
+	// -- Query support -----------------------------------
 
 	@Override
 	public Query createQuery() {
         assertActive();
-        ArasIndexerImpl arasIndexer = new ArasIndexerImpl(workingContext, workingContext.getIndexProvider());
-		return new LuceneQueryBuilder( arasIndexer, getQNResolver());
-
+        IndexSearcher searcher = new ArasIndexerImpl(context, context.getIndexProvider());
+		return new LuceneQueryBuilder( searcher, getQNResolver());
 	}
+
+    // ----------------------------------------------------
 
 	@Override
 	public WorkingContext getConversationContext() {
-		return workingContext;
+		return context;
 	}
 
     @Override
     public TransactionControl beginTransaction() {
-        return workingContext.getTxProvider().begin();
+        return context.getTxProvider().begin();
     }
 
 	@Override
 	public void close() {
-		workingContext.clear();
+		context.clear();
 	}
 
 	// ----------------------------------------------------
@@ -125,7 +131,7 @@ public abstract class AbstractConversation implements Conversation {
     }
 
     protected void assertActive() {
-        if (!workingContext.isActive()) {
+        if (!context.isActive()) {
             throw new IllegalStateException("Conversation already closed.");
         }
     }
