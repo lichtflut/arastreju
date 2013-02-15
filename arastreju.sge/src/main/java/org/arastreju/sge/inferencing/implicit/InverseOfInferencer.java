@@ -41,7 +41,7 @@ import org.slf4j.LoggerFactory;
  */
 public class InverseOfInferencer implements Inferencer {
 
-	private final Logger logger = LoggerFactory.getLogger(InverseOfInferencer.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(InverseOfInferencer.class);
 	
 	private final ResourceResolver resolver;
 	
@@ -57,15 +57,13 @@ public class InverseOfInferencer implements Inferencer {
 
 	// ----------------------------------------------------
 
-	/** 
-	 * {@inheritDoc}
-	 */
+	@Override
 	public void addInferenced(final Statement stmt, final Set<Statement> target) {
 		final SNProperty property = SNProperty.from(resolver.resolve(stmt.getPredicate()));
 		Set<SemanticNode> invertedPredicates = SNOPS.objects(property, Aras.INVERSE_OF);
 		if (!invertedPredicates.isEmpty()) {
 			addInverted(stmt, invertedPredicates, target);
-			logger.debug("Found inverted properties of {} : {}", property, invertedPredicates);
+			LOGGER.debug("Found inverted properties of {} : {}", property, invertedPredicates);
 		}
 	}
 	
@@ -77,7 +75,7 @@ public class InverseOfInferencer implements Inferencer {
 				final Statement inverted = new DetachedStatement(originalStmt.getObject().asResource(), sn.asResource(), 
 						originalStmt.getSubject(), originalStmt.getContexts());
 				target.add(inverted);
-				logger.debug("Added inverted Stmt: " + inverted);
+				LOGGER.debug("Added inverted Stmt: " + inverted);
 			}
 		}
 	}

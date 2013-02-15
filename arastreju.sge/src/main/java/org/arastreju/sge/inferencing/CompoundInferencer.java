@@ -43,9 +43,7 @@ public class CompoundInferencer implements Inferencer {
 	
 	// -----------------------------------------------------
 
-	/**
-	 * {@inheritDoc}
-	 */
+	@Override
 	public void addInferenced(final Statement stmt, final Set<Statement> target) {
 		final Set<Inferencer> inferencers = predicateMap.getValues(stmt.getPredicate());
 		for (Inferencer current : inferencers) {
@@ -54,7 +52,7 @@ public class CompoundInferencer implements Inferencer {
 		for (Inferencer current : common) {
 			current.addInferenced(stmt, target);
 		}
-	};
+	}
 	
 	// ----------------------------------------------------
 	

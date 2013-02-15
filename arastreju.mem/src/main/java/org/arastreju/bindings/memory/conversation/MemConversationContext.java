@@ -33,7 +33,7 @@ public class MemConversationContext extends AbstractConversationContext<MemAssoc
 
     @Override
     public void addAssociation(MemAssociationKeeper keeper, Statement assoc) {
-        getConnection().addAssociation(keeper.getPhysicalID(), assoc);
+        getConnection().getStore().addAssociation(keeper.getPhysicalID(), assoc);
         keeper.addAssociationDirectly(assoc);
     }
 

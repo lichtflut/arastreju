@@ -79,8 +79,10 @@ public abstract class AttachedAssociationKeeper extends AbstractAssociationKeepe
 
     @Override
     public boolean removeAssociation(final Statement assoc) {
+        if (!getAssociations().contains(assoc)) {
+            return false;
+        }
         if (isAttached()) {
-            getAssociations().remove(assoc);
             return getConversationContext().removeAssociation(this, assoc);
         } else {
             return super.removeAssociation(assoc);
@@ -102,8 +104,16 @@ public abstract class AttachedAssociationKeeper extends AbstractAssociationKeepe
      * Add an association directly to the set, without resolving.
      * @param assoc The association to add.
      */
-    public void addAssociationDirectly(final Statement assoc) {
+    public void addAssociationDirectly(Statement assoc) {
         getAssociationsDirectly().add(assoc);
+    }
+
+    /**
+     * Remove a association directly to the set, without resolving.
+     * @param assoc The association to remove.
+     */
+    public void removeAssociationDirectly(Statement assoc) {
+        getAssociationsDirectly().remove(assoc);
     }
 
     /**
@@ -128,5 +138,4 @@ public abstract class AttachedAssociationKeeper extends AbstractAssociationKeepe
         markResolved();
         context = null;
     }
-
 }

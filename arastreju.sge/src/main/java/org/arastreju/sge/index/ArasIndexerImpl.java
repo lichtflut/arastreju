@@ -32,6 +32,7 @@ import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.util.Version;
 import org.arastreju.sge.ConversationContext;
+import org.arastreju.sge.inferencing.Inferencer;
 import org.arastreju.sge.model.ResourceID;
 import org.arastreju.sge.model.Statement;
 import org.arastreju.sge.model.nodes.ResourceNode;
@@ -40,8 +41,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * <p>
@@ -60,6 +65,8 @@ public class ArasIndexerImpl implements IndexUpdator, IndexSearcher {
 	/* turn this into a configuration setting */
 	private static final int MAX_RESULTS = 100;
 
+    private List<Inferencer> inferencers = new ArrayList<Inferencer>();
+
 	private final ConversationContext conversationContext;
     
     private final IndexProvider provider;
@@ -73,6 +80,18 @@ public class ArasIndexerImpl implements IndexUpdator, IndexSearcher {
 
     // ----------------------------------------------------
 
+    /**
+     * Add a soft inferencer.
+     * @param inferencer The inferencer.
+     * @return This.
+     */
+    public ArasIndexerImpl add(Inferencer... inferencer) {
+        Collections.addAll(inferencers, inferencer);
+        return this;
+    }
+
+    // ----------------------------------------------------
+
 	/**
 	 * Index this node with all it's statements, regarding the current primary context.
 	 * If the node already has been indexed, it will be updated.
@@ -80,18 +99,9 @@ public class ArasIndexerImpl implements IndexUpdator, IndexSearcher {
 	 */
 	@Override
 	public void index(ResourceNode node) {
-		LOGGER.debug("index(" + node + ")");
-		Document doc = new Document();
-		doc.add(new Field(IndexFields.QUALIFIED_NAME, node.toURI(), Store.YES, Index.ANALYZED));
+		LOGGER.debug("Indexing ({})", node);
 
-		for (Statement stmt : node.getAssociations()) {
-			doc.add(makeField(stmt));
-			Field f = makeGenField(stmt);
-			if (!findValue(doc, f.name(), f.stringValue())) {
-				doc.add(f);
-			}
-		}
-
+        Document doc = createDocument(node);
 		LuceneIndex index = provider.forContext(conversationContext.getPrimaryContext());
 		try {
 			index.getWriter().updateDocument(new Term(IndexFields.QUALIFIED_NAME, normalizeQN(node.toURI())), doc); //creates if nonexistent
@@ -132,12 +142,7 @@ public class ArasIndexerImpl implements IndexUpdator, IndexSearcher {
 				doc.add(new Field(IndexFields.QUALIFIED_NAME, subject.toURI(), Store.YES, Index.ANALYZED));
 			}
 
-			doc.add(makeField(statement));
-
-			Field genField = makeGenField(statement);
-			if (!findValue(doc, genField.name(), genField.stringValue())) {
-				doc.add(genField);
-			}
+            addFields(doc, statement);
 
 			writer.updateDocument(new Term(IndexFields.QUALIFIED_NAME, normalizeQN(subject.toURI())), doc);
 			writer.commit();
@@ -226,7 +231,33 @@ public class ArasIndexerImpl implements IndexUpdator, IndexSearcher {
 
 	// ----------------------------------------------------
 
-	private Field makeGenField(Statement stmt) {
+    private Document createDocument(ResourceNode node) {
+        Document doc = new Document();
+        doc.add(new Field(IndexFields.QUALIFIED_NAME, node.toURI(), Store.YES, Index.ANALYZED));
+
+        Set<Statement> asserted = node.getAssociations();
+        Set<Statement> inferred = new HashSet<Statement>();
+        for (Statement stmt : asserted) {
+            for (Inferencer inferencer : inferencers) {
+                inferencer.addInferenced(stmt, inferred);
+            }
+            addFields(doc, stmt);
+        }
+        for (Statement stmt : inferred) {
+            addFields(doc, stmt);
+        }
+        return doc;
+    }
+
+    private void addFields(Document doc, Statement stmt) {
+        doc.add(makeField(stmt));
+        Field f = makeGenField(stmt);
+        if (!findValue(doc, f.name(), f.stringValue())) {
+            doc.add(f);
+        }
+    }
+
+    private Field makeGenField(Statement stmt) {
 		Field f;
 
 		if (stmt.getObject().isResourceNode()) {
