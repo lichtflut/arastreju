@@ -14,6 +14,7 @@ import org.arastreju.sge.model.nodes.views.SNText;
 import org.arastreju.sge.naming.QualifiedName;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -68,6 +69,7 @@ public class MemConversationTest {
     }
 
     @Test
+    @Ignore
     public void testAttachAndDetach() {
         ResourceNode flower = new SNResource(qnFlower);
         conversation.attach(flower);

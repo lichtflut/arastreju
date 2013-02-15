@@ -2,18 +2,18 @@ package org.arastreju.bindings.memory.conversation;
 
 import de.lichtflut.infra.exceptions.NotYetImplementedException;
 import org.arastreju.bindings.memory.index.MockIndex;
-import org.arastreju.bindings.memory.keepers.MemAssociationKeeper;
-import org.arastreju.bindings.memory.nodes.SNMemResource;
 import org.arastreju.sge.index.LuceneQueryBuilder;
 import org.arastreju.sge.index.QNResolver;
 import org.arastreju.sge.model.ResourceID;
 import org.arastreju.sge.model.Statement;
 import org.arastreju.sge.model.associations.AssociationKeeper;
+import org.arastreju.sge.model.associations.AttachedAssociationKeeper;
 import org.arastreju.sge.model.associations.DetachedAssociationKeeper;
 import org.arastreju.sge.model.nodes.ResourceNode;
 import org.arastreju.sge.naming.QualifiedName;
 import org.arastreju.sge.query.Query;
 import org.arastreju.sge.spi.AssocKeeperAccess;
+import org.arastreju.sge.spi.AttachedResourceNode;
 import org.arastreju.sge.spi.abstracts.AbstractConversation;
 
 import java.util.Set;
@@ -43,21 +43,21 @@ public class MemConversation extends AbstractConversation {
 
 	@Override
 	public ResourceNode findResource(final QualifiedName qn) {
-        MemAssociationKeeper existing = getConversationContext().find(qn);
+        AttachedAssociationKeeper existing = getConversationContext().find(qn);
         if (existing != null) {
-            return new SNMemResource(qn, existing);
+            return new AttachedResourceNode(qn, existing);
         }
         return null;
     }
 
 	@Override
 	public ResourceNode resolve(final ResourceID resourceID) {
-        MemAssociationKeeper existing = getConversationContext().find(resourceID.getQualifiedName());
+        AttachedAssociationKeeper existing = getConversationContext().find(resourceID.getQualifiedName());
         if (existing != null) {
-            return new SNMemResource(resourceID.getQualifiedName(), existing);
+            return new AttachedResourceNode(resourceID.getQualifiedName(), existing);
         } else {
             AssociationKeeper created = getConversationContext().create(resourceID.getQualifiedName());
-            return new SNMemResource(resourceID.getQualifiedName(), created);
+            return new AttachedResourceNode(resourceID.getQualifiedName(), created);
         }
 	}
 
@@ -69,7 +69,7 @@ public class MemConversation extends AbstractConversation {
         }
         AssocKeeperAccess accessor = AssocKeeperAccess.getInstance();
         AssociationKeeper given = accessor.getAssociationKeeper(node);
-        MemAssociationKeeper existing = getConversationContext().find(node.getQualifiedName());
+        AttachedAssociationKeeper existing = getConversationContext().find(node.getQualifiedName());
         if (existing != null) {
             accessor.merge(existing, given);
             accessor.setAssociationKeeper(node, existing);
@@ -93,7 +93,7 @@ public class MemConversation extends AbstractConversation {
         if (isAttached(node)) {
             return;
         }
-        MemAssociationKeeper existing = getConversationContext().find(node.getQualifiedName());
+        AttachedAssociationKeeper existing = getConversationContext().find(node.getQualifiedName());
         if (existing != null) {
             AssocKeeperAccess.getInstance().setAssociationKeeper(node, existing);
         } else {

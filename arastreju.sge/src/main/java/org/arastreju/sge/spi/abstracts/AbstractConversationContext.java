@@ -45,7 +45,7 @@ import java.util.Set;
  *
  * @author Oliver Tigges
  */
-public abstract class AbstractConversationContext<T extends AttachedAssociationKeeper> implements WorkingContext<T> {
+public abstract class AbstractConversationContext implements WorkingContext {
 
 	public static final Context[] NO_CTX = new Context[0];
 
@@ -57,9 +57,9 @@ public abstract class AbstractConversationContext<T extends AttachedAssociationK
 
     private final long ctxId = ++ID_GEN;
 
-    private final GraphDataConnection<T> connection;
+    private final GraphDataConnection connection;
 
-    private final Map<QualifiedName, T> register = new HashMap<QualifiedName, T>();
+    private final Map<QualifiedName, AttachedAssociationKeeper> register = new HashMap<QualifiedName, AttachedAssociationKeeper>();
 
     private final Set<Context> readContexts = new HashSet<Context>();
 
@@ -72,7 +72,7 @@ public abstract class AbstractConversationContext<T extends AttachedAssociationK
 	/**
 	 * Creates a new Working Context.
 	 */
-	public AbstractConversationContext(GraphDataConnection<T> connection) {
+	public AbstractConversationContext(GraphDataConnection connection) {
 		LOGGER.debug("New Conversation Context startet. " + ctxId);
         this.connection = connection;
         connection.register(this);
@@ -81,7 +81,7 @@ public abstract class AbstractConversationContext<T extends AttachedAssociationK
     /**
      * Creates a new Working Context.
      */
-    public AbstractConversationContext(GraphDataConnection<T> connection, Context primaryContext, Context... readContexts) {
+    public AbstractConversationContext(GraphDataConnection connection, Context primaryContext, Context... readContexts) {
         this(connection);
         setPrimaryContext(primaryContext);
         setReadContexts(readContexts);
@@ -90,9 +90,9 @@ public abstract class AbstractConversationContext<T extends AttachedAssociationK
 	// ----------------------------------------------------
 
     @Override
-    public T lookup(QualifiedName qn) {
+    public AttachedAssociationKeeper lookup(QualifiedName qn) {
         assertActive();
-        T registered = register.get(qn);
+        AttachedAssociationKeeper registered = register.get(qn);
         if (registered != null && !registered.isAttached()) {
             LOGGER.warn("There is a detached AssociationKeeper in the conversation register: {}.", qn);
         }
@@ -100,13 +100,13 @@ public abstract class AbstractConversationContext<T extends AttachedAssociationK
     }
 
     @Override
-    public T find(QualifiedName qn) {
+    public AttachedAssociationKeeper find(QualifiedName qn) {
         assertActive();
-        T registered = lookup(qn);
+        AttachedAssociationKeeper registered = lookup(qn);
         if (registered != null) {
             return registered;
         }
-        T existing = connection.find(qn);
+        AttachedAssociationKeeper existing = connection.find(qn);
         if (existing != null) {
             attach(qn, existing);
             return existing;
@@ -116,11 +116,11 @@ public abstract class AbstractConversationContext<T extends AttachedAssociationK
     }
 
     @Override
-    public T create(final QualifiedName qn) {
+    public AttachedAssociationKeeper create(final QualifiedName qn) {
         assertActive();
-        T keeper = getTxProvider().doTransacted(new TxResultAction<T>() {
+        AttachedAssociationKeeper keeper = getTxProvider().doTransacted(new TxResultAction<AttachedAssociationKeeper>() {
             @Override
-            public T execute() {
+            public AttachedAssociationKeeper execute() {
                 return connection.create(qn);
             }
         });
@@ -144,7 +144,7 @@ public abstract class AbstractConversationContext<T extends AttachedAssociationK
     // ----------------------------------------------------
 
     @Override
-    public void attach(QualifiedName qn, T keeper) {
+    public void attach(QualifiedName qn, AttachedAssociationKeeper keeper) {
         assertActive();
         register.put(qn, keeper);
         keeper.setConversationContext(this);
@@ -153,7 +153,7 @@ public abstract class AbstractConversationContext<T extends AttachedAssociationK
     @Override
     public void detach(QualifiedName qn) {
         assertActive();
-        final T removed = register.remove(qn);
+        final AttachedAssociationKeeper removed = register.remove(qn);
         if (removed != null) {
             removed.detach();
         }
@@ -174,7 +174,7 @@ public abstract class AbstractConversationContext<T extends AttachedAssociationK
 		assertActive();
 		clearCaches();
 	}
-	
+
 	/**
 	 * Close and invalidate this context.
 	 */
@@ -187,7 +187,7 @@ public abstract class AbstractConversationContext<T extends AttachedAssociationK
 			LOGGER.info("Conversation will be closed. " + ctxId);
 		}
 	}
-	
+
 	/**
 	 * @return the active
 	 */
@@ -197,7 +197,7 @@ public abstract class AbstractConversationContext<T extends AttachedAssociationK
 
     @Override
     public void onModification(QualifiedName qualifiedName, WorkingContext otherContext) {
-        T existing = lookup(qualifiedName);
+        AttachedAssociationKeeper existing = lookup(qualifiedName);
         if (existing != null) {
             LOGGER.info("Concurrent change on node {} in other context {}.", qualifiedName, otherContext);
             existing.notifyChanged();
@@ -210,7 +210,7 @@ public abstract class AbstractConversationContext<T extends AttachedAssociationK
     }
 
     // ----------------------------------------------------
-	
+
 	public Context[] getReadContexts() {
 		assertActive();
 		if (readContexts != null) {
@@ -219,7 +219,7 @@ public abstract class AbstractConversationContext<T extends AttachedAssociationK
 			return NO_CTX;
 		}
 	}
-	
+
     public Context getPrimaryContext() {
     	return primaryContext;
     }
@@ -268,7 +268,7 @@ public abstract class AbstractConversationContext<T extends AttachedAssociationK
 
     // ----------------------------------------------------
 
-    protected GraphDataConnection<T> getConnection() {
+    protected GraphDataConnection getConnection() {
         return connection;
     }
 
@@ -277,19 +277,19 @@ public abstract class AbstractConversationContext<T extends AttachedAssociationK
     }
 
     protected void clearCaches() {
-        for (T keeper : register.values()) {
+        for (AttachedAssociationKeeper keeper : register.values()) {
             keeper.detach();
         }
         register.clear();
     }
-	
+
 	protected void assertActive() {
 		if (!active) {
 			LOGGER.warn("Conversation context already closed. " + ctxId);
 			throw new IllegalStateException("ConversationContext already closed.");
 		}
 	}
-	
+
 	@Override
 	protected void finalize() throws Throwable {
         super.finalize();

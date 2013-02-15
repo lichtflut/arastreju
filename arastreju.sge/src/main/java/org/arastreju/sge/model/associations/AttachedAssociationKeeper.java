@@ -18,7 +18,7 @@ import java.util.Set;
  *
  * @author Oliver Tigges
  */
-public abstract class AttachedAssociationKeeper extends AbstractAssociationKeeper {
+public class AttachedAssociationKeeper extends AbstractAssociationKeeper {
 
     private final QualifiedName qn;
 
@@ -28,12 +28,12 @@ public abstract class AttachedAssociationKeeper extends AbstractAssociationKeepe
 
     // ----------------------------------------------------
 
-    protected AttachedAssociationKeeper(QualifiedName qn, PhysicalNodeID physicalID) {
+    public AttachedAssociationKeeper(QualifiedName qn, PhysicalNodeID physicalID) {
         this.qn = qn;
         this.physicalID = physicalID;
     }
 
-    protected AttachedAssociationKeeper(QualifiedName qn, PhysicalNodeID physicalID, Set<Statement> associations) {
+    public AttachedAssociationKeeper(QualifiedName qn, PhysicalNodeID physicalID, Set<Statement> associations) {
         super(associations);
         this.qn = qn;
         this.physicalID = physicalID;
@@ -138,4 +138,15 @@ public abstract class AttachedAssociationKeeper extends AbstractAssociationKeepe
         markResolved();
         context = null;
     }
+
+    // ----------------------------------------------------
+
+    /**
+     * Called when being serialized --> Replace by detached association keeper.
+     * @return A Detached Association Keeper.
+     */
+    private Object writeReplace() {
+        return new DetachedAssociationKeeper(getAssociationsDirectly());
+    }
+
 }

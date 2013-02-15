@@ -19,21 +19,21 @@ import org.arastreju.sge.spi.abstracts.WorkingContext;
  *
  * @author Oliver Tigges
  */
-public interface GraphDataConnection<T extends AttachedAssociationKeeper> {
+public interface GraphDataConnection {
 
     /**
      * Find a resource.
      * @param qn The resource's qualified name.
      * @return The association keeper or null.
      */
-    T find(QualifiedName qn);
+    AttachedAssociationKeeper find(QualifiedName qn);
 
     /**
      * Create a new resource.
      * @param qn The resource's qualified name.
      * @return The new association keeper.
      */
-    T create(QualifiedName qn);
+    AttachedAssociationKeeper create(QualifiedName qn);
 
     /**
      * Remove a resource.
@@ -62,11 +62,11 @@ public interface GraphDataConnection<T extends AttachedAssociationKeeper> {
      * Resolve the associations of given association keeper.
      * @param associationKeeper The association keeper to be resolved.
      */
-    void resolveAssociations(T associationKeeper);
+    void resolveAssociations(AttachedAssociationKeeper associationKeeper);
 
     // ----------------------------------------------------
 
-    GraphDataStore<T> getStore();
+    GraphDataStore getStore();
 
     IndexProvider getIndexProvider();
 
@@ -79,11 +79,11 @@ public interface GraphDataConnection<T extends AttachedAssociationKeeper> {
      * @param qn The qualified name.
      * @param context The context in which occurred the change.
      */
-    void notifyModification(QualifiedName qn, WorkingContext<T> context);
+    void notifyModification(QualifiedName qn, WorkingContext context);
 
-    void register(AbstractConversationContext<T> conversationContext);
+    void register(WorkingContext conversationContext);
 
-    void unregister(AbstractConversationContext<T> conversationContext);
+    void unregister(WorkingContext conversationContext);
 
     void close();
 }

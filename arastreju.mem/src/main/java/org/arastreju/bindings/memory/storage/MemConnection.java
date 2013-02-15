@@ -1,8 +1,8 @@
 package org.arastreju.bindings.memory.storage;
 
-import org.arastreju.bindings.memory.keepers.MemAssociationKeeper;
 import org.arastreju.bindings.memory.tx.MemTransactionProvider;
 import org.arastreju.sge.index.IndexProvider;
+import org.arastreju.sge.model.associations.AttachedAssociationKeeper;
 import org.arastreju.sge.persistence.TxProvider;
 import org.arastreju.sge.spi.abstracts.AbstractGraphDataConnection;
 
@@ -17,7 +17,7 @@ import org.arastreju.sge.spi.abstracts.AbstractGraphDataConnection;
  *
  * @author Oliver Tigges
  */
-public class MemConnection extends AbstractGraphDataConnection<MemAssociationKeeper> {
+public class MemConnection extends AbstractGraphDataConnection {
 
     private final MemTransactionProvider txProvider;
 

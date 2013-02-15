@@ -1,12 +1,15 @@
 package org.arastreju.bindings.memory.conversation;
 
 import de.lichtflut.infra.exceptions.NotYetImplementedException;
-import org.arastreju.bindings.memory.keepers.MemAssociationKeeper;
 import org.arastreju.bindings.memory.storage.MemConnection;
 import org.arastreju.sge.context.Context;
 import org.arastreju.sge.index.IndexProvider;
 import org.arastreju.sge.model.Statement;
+import org.arastreju.sge.model.associations.AttachedAssociationKeeper;
+import org.arastreju.sge.persistence.ResourceResolver;
 import org.arastreju.sge.spi.abstracts.AbstractConversationContext;
+import org.arastreju.sge.spi.abstracts.AssociationManager;
+import org.arastreju.sge.spi.uow.ResourceResolverImpl;
 
 /**
  * <p>
@@ -19,31 +22,37 @@ import org.arastreju.sge.spi.abstracts.AbstractConversationContext;
  *
  * @author Oliver Tigges
  */
-public class MemConversationContext extends AbstractConversationContext<MemAssociationKeeper> {
+public class MemConversationContext extends AbstractConversationContext {
+
+    private AssociationManager manager;
+
+    // ----------------------------------------------------
 
     public MemConversationContext(MemConnection connection) {
         super(connection);
+        init();
     }
 
     public MemConversationContext(MemConnection connection, Context primary, Context... readContexts) {
-       super(connection, primary, readContexts);
+        super(connection, primary, readContexts);
+        init();
     }
 
     // ----------------------------------------------------
 
     @Override
-    public void addAssociation(MemAssociationKeeper keeper, Statement assoc) {
+    public void addAssociation(AttachedAssociationKeeper keeper, Statement assoc) {
         getConnection().getStore().addAssociation(keeper.getPhysicalID(), assoc);
         keeper.addAssociationDirectly(assoc);
     }
 
     @Override
-    public boolean removeAssociation(MemAssociationKeeper keeper, Statement assoc) {
+    public boolean removeAssociation(AttachedAssociationKeeper keeper, Statement assoc) {
         return getConnection().addAssociation(keeper.getPhysicalID(), assoc);
     }
 
     @Override
-    public void resolveAssociations(MemAssociationKeeper associationKeeper) {
+    public void resolveAssociations(AttachedAssociationKeeper associationKeeper) {
         throw new NotYetImplementedException();
     }
 
@@ -51,4 +60,12 @@ public class MemConversationContext extends AbstractConversationContext<MemAssoc
     public IndexProvider getIndexProvider() {
         throw new NotYetImplementedException();
     }
+
+    // ----------------------------------------------------
+
+    private void init() {
+        ResourceResolver resolver = new ResourceResolverImpl(this);
+        manager = new AssociationManager(resolver);
+    }
+
 }
