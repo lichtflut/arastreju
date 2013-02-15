@@ -92,9 +92,9 @@ public abstract class AbstractGraphDataConnection implements GraphDataConnection
     @Override
     public void notifyModification(QualifiedName qn, WorkingContext context) {
         List<WorkingContext> copy = new ArrayList<WorkingContext>(openConversations);
-        for (WorkingContext conversation : copy) {
-            if (!conversation.equals(context)) {
-                conversation.onModification(qn, context);
+        for (WorkingContext current : copy) {
+            if (!current.equals(context)) {
+                current.onModification(qn, context);
             }
         }
     }
