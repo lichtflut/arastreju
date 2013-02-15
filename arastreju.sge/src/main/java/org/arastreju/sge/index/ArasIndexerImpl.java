@@ -22,18 +22,14 @@ import org.apache.lucene.document.Field.Index;
 import org.apache.lucene.document.Field.Store;
 import org.apache.lucene.document.Fieldable;
 import org.apache.lucene.index.IndexReader;
-import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.queryParser.ParseException;
 import org.apache.lucene.queryParser.QueryParser;
 import org.apache.lucene.search.MatchAllDocsQuery;
-import org.apache.lucene.search.Query;
-import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.util.Version;
 import org.arastreju.sge.ConversationContext;
 import org.arastreju.sge.inferencing.Inferencer;
-import org.arastreju.sge.model.ResourceID;
 import org.arastreju.sge.model.Statement;
 import org.arastreju.sge.model.nodes.ResourceNode;
 import org.arastreju.sge.naming.QualifiedName;
@@ -108,46 +104,6 @@ public class ArasIndexerImpl implements IndexUpdator, IndexSearcher {
 			index.getWriter().commit(); // XXX to be revised when transactions enter the play
 		} catch (IOException e) {
 			String msg = "caught IOException while indexing resource " + node.toURI();
-			LOGGER.error(msg, e);
-			throw new RuntimeException(msg, e);
-		}
-	}
-
-	/**
-	 * Add this statement to the index.
-	 * @param statement The statement to index.
-	 */
-	@Override
-	public void index(Statement statement) {
-		LOGGER.debug("index(" + statement + ")");
-		LuceneIndex index = provider.forContext(conversationContext.getPrimaryContext());
-		IndexWriter writer = index.getWriter();
-		org.apache.lucene.search.IndexSearcher searcher = index.getSearcher();
-		IndexReader reader = searcher.getIndexReader();
-
-		ResourceID subject = statement.getSubject();
-		ResourceID pred = statement.getPredicate();
-
-		try {
-			Document doc;
-			Query q = new TermQuery(new Term(IndexFields.QUALIFIED_NAME, normalizeQN(subject.toURI())));
-			TopDocs top = searcher.search(q, 1);
-			if (top.totalHits > 0) {
-				doc = reader.document(top.scoreDocs[0].doc);
-				if (doc.get(pred.toURI()) != null) {
-					doc.removeFields(pred.toURI());
-				}
-			} else {
-				doc = new Document();
-				doc.add(new Field(IndexFields.QUALIFIED_NAME, subject.toURI(), Store.YES, Index.ANALYZED));
-			}
-
-            addFields(doc, statement);
-
-			writer.updateDocument(new Term(IndexFields.QUALIFIED_NAME, normalizeQN(subject.toURI())), doc);
-			writer.commit();
-		} catch (IOException e) {
-			String msg = "caught IOException while indexing statement " + statement;
 			LOGGER.error(msg, e);
 			throw new RuntimeException(msg, e);
 		}

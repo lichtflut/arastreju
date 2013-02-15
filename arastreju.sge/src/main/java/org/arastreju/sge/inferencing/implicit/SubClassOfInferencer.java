@@ -2,8 +2,6 @@ package org.arastreju.sge.inferencing.implicit;
 
 import org.arastreju.sge.apriori.RDF;
 import org.arastreju.sge.apriori.RDFS;
-import org.arastreju.sge.eh.ArastrejuRuntimeException;
-import org.arastreju.sge.eh.ErrorCodes;
 import org.arastreju.sge.inferencing.Inferencer;
 import org.arastreju.sge.model.DetachedStatement;
 import org.arastreju.sge.model.Statement;
@@ -48,18 +46,14 @@ public class SubClassOfInferencer implements Inferencer {
 
     @Override
     public void addInferenced(Statement stmt, Set<Statement> target) {
-        if (!RDFS.SUB_CLASS_OF.equals(stmt.getPredicate())) {
-            throw new ArastrejuRuntimeException(ErrorCodes.GENERAL_CONSISTENCY_FAILURE,
-                    "Expected rdfs:subClassOf but was " + stmt.getPredicate());
-        }
-
-        target.add(new DetachedStatement(stmt.getSubject(), RDF.TYPE, RDFS.CLASS));
-
-        if (stmt.getObject().isResourceNode()) {
-            final ResourceNode resolved = resolver.resolve(stmt.getObject().asResource());
-            final SNClass clazz = SNClass.from(resolved);
-            for (SNClass current : clazz.getSuperClasses()) {
-                target.add(new DetachedStatement(stmt.getSubject(), RDFS.SUB_CLASS_OF, current, stmt.getContexts()));
+        if (RDFS.SUB_CLASS_OF.equals(stmt.getPredicate())) {
+            target.add(new DetachedStatement(stmt.getSubject(), RDF.TYPE, RDFS.CLASS));
+            if (stmt.getObject().isResourceNode()) {
+                final ResourceNode resolved = resolver.resolve(stmt.getObject().asResource());
+                final SNClass clazz = SNClass.from(resolved);
+                for (SNClass current : clazz.getSuperClasses()) {
+                    target.add(new DetachedStatement(stmt.getSubject(), RDFS.SUB_CLASS_OF, current, stmt.getContexts()));
+                }
             }
         }
     }

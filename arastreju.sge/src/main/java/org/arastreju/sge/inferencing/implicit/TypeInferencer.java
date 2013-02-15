@@ -57,11 +57,7 @@ public class TypeInferencer implements Inferencer {
 	// ----------------------------------------------------
 	
 	public void addInferenced(Statement stmt, Set<Statement> target) {
-		if (!RDF.TYPE.equals(stmt.getPredicate())) {
-			throw new ArastrejuRuntimeException(ErrorCodes.GENERAL_CONSISTENCY_FAILURE, 
-					"Expected rdf:type but was " + stmt.getPredicate());
-		}
-		if (stmt.getObject().isResourceNode()) {
+		if (RDF.TYPE.equals(stmt.getPredicate()) && stmt.getObject().isResourceNode()) {
 			final ResourceNode resolved = resolver.resolve(stmt.getObject().asResource());
 			final SNClass clazz = SNClass.from(resolved);
 			final Set<SNClass> allClasses = clazz.getSuperClasses();

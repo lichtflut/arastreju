@@ -25,12 +25,6 @@ public interface IndexUpdator {
     void index(ResourceNode node);
 
     /**
-     * Add this statement to the index.
-     * @param statement The statement to index.
-     */
-    void index(Statement statement);
-
-    /**
      * Remove the resource identified by the qualified name form the index.
      * @param qn The qualified name.
      */
