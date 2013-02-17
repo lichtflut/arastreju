@@ -5,7 +5,6 @@ import org.arastreju.bindings.memory.conversation.MemConversation;
 import org.arastreju.bindings.memory.conversation.MemConversationContext;
 import org.arastreju.bindings.memory.storage.MemConnection;
 import org.arastreju.sge.Conversation;
-import org.arastreju.sge.organize.Organizer;
 import org.arastreju.sge.context.Context;
 import org.arastreju.sge.context.DomainIdentifier;
 import org.arastreju.sge.spi.abstracts.AbstractArastrejuGate;
@@ -45,11 +44,6 @@ public class MemGate extends AbstractArastrejuGate {
     public Conversation startConversation(Context primary, Context... readContexts) {
         MemConversationContext cc = new MemConversationContext(connection, primary, readContexts);
         return new MemConversation(cc);
-    }
-
-    @Override
-    public Organizer getOrganizer() {
-        throw new NotYetImplementedException();
     }
 
     @Override

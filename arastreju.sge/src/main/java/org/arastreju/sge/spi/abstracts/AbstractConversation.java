@@ -3,7 +3,6 @@ package org.arastreju.sge.spi.abstracts;
 import org.arastreju.sge.Conversation;
 import org.arastreju.sge.ConversationContext;
 import org.arastreju.sge.SNOPS;
-import org.arastreju.sge.index.ArasIndexerImpl;
 import org.arastreju.sge.index.IndexSearcher;
 import org.arastreju.sge.index.LuceneQueryBuilder;
 import org.arastreju.sge.index.QNResolver;
@@ -127,15 +126,15 @@ public abstract class AbstractConversation implements Conversation {
 	public void attach(final SemanticGraph graph) {
 		assertActive();
 		tx().doTransacted(new TxResultAction<SemanticGraph>() {
-			@Override
-			public SemanticGraph execute() {
-				for(Statement stmt : graph.getStatements()) {
-					final ResourceNode subject = resolve(stmt.getSubject());
-					SNOPS.associate(subject, stmt.getPredicate(), stmt.getObject(), stmt.getContexts());
-				}
-				return graph;
-			}
-		});
+            @Override
+            public SemanticGraph execute() {
+                for (Statement stmt : graph.getStatements()) {
+                    final ResourceNode subject = resolve(stmt.getSubject());
+                    SNOPS.associate(subject, stmt.getPredicate(), stmt.getObject(), stmt.getContexts());
+                }
+                return graph;
+            }
+        });
 	}
 
     @Override
@@ -175,8 +174,8 @@ public abstract class AbstractConversation implements Conversation {
 	@Override
 	public Query createQuery() {
         assertActive();
-        IndexSearcher searcher = new ArasIndexerImpl(context, context.getIndexProvider());
-		return new LuceneQueryBuilder( searcher, getQNResolver());
+        IndexSearcher searcher = context.getIndexSearcher();
+		return new LuceneQueryBuilder(searcher, getQNResolver());
 	}
 
     // ----------------------------------------------------

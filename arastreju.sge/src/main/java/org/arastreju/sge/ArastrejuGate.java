@@ -46,12 +46,6 @@ public interface ArastrejuGate {
      */
     Conversation startConversation(Context primary, Context... readContexts);
 	
-	/**
-	 * Obtain the Organizer for Contexts and Namespaces.
-	 * @return The organizer.
-	 */
-	Organizer getOrganizer();
-	
 	// ----------------------------------------------------
 	
 	/**

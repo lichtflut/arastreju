@@ -3,6 +3,7 @@ package org.arastreju.sge.spi.abstracts;
 import org.arastreju.sge.ArastrejuGate;
 import org.arastreju.sge.ConversationContext;
 import org.arastreju.sge.context.DomainIdentifier;
+import org.arastreju.sge.organize.Organizer;
 
 /**
  * <p>
@@ -19,7 +20,7 @@ public abstract class AbstractArastrejuGate implements ArastrejuGate {
 
 	private final DomainIdentifier domainIdentifier;
 
-	// ----------------------------------------------------
+    // ----------------------------------------------------
 
 	protected AbstractArastrejuGate(final DomainIdentifier domainIdentifier) {
 		this.domainIdentifier = domainIdentifier;

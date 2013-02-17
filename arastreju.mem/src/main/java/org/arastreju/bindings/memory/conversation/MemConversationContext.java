@@ -41,24 +41,15 @@ public class MemConversationContext extends AbstractConversationContext {
     // ----------------------------------------------------
 
     @Override
-    public void addAssociation(AttachedAssociationKeeper keeper, Statement assoc) {
-        getConnection().getStore().addAssociation(keeper.getPhysicalID(), assoc);
-        keeper.addAssociationDirectly(assoc);
-    }
-
-    @Override
-    public boolean removeAssociation(AttachedAssociationKeeper keeper, Statement assoc) {
-        return getConnection().addAssociation(keeper.getPhysicalID(), assoc);
-    }
-
-    @Override
     public void resolveAssociations(AttachedAssociationKeeper associationKeeper) {
         throw new NotYetImplementedException();
     }
 
+    // ----------------------------------------------------
+
     @Override
-    public IndexProvider getIndexProvider() {
-        throw new NotYetImplementedException();
+    protected AssociationManager getAssociationManager() {
+        return manager;
     }
 
     // ----------------------------------------------------

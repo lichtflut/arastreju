@@ -18,13 +18,19 @@ package org.arastreju.sge.spi.abstracts;
 
 import org.arastreju.sge.ConversationContext;
 import org.arastreju.sge.context.Context;
-import org.arastreju.sge.index.IndexProvider;
+import org.arastreju.sge.index.ArasIndexerImpl;
+import org.arastreju.sge.index.IndexSearcher;
+import org.arastreju.sge.index.IndexUpdator;
+import org.arastreju.sge.inferencing.implicit.SubClassOfInferencer;
+import org.arastreju.sge.inferencing.implicit.TypeInferencer;
+import org.arastreju.sge.model.Statement;
 import org.arastreju.sge.model.associations.AttachedAssociationKeeper;
 import org.arastreju.sge.naming.QualifiedName;
 import org.arastreju.sge.persistence.TxAction;
 import org.arastreju.sge.persistence.TxProvider;
 import org.arastreju.sge.persistence.TxResultAction;
 import org.arastreju.sge.spi.GraphDataConnection;
+import org.arastreju.sge.spi.uow.ResourceResolverImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -162,6 +168,32 @@ public abstract class AbstractConversationContext implements WorkingContext {
     // ----------------------------------------------------
 
     @Override
+    public void addAssociation(final AttachedAssociationKeeper keeper, final Statement stmt) {
+        assertActive();
+        getTxProvider().doTransacted(new TxAction() {
+            @Override
+            public void execute() {
+                getAssociationManager().addAssociation(keeper, stmt);
+            }
+        });
+
+    }
+
+    @Override
+    public boolean removeAssociation(final AttachedAssociationKeeper keeper, final Statement stmt) {
+        assertActive();
+        getTxProvider().doTransacted(new TxAction() {
+            @Override
+            public void execute() {
+                getAssociationManager().removeAssociation(keeper, stmt);
+            }
+        });
+        return true;
+    }
+
+    // ----------------------------------------------------
+
+    @Override
     public TxProvider getTxProvider() {
         return connection.getTxProvider();
     }
@@ -188,9 +220,6 @@ public abstract class AbstractConversationContext implements WorkingContext {
 		}
 	}
 
-	/**
-	 * @return the active
-	 */
     public boolean isActive() {
 		return active;
 	}
@@ -205,8 +234,16 @@ public abstract class AbstractConversationContext implements WorkingContext {
     }
 
     @Override
-    public IndexProvider getIndexProvider() {
-        return connection.getIndexProvider();
+    public IndexSearcher getIndexSearcher() {
+        return new ArasIndexerImpl(this, connection.getIndexProvider());
+    }
+
+    @Override
+    public IndexUpdator getIndexUpdator() {
+        ResourceResolverImpl resolver = new ResourceResolverImpl(this);
+        return new ArasIndexerImpl(this, connection.getIndexProvider())
+            .add(new TypeInferencer(resolver))
+            .add(new SubClassOfInferencer(resolver));
     }
 
     // ----------------------------------------------------
@@ -266,6 +303,8 @@ public abstract class AbstractConversationContext implements WorkingContext {
     }
 
     // ----------------------------------------------------
+
+    protected abstract AssociationManager getAssociationManager ();
 
     protected GraphDataConnection getConnection() {
         return connection;

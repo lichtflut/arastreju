@@ -1,13 +1,11 @@
 package org.arastreju.sge.spi.abstracts;
 
-import de.lichtflut.infra.exceptions.NotYetImplementedException;
 import org.arastreju.sge.index.IndexProvider;
-import org.arastreju.sge.model.Statement;
 import org.arastreju.sge.model.associations.AttachedAssociationKeeper;
 import org.arastreju.sge.naming.QualifiedName;
+import org.arastreju.sge.persistence.TxProvider;
 import org.arastreju.sge.spi.GraphDataConnection;
 import org.arastreju.sge.spi.GraphDataStore;
-import org.arastreju.sge.spi.PhysicalNodeID;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -55,21 +53,6 @@ public abstract class AbstractGraphDataConnection implements GraphDataConnection
     @Override
     public void remove(QualifiedName qn) {
         store.remove(qn);
-    }
-
-    @Override
-    public boolean addAssociation(PhysicalNodeID id, Statement assoc) {
-        return store.addAssociation(id, assoc);
-    }
-
-    @Override
-    public boolean removeAssociation(PhysicalNodeID id, Statement assoc) {
-        throw new NotYetImplementedException();
-    }
-
-    @Override
-    public void resolveAssociations(AttachedAssociationKeeper associationKeeper) {
-        throw new NotYetImplementedException();
     }
 
     // ----------------------------------------------------
@@ -121,5 +104,10 @@ public abstract class AbstractGraphDataConnection implements GraphDataConnection
     @Override
     public IndexProvider getIndexProvider() {
         return indexProvider;
+    }
+
+    @Override
+    public TxProvider getTxProvider() {
+        return store.getTxProvider();
     }
 }

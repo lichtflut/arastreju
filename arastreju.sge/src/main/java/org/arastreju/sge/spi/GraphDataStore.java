@@ -1,8 +1,8 @@
 package org.arastreju.sge.spi;
 
-import org.arastreju.sge.model.Statement;
 import org.arastreju.sge.model.associations.AttachedAssociationKeeper;
 import org.arastreju.sge.naming.QualifiedName;
+import org.arastreju.sge.persistence.TxProvider;
 
 /**
  * <p>
@@ -38,10 +38,9 @@ public interface GraphDataStore {
     void remove(QualifiedName qn);
 
     /**
-     * Add an association.
-     * @param id Physical ID of the new association's subject.
-     * @param assoc The association.
-     * @return true, if the association has been created.
+     * Get the provider for transactions.
+     * @return The transaction provider.
      */
-    boolean addAssociation(PhysicalNodeID id, Statement assoc);
+    TxProvider getTxProvider();
+
 }

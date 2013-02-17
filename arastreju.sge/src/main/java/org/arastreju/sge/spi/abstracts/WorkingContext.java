@@ -2,6 +2,8 @@ package org.arastreju.sge.spi.abstracts;
 
 import org.arastreju.sge.ConversationContext;
 import org.arastreju.sge.index.IndexProvider;
+import org.arastreju.sge.index.IndexSearcher;
+import org.arastreju.sge.index.IndexUpdator;
 import org.arastreju.sge.model.Statement;
 import org.arastreju.sge.model.associations.AttachedAssociationKeeper;
 import org.arastreju.sge.naming.QualifiedName;
@@ -83,13 +85,23 @@ public interface WorkingContext extends ConversationContext {
      */
     void resolveAssociations(AttachedAssociationKeeper associationKeeper);
 
+    // ----------------------------------------------------
 
+    /**
+     * Get a searcher for indexed elements.
+     * @return The index searcher.
+     */
+    IndexSearcher getIndexSearcher();
+
+    /**
+     * Get an updator for indexing of elements.
+     * @return The updator.
+     */
+    IndexUpdator getIndexUpdator();
 
     // ----------------------------------------------------
 
     TxProvider getTxProvider();
-
-    IndexProvider getIndexProvider();
 
     /**
      * Close this context and clear all registered resources.
