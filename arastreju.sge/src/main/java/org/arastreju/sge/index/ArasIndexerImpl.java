@@ -101,7 +101,7 @@ public class ArasIndexerImpl implements IndexUpdator, IndexSearcher {
 		LuceneIndex index = provider.forContext(conversationContext.getPrimaryContext());
 		try {
 			index.getWriter().updateDocument(new Term(IndexFields.QUALIFIED_NAME, normalizeQN(node.toURI())), doc); //creates if nonexistent
-			index.getWriter().commit(); // XXX to be revised when transactions enter the play
+//			index.getWriter().commit(); // XXX to be revised when transactions enter the play
 		} catch (IOException e) {
 			String msg = "caught IOException while indexing resource " + node.toURI();
 			LOGGER.error(msg, e);
@@ -119,7 +119,7 @@ public class ArasIndexerImpl implements IndexUpdator, IndexSearcher {
 		LuceneIndex index = provider.forContext(conversationContext.getPrimaryContext());
 		try {
 			index.getWriter().deleteDocuments(new Term(IndexFields.QUALIFIED_NAME, normalizeQN(qn.toURI())));
-			index.getWriter().commit();
+//			index.getWriter().commit();
 		} catch (IOException e) {
 			String msg = "caught IOException while removing " + qn.toURI();
 			LOGGER.error(msg, e);
@@ -276,7 +276,7 @@ public class ArasIndexerImpl implements IndexUpdator, IndexSearcher {
 		LuceneIndex index = provider.forContext(conversationContext.getPrimaryContext());
 		try {
 			index.getWriter().deleteAll();
-			index.getWriter().commit();
+//			index.getWriter().commit();
 		} catch (IOException e) {
 			String msg = "caught IOException while clearing index";
 			LOGGER.error(msg, e);

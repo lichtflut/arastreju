@@ -58,7 +58,7 @@ class LuceneIndex {
 			writer.deleteAll();
 			writer.commit();
 		}
-		this.reader = IndexReader.open(dir, true);
+		this.reader = IndexReader.open(writer, true);
 		this.searcher = new org.apache.lucene.search.IndexSearcher(reader);
 	}
 
@@ -85,8 +85,8 @@ class LuceneIndex {
 			if (reader.isCurrent()) {
 				return;
 			}
-			IndexReader nr;
-			nr = IndexReader.openIfChanged(reader, true);
+
+			IndexReader nr = IndexReader.openIfChanged(reader, writer, true);
 			if (nr != null) {
 				searcher.close();
 				reader.close();
