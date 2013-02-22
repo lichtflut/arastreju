@@ -65,7 +65,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.arastreju</groupId>
-			<artifactId>arastreju.mem</artifactId>
+			<artifactId>arastreju-neo4j</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 	</dependencies>
