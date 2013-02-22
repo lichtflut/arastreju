@@ -17,7 +17,6 @@ package org.arastreju.sge.organize;
 
 import org.arastreju.sge.ArastrejuGate;
 import org.arastreju.sge.Conversation;
-import org.arastreju.sge.ConversationContext;
 import org.arastreju.sge.apriori.Aras;
 import org.arastreju.sge.apriori.RDF;
 import org.arastreju.sge.context.Context;
@@ -117,8 +116,7 @@ public class Organizer {
     // ----------------------------------------------------
 
     public StatementContainer getStatements(final Context... ctx) {
-        Conversation conversation = conversation(ctx);
-        ConversationContext convCtx = conversation.getConversationContext();
+        final Conversation conversation = conversation(ctx);
         return new StatementContainer() {
             @Override
             public Collection<Namespace> getNamespaces() {
@@ -127,11 +125,9 @@ public class Organizer {
 
             @Override
             public Iterator<Statement> iterator() {
-                //final ResourceIndex index = new ResourceIndex(connection, conversationContext);
-                //final QueryResult queryResult = index.getAllResources();
-                final QueryResult queryResult = null;
+                final QueryResult queryResult = conversation.createQuery().addValue("*").getResult();
                 final Iterator<ResourceNode> nodeIterator = queryResult.iterator();
-                return newStatementIterator(nodeIterator);
+                return new StatementIterator(nodeIterator);
             }
         } ;
     }
@@ -161,10 +157,6 @@ public class Organizer {
 		assure(node, RDF.TYPE, Aras.CONTEXT);
 		return node;
 	}
-
-    protected Iterator<Statement> newStatementIterator(Iterator<ResourceNode> nodeIterator) {
-        return new StatementIterator(nodeIterator);
-    }
 
     // ----------------------------------------------------
 
