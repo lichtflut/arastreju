@@ -1,11 +1,14 @@
-package org.arastreju.sge.spi.abstracts;
+package org.arastreju.sge.spi.impl;
 
 import org.arastreju.sge.index.IndexProvider;
 import org.arastreju.sge.model.associations.AttachedAssociationKeeper;
 import org.arastreju.sge.naming.QualifiedName;
 import org.arastreju.sge.persistence.TxProvider;
+import org.arastreju.sge.spi.AssociationResolver;
+import org.arastreju.sge.spi.AssociationWriter;
 import org.arastreju.sge.spi.GraphDataConnection;
 import org.arastreju.sge.spi.GraphDataStore;
+import org.arastreju.sge.spi.WorkingContext;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -23,7 +26,7 @@ import java.util.Set;
  *
  * @author Oliver Tigges
  */
-public class DefaultGraphDataConnection implements GraphDataConnection {
+public class GraphDataConnectionImpl implements GraphDataConnection {
 
     private final Set<WorkingContext> openConversations = new HashSet<WorkingContext>();
 
@@ -38,7 +41,7 @@ public class DefaultGraphDataConnection implements GraphDataConnection {
      * @param store The physical store.
      * @param indexProvider The provider for indexes.
      */
-    public DefaultGraphDataConnection(GraphDataStore store, IndexProvider indexProvider) {
+    public GraphDataConnectionImpl(GraphDataStore store, IndexProvider indexProvider) {
         this.store = store;
         this.indexProvider = indexProvider;
     }
@@ -58,6 +61,18 @@ public class DefaultGraphDataConnection implements GraphDataConnection {
     @Override
     public void remove(QualifiedName qn) {
         store.remove(qn);
+    }
+
+    // ----------------------------------------------------
+
+    @Override
+    public AssociationResolver createAssociationResolver(WorkingContext ctx) {
+        return store.createAssociationResolver(ctx);
+    }
+
+    @Override
+    public AssociationWriter createAssociationWriter(WorkingContext ctx) {
+        return store.crateAssociationWriter(ctx);
     }
 
     // ----------------------------------------------------
@@ -100,11 +115,6 @@ public class DefaultGraphDataConnection implements GraphDataConnection {
     }
 
     // ----------------------------------------------------
-
-    @Override
-    public GraphDataStore getStore() {
-        return store;
-    }
 
     @Override
     public IndexProvider getIndexProvider() {

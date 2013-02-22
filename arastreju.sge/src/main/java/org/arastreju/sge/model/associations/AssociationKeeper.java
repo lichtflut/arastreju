@@ -17,10 +17,9 @@ package org.arastreju.sge.model.associations;
 
 import java.util.Set;
 
-import org.arastreju.sge.ConversationContext;
 import org.arastreju.sge.model.Statement;
 import org.arastreju.sge.model.nodes.ResourceNode;
-import org.arastreju.sge.spi.abstracts.WorkingContext;
+import org.arastreju.sge.spi.WorkingContext;
 
 /**
  * <p>

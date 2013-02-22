@@ -1,10 +1,14 @@
 package org.arastreju.bindings.memory.storage;
 
+import de.lichtflut.infra.exceptions.NotYetImplementedException;
 import org.arastreju.bindings.memory.tx.MemTransactionProvider;
 import org.arastreju.sge.model.associations.AttachedAssociationKeeper;
 import org.arastreju.sge.naming.QualifiedName;
 import org.arastreju.sge.persistence.TxProvider;
+import org.arastreju.sge.spi.AssociationResolver;
+import org.arastreju.sge.spi.AssociationWriter;
 import org.arastreju.sge.spi.GraphDataStore;
+import org.arastreju.sge.spi.WorkingContext;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -46,6 +50,16 @@ public class MemStorage implements GraphDataStore {
     @Override
     public void remove(QualifiedName qn) {
         store.remove(qn);
+    }
+
+    @Override
+    public AssociationResolver createAssociationResolver(WorkingContext ctx) {
+        throw new NotYetImplementedException();
+    }
+
+    @Override
+    public AssociationWriter crateAssociationWriter(WorkingContext ctx) {
+        throw new NotYetImplementedException();
     }
 
     @Override

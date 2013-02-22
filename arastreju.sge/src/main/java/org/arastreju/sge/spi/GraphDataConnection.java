@@ -1,11 +1,9 @@
 package org.arastreju.sge.spi;
 
 import org.arastreju.sge.index.IndexProvider;
-import org.arastreju.sge.model.Statement;
 import org.arastreju.sge.model.associations.AttachedAssociationKeeper;
 import org.arastreju.sge.naming.QualifiedName;
 import org.arastreju.sge.persistence.TxProvider;
-import org.arastreju.sge.spi.abstracts.WorkingContext;
 
 /**
  * <p>
@@ -42,8 +40,26 @@ public interface GraphDataConnection {
 
     // ----------------------------------------------------
 
-    GraphDataStore getStore();
+    /**
+     * Create a new association resolver for given working context.
+     * @param ctx The context of the new resolver.
+     * @return The resolver.
+     */
+    AssociationResolver createAssociationResolver(WorkingContext ctx);
 
+    /**
+     * Create a new association writer for given working context.
+     * @param ctx The context of the new writer.
+     * @return The writer.
+     */
+    AssociationWriter createAssociationWriter(WorkingContext ctx);
+
+    // ----------------------------------------------------
+
+    /**
+     * Get the index provider.
+     * @return Thr provider for indexes.
+     */
     IndexProvider getIndexProvider();
 
     /**

@@ -3,7 +3,7 @@ package org.arastreju.sge.model.associations;
 import org.arastreju.sge.model.Statement;
 import org.arastreju.sge.naming.QualifiedName;
 import org.arastreju.sge.spi.PhysicalNodeID;
-import org.arastreju.sge.spi.abstracts.WorkingContext;
+import org.arastreju.sge.spi.WorkingContext;
 
 import java.util.Set;
 

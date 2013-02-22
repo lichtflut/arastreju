@@ -3,7 +3,7 @@ package org.arastreju.sge.spi.uow;
 import org.arastreju.sge.model.Statement;
 import org.arastreju.sge.spi.AssociationListener;
 import org.arastreju.sge.spi.GraphDataConnection;
-import org.arastreju.sge.spi.abstracts.WorkingContext;
+import org.arastreju.sge.spi.WorkingContext;
 
 /**
  * <p>

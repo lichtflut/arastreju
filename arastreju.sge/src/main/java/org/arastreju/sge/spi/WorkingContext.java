@@ -1,7 +1,6 @@
-package org.arastreju.sge.spi.abstracts;
+package org.arastreju.sge.spi;
 
 import org.arastreju.sge.ConversationContext;
-import org.arastreju.sge.index.IndexProvider;
 import org.arastreju.sge.index.IndexSearcher;
 import org.arastreju.sge.index.IndexUpdator;
 import org.arastreju.sge.model.Statement;

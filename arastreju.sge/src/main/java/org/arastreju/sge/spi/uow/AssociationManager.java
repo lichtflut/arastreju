@@ -1,4 +1,4 @@
-package org.arastreju.sge.spi.abstracts;
+package org.arastreju.sge.spi.uow;
 
 import org.arastreju.sge.model.DetachedStatement;
 import org.arastreju.sge.model.ResourceID;

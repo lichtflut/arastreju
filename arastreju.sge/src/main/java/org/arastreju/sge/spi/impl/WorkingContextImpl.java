@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 lichtflut Forschungs- und Entwicklungsgesellschaft mbH
+ * Copyright (C) 2013 lichtflut Forschungs- und Entwicklungsgesellschaft mbH
  *
  * The Arastreju-Neo4j binding is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,22 +14,31 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.arastreju.sge.spi.abstracts;
+package org.arastreju.sge.spi.impl;
 
 import org.arastreju.sge.ConversationContext;
 import org.arastreju.sge.context.Context;
 import org.arastreju.sge.index.ArasIndexerImpl;
 import org.arastreju.sge.index.IndexSearcher;
 import org.arastreju.sge.index.IndexUpdator;
+import org.arastreju.sge.inferencing.implicit.InverseOfInferencer;
 import org.arastreju.sge.inferencing.implicit.SubClassOfInferencer;
 import org.arastreju.sge.inferencing.implicit.TypeInferencer;
 import org.arastreju.sge.model.Statement;
 import org.arastreju.sge.model.associations.AttachedAssociationKeeper;
 import org.arastreju.sge.naming.QualifiedName;
+import org.arastreju.sge.persistence.ResourceResolver;
 import org.arastreju.sge.persistence.TxAction;
 import org.arastreju.sge.persistence.TxProvider;
 import org.arastreju.sge.persistence.TxResultAction;
+import org.arastreju.sge.spi.AssociationResolver;
+import org.arastreju.sge.spi.AssociationWriter;
 import org.arastreju.sge.spi.GraphDataConnection;
+import org.arastreju.sge.spi.uow.AssociationManager;
+import org.arastreju.sge.spi.WorkingContext;
+import org.arastreju.sge.spi.uow.IndexUpdateUOW;
+import org.arastreju.sge.spi.uow.InferencingInterceptor;
+import org.arastreju.sge.spi.uow.OpenConversationNotifier;
 import org.arastreju.sge.spi.uow.ResourceResolverImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -51,11 +60,11 @@ import java.util.Set;
  *
  * @author Oliver Tigges
  */
-public abstract class AbstractConversationContext implements WorkingContext {
+public class WorkingContextImpl implements WorkingContext {
 
 	public static final Context[] NO_CTX = new Context[0];
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(AbstractConversationContext.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(WorkingContextImpl.class);
 
 	private static long ID_GEN = 0;
 
@@ -64,6 +73,10 @@ public abstract class AbstractConversationContext implements WorkingContext {
     private final long ctxId = ++ID_GEN;
 
     private final GraphDataConnection connection;
+
+    private final AssociationResolver associationResolver;
+
+    private final AssociationManager associationManager;
 
     private final Map<QualifiedName, AttachedAssociationKeeper> register = new HashMap<QualifiedName, AttachedAssociationKeeper>();
 
@@ -78,20 +91,14 @@ public abstract class AbstractConversationContext implements WorkingContext {
 	/**
 	 * Creates a new Working Context.
 	 */
-	public AbstractConversationContext(GraphDataConnection connection) {
-		LOGGER.debug("New Conversation Context startet. " + ctxId);
+	public WorkingContextImpl(GraphDataConnection connection) {
+		LOGGER.debug("New Conversation Context started: {} ", ctxId);
         this.connection = connection;
+        this.associationResolver = connection.createAssociationResolver(this);
+        this.associationManager = createAssociationManager();
+
         connection.register(this);
 	}
-
-    /**
-     * Creates a new Working Context.
-     */
-    public AbstractConversationContext(GraphDataConnection connection, Context primaryContext, Context... readContexts) {
-        this(connection);
-        setPrimaryContext(primaryContext);
-        setReadContexts(readContexts);
-    }
 
 	// ----------------------------------------------------
 
@@ -167,13 +174,23 @@ public abstract class AbstractConversationContext implements WorkingContext {
 
     // ----------------------------------------------------
 
+    /**
+     * Resolve the associations of given association keeper.
+     * @param keeper The association keeper to be resolved.
+     */
+    @Override
+    public void resolveAssociations(AttachedAssociationKeeper keeper) {
+        assertActive();
+        associationResolver.resolveAssociations(keeper);
+    }
+
     @Override
     public void addAssociation(final AttachedAssociationKeeper keeper, final Statement stmt) {
         assertActive();
         getTxProvider().doTransacted(new TxAction() {
             @Override
             public void execute() {
-                getAssociationManager().addAssociation(keeper, stmt);
+                associationManager.addAssociation(keeper, stmt);
             }
         });
 
@@ -185,7 +202,7 @@ public abstract class AbstractConversationContext implements WorkingContext {
         getTxProvider().doTransacted(new TxAction() {
             @Override
             public void execute() {
-                getAssociationManager().removeAssociation(keeper, stmt);
+                associationManager.removeAssociation(keeper, stmt);
             }
         });
         return true;
@@ -288,7 +305,7 @@ public abstract class AbstractConversationContext implements WorkingContext {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        AbstractConversationContext that = (AbstractConversationContext) o;
+        WorkingContextImpl that = (WorkingContextImpl) o;
         return ctxId == that.ctxId;
     }
 
@@ -303,8 +320,6 @@ public abstract class AbstractConversationContext implements WorkingContext {
     }
 
     // ----------------------------------------------------
-
-    protected abstract AssociationManager getAssociationManager ();
 
     protected GraphDataConnection getConnection() {
         return connection;
@@ -335,5 +350,18 @@ public abstract class AbstractConversationContext implements WorkingContext {
 			LOGGER.debug("Conversation context will be removed by GC, but has not been closed. " + ctxId);
 		}
 	}
+
+    // ----------------------------------------------------
+
+    private AssociationManager createAssociationManager() {
+        AssociationWriter writer = connection.createAssociationWriter(this);
+        ResourceResolver resolver = new ResourceResolverImpl(this);
+        AssociationManager am = new AssociationManager(resolver);
+        am.register(writer);
+        am.register(new IndexUpdateUOW(getIndexUpdator()));
+        am.register(new InferencingInterceptor(am).add(new InverseOfInferencer(resolver)));
+        am.register(new OpenConversationNotifier(getConnection(), this));
+        return am;
+    }
 
 }

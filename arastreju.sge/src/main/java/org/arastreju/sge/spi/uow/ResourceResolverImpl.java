@@ -8,7 +8,7 @@ import org.arastreju.sge.naming.QualifiedName;
 import org.arastreju.sge.persistence.ResourceResolver;
 import org.arastreju.sge.spi.AssocKeeperAccess;
 import org.arastreju.sge.spi.AttachedResourceNode;
-import org.arastreju.sge.spi.abstracts.WorkingContext;
+import org.arastreju.sge.spi.WorkingContext;
 
 import java.util.Set;
 
