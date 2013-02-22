@@ -2,7 +2,6 @@ package org.arastreju.bindings.memory;
 
 import org.arastreju.bindings.memory.conversation.MemConversation;
 import org.arastreju.bindings.memory.conversation.MemConversationContext;
-import org.arastreju.bindings.memory.storage.MemConnection;
 import org.arastreju.bindings.memory.storage.MemStorage;
 import org.arastreju.sge.apriori.Aras;
 import org.arastreju.sge.apriori.RDF;
@@ -12,6 +11,8 @@ import org.arastreju.sge.model.nodes.ResourceNode;
 import org.arastreju.sge.model.nodes.SNResource;
 import org.arastreju.sge.model.nodes.views.SNText;
 import org.arastreju.sge.naming.QualifiedName;
+import org.arastreju.sge.spi.GraphDataConnection;
+import org.arastreju.sge.spi.abstracts.DefaultGraphDataConnection;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -39,7 +40,7 @@ public class MemConversationTest {
     @Before
     public void setUp() {
         MemStorage storage = new MemStorage();
-        MemConnection connection = new MemConnection(storage, null);
+        GraphDataConnection connection = new DefaultGraphDataConnection(storage, null);
         MemConversationContext context = new MemConversationContext(connection);
         conversation = new MemConversation(context);
     }

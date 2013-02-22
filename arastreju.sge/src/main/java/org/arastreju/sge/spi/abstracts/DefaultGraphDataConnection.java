@@ -23,7 +23,7 @@ import java.util.Set;
  *
  * @author Oliver Tigges
  */
-public abstract class AbstractGraphDataConnection implements GraphDataConnection {
+public class DefaultGraphDataConnection implements GraphDataConnection {
 
     private final Set<WorkingContext> openConversations = new HashSet<WorkingContext>();
 
@@ -33,7 +33,12 @@ public abstract class AbstractGraphDataConnection implements GraphDataConnection
 
     // ----------------------------------------------------
 
-    protected AbstractGraphDataConnection(GraphDataStore store, IndexProvider indexProvider) {
+    /**
+     * Constructor.
+     * @param store The physical store.
+     * @param indexProvider The provider for indexes.
+     */
+    public DefaultGraphDataConnection(GraphDataStore store, IndexProvider indexProvider) {
         this.store = store;
         this.indexProvider = indexProvider;
     }

@@ -1,12 +1,10 @@
 package org.arastreju.bindings.memory.conversation;
 
 import de.lichtflut.infra.exceptions.NotYetImplementedException;
-import org.arastreju.bindings.memory.storage.MemConnection;
 import org.arastreju.sge.context.Context;
-import org.arastreju.sge.index.IndexProvider;
-import org.arastreju.sge.model.Statement;
 import org.arastreju.sge.model.associations.AttachedAssociationKeeper;
 import org.arastreju.sge.persistence.ResourceResolver;
+import org.arastreju.sge.spi.GraphDataConnection;
 import org.arastreju.sge.spi.abstracts.AbstractConversationContext;
 import org.arastreju.sge.spi.abstracts.AssociationManager;
 import org.arastreju.sge.spi.uow.ResourceResolverImpl;
@@ -28,12 +26,12 @@ public class MemConversationContext extends AbstractConversationContext {
 
     // ----------------------------------------------------
 
-    public MemConversationContext(MemConnection connection) {
+    public MemConversationContext(GraphDataConnection connection) {
         super(connection);
         init();
     }
 
-    public MemConversationContext(MemConnection connection, Context primary, Context... readContexts) {
+    public MemConversationContext(GraphDataConnection connection, Context primary, Context... readContexts) {
         super(connection, primary, readContexts);
         init();
     }

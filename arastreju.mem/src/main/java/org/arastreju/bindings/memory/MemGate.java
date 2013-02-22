@@ -1,13 +1,12 @@
 package org.arastreju.bindings.memory;
 
-import de.lichtflut.infra.exceptions.NotYetImplementedException;
 import org.arastreju.bindings.memory.conversation.MemConversation;
 import org.arastreju.bindings.memory.conversation.MemConversationContext;
-import org.arastreju.bindings.memory.storage.MemConnection;
 import org.arastreju.sge.Conversation;
-import org.arastreju.sge.context.Context;
 import org.arastreju.sge.context.DomainIdentifier;
+import org.arastreju.sge.spi.GraphDataConnection;
 import org.arastreju.sge.spi.abstracts.AbstractArastrejuGate;
+import org.arastreju.sge.spi.abstracts.WorkingContext;
 
 /**
  * <p>
@@ -22,32 +21,20 @@ import org.arastreju.sge.spi.abstracts.AbstractArastrejuGate;
  */
 public class MemGate extends AbstractArastrejuGate {
 
-    private MemConnection connection;
-
-    // ----------------------------------------------------
-
-    public MemGate(MemConnection connection, DomainIdentifier domainIdentifier) {
-        super(domainIdentifier);
-        this.connection = connection;
+    public MemGate(GraphDataConnection connection, DomainIdentifier domainIdentifier) {
+        super(connection, domainIdentifier);
     }
 
     // ----------------------------------------------------
 
     @Override
-    public Conversation startConversation() {
-        MemConversationContext cc = new MemConversationContext(connection);
-        initContext(cc);
-        return new MemConversation(cc);
+    protected WorkingContext newWorkingContext(GraphDataConnection connection) {
+        return new MemConversationContext(connection);
     }
 
     @Override
-    public Conversation startConversation(Context primary, Context... readContexts) {
-        MemConversationContext cc = new MemConversationContext(connection, primary, readContexts);
-        return new MemConversation(cc);
+    protected Conversation newConversation(WorkingContext ctx) {
+        return new MemConversation(ctx);
     }
 
-    @Override
-    public void close() {
-        throw new NotYetImplementedException();
-    }
 }
