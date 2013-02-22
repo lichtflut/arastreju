@@ -58,9 +58,6 @@ import java.util.Set;
 public class ArasIndexerImpl implements IndexUpdator, IndexSearcher {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ArasIndexerImpl.class);
 
-	/* turn this into a configuration setting */
-	private static final int MAX_RESULTS = 100;
-
     private List<Inferencer> inferencers = new ArrayList<Inferencer>();
 
 	private final ConversationContext conversationContext;
@@ -132,22 +129,19 @@ public class ArasIndexerImpl implements IndexUpdator, IndexSearcher {
 		LOGGER.debug("search(" + query + ")");
 		LuceneIndex index = provider.forContext(conversationContext.getPrimaryContext());
 		org.apache.lucene.search.IndexSearcher searcher = index.getSearcher();
-		IndexReader reader = searcher.getIndexReader();
 
 		/* default field is 'qn' as this is the only field common to all resources.
 		 * (not that we're going to need a default field, anyway.) */
 		QueryParser qp = new QueryParser(Version.LUCENE_35, IndexFields.QUALIFIED_NAME, new LowercaseWhitespaceAnalyzer(Version.LUCENE_35));
 		qp.setAllowLeadingWildcard(true); //such queries should be avoided where possible nevertheless
 
-		TopDocs top;
-		List<QualifiedName> resultList = new LinkedList<QualifiedName>();
+		List<QualifiedName> resultList;
 		try {
 			/* we can use searcher.search(String, Collector) if we need all them results */
-			top = searcher.search(qp.parse(query), MAX_RESULTS);
-			for (int i = 0; i < top.totalHits; i++) {
-				Document hit = reader.document(top.scoreDocs[i].doc);
-				resultList.add(new QualifiedName(hit.get(IndexFields.QUALIFIED_NAME)));
-			}
+			AllHitsCollector collector = new AllHitsCollector();
+			searcher.search(qp.parse(query), collector);
+
+			resultList = collector.getList();
 		} catch (IOException e) {
 			String msg = "caught IOException while processing query '" + query + "'";
 			LOGGER.error(msg, e);
