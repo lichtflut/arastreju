@@ -13,26 +13,34 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.arastreju.sge.index;
+package org.arastreju.binding.memory;
+
+import org.arastreju.bindings.memory.storage.MemStorage;
+import org.arastreju.sge.spi.AbstractConversationTest;
+import org.arastreju.sge.spi.GraphDataStore;
+import org.junit.Ignore;
 
 /**
  * <p>
- *  Searcher for the Arastreju index.
+ *  Compatibility test for memory binding.
  * </p>
  *
  * <p>
- *  Created 01.02.13
+ *  Created Feb. 22, 2013
  * </p>
  *
  * @author Oliver Tigges
  */
-public interface IndexSearcher {
+public class MemConversationTest extends AbstractConversationTest {
 
-    /**
-     * Search the index.
-     *
-     * @param query The lucene query.
-     * @return An iterator over the search results.
-     */
-    IndexSearchResult search(String query);
+    @Override
+    protected GraphDataStore createStore() throws Exception {
+        return new MemStorage();
+    }
+
+    @Ignore
+    @Override
+    public void testMultipleContexts() {
+        // TODO: Not yet supported by mem conversation
+    }
 }

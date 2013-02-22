@@ -50,7 +50,7 @@
 						<exclude>.git/**</exclude>
 						<exclude>.idea/**</exclude>
 						<exclude>.settings/**</exclude>
-						<exclude>header.xml</exclude>
+						<exclude>**/*.xml</exclude>
 						<exclude>**/*.rdf</exclude>
 					</excludes>
 				</configuration>

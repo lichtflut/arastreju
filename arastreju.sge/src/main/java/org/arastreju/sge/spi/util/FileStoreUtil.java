@@ -15,16 +15,38 @@
  */
 package org.arastreju.sge.spi.util;
 
+import java.io.File;
+import java.io.IOException;
+
 /**
  * <p>
- * DESCRITPION.
+ *  Utilities for handling of file stores.
  * </p>
- * <p/>
+ *
  * <p>
- * Created 22.02.13
+ *  Created Feb. 22, 2013
  * </p>
  *
  * @author Oliver Tigges
  */
 public class FileStoreUtil {
+
+    public static String prepareTempStore() throws IOException {
+        return prepareTempStore("default");
+    }
+
+    public static String prepareTempStore(String prefix) throws IOException {
+        final File temp = File.createTempFile(prefix, Long.toString(System.nanoTime()));
+        if (!temp.delete()) {
+            throw new IOException("Could not delete temp file: "
+                    + temp.getAbsolutePath());
+        }
+        if (!temp.mkdir()) {
+            throw new IOException("Could not create temp directory: "
+                    + temp.getAbsolutePath());
+        }
+
+        return temp.getAbsolutePath();
+    }
+
 }
