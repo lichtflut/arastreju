@@ -1,9 +1,10 @@
 package org.arastreju.sge.spi.abstracts;
 
 import org.arastreju.sge.ArastrejuGate;
-import org.arastreju.sge.ConversationContext;
+import org.arastreju.sge.Conversation;
+import org.arastreju.sge.context.Context;
 import org.arastreju.sge.context.DomainIdentifier;
-import org.arastreju.sge.organize.Organizer;
+import org.arastreju.sge.spi.GraphDataConnection;
 
 /**
  * <p>
@@ -18,27 +19,46 @@ import org.arastreju.sge.organize.Organizer;
  */
 public abstract class AbstractArastrejuGate implements ArastrejuGate {
 
-	private final DomainIdentifier domainIdentifier;
+    private GraphDataConnection connection;
+    private final DomainIdentifier domainIdentifier;
 
     // ----------------------------------------------------
 
-	protected AbstractArastrejuGate(final DomainIdentifier domainIdentifier) {
-		this.domainIdentifier = domainIdentifier;
+	protected AbstractArastrejuGate(GraphDataConnection connection, DomainIdentifier domainIdentifier) {
+        this.connection = connection;
+        this.domainIdentifier = domainIdentifier;
 	}
 
-	protected DomainIdentifier getDomainIdentifier() {
-		return domainIdentifier;
-	}
+    // ----------------------------------------------------
 
-	/**
-	 * Intitialze this conversation context from the initial context.
-	 * @param cc The conversation context to be initialized.
-	 */
-	protected void initContext(final ConversationContext cc) {
-		if (domainIdentifier.getInitialContext() != null) {
-			cc.setPrimaryContext(domainIdentifier.getInitialContext());
-			cc.setReadContexts(domainIdentifier.getInitialContext());
-		}
-	}
+    @Override
+    public Conversation startConversation() {
+        return startConversation(domainIdentifier.getInitialContext(), domainIdentifier.getInitialContext());
+    }
+
+    @Override
+    public Conversation startConversation(Context primary, Context... readContexts) {
+        WorkingContext ctx = newWorkingContext(connection);
+        ctx.setPrimaryContext(primary);
+        ctx.setReadContexts(readContexts);
+        return newConversation(ctx);
+    }
+
+    // ----------------------------------------------------
+
+    protected abstract WorkingContext newWorkingContext(GraphDataConnection connection);
+
+    protected abstract Conversation newConversation(WorkingContext ctx);
+
+    // ----------------------------------------------------
+
+    protected DomainIdentifier getDomainIdentifier() {
+        return domainIdentifier;
+    }
+
+    @Override
+    public void close() {
+        connection.close();
+    }
 
 }
