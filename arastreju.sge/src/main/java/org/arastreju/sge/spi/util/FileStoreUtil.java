@@ -13,37 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.arastreju.sge.persistence;
-
-import org.arastreju.sge.model.ResourceID;
-import org.arastreju.sge.model.nodes.ResourceNode;
-import org.arastreju.sge.naming.QualifiedName;
+package org.arastreju.sge.spi.util;
 
 /**
  * <p>
- *  Resolver for resources.
+ * DESCRITPION.
+ * </p>
  * <p/>
- *
  * <p>
- *  Created Jul 2, 2012
+ * Created 22.02.13
  * </p>
  *
  * @author Oliver Tigges
  */
-public interface ResourceResolver {
-
-    /**
-     * Resolve a resource identifier.
-     * @param rid The resource identifier.
-     * @return The existing or newly created ResourceNode for this identifier.
-     */
-    ResourceNode resolve(ResourceID rid);
-
-    /**
-     * Find a resource by it's qualified name.
-     * @param qn The qualified name.
-     * @return The resource node or null.
-     */
-    ResourceNode findResource(QualifiedName qn);
-
+public class FileStoreUtil {
 }
