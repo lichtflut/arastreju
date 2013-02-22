@@ -16,15 +16,14 @@
  */
 package org.arastreju.samples;
 
-import org.arastreju.bindings.neo4j.Neo4jGateFactory;
 import org.arastreju.sge.Arastreju;
 import org.arastreju.sge.ArastrejuGate;
-import org.arastreju.sge.ArastrejuProfile;
 import org.arastreju.sge.Conversation;
-import org.arastreju.sge.model.DetachedStatement;
 import org.arastreju.sge.model.ResourceID;
-import org.arastreju.sge.model.SimpleResourceID;
 import org.arastreju.sge.model.Statement;
+import org.arastreju.sge.model.nodes.ResourceNode;
+
+import static org.arastreju.sge.SNOPS.*;
 
 /**
  * <p>
@@ -38,35 +37,41 @@ import org.arastreju.sge.model.Statement;
  * @author Timo Buhrmester
  */
 public class StatementSample {
+	private static String RESOURCE_URI_ALICE = "http://example.org/alice";
+	private static String RESOURCE_URI_BOB = "http://example.org/bob";
+	private static String RESOURCE_URI_KNOWS = "http://example.org/knows";
+
+	private static Arastreju aras;
+	private static ArastrejuGate gate;
+	private static Conversation conv;
+
+	private static void setUp() {
+		aras = Arastreju.getInstance();
+		gate = aras.openMasterGate();
+		conv = gate.startConversation();
+	}
+
+	private static void tearDown() {
+		conv.close();
+		gate.close();
+	}
+
 	public static void main(String[] args) {
-		/* create new default profile, for neo4j backend */
-		ArastrejuProfile profile = new ArastrejuProfile("myprofile");
-		profile.setProperty(ArastrejuProfile.GATE_FACTORY, Neo4jGateFactory.class.getCanonicalName());
-
-		/* create arastreju instance */
-		Arastreju aras = Arastreju.getInstance(profile);
-
-		/* open master gate */
-		ArastrejuGate gate = aras.openMasterGate();
-
-		/* start a conversation */
-		Conversation conv = gate.startConversation();
+		setUp();
 
 		/* create a new statement "alice talks_to bob" */
-		ResourceID subject = new SimpleResourceID("http://example.org/alice");
-		ResourceID predicate = new SimpleResourceID("http://example.org/talks_to");
-		ResourceID object = new SimpleResourceID("http://example.org/bob");
-		Statement stmt = new DetachedStatement(subject, predicate, object);
+		ResourceNode subject = resource(id(qualify(RESOURCE_URI_ALICE)));
+		ResourceID predicate = id(qualify(RESOURCE_URI_KNOWS));
+		ResourceID object = id(qualify(RESOURCE_URI_BOB));
 
-		/* aadd statement to conversation, persisting it */
+		Statement stmt = associate(subject, predicate, object);
+
+		/* add statement to conversation, persisting it */
 		conv.addStatement(stmt);
 
 		/* detach again if you want */
 		conv.removeStatement(stmt);
 
-		/* clean up */
-		conv.close();
-		gate.close();
-		profile.close();
+		tearDown();
 	}
 }

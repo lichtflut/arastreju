@@ -16,14 +16,13 @@
  */
 package org.arastreju.samples;
 
-import org.arastreju.bindings.neo4j.Neo4jGateFactory;
 import org.arastreju.sge.Arastreju;
 import org.arastreju.sge.ArastrejuGate;
-import org.arastreju.sge.ArastrejuProfile;
 import org.arastreju.sge.Conversation;
 import org.arastreju.sge.model.nodes.ResourceNode;
 import org.arastreju.sge.model.nodes.SNResource;
-import org.arastreju.sge.naming.QualifiedName;
+
+import static org.arastreju.sge.SNOPS.*;
 
 /**
  * <p>
@@ -37,32 +36,35 @@ import org.arastreju.sge.naming.QualifiedName;
  * @author Timo Buhrmester
  */
 public class NodeSample {
+	private static String RESOURCE_URI = "http://example.org/my_resource";
+
+	private static Arastreju aras;
+	private static ArastrejuGate gate;
+	private static Conversation conv;
+
+	private static void setUp() {
+		aras = Arastreju.getInstance();
+		gate = aras.openMasterGate();
+		conv = gate.startConversation();
+	}
+
+	private static void tearDown() {
+		conv.close();
+		gate.close();
+	}
+
 	public static void main(String[] args) {
-		/* create new default profile, for neo4j backend */
-		ArastrejuProfile profile = new ArastrejuProfile("myprofile");
-		profile.setProperty(ArastrejuProfile.GATE_FACTORY, Neo4jGateFactory.class.getCanonicalName());
+		setUp();
 
-		/* create arastreju instance */
-		Arastreju aras = Arastreju.getInstance(profile);
+		/* create a node */
+		ResourceNode node = new SNResource(qualify(RESOURCE_URI));
 
-		/* open master gate */
-		ArastrejuGate gate = aras.openMasterGate();
-
-		/* start a conversation */
-		Conversation conv = gate.startConversation();
-
-		/* create a new resource */
-		ResourceNode node = new SNResource(new QualifiedName("http://example.org/my_resource"));
-
-		/* attach node to conversation, persisting it */
+		/* attach node, making it persist in the storage back-end */
 		conv.attach(node);
 
 		/* detach the node again */
 		conv.detach(node);
 
-		/* clean up */
-		conv.close();
-		gate.close();
-		profile.close();
+		tearDown();
 	}
 }
