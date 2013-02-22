@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 lichtflut Forschungs- und Entwicklungsgesellschaft mbH
+ * Copyright (C) 2013 lichtflut Forschungs- und Entwicklungsgesellschaft mbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,14 +15,11 @@
  */
 package org.arastreju.sge.model.nodes;
 
-import java.util.Set;
-
 import org.arastreju.sge.context.Context;
 import org.arastreju.sge.model.ResourceID;
 import org.arastreju.sge.model.Statement;
-import org.arastreju.sge.model.nodes.views.SNClass;
-import org.arastreju.sge.model.nodes.views.SNEntity;
-import org.arastreju.sge.model.nodes.views.SNProperty;
+
+import java.util.Set;
 
 /**
  * <p>

@@ -117,7 +117,7 @@ public class AttachedAssociationKeeper extends AbstractAssociationKeeper {
     }
 
     /**
-     * Called when the underlying neo node has been changed in another conversation.
+     * Called when the underlying physical node has been changed in another conversation.
      * The state of this node must be reset to trigger a reload later.
      */
     public void notifyChanged() {
