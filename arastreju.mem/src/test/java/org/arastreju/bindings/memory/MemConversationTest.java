@@ -1,7 +1,7 @@
 package org.arastreju.bindings.memory;
 
-import org.arastreju.bindings.memory.conversation.MemConversation;
 import org.arastreju.bindings.memory.storage.MemStorage;
+import org.arastreju.sge.Conversation;
 import org.arastreju.sge.apriori.Aras;
 import org.arastreju.sge.apriori.RDF;
 import org.arastreju.sge.apriori.RDFS;
@@ -11,6 +11,7 @@ import org.arastreju.sge.model.nodes.SNResource;
 import org.arastreju.sge.model.nodes.views.SNText;
 import org.arastreju.sge.naming.QualifiedName;
 import org.arastreju.sge.spi.GraphDataConnection;
+import org.arastreju.sge.spi.impl.ConversationImpl;
 import org.arastreju.sge.spi.impl.GraphDataConnectionImpl;
 import org.arastreju.sge.spi.impl.WorkingContextImpl;
 import org.junit.Assert;
@@ -33,7 +34,7 @@ public class MemConversationTest {
 
     QualifiedName qnFlower = new QualifiedName("http://example.com/flower");
 
-    MemConversation conversation;
+    Conversation conversation;
 
     // ----------------------------------------------------
 
@@ -42,7 +43,7 @@ public class MemConversationTest {
         MemStorage storage = new MemStorage();
         GraphDataConnection connection = new GraphDataConnectionImpl(storage, null);
         WorkingContextImpl context = new WorkingContextImpl(connection);
-        conversation = new MemConversation(context);
+        conversation = new ConversationImpl(context);
     }
 
     // ----------------------------------------------------
