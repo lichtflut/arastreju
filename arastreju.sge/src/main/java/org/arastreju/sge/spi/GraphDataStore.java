@@ -61,4 +61,9 @@ public interface GraphDataStore {
      */
     TxProvider getTxProvider();
 
+    /**
+     * Close the store.
+     */
+    void close();
+
 }

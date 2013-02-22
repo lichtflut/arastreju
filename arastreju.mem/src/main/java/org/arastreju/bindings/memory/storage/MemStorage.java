@@ -81,6 +81,11 @@ public class MemStorage implements GraphDataStore {
         return new MemTransactionProvider();
     }
 
+    @Override
+    public void close() {
+        store.clear();
+    }
+
     // ----------------------------------------------------
 
     StoredResource getStoreEntry(QualifiedName qn) {
