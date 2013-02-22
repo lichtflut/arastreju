@@ -5,6 +5,7 @@ import org.arastreju.sge.Conversation;
 import org.arastreju.sge.apriori.Aras;
 import org.arastreju.sge.apriori.RDF;
 import org.arastreju.sge.apriori.RDFS;
+import org.arastreju.sge.index.IndexProvider;
 import org.arastreju.sge.model.SimpleResourceID;
 import org.arastreju.sge.model.nodes.ResourceNode;
 import org.arastreju.sge.model.nodes.SNResource;
@@ -41,7 +42,8 @@ public class MemConversationTest {
     @Before
     public void setUp() {
         MemStorage storage = new MemStorage();
-        GraphDataConnection connection = new GraphDataConnectionImpl(storage, null);
+        IndexProvider indexProvider = new IndexProvider(System.getProperty("java.io.tmpdir"));
+        GraphDataConnection connection = new GraphDataConnectionImpl(storage, indexProvider);
         WorkingContextImpl context = new WorkingContextImpl(connection);
         conversation = new ConversationImpl(context);
     }
@@ -49,7 +51,6 @@ public class MemConversationTest {
     // ----------------------------------------------------
 
     @Test
-    @Ignore
     public void testStoreAndFind() {
         ResourceNode flower = conversation.findResource(qnFlower);
         Assert.assertNull(flower);
@@ -65,7 +66,6 @@ public class MemConversationTest {
     }
 
     @Test
-    @Ignore
     public void testResolving() {
         ResourceNode flower = conversation.resolve(new SimpleResourceID(qnFlower));
         Assert.assertNotNull(flower);
@@ -73,7 +73,6 @@ public class MemConversationTest {
     }
 
     @Test
-    @Ignore
     public void testAttachAndDetach() {
         ResourceNode flower = new SNResource(qnFlower);
         conversation.attach(flower);

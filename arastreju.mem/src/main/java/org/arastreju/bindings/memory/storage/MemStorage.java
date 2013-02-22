@@ -15,7 +15,6 @@
  */
 package org.arastreju.bindings.memory.storage;
 
-import de.lichtflut.infra.exceptions.NotYetImplementedException;
 import org.arastreju.bindings.memory.tx.MemTransactionProvider;
 import org.arastreju.sge.model.associations.AttachedAssociationKeeper;
 import org.arastreju.sge.naming.QualifiedName;
@@ -74,7 +73,7 @@ public class MemStorage implements GraphDataStore {
 
     @Override
     public AssociationWriter crateAssociationWriter(WorkingContext ctx) {
-        throw new NotYetImplementedException();
+        return new MemAssociationWriter(ctx, this);
     }
 
     @Override

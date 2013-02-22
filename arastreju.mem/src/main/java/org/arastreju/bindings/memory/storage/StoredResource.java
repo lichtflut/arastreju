@@ -49,4 +49,8 @@ public class StoredResource {
     public void addAssociation(Statement stmt) {
         statements.add(stmt);
     }
+
+    public void remove(Statement stmt) {
+        statements.remove(stmt);
+    }
 }
