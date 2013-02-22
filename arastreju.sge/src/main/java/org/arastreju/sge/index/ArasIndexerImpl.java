@@ -40,7 +40,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
@@ -58,32 +57,32 @@ import java.util.Set;
 public class ArasIndexerImpl implements IndexUpdator, IndexSearcher {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ArasIndexerImpl.class);
 
-    private List<Inferencer> inferencers = new ArrayList<Inferencer>();
+	private List<Inferencer> inferencers = new ArrayList<Inferencer>();
 
 	private final ConversationContext conversationContext;
-    
-    private final IndexProvider provider;
 
-    // ----------------------------------------------------
+	private final IndexProvider provider;
+
+	// ----------------------------------------------------
 
 	public ArasIndexerImpl(ConversationContext cc, IndexProvider provider) {
 		this.conversationContext = cc;
-        this.provider = provider;
-    }
+		this.provider = provider;
+	}
 
-    // ----------------------------------------------------
+	// ----------------------------------------------------
 
-    /**
-     * Add a soft inferencer.
-     * @param inferencer The inferencer.
-     * @return This.
-     */
-    public ArasIndexerImpl add(Inferencer... inferencer) {
-        Collections.addAll(inferencers, inferencer);
-        return this;
-    }
+	/**
+	 * Add a soft inferencer.
+	 * @param inferencer The inferencer.
+	 * @return This.
+	 */
+	public ArasIndexerImpl add(Inferencer... inferencer) {
+		Collections.addAll(inferencers, inferencer);
+		return this;
+	}
 
-    // ----------------------------------------------------
+	// ----------------------------------------------------
 
 	/**
 	 * Index this node with all it's statements, regarding the current primary context.
@@ -94,7 +93,7 @@ public class ArasIndexerImpl implements IndexUpdator, IndexSearcher {
 	public void index(ResourceNode node) {
 		LOGGER.debug("Indexing ({})", node);
 
-        Document doc = createDocument(node);
+		Document doc = createDocument(node);
 		LuceneIndex index = provider.forContext(conversationContext.getPrimaryContext());
 		try {
 			index.getWriter().updateDocument(new Term(IndexFields.QUALIFIED_NAME, normalizeQN(node.toURI())), doc); //creates if nonexistent
@@ -181,33 +180,33 @@ public class ArasIndexerImpl implements IndexUpdator, IndexSearcher {
 
 	// ----------------------------------------------------
 
-    private Document createDocument(ResourceNode node) {
-        Document doc = new Document();
-        doc.add(new Field(IndexFields.QUALIFIED_NAME, node.toURI(), Store.YES, Index.ANALYZED));
+	private Document createDocument(ResourceNode node) {
+		Document doc = new Document();
+		doc.add(new Field(IndexFields.QUALIFIED_NAME, node.toURI(), Store.YES, Index.ANALYZED));
 
-        Set<Statement> asserted = node.getAssociations();
-        Set<Statement> inferred = new HashSet<Statement>();
-        for (Statement stmt : asserted) {
-            for (Inferencer inferencer : inferencers) {
-                inferencer.addInferenced(stmt, inferred);
-            }
-            addFields(doc, stmt);
-        }
-        for (Statement stmt : inferred) {
-            addFields(doc, stmt);
-        }
-        return doc;
-    }
+		Set<Statement> asserted = node.getAssociations();
+		Set<Statement> inferred = new HashSet<Statement>();
+		for (Statement stmt : asserted) {
+			for (Inferencer inferencer : inferencers) {
+				inferencer.addInferenced(stmt, inferred);
+			}
+			addFields(doc, stmt);
+		}
+		for (Statement stmt : inferred) {
+			addFields(doc, stmt);
+		}
+		return doc;
+	}
 
-    private void addFields(Document doc, Statement stmt) {
-        doc.add(makeField(stmt));
-        Field f = makeGenField(stmt);
-        if (!findValue(doc, f.name(), f.stringValue())) {
-            doc.add(f);
-        }
-    }
+	private void addFields(Document doc, Statement stmt) {
+		doc.add(makeField(stmt));
+		Field f = makeGenField(stmt);
+		if (!findValue(doc, f.name(), f.stringValue())) {
+			doc.add(f);
+		}
+	}
 
-    private Field makeGenField(Statement stmt) {
+	private Field makeGenField(Statement stmt) {
 		Field f;
 
 		if (stmt.getObject().isResourceNode()) {
@@ -278,5 +277,3 @@ public class ArasIndexerImpl implements IndexUpdator, IndexSearcher {
 		}
 	}
 }
-
-
