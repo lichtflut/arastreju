@@ -18,7 +18,6 @@ package org.arastreju.binding.memory;
 import org.arastreju.bindings.memory.storage.MemStorage;
 import org.arastreju.sge.spi.AbstractConversationTest;
 import org.arastreju.sge.spi.GraphDataStore;
-import org.junit.Ignore;
 
 /**
  * <p>
@@ -38,9 +37,4 @@ public class MemConversationTest extends AbstractConversationTest {
         return new MemStorage();
     }
 
-    @Ignore
-    @Override
-    public void testMultipleContexts() {
-        // TODO: Not yet supported by mem conversation
-    }
 }

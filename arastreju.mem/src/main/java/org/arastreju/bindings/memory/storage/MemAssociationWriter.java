@@ -15,9 +15,12 @@
  */
 package org.arastreju.bindings.memory.storage;
 
+import org.arastreju.sge.context.Context;
+import org.arastreju.sge.model.DetachedStatement;
 import org.arastreju.sge.model.Statement;
 import org.arastreju.sge.spi.AssociationWriter;
 import org.arastreju.sge.spi.WorkingContext;
+import org.arastreju.sge.spi.impl.AbstractAssociationWriter;
 
 /**
  * <p>
@@ -30,16 +33,14 @@ import org.arastreju.sge.spi.WorkingContext;
  *
  * @author Oliver Tigges
  */
-public class MemAssociationWriter implements AssociationWriter {
-
-    private WorkingContext ctx;
+public class MemAssociationWriter extends AbstractAssociationWriter {
 
     private MemStorage storage;
 
     // ----------------------------------------------------
 
     public MemAssociationWriter(WorkingContext ctx, MemStorage storage) {
-        this.ctx = ctx;
+        super(ctx, storage);
         this.storage = storage;
     }
 
@@ -48,12 +49,19 @@ public class MemAssociationWriter implements AssociationWriter {
     @Override
     public void onCreate(Statement stmt) {
         StoredResource entry = storage.getStoreEntry(stmt.getSubject().getQualifiedName());
-        entry.addAssociation(stmt);
+        entry.addAssociation(copyForStorage(stmt));
     }
 
     @Override
     public void onRemove(Statement stmt) {
         StoredResource entry = storage.getStoreEntry(stmt.getSubject().getQualifiedName());
         entry.remove(stmt);
+    }
+
+    // ----------------------------------------------------
+
+    private Statement copyForStorage(Statement original) {
+        Context[] ctxs = getCurrentContexts(original);
+        return new DetachedStatement(original.getSubject(), original.getPredicate(), original.getObject(), ctxs);
     }
 }
