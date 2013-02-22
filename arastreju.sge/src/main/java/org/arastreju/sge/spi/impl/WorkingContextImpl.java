@@ -31,10 +31,9 @@ import org.arastreju.sge.persistence.TxAction;
 import org.arastreju.sge.persistence.TxProvider;
 import org.arastreju.sge.persistence.TxResultAction;
 import org.arastreju.sge.spi.AssociationResolver;
-import org.arastreju.sge.spi.AssociationWriter;
 import org.arastreju.sge.spi.GraphDataConnection;
-import org.arastreju.sge.spi.uow.AssociationManager;
 import org.arastreju.sge.spi.WorkingContext;
+import org.arastreju.sge.spi.uow.AssociationManager;
 import org.arastreju.sge.spi.uow.IndexUpdateUOW;
 import org.arastreju.sge.spi.uow.InferencingInterceptor;
 import org.arastreju.sge.spi.uow.OpenConversationNotifier;
@@ -91,7 +90,7 @@ public class WorkingContextImpl implements WorkingContext {
 	 * Creates a new Working Context.
 	 */
 	public WorkingContextImpl(GraphDataConnection connection) {
-		LOGGER.debug("New Conversation Context started: {} ", ctxId);
+		LOGGER.debug("New conversation context {} started.", ctxId);
         this.connection = connection;
         this.associationResolver = connection.createAssociationResolver(this);
         this.associationManager = createAssociationManager();
@@ -232,7 +231,7 @@ public class WorkingContextImpl implements WorkingContext {
 			clear();
             onClose();
 			active = false;
-			LOGGER.info("Conversation will be closed. " + ctxId);
+			LOGGER.info("Conversation '{}' will be closed.", ctxId);
 		}
 	}
 
@@ -337,7 +336,7 @@ public class WorkingContextImpl implements WorkingContext {
 
 	protected void assertActive() {
 		if (!active) {
-			LOGGER.warn("Conversation context already closed. " + ctxId);
+			LOGGER.warn("Conversation context already closed: {}", ctxId);
 			throw new IllegalStateException("ConversationContext already closed.");
 		}
 	}
@@ -346,17 +345,16 @@ public class WorkingContextImpl implements WorkingContext {
 	protected void finalize() throws Throwable {
         super.finalize();
 		if (active) {
-			LOGGER.debug("Conversation context will be removed by GC, but has not been closed. " + ctxId);
+			LOGGER.debug("Conversation context will be removed by GC, but has not been closed: {}", ctxId);
 		}
 	}
 
     // ----------------------------------------------------
 
     private AssociationManager createAssociationManager() {
-        AssociationWriter writer = connection.createAssociationWriter(this);
         ResourceResolver resolver = new ResourceResolverImpl(this);
         AssociationManager am = new AssociationManager(resolver);
-        am.register(writer);
+        am.register(connection.createAssociationWriter(this));
         am.register(new IndexUpdateUOW(getIndexUpdator()));
         am.register(new InferencingInterceptor(am).add(new InverseOfInferencer(resolver)));
         am.register(new OpenConversationNotifier(getConnection(), this));

@@ -42,9 +42,9 @@ import java.util.Set;
  */
 public class IndexUpdateUOW implements UnitOfWork, AssociationListener {
 
-    private Set<ResourceID> modified = new HashSet<ResourceID>();
+    private final Set<ResourceID> modified = new HashSet<ResourceID>();
 
-    private List<Inferencer> inferencers = new ArrayList<Inferencer>();
+    private final List<Inferencer> inferencers = new ArrayList<Inferencer>();
 
     private final IndexUpdator indexUpdator;
 
