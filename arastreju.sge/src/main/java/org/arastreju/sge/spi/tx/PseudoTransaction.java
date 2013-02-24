@@ -13,7 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.arastreju.sge.persistence;
+package org.arastreju.sge.spi.tx;
+
+import org.arastreju.sge.spi.tx.AbstractTransactionControl;
 
 /**
  * <p>
@@ -26,53 +28,24 @@ package org.arastreju.sge.persistence;
  *
  * @author Raphael Esterle
  */
-public class PseudoTransaction implements TransactionControl {
+public class PseudoTransaction extends AbstractTransactionControl {
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public void success() {
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public void fail() {
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public void finish() {
 	}
 	
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void commit() {
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void rollback() {
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public void flush() {
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public boolean isActive() {
 		return true;

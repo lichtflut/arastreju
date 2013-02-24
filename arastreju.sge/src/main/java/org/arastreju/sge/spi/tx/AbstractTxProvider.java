@@ -13,7 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.arastreju.sge.persistence;
+package org.arastreju.sge.spi.tx;
+
+import org.arastreju.sge.persistence.TxAction;
+import org.arastreju.sge.persistence.TxResultAction;
+import org.arastreju.sge.spi.WorkingContext;
 
 /**
  * <p>
@@ -26,25 +30,22 @@ package org.arastreju.sge.persistence;
  *
  * @author Oliver Tigges
  */
-public abstract class TxProvider {
+public abstract class AbstractTxProvider implements TxProvider {
 
-	private TransactionControl tx;
+	private BoundTransactionControl tx;
 
 	// -----------------------------------------------------
 
 	/**
 	 * Constructor.
 	 */
-	public TxProvider() {
+	public AbstractTxProvider() {
 	}
 	
 	// -----------------------------------------------------
 	
-	/**
-	 * Begin a new transaction if not already one open.
-	 * @return An active transaction.
-	 */
-	public TransactionControl begin() {
+	@Override
+    public BoundTransactionControl begin() {
 		if (!inTransaction()) {
 			tx = newTx();
 			return tx;
@@ -53,18 +54,17 @@ public abstract class TxProvider {
 		}
 	}
 	
-	/**
-	 * Check if there is a transaction running.
-	 * @return true if there is a transaction.
-	 */
-	public boolean inTransaction() {
+	@Override
+    public boolean inTransaction() {
 		return tx != null && tx.isActive();
 	}
 	
 	// -----------------------------------------------------
 	
-	public void doTransacted(final TxAction action){
-		final TransactionControl tx = begin();
+	@Override
+    public void doTransacted(final TxAction action, WorkingContext ctx){
+		final BoundTransactionControl tx = begin();
+        tx.bind(ctx);
 		try {
 			action.execute();
 			tx.success();
@@ -77,8 +77,10 @@ public abstract class TxProvider {
 		}
 	}
 	
-	public <T> T doTransacted(final TxResultAction<T> action){
-		final TransactionControl tx = begin();
+	@Override
+    public <T> T doTransacted(final TxResultAction<T> action, WorkingContext ctx){
+		final BoundTransactionControl tx = begin();
+        tx.bind(ctx);
 		try {
 			T result = action.execute();
 			tx.success();
@@ -94,10 +96,10 @@ public abstract class TxProvider {
 
     // ----------------------------------------------------
 
-    protected abstract TransactionControl newTx();
+    protected abstract BoundTransactionControl newTx();
 
-    protected TransactionControl newSubTx(TransactionControl parent) {
-    	return new SubTransaction(parent);
+    protected BoundTransactionControl newSubTx(BoundTransactionControl parent) {
+        return new SubTransaction(parent);
     }
-	
+
 }

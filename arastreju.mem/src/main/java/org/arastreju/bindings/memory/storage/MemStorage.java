@@ -18,11 +18,11 @@ package org.arastreju.bindings.memory.storage;
 import org.arastreju.bindings.memory.tx.MemTransactionProvider;
 import org.arastreju.sge.model.associations.AttachedAssociationKeeper;
 import org.arastreju.sge.naming.QualifiedName;
-import org.arastreju.sge.persistence.TxProvider;
 import org.arastreju.sge.spi.AssociationResolver;
 import org.arastreju.sge.spi.AssociationWriter;
 import org.arastreju.sge.spi.GraphDataStore;
 import org.arastreju.sge.spi.WorkingContext;
+import org.arastreju.sge.spi.tx.TxProvider;
 
 import java.util.HashMap;
 import java.util.Map;

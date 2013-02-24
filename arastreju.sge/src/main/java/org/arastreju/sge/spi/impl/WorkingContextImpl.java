@@ -28,11 +28,11 @@ import org.arastreju.sge.model.associations.AttachedAssociationKeeper;
 import org.arastreju.sge.naming.QualifiedName;
 import org.arastreju.sge.persistence.ResourceResolver;
 import org.arastreju.sge.persistence.TxAction;
-import org.arastreju.sge.persistence.TxProvider;
 import org.arastreju.sge.persistence.TxResultAction;
 import org.arastreju.sge.spi.AssociationResolver;
 import org.arastreju.sge.spi.GraphDataConnection;
 import org.arastreju.sge.spi.WorkingContext;
+import org.arastreju.sge.spi.tx.TxProvider;
 import org.arastreju.sge.spi.uow.AssociationManager;
 import org.arastreju.sge.spi.uow.IndexUpdateUOW;
 import org.arastreju.sge.spi.uow.InferencingInterceptor;
@@ -134,7 +134,7 @@ public class WorkingContextImpl implements WorkingContext {
             public AttachedAssociationKeeper execute() {
                 return connection.create(qn);
             }
-        });
+        }, this);
         attach(qn, keeper);
         return keeper;
     }
@@ -148,7 +148,7 @@ public class WorkingContextImpl implements WorkingContext {
             public void execute() {
                 connection.remove(qn);
             }
-        });
+        }, this);
 
     }
 
@@ -190,7 +190,7 @@ public class WorkingContextImpl implements WorkingContext {
             public void execute() {
                 associationManager.addAssociation(keeper, stmt);
             }
-        });
+        }, this);
 
     }
 
@@ -202,7 +202,7 @@ public class WorkingContextImpl implements WorkingContext {
             public void execute() {
                 associationManager.removeAssociation(keeper, stmt);
             }
-        });
+        }, this);
         return true;
     }
 

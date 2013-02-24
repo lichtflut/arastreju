@@ -13,33 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.arastreju.sge;
-
-import org.arastreju.sge.context.Context;
+package org.arastreju.sge.spi.tx;
 
 /**
  * <p>
- *  Context of a {@link Conversation}.
+ *  Extension of TxProvider, returns BoundTransactionControls.
  * </p>
  *
  * <p>
- * 	Created Jun 7, 2012
+ *  Created Feb. 24, 2013
  * </p>
  *
  * @author Oliver Tigges
  */
-public interface ConversationContext {
-
-	Context[] getReadContexts();
-
-	Context getPrimaryContext();
-	
-	ConversationContext setPrimaryContext(Context context);
-	
-	ConversationContext setReadContexts(Context... contexts);
-
-	void clear();
-
-	boolean isActive();
+public interface BoundTxProvider extends TxProvider {
 
 }

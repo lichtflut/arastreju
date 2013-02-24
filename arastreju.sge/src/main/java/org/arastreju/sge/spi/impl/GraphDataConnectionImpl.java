@@ -18,12 +18,13 @@ package org.arastreju.sge.spi.impl;
 import org.arastreju.sge.index.IndexProvider;
 import org.arastreju.sge.model.associations.AttachedAssociationKeeper;
 import org.arastreju.sge.naming.QualifiedName;
-import org.arastreju.sge.persistence.TxProvider;
 import org.arastreju.sge.spi.AssociationResolver;
 import org.arastreju.sge.spi.AssociationWriter;
 import org.arastreju.sge.spi.GraphDataConnection;
 import org.arastreju.sge.spi.GraphDataStore;
 import org.arastreju.sge.spi.WorkingContext;
+import org.arastreju.sge.spi.tx.BoundTxProvider;
+import org.arastreju.sge.spi.tx.TxProvider;
 
 import java.util.ArrayList;
 import java.util.HashSet;

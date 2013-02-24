@@ -13,9 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.arastreju.sge.persistence;
+package org.arastreju.sge.spi.tx;
 
 
+import org.arastreju.sge.spi.WorkingContext;
 
 /**
  * <p>
@@ -28,68 +29,68 @@ package org.arastreju.sge.persistence;
  *
  * @author Oliver Tigges
  */
-public class SubTransaction implements TransactionControl {
+public class SubTransaction implements BoundTransactionControl {
 
-	private final TransactionControl superTx;
+	private final BoundTransactionControl superTx;
 	
 	// -----------------------------------------------------
 
 	/**
 	 * @param superTx The super transaction.
 	 */
-	public SubTransaction(final TransactionControl superTx) {
+	public SubTransaction(final BoundTransactionControl superTx) {
 		this.superTx = superTx;
 	}
 	
 	// -----------------------------------------------------
 	
-	/** 
-	 * {@inheritDoc}
-	 */
+	@Override
 	public void success() {
 		superTx.success();
 	}
-	
-	/** 
-	 * {@inheritDoc}
-	 */
+
+    @Override
 	public void commit() {
 		// do nothing
 	}
-	
-	/** 
-	 * {@inheritDoc}
-	 */
+
+    @Override
 	public void finish() {
 		// do nothing
 	}
-	
-	/** 
-	 * {@inheritDoc}
-	 */
+
+    @Override
 	public void fail() {
 		superTx.fail();
 	}
 
-	/** 
-	 * {@inheritDoc}
-	 */
+    @Override
 	public void rollback() {
 		superTx.rollback();
 	}
 
-	/** 
-	 * {@inheritDoc}
-	 */
+    @Override
 	public void flush() {
 		superTx.flush();
 	}
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public boolean isActive() {
         return superTx.isActive();
+    }
+
+    // -- BoundTransactionControl -------------------------
+
+    @Override
+    public BoundTransactionControl bind(WorkingContext ctx) {
+        if (!ctx.equals(getContext())) {
+            throw new UnsupportedOperationException("The context may not be changed for sub transactions.");
+        }
+        return this;
+    }
+
+    @Override
+    public WorkingContext getContext() {
+        return superTx.getContext();
     }
 }

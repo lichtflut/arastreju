@@ -17,7 +17,7 @@ package org.arastreju.sge.spi;
 
 import org.arastreju.sge.model.associations.AttachedAssociationKeeper;
 import org.arastreju.sge.naming.QualifiedName;
-import org.arastreju.sge.persistence.TxProvider;
+import org.arastreju.sge.spi.tx.TxProvider;
 
 /**
  * <p>

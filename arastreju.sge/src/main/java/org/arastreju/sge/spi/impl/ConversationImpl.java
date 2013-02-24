@@ -33,12 +33,12 @@ import org.arastreju.sge.model.nodes.SemanticNode;
 import org.arastreju.sge.naming.QualifiedName;
 import org.arastreju.sge.persistence.TransactionControl;
 import org.arastreju.sge.persistence.TxAction;
-import org.arastreju.sge.persistence.TxProvider;
 import org.arastreju.sge.persistence.TxResultAction;
 import org.arastreju.sge.query.Query;
 import org.arastreju.sge.spi.AssocKeeperAccess;
 import org.arastreju.sge.spi.AttachedResourceNode;
 import org.arastreju.sge.spi.WorkingContext;
+import org.arastreju.sge.spi.tx.TxProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -151,7 +151,7 @@ public class ConversationImpl implements Conversation {
                 }
                 return graph;
             }
-        });
+        }, context);
 	}
 
     @Override
@@ -173,7 +173,7 @@ public class ConversationImpl implements Conversation {
                     persist(resource);
                 }
             }
-        });
+        }, context);
     }
 
 	@Override
@@ -209,7 +209,7 @@ public class ConversationImpl implements Conversation {
 
     @Override
     public TransactionControl beginTransaction() {
-        return context.getTxProvider().begin();
+        return context.getTxProvider().begin().bind(context);
     }
 
 	@Override

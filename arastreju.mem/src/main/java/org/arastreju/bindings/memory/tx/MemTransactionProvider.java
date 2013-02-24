@@ -15,10 +15,9 @@
  */
 package org.arastreju.bindings.memory.tx;
 
-import de.lichtflut.infra.exceptions.NotYetImplementedException;
-import org.arastreju.sge.persistence.PseudoTransaction;
-import org.arastreju.sge.persistence.TransactionControl;
-import org.arastreju.sge.persistence.TxProvider;
+import org.arastreju.sge.spi.tx.AbstractTxProvider;
+import org.arastreju.sge.spi.tx.BoundTransactionControl;
+import org.arastreju.sge.spi.tx.PseudoTransaction;
 
 /**
  * <p>
@@ -31,10 +30,10 @@ import org.arastreju.sge.persistence.TxProvider;
  *
  * @author Oliver Tigges
  */
-public class MemTransactionProvider extends TxProvider {
+public class MemTransactionProvider extends AbstractTxProvider {
 
     @Override
-    protected TransactionControl newTx() {
+    protected BoundTransactionControl newTx() {
         return new PseudoTransaction();
     }
 

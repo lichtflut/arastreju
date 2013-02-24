@@ -13,33 +13,35 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.arastreju.sge;
+package org.arastreju.sge.spi.tx;
 
-import org.arastreju.sge.context.Context;
+import org.arastreju.sge.persistence.TransactionControl;
+import org.arastreju.sge.spi.WorkingContext;
 
 /**
  * <p>
- *  Context of a {@link Conversation}.
+ *  Extension of Transaction Control. Can be bound to a working context.
  * </p>
  *
  * <p>
- * 	Created Jun 7, 2012
+ *  Created Feb. 24, 2013
  * </p>
  *
  * @author Oliver Tigges
  */
-public interface ConversationContext {
+public interface BoundTransactionControl extends TransactionControl {
 
-	Context[] getReadContexts();
+    /**
+     * Bind this transaction to given context.
+     * @param ctx The context.
+     * @return This.
+     */
+    BoundTransactionControl bind(WorkingContext ctx);
 
-	Context getPrimaryContext();
-	
-	ConversationContext setPrimaryContext(Context context);
-	
-	ConversationContext setReadContexts(Context... contexts);
-
-	void clear();
-
-	boolean isActive();
+    /**
+     * Get the working context.
+     * @return The context.
+     */
+    WorkingContext getContext();
 
 }
