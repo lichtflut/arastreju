@@ -32,6 +32,7 @@ import org.arastreju.sge.persistence.TxResultAction;
 import org.arastreju.sge.spi.AssociationResolver;
 import org.arastreju.sge.spi.GraphDataConnection;
 import org.arastreju.sge.spi.WorkingContext;
+import org.arastreju.sge.spi.tx.BoundTransactionControl;
 import org.arastreju.sge.spi.tx.TxProvider;
 import org.arastreju.sge.spi.uow.AssociationManager;
 import org.arastreju.sge.spi.uow.IndexUpdateUOW;
@@ -74,11 +75,13 @@ public class WorkingContextImpl implements WorkingContext {
 
     private final AssociationResolver associationResolver;
 
-    private final AssociationManager associationManager;
-
     private final Map<QualifiedName, AttachedAssociationKeeper> register = new HashMap<QualifiedName, AttachedAssociationKeeper>();
 
     private final Set<Context> readContexts = new HashSet<Context>();
+
+    private final TxProvider txProvider;
+
+    private AssociationManager associationManager;
 
 	private Context primaryContext;
 
@@ -93,8 +96,7 @@ public class WorkingContextImpl implements WorkingContext {
 		LOGGER.debug("New conversation context {} started.", ctxId);
         this.connection = connection;
         this.associationResolver = connection.createAssociationResolver(this);
-        this.associationManager = createAssociationManager();
-
+        this.txProvider = connection.createTxProvider(this);
         connection.register(this);
 	}
 
@@ -209,9 +211,21 @@ public class WorkingContextImpl implements WorkingContext {
     // ----------------------------------------------------
 
     @Override
-    public TxProvider getTxProvider() {
-        return connection.getTxProvider();
+    public void onModification(QualifiedName qualifiedName, WorkingContext otherContext) {
+        AttachedAssociationKeeper existing = lookup(qualifiedName);
+        if (existing != null) {
+            LOGGER.info("Concurrent change on node {} in other context {}.", qualifiedName, otherContext);
+            existing.notifyChanged();
+        }
     }
+
+    @Override
+    public void beginUnitOfWork(BoundTransactionControl tx) {
+        LOGGER.info("Starting new Unit of Work in conversation {}.", this);
+        this.associationManager = createAssociationManager(tx);
+    }
+
+    // ----------------------------------------------------
 
 	/**
 	 * Clear the cache.
@@ -239,13 +253,11 @@ public class WorkingContextImpl implements WorkingContext {
 		return active;
 	}
 
+    // ----------------------------------------------------
+
     @Override
-    public void onModification(QualifiedName qualifiedName, WorkingContext otherContext) {
-        AttachedAssociationKeeper existing = lookup(qualifiedName);
-        if (existing != null) {
-            LOGGER.info("Concurrent change on node {} in other context {}.", qualifiedName, otherContext);
-            existing.notifyChanged();
-        }
+    public TxProvider getTxProvider() {
+        return txProvider;
     }
 
     @Override
@@ -351,11 +363,14 @@ public class WorkingContextImpl implements WorkingContext {
 
     // ----------------------------------------------------
 
-    private AssociationManager createAssociationManager() {
+    private AssociationManager createAssociationManager(BoundTransactionControl tx) {
         ResourceResolver resolver = new ResourceResolverImpl(this);
-        AssociationManager am = new AssociationManager(resolver);
+        IndexUpdateUOW indexUpdateUOW = new IndexUpdateUOW(getIndexUpdator());
+        tx.register(indexUpdateUOW);
+
+        AssociationManager am = new AssociationManager(resolver, tx);
         am.register(connection.createAssociationWriter(this));
-        am.register(new IndexUpdateUOW(getIndexUpdator()));
+        am.register(indexUpdateUOW);
         am.register(new InferencingInterceptor(am).add(new InverseOfInferencer(resolver)));
         am.register(new OpenConversationNotifier(getConnection(), this));
         return am;

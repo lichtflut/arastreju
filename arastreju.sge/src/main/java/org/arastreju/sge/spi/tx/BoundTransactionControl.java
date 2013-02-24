@@ -44,4 +44,13 @@ public interface BoundTransactionControl extends TransactionControl {
      */
     WorkingContext getContext();
 
+    // ----------------------------------------------------
+
+    /**
+     * Register a listener for events on this transaction.
+     * @param listeners The listener(s) to register.
+     * @return This.
+     */
+    BoundTransactionControl register(TxListener... listeners);
+
 }

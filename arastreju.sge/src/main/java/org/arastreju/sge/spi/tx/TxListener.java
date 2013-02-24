@@ -13,21 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.arastreju.sge.spi.uow;
-
-import org.arastreju.sge.spi.tx.TxListener;
+package org.arastreju.sge.spi.tx;
 
 /**
  * <p>
- *  Represents a unit of work to be done during a transaction.
+ *  Listener for transaction events.
  * </p>
  *
  * <p>
- *  Created Feb. 14, 2013
+ *  Created Feb. 24, 2013
  * </p>
  *
  * @author Oliver Tigges
  */
-public interface UnitOfWork extends TxListener {
+public interface TxListener {
+
+    void onBeforeCommit();
+
+    void onAfterCommit();
+
+    void onRollback();
 
 }

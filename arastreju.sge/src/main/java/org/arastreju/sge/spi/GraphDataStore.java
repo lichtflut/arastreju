@@ -68,13 +68,14 @@ public interface GraphDataStore {
      */
     AssociationWriter crateAssociationWriter(WorkingContext ctx);
 
-    // ----------------------------------------------------
-
     /**
-     * Get the provider for transactions.
+     * Create a new provider for transactions.
+     * @param ctx The context.
      * @return The transaction provider.
      */
-    TxProvider getTxProvider();
+    TxProvider createTxProvider(WorkingContext ctx);
+
+    // ----------------------------------------------------
 
     /**
      * Close the store.

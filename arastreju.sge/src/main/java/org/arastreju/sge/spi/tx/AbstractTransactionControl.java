@@ -17,6 +17,10 @@ package org.arastreju.sge.spi.tx;
 
 import org.arastreju.sge.spi.WorkingContext;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 /**
  * <p>
  *  Abstract base class for (bound) transaction controls.
@@ -30,7 +34,21 @@ import org.arastreju.sge.spi.WorkingContext;
  */
 public abstract class AbstractTransactionControl implements BoundTransactionControl {
 
+    private List<TxListener> listeners = new ArrayList<TxListener>();
+
     private WorkingContext ctx;
+
+    private boolean success;
+
+    private boolean fail;
+
+    // ----------------------------------------------------
+
+    @Override
+    public AbstractTransactionControl register(TxListener... listeners) {
+        Collections.addAll(this.listeners, listeners);
+        return this;
+    }
 
     // ----------------------------------------------------
 
@@ -49,8 +67,36 @@ public abstract class AbstractTransactionControl implements BoundTransactionCont
     // ----------------------------------------------------
 
     @Override
+    public final void success() {
+        assertTxActive();
+        this.success = true;
+        onSuccess();
+    }
+
+    @Override
+    public final void fail() {
+        assertTxActive();
+        this.fail = true;
+        onFail();
+    }
+
+    @Override
+    public final void finish() {
+        assertTxActive();
+        if (success) {
+            notifyBeforeCommit();
+            onFinish();
+            notifyAfterCommit();
+        } else {
+            notifyRollback();
+            onFinish();
+        }
+    }
+
+    @Override
     public BoundTransactionControl bind(WorkingContext ctx) {
         this.ctx = ctx;
+        ctx.beginUnitOfWork(this);
         return this;
     }
 
@@ -59,7 +105,33 @@ public abstract class AbstractTransactionControl implements BoundTransactionCont
         return ctx;
     }
 
+    // -- abstracts ---------------------------------------
+
+    protected abstract void onSuccess();
+
+    protected abstract void onFail();
+
+    protected abstract void onFinish();
+
     // ----------------------------------------------------
+
+    protected void notifyBeforeCommit() {
+        for (TxListener listener : listeners) {
+            listener.onBeforeCommit();
+        }
+    }
+
+    protected void notifyAfterCommit() {
+        for (TxListener listener : listeners) {
+            listener.onAfterCommit();
+        }
+    }
+
+    protected void notifyRollback() {
+        for (TxListener listener : listeners) {
+            listener.onRollback();
+        }
+    }
 
     protected void assertTxActive() {
         if (!isActive()) {

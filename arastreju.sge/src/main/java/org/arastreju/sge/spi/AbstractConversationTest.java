@@ -300,7 +300,7 @@ public abstract class AbstractConversationTest {
         SNOPS.associate(car1, RDFS.SUB_CLASS_OF, vehicle);
         SNOPS.associate(car1, Aras.HAS_PROPER_NAME, new SNText("Knut"));
 
-// detach
+        // detach
         conversation.detach(car1);
 
         Assert.assertEquals(3, car1.getAssociations().size());

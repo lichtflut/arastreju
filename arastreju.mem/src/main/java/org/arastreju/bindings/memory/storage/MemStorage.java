@@ -77,7 +77,7 @@ public class MemStorage implements GraphDataStore {
     }
 
     @Override
-    public TxProvider getTxProvider() {
+    public TxProvider createTxProvider(WorkingContext ctx) {
         return new MemTransactionProvider();
     }
 

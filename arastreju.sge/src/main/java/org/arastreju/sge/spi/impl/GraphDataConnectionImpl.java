@@ -138,7 +138,7 @@ public class GraphDataConnectionImpl implements GraphDataConnection {
     }
 
     @Override
-    public TxProvider getTxProvider() {
-        return store.getTxProvider();
+    public TxProvider createTxProvider(WorkingContext ctx) {
+        return store.createTxProvider(ctx);
     }
 }

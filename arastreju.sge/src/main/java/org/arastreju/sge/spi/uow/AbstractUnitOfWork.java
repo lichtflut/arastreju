@@ -15,19 +15,29 @@
  */
 package org.arastreju.sge.spi.uow;
 
-import org.arastreju.sge.spi.tx.TxListener;
-
 /**
  * <p>
- *  Represents a unit of work to be done during a transaction.
+ *  Abstract base for transaction bound Units of Work.
  * </p>
  *
  * <p>
- *  Created Feb. 14, 2013
+ *  Created Feb. 24, 2013
  * </p>
  *
  * @author Oliver Tigges
  */
-public interface UnitOfWork extends TxListener {
+public abstract class AbstractUnitOfWork implements UnitOfWork {
+
+    @Override
+    public void onBeforeCommit() {
+    }
+
+    @Override
+    public void onAfterCommit() {
+    }
+
+    @Override
+    public void onRollback() {
+    }
 
 }

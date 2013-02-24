@@ -81,7 +81,7 @@ public interface GraphDataConnection {
      * Get the provider for transactions.
      * @return The transaction provider.
      */
-    TxProvider getTxProvider();
+    TxProvider createTxProvider(WorkingContext ctx);
 
     // ----------------------------------------------------
 

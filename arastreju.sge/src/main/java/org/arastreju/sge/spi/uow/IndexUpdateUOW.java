@@ -21,6 +21,8 @@ import org.arastreju.sge.model.ResourceID;
 import org.arastreju.sge.model.Statement;
 import org.arastreju.sge.model.nodes.ResourceNode;
 import org.arastreju.sge.spi.AssociationListener;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -40,7 +42,9 @@ import java.util.Set;
  *
  * @author Oliver Tigges
  */
-public class IndexUpdateUOW implements UnitOfWork, AssociationListener {
+public class IndexUpdateUOW extends AbstractUnitOfWork implements AssociationListener {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(IndexUpdateUOW.class);
 
     private final Set<ResourceID> modified = new HashSet<ResourceID>();
 
@@ -76,14 +80,29 @@ public class IndexUpdateUOW implements UnitOfWork, AssociationListener {
         update(stmt.getSubject());
     }
 
-    // ----------------------------------------------------
+    // -- Tx Listener ---------------------------------------
 
     @Override
-    public void finish() {
+    public void onBeforeCommit() {
+        LOGGER.debug("On Before Commit.");
         for (ResourceID rid : modified) {
             update(rid);
         }
+        modified.clear();
     }
+
+    @Override
+    public void onAfterCommit() {
+        LOGGER.debug("On After Commit.");
+    }
+
+    @Override
+    public void onRollback() {
+        LOGGER.debug("On Rollback");
+        modified.clear();
+    }
+
+    // ----------------------------------------------------
 
     private void update(ResourceID rid) {
         ResourceNode node = rid.asResource();

@@ -21,6 +21,7 @@ import org.arastreju.sge.index.IndexUpdator;
 import org.arastreju.sge.model.Statement;
 import org.arastreju.sge.model.associations.AttachedAssociationKeeper;
 import org.arastreju.sge.naming.QualifiedName;
+import org.arastreju.sge.spi.tx.BoundTransactionControl;
 import org.arastreju.sge.spi.tx.TxProvider;
 
 /**
@@ -121,6 +122,12 @@ public interface WorkingContext extends ConversationContext {
      * Close this context and clear all registered resources.
      */
     void close();
+
+    /**
+     * Begin a new Unit of Work.
+     * @param tx The transaction for this UoW.
+     */
+    void beginUnitOfWork(BoundTransactionControl tx);
 
     /**
      * Called when a resource has been modified by another conversation context with same graph data connection.

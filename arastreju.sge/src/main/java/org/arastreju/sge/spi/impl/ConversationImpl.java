@@ -94,6 +94,28 @@ public class ConversationImpl implements Conversation {
     }
 
     @Override
+    public void attach(final ResourceNode resource) {
+        assertActive();
+        // 1st: check if node is already attached.
+        if (resource.isAttached()){
+            verifySameContext(resource);
+            return;
+        }
+        tx().doTransacted(new TxAction() {
+            public void execute() {
+                // 2nd: check if node for qualified name exists and has to be merged
+                final AssociationKeeper attachedKeeper = context.find(resource.getQualifiedName());
+                if (attachedKeeper != null) {
+                    merge(attachedKeeper, resource);
+                } else {
+                    // 3rd: if resource is really new, create a new Neo node.
+                    persist(resource);
+                }
+            }
+        }, context);
+    }
+
+    @Override
     public void detach(final ResourceNode node) {
         assertActive();
         AssocKeeperAccess.getInstance().setAssociationKeeper(
@@ -153,28 +175,6 @@ public class ConversationImpl implements Conversation {
             }
         }, context);
 	}
-
-    @Override
-    public void attach(final ResourceNode resource) {
-        assertActive();
-        // 1st: check if node is already attached.
-        if (resource.isAttached()){
-            verifySameContext(resource);
-            return;
-        }
-        tx().doTransacted(new TxAction() {
-            public void execute() {
-                // 2nd: check if node for qualified name exists and has to be merged
-                final AssociationKeeper attachedKeeper = context.find(resource.getQualifiedName());
-                if (attachedKeeper != null) {
-                    merge(attachedKeeper, resource);
-                } else {
-                    // 3rd: if resource is really new, create a new Neo node.
-                    persist(resource);
-                }
-            }
-        }, context);
-    }
 
 	@Override
 	public void detach(final SemanticGraph graph) {

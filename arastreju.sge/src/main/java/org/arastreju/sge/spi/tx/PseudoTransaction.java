@@ -30,25 +30,30 @@ import org.arastreju.sge.spi.tx.AbstractTransactionControl;
  */
 public class PseudoTransaction extends AbstractTransactionControl {
 
-	@Override
-	public void success() {
-	}
+    private boolean active = true;
 
-	@Override
-	public void fail() {
-	}
+    // ----------------------------------------------------
 
-	@Override
-	public void finish() {
-	}
-	
 	@Override
 	public void flush() {
 	}
 
 	@Override
 	public boolean isActive() {
-		return true;
+		return active;
 	}
+
+    @Override
+    protected void onSuccess() {
+    }
+
+    @Override
+    protected void onFail() {
+    }
+
+    @Override
+    protected void onFinish() {
+        active = false;
+    }
 
 }

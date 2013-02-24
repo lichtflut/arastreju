@@ -93,4 +93,9 @@ public class SubTransaction implements BoundTransactionControl {
     public WorkingContext getContext() {
         return superTx.getContext();
     }
+
+    @Override
+    public BoundTransactionControl register(TxListener... listeners) {
+        return superTx.register(listeners);
+    }
 }
