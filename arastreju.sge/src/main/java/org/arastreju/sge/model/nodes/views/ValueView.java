@@ -15,16 +15,16 @@
  */
 package org.arastreju.sge.model.nodes.views;
 
+import org.arastreju.sge.model.ElementaryDataType;
+import org.arastreju.sge.model.nodes.ResourceNode;
+import org.arastreju.sge.model.nodes.SNValue;
+import org.arastreju.sge.model.nodes.ValueNode;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Date;
 import java.util.Locale;
-
-import org.arastreju.sge.model.ElementaryDataType;
-import org.arastreju.sge.model.nodes.ResourceNode;
-import org.arastreju.sge.model.nodes.SNValue;
-import org.arastreju.sge.model.nodes.ValueNode;
 
 /**
  * <p>

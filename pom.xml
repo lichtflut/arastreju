@@ -11,6 +11,8 @@
 		<module>arastreju.sge</module>
 		<module>arastreju.mem</module>
 		<module>samples</module>
+        <module>spi</module>
+        <module>tck</module>
 	</modules>
 	<build>
 		<pluginManagement>

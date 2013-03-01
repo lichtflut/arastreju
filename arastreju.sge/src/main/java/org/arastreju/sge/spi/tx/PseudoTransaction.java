@@ -15,8 +15,6 @@
  */
 package org.arastreju.sge.spi.tx;
 
-import org.arastreju.sge.spi.tx.AbstractTransactionControl;
-
 /**
  * <p>
  * 	This pseudo implementation does not really work transactional.

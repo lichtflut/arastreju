@@ -15,16 +15,16 @@
  */
 package org.arastreju.sge.structure;
 
+import org.arastreju.sge.apriori.Aras;
+import org.arastreju.sge.model.Statement;
+import org.arastreju.sge.model.nodes.ResourceNode;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
-
-import org.arastreju.sge.apriori.Aras;
-import org.arastreju.sge.model.Statement;
-import org.arastreju.sge.model.nodes.ResourceNode;
 
 /**
  * <p>

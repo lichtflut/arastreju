@@ -65,5 +65,16 @@
 			<artifactId>arastreju.sge</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+        <dependency>
+            <groupId>org.arastreju</groupId>
+            <artifactId>arastreju-spi</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.arastreju</groupId>
+            <artifactId>arastreju-tck</artifactId>
+            <version>${project.version}</version>
+            <scope>test</scope>
+        </dependency>
 	</dependencies>
 </project>

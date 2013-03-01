@@ -15,10 +15,6 @@
  */
 package org.arastreju.sge.model.nodes.views;
 
-import java.io.Serializable;
-import java.util.Date;
-import java.util.Set;
-
 import org.arastreju.sge.SNOPS;
 import org.arastreju.sge.context.Context;
 import org.arastreju.sge.model.ResourceID;
@@ -28,6 +24,10 @@ import org.arastreju.sge.model.nodes.SNResource;
 import org.arastreju.sge.model.nodes.SemanticNode;
 import org.arastreju.sge.model.nodes.ValueNode;
 import org.arastreju.sge.naming.QualifiedName;
+
+import java.io.Serializable;
+import java.util.Date;
+import java.util.Set;
 
 import static org.arastreju.sge.SNOPS.associations;
 

@@ -16,8 +16,8 @@
 package org.arastreju.binding.memory;
 
 import org.arastreju.bindings.memory.storage.MemStorage;
-import org.arastreju.sge.spi.AbstractConversationTest;
 import org.arastreju.sge.spi.GraphDataStore;
+import org.arastreju.tck.AbstractConversationTest;
 
 /**
  * <p>

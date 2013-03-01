@@ -15,9 +15,8 @@
  */
 package org.arastreju.sge.model;
 
-import org.arastreju.sge.apriori.Aras;
-
 import de.lichtflut.infra.exceptions.NotYetSupportedException;
+import org.arastreju.sge.apriori.Aras;
 
 /**
  * <p>

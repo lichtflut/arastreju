@@ -15,6 +15,13 @@
  */
 package org.arastreju.sge.model;
 
+import org.arastreju.sge.SNOPS;
+import org.arastreju.sge.model.nodes.ResourceNode;
+import org.arastreju.sge.model.nodes.SemanticNode;
+import org.arastreju.sge.model.nodes.ValueNode;
+import org.arastreju.sge.naming.Namespace;
+import org.arastreju.sge.naming.SimpleNamespace;
+
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
@@ -22,13 +29,6 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.TreeSet;
-
-import org.arastreju.sge.SNOPS;
-import org.arastreju.sge.model.nodes.ResourceNode;
-import org.arastreju.sge.model.nodes.SemanticNode;
-import org.arastreju.sge.model.nodes.ValueNode;
-import org.arastreju.sge.naming.Namespace;
-import org.arastreju.sge.naming.SimpleNamespace;
 
 /**
  * <p>

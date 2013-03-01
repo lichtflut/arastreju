@@ -15,15 +15,15 @@
  */
 package org.arastreju.sge.traverse;
 
+import org.arastreju.sge.SNOPS;
+import org.arastreju.sge.model.ResourceID;
+import org.arastreju.sge.model.nodes.SemanticNode;
+
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
-
-import org.arastreju.sge.SNOPS;
-import org.arastreju.sge.model.ResourceID;
-import org.arastreju.sge.model.nodes.SemanticNode;
 
 /**
  * <p>

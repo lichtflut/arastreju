@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.arastreju.sge.spi;
+package org.arastreju.tck;
 
 import org.arastreju.sge.Conversation;
 import org.arastreju.sge.ConversationContext;
@@ -40,6 +40,8 @@ import org.arastreju.sge.model.nodes.views.SNText;
 import org.arastreju.sge.naming.QualifiedName;
 import org.arastreju.sge.query.Query;
 import org.arastreju.sge.query.QueryResult;
+import org.arastreju.sge.spi.GraphDataConnection;
+import org.arastreju.sge.spi.GraphDataStore;
 import org.arastreju.sge.spi.impl.ConversationImpl;
 import org.arastreju.sge.spi.impl.GraphDataConnectionImpl;
 import org.arastreju.sge.spi.impl.WorkingContextImpl;
@@ -531,6 +533,8 @@ public abstract class AbstractConversationTest {
         Assert.assertEquals(1, res.size());
 
     }
+
+
 
     @Test
     public void testMultipleContexts() {

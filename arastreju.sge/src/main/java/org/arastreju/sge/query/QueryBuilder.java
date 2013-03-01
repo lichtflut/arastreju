@@ -15,12 +15,12 @@
  */
 package org.arastreju.sge.query;
 
-import java.util.Stack;
-
 import org.arastreju.sge.model.ResourceID;
 import org.arastreju.sge.model.nodes.ResourceNode;
 import org.arastreju.sge.naming.QualifiedName;
 import org.arastreju.sge.query.exp.AbstractQueryExpression;
+
+import java.util.Stack;
 
 /**
  * <p>

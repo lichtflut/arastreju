@@ -15,8 +15,6 @@
  */
 package org.arastreju.sge.inferencing.implicit;
 
-import java.util.Set;
-
 import org.arastreju.sge.SNOPS;
 import org.arastreju.sge.apriori.Aras;
 import org.arastreju.sge.inferencing.Inferencer;
@@ -27,6 +25,8 @@ import org.arastreju.sge.model.nodes.views.SNProperty;
 import org.arastreju.sge.persistence.ResourceResolver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.Set;
 
 /**
  * <p>

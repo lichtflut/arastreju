@@ -19,8 +19,6 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.arastreju.sge.model.ResourceID;
-
 /**
  * <p>
  * 	A qualified name consists of a global namespace and a name.

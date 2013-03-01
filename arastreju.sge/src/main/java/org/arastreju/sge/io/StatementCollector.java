@@ -15,12 +15,12 @@
  */
 package org.arastreju.sge.io;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.arastreju.sge.model.DefaultSemanticGraph;
 import org.arastreju.sge.model.SemanticGraph;
 import org.arastreju.sge.model.Statement;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * <p>

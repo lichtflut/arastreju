@@ -18,11 +18,11 @@
  */
 package org.arastreju.sge.model.nodes.views;
 
-import java.math.BigDecimal;
-import java.math.BigInteger;
-
 import org.arastreju.sge.model.ElementaryDataType;
 import org.arastreju.sge.model.nodes.SNValue;
+
+import java.math.BigDecimal;
+import java.math.BigInteger;
 
 /**
  * Representation of a scalar value, i.e. a number without any direction or unit.

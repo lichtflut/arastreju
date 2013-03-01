@@ -15,9 +15,9 @@
  */
 package org.arastreju.sge.inferencing;
 
-import java.util.Set;
-
 import org.arastreju.sge.model.Statement;
+
+import java.util.Set;
 
 /**
  * <p>

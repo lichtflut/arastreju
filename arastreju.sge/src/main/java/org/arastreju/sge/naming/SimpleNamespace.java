@@ -16,9 +16,9 @@
 package org.arastreju.sge.naming;
 
 
-import java.io.Serializable;
-
 import de.lichtflut.infra.Infra;
+
+import java.io.Serializable;
 
 /**
  * <p>

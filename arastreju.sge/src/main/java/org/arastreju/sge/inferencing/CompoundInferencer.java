@@ -15,14 +15,13 @@
  */
 package org.arastreju.sge.inferencing;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Set;
-
+import de.lichtflut.infra.data.MultiMap;
 import org.arastreju.sge.model.ResourceID;
 import org.arastreju.sge.model.Statement;
 
-import de.lichtflut.infra.data.MultiMap;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Set;
 
 /**
  * <p>

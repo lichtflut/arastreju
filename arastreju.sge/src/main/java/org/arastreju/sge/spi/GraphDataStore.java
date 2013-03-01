@@ -17,6 +17,9 @@ package org.arastreju.sge.spi;
 
 import org.arastreju.sge.model.associations.AttachedAssociationKeeper;
 import org.arastreju.sge.naming.QualifiedName;
+import org.arastreju.sge.spi.AssociationResolver;
+import org.arastreju.sge.spi.AssociationWriter;
+import org.arastreju.sge.spi.WorkingContext;
 import org.arastreju.sge.spi.tx.TxProvider;
 
 /**

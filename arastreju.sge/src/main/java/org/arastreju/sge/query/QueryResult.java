@@ -15,9 +15,9 @@
  */
 package org.arastreju.sge.query;
 
-import java.util.List;
-
 import org.arastreju.sge.model.nodes.ResourceNode;
+
+import java.util.List;
 
 /**
  * <p>

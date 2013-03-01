@@ -15,11 +15,11 @@
  */
 package org.arastreju.sge.model.associations;
 
-import java.util.Set;
-
 import org.arastreju.sge.model.Statement;
 import org.arastreju.sge.model.nodes.ResourceNode;
 import org.arastreju.sge.spi.WorkingContext;
+
+import java.util.Set;
 
 /**
  * <p>

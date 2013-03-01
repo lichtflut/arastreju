@@ -15,9 +15,6 @@
  */
 package org.arastreju.sge.io;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-
 import org.arastreju.sge.model.ResourceID;
 import org.arastreju.sge.model.nodes.SemanticNode;
 import org.arastreju.sge.model.nodes.ValueNode;
@@ -27,6 +24,9 @@ import org.openrdf.model.Value;
 import org.openrdf.model.impl.BNodeImpl;
 import org.openrdf.model.impl.LiteralImpl;
 import org.openrdf.model.impl.URIImpl;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 
 /**
  * <p>

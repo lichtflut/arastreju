@@ -15,10 +15,7 @@
  */
 package org.arastreju.sge.index;
 
-import org.apache.lucene.search.TopDocs;
 import org.arastreju.sge.naming.QualifiedName;
-
-import java.util.Iterator;
 
 /**
  * <p>

@@ -15,10 +15,7 @@
  */
 package org.arastreju.sge.index;
 
-import java.util.regex.Matcher;
-
 import de.lichtflut.infra.exceptions.NotYetSupportedException;
-import org.arastreju.sge.naming.QualifiedName;
 import org.arastreju.sge.query.QueryBuilder;
 import org.arastreju.sge.query.QueryException;
 import org.arastreju.sge.query.QueryExpression;
@@ -27,6 +24,8 @@ import org.arastreju.sge.query.QueryParam;
 import org.arastreju.sge.query.QueryResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.regex.Matcher;
 
 /**
  * <p>

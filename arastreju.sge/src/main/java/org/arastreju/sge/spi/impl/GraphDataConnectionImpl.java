@@ -23,7 +23,6 @@ import org.arastreju.sge.spi.AssociationWriter;
 import org.arastreju.sge.spi.GraphDataConnection;
 import org.arastreju.sge.spi.GraphDataStore;
 import org.arastreju.sge.spi.WorkingContext;
-import org.arastreju.sge.spi.tx.BoundTxProvider;
 import org.arastreju.sge.spi.tx.TxProvider;
 
 import java.util.ArrayList;

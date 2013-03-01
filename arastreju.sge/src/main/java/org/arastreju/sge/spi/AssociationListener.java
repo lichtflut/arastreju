@@ -16,7 +16,6 @@
 package org.arastreju.sge.spi;
 
 import org.arastreju.sge.model.Statement;
-import org.arastreju.sge.model.associations.AttachedAssociationKeeper;
 
 /**
  * <p>

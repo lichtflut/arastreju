@@ -15,12 +15,12 @@
  */
 package org.arastreju.sge.query.exp;
 
-import java.util.Collections;
-import java.util.List;
-
 import org.arastreju.sge.query.QueryExpression;
 import org.arastreju.sge.query.QueryOperator;
 import org.arastreju.sge.query.QueryParam;
+
+import java.util.Collections;
+import java.util.List;
 
 /**
  * <p>

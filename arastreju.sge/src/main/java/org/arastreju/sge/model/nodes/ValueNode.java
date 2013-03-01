@@ -15,15 +15,15 @@
  */
 package org.arastreju.sge.model.nodes;
 
-import java.math.BigDecimal;
-import java.math.BigInteger;
-import java.util.Date;
-import java.util.Locale;
-
 import org.arastreju.sge.model.ElementaryDataType;
 import org.arastreju.sge.model.nodes.views.SNScalar;
 import org.arastreju.sge.model.nodes.views.SNText;
 import org.arastreju.sge.model.nodes.views.SNTimeSpec;
+
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.util.Date;
+import java.util.Locale;
 
 /**
  * <p>

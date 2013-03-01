@@ -15,11 +15,11 @@
  */
 package org.arastreju.sge.query.exp;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.arastreju.sge.query.QueryExpression;
 import org.arastreju.sge.query.QueryOperator;
+
+import java.util.ArrayList;
+import java.util.List;
 
 class GroupedQueryExpression extends AbstractQueryExpression {
 

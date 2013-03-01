@@ -15,12 +15,12 @@
  */
 package org.arastreju.sge.traverse;
 
+import org.arastreju.sge.model.ResourceID;
+import org.arastreju.sge.model.Statement;
+
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
-
-import org.arastreju.sge.model.ResourceID;
-import org.arastreju.sge.model.Statement;
 
 /**
  * <p>

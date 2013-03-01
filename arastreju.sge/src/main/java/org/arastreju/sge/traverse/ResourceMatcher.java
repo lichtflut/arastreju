@@ -15,11 +15,11 @@
  */
 package org.arastreju.sge.traverse;
 
-import java.util.Collection;
-
 import org.arastreju.sge.model.ResourceID;
 import org.arastreju.sge.model.nodes.ResourceNode;
 import org.arastreju.sge.model.nodes.SemanticNode;
+
+import java.util.Collection;
 
 /**
  * @author Oliver Tigges

@@ -15,17 +15,15 @@
  */
 package org.arastreju.sge.inferencing.implicit;
 
-import java.util.Set;
-
 import org.arastreju.sge.apriori.RDF;
-import org.arastreju.sge.eh.ArastrejuRuntimeException;
-import org.arastreju.sge.eh.ErrorCodes;
 import org.arastreju.sge.inferencing.Inferencer;
 import org.arastreju.sge.model.DetachedStatement;
 import org.arastreju.sge.model.Statement;
 import org.arastreju.sge.model.nodes.ResourceNode;
 import org.arastreju.sge.model.nodes.views.SNClass;
 import org.arastreju.sge.persistence.ResourceResolver;
+
+import java.util.Set;
 
 /**
  * <p>

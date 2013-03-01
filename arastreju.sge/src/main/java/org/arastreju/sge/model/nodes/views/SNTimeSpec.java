@@ -18,14 +18,13 @@
  */
 package org.arastreju.sge.model.nodes.views;
 
-import java.text.DateFormat;
-import java.util.Date;
-
+import de.lichtflut.infra.exceptions.NotYetSupportedException;
 import org.arastreju.sge.model.ElementaryDataType;
 import org.arastreju.sge.model.TimeMask;
 import org.arastreju.sge.model.nodes.SNValue;
 
-import de.lichtflut.infra.exceptions.NotYetSupportedException;
+import java.text.DateFormat;
+import java.util.Date;
 
 /**
  * Semantic node representing a time specification.

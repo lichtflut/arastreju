@@ -15,12 +15,12 @@
  */
 package org.arastreju.sge.model;
 
+import org.arastreju.sge.context.Context;
+import org.arastreju.sge.model.nodes.StatementOrigin;
+
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Date;
-
-import org.arastreju.sge.context.Context;
-import org.arastreju.sge.model.nodes.StatementOrigin;
 
 /**
  * <p>

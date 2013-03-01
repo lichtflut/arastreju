@@ -15,9 +15,9 @@
  */
 package org.arastreju.sge.query.reduce;
 
-import java.util.Iterator;
-
 import org.arastreju.sge.model.nodes.ResourceNode;
+
+import java.util.Iterator;
 
 /**
  * <p>

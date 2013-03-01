@@ -15,16 +15,15 @@
  */
 package org.arastreju.sge.io;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.util.Set;
-
+import de.lichtflut.infra.exceptions.NotYetImplementedException;
 import org.arastreju.sge.model.SemanticGraph;
 import org.arastreju.sge.model.Statement;
 import org.arastreju.sge.model.nodes.ResourceNode;
 
-import de.lichtflut.infra.exceptions.NotYetImplementedException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.Set;
 
 /**
  * <p>

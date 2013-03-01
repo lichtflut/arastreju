@@ -15,13 +15,13 @@
  */
 package org.arastreju.sge.model;
 
-import java.util.Collection;
-import java.util.Set;
-
 import org.arastreju.sge.io.StatementContainer;
 import org.arastreju.sge.model.nodes.ResourceNode;
 import org.arastreju.sge.model.nodes.SemanticNode;
 import org.arastreju.sge.naming.Namespace;
+
+import java.util.Collection;
+import java.util.Set;
 
 
 /**

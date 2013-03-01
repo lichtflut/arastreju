@@ -15,15 +15,15 @@
  */
 package org.arastreju.sge.traverse;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import org.arastreju.sge.SNOPS;
 import org.arastreju.sge.model.DefaultSemanticGraph;
 import org.arastreju.sge.model.SemanticGraph;
 import org.arastreju.sge.model.Statement;
 import org.arastreju.sge.model.nodes.ResourceNode;
 import org.arastreju.sge.model.nodes.SemanticNode;
+
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * <p>

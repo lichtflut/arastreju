@@ -16,7 +16,6 @@
 package org.arastreju.sge.config;
 
 import org.arastreju.sge.context.VirtualDomain;
-import org.arastreju.sge.model.SimpleResourceID;
 
 /**
  * <p>

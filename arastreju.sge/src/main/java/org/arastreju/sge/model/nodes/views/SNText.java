@@ -15,10 +15,10 @@
  */
 package org.arastreju.sge.model.nodes.views;
 
-import java.util.Locale;
-
 import org.arastreju.sge.model.ElementaryDataType;
 import org.arastreju.sge.model.nodes.SNValue;
+
+import java.util.Locale;
 
 /**
  * <p>

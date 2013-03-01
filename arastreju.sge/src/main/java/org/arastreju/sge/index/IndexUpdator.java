@@ -15,7 +15,6 @@
  */
 package org.arastreju.sge.index;
 
-import org.arastreju.sge.model.Statement;
 import org.arastreju.sge.model.nodes.ResourceNode;
 import org.arastreju.sge.naming.QualifiedName;
 

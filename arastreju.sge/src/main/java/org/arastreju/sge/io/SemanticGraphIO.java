@@ -15,11 +15,11 @@
  */
 package org.arastreju.sge.io;
 
+import org.arastreju.sge.model.SemanticGraph;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-
-import org.arastreju.sge.model.SemanticGraph;
 
 /**
  * <p>

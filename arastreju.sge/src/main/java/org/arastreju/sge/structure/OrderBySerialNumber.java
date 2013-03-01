@@ -15,12 +15,12 @@
  */
 package org.arastreju.sge.structure;
 
-import java.util.Comparator;
-
 import org.arastreju.sge.SNOPS;
 import org.arastreju.sge.apriori.Aras;
 import org.arastreju.sge.model.nodes.ResourceNode;
 import org.arastreju.sge.model.nodes.SemanticNode;
+
+import java.util.Comparator;
 
 /**
  * <p>

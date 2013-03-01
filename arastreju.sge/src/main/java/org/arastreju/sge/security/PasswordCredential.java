@@ -15,9 +15,8 @@
  */
 package org.arastreju.sge.security;
 
-import org.arastreju.sge.model.nodes.SemanticNode;
-
 import de.lichtflut.infra.Infra;
+import org.arastreju.sge.model.nodes.SemanticNode;
 
 /**
  * <p>

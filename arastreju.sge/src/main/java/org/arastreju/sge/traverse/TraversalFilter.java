@@ -15,9 +15,9 @@
  */
 package org.arastreju.sge.traverse;
 
-import java.io.Serializable;
-
 import org.arastreju.sge.model.Statement;
+
+import java.io.Serializable;
 
 /**
  * <p>

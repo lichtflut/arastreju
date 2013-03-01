@@ -15,11 +15,11 @@
  */
 package org.arastreju.sge.structure;
 
-import java.util.Collections;
-import java.util.List;
-
 import org.arastreju.sge.model.nodes.ResourceNode;
 import org.arastreju.sge.model.nodes.ValueNode;
+
+import java.util.Collections;
+import java.util.List;
 
 /**
  * <p>

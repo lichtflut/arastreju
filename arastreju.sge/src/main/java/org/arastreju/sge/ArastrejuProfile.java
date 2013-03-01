@@ -15,6 +15,11 @@
  */
 package org.arastreju.sge;
 
+import org.arastreju.sge.eh.ArastrejuRuntimeException;
+import org.arastreju.sge.eh.ErrorCodes;
+import org.arastreju.sge.spi.GateLifecycleListener;
+import org.arastreju.sge.spi.ProfileCloseListener;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -24,11 +29,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
-
-import org.arastreju.sge.eh.ArastrejuRuntimeException;
-import org.arastreju.sge.eh.ErrorCodes;
-import org.arastreju.sge.spi.GateLifecycleListener;
-import org.arastreju.sge.spi.ProfileCloseListener;
 
 /**
  * <p>

@@ -15,11 +15,11 @@
  */
 package org.arastreju.sge.query.reduce;
 
-import java.util.Iterator;
-
 import org.arastreju.sge.model.nodes.ResourceNode;
 import org.arastreju.sge.query.Query;
 import org.arastreju.sge.query.QueryResult;
+
+import java.util.Iterator;
 
 /**
  * <p>

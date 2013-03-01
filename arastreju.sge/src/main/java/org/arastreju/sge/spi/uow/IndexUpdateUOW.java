@@ -26,9 +26,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 /**
  * <p>
@@ -45,8 +43,6 @@ import java.util.Set;
 public class IndexUpdateUOW extends AbstractUnitOfWork implements AssociationListener {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(IndexUpdateUOW.class);
-
-    private final Set<ResourceID> modified = new HashSet<ResourceID>();
 
     private final List<Inferencer> inferencers = new ArrayList<Inferencer>();
 
@@ -69,14 +65,12 @@ public class IndexUpdateUOW extends AbstractUnitOfWork implements AssociationLis
 
     @Override
     public void onCreate(Statement stmt) {
-        //modified.add(stmt.getSubject());
         update(stmt.getSubject());
 
     }
 
     @Override
     public void onRemove(Statement stmt) {
-        //modified.add(stmt.getSubject());
         update(stmt.getSubject());
     }
 
@@ -85,10 +79,7 @@ public class IndexUpdateUOW extends AbstractUnitOfWork implements AssociationLis
     @Override
     public void onBeforeCommit() {
         LOGGER.debug("On Before Commit.");
-        for (ResourceID rid : modified) {
-            update(rid);
-        }
-        modified.clear();
+        // TODO: Commit index
     }
 
     @Override
@@ -99,7 +90,6 @@ public class IndexUpdateUOW extends AbstractUnitOfWork implements AssociationLis
     @Override
     public void onRollback() {
         LOGGER.debug("On Rollback");
-        modified.clear();
     }
 
     // ----------------------------------------------------
@@ -107,7 +97,7 @@ public class IndexUpdateUOW extends AbstractUnitOfWork implements AssociationLis
     private void update(ResourceID rid) {
         ResourceNode node = rid.asResource();
         if (!node.isAttached()) {
-            throw new IllegalStateException("Didn't expect a non attached node here: " + modified);
+            throw new IllegalStateException("Didn't expect a non attached node here: " + node);
         }
         indexUpdator.index(node);
     }

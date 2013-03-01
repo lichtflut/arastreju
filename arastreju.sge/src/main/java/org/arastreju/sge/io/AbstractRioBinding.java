@@ -15,10 +15,6 @@
  */
 package org.arastreju.sge.io;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-
 import org.arastreju.sge.eh.ErrorCodes;
 import org.arastreju.sge.model.SemanticGraph;
 import org.arastreju.sge.model.Statement;
@@ -30,6 +26,10 @@ import org.openrdf.rio.RDFWriter;
 import org.openrdf.rio.RDFWriterFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 /**
  * <p>
