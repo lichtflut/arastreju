@@ -4,20 +4,15 @@ import static org.arastreju.sge.SNOPS.associate;
 import static org.arastreju.sge.SNOPS.id;
 import static org.arastreju.sge.SNOPS.resource;
 
-
 import org.arastreju.sge.Arastreju;
 import org.arastreju.sge.ArastrejuGate;
 import org.arastreju.sge.Conversation;
-import org.arastreju.sge.apriori.Aras;
 import org.arastreju.sge.model.ResourceID;
 import org.arastreju.sge.model.Statement;
 import org.arastreju.sge.model.nodes.ResourceNode;
 import org.arastreju.sge.naming.QualifiedName;
 import org.arastreju.sge.query.Query;
 import org.arastreju.sge.query.QueryResult;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 
 /**
  * <p>
@@ -33,6 +28,7 @@ import org.slf4j.LoggerFactory;
 public class IndexingSample {
 	private QualifiedName RESOURCE_URI_ALICE = new QualifiedName("http://example.org/alice");
 	private QualifiedName RESOURCE_URI_BOB = new QualifiedName("http://example.org/bob");
+	private QualifiedName RESOURCE_URI_EVE = new QualifiedName("http://example.org/eve");
 	private QualifiedName RESOURCE_URI_KNOWS = new QualifiedName("http://example.org/knows");
 
 	private final Arastreju aras;
@@ -50,10 +46,21 @@ public class IndexingSample {
 
 		/* search for everyone who knows bob */
 		Query query = conv.createQuery().addField(RESOURCE_URI_KNOWS.toURI(), RESOURCE_URI_BOB.toURI());
-        QueryResult result = query.getResult();
+		QueryResult result = query.getResult();
 
-        /* in this case we know it's only alice, so we can use .getSingleNode() */
-        System.out.println("found in index: " + result.getSingleNode().toURI());
+		/* in this case we know it's only alice, so we can use .getSingleNode() */
+		System.out.println("found in index: " + result.getSingleNode().toURI());
+
+		/* introduce bob to eve, too */
+		createAssociation(resource(id(RESOURCE_URI_EVE)), id(RESOURCE_URI_KNOWS), id(RESOURCE_URI_BOB));
+
+		/* search again */
+		result = query.getResult();
+
+		/* now we should find two, alice and eve */
+		for (ResourceNode node : result) {
+			System.out.println("found in index: " + node.toURI());
+		}
 	}
 
 	private void createAssociation(ResourceNode subject, ResourceID predicate, ResourceID object) {
@@ -67,8 +74,8 @@ public class IndexingSample {
 	}
 
 	public static void main(String[] args) {
-	    IndexingSample smp = new IndexingSample();
-	    smp.sample();
-	    smp.tearDown();
-    }
+		IndexingSample smp = new IndexingSample();
+		smp.sample();
+		smp.tearDown();
+	}
 }
