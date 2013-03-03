@@ -20,8 +20,7 @@ import org.arastreju.sge.ArastrejuGate;
 import org.arastreju.sge.Conversation;
 import org.arastreju.sge.model.nodes.ResourceNode;
 import org.arastreju.sge.model.nodes.SNResource;
-
-import static org.arastreju.sge.SNOPS.*;
+import org.arastreju.sge.naming.QualifiedName;
 
 /**
  * <p>
@@ -35,28 +34,19 @@ import static org.arastreju.sge.SNOPS.*;
  * @author Timo Buhrmester
  */
 public class NodeSample {
-	private static String RESOURCE_URI = "http://example.org/my_resource";
+	private final QualifiedName RESOURCE_URI = new QualifiedName("http://example.org/my_resource");
 
-	private static Arastreju aras;
-	private static ArastrejuGate gate;
-	private static Conversation conv;
 
-	private static void setUp() {
-		aras = Arastreju.getInstance();
-		gate = aras.openMasterGate();
-		conv = gate.startConversation();
-	}
+	public void sample() {
+		/* create instance and open master gate */
+		Arastreju aras = Arastreju.getInstance();
+		ArastrejuGate gate = aras.openMasterGate();
 
-	private static void tearDown() {
-		conv.close();
-		gate.close();
-	}
-
-	public static void main(String[] args) {
-		setUp();
+		/* create conversation for manipulating a graph */
+		Conversation conv = gate.startConversation();
 
 		/* create a node */
-		ResourceNode node = new SNResource(qualify(RESOURCE_URI));
+		ResourceNode node = new SNResource(RESOURCE_URI);
 
 		/* attach node, making it persist in the storage back-end */
 		conv.attach(node);
@@ -64,6 +54,11 @@ public class NodeSample {
 		/* detach the node again */
 		conv.detach(node);
 
-		tearDown();
+		conv.close();
+		gate.close();
+	}
+
+	public static void main(String[] args) {
+		new NodeSample().sample();
 	}
 }

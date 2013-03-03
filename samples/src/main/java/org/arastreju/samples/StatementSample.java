@@ -21,6 +21,7 @@ import org.arastreju.sge.Conversation;
 import org.arastreju.sge.model.ResourceID;
 import org.arastreju.sge.model.Statement;
 import org.arastreju.sge.model.nodes.ResourceNode;
+import org.arastreju.sge.naming.QualifiedName;
 
 import static org.arastreju.sge.SNOPS.*;
 
@@ -36,32 +37,22 @@ import static org.arastreju.sge.SNOPS.*;
  * @author Timo Buhrmester
  */
 public class StatementSample {
-	private static String RESOURCE_URI_ALICE = "http://example.org/alice";
-	private static String RESOURCE_URI_BOB = "http://example.org/bob";
-	private static String RESOURCE_URI_KNOWS = "http://example.org/knows";
+	private QualifiedName RESOURCE_URI_ALICE = new QualifiedName("http://example.org/alice");
+	private QualifiedName RESOURCE_URI_BOB = new QualifiedName("http://example.org/bob");
+	private QualifiedName RESOURCE_URI_KNOWS = new QualifiedName("http://example.org/knows");
 
-	private static Arastreju aras;
-	private static ArastrejuGate gate;
-	private static Conversation conv;
+	public void sample() {
+		/* create instance and open master gate */
+		Arastreju aras = Arastreju.getInstance();
+		ArastrejuGate gate = aras.openMasterGate();
 
-	private static void setUp() {
-		aras = Arastreju.getInstance();
-		gate = aras.openMasterGate();
-		conv = gate.startConversation();
-	}
-
-	private static void tearDown() {
-		conv.close();
-		gate.close();
-	}
-
-	public static void main(String[] args) {
-		setUp();
+		/* create conversation for manipulating a graph */
+		Conversation conv = gate.startConversation();
 
 		/* create a new statement "alice talks_to bob" */
-		ResourceNode subject = resource(id(qualify(RESOURCE_URI_ALICE)));
-		ResourceID predicate = id(qualify(RESOURCE_URI_KNOWS));
-		ResourceID object = id(qualify(RESOURCE_URI_BOB));
+		ResourceNode subject = resource(id(RESOURCE_URI_ALICE));
+		ResourceID predicate = id(RESOURCE_URI_KNOWS);
+		ResourceID object = id(RESOURCE_URI_BOB);
 
 		Statement stmt = associate(subject, predicate, object);
 
@@ -71,6 +62,11 @@ public class StatementSample {
 		/* detach again if you want */
 		conv.removeStatement(stmt);
 
-		tearDown();
+		conv.close();
+		gate.close();
 	}
+
+	public static void main(String[] args) {
+	    new StatementSample().sample();
+    }
 }
