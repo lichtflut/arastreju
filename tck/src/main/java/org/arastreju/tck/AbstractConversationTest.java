@@ -76,12 +76,12 @@ import static org.arastreju.sge.SNOPS.remove;
  */
 public abstract class AbstractConversationTest {
 
-    private final QualifiedName qnVehicle = new QualifiedName("http://q#", "Verhicle");
-    private final QualifiedName qnCar = new QualifiedName("http://q#", "Car");
-    private final QualifiedName qnBike = new QualifiedName("http://q#", "Bike");
-    private final QualifiedName qnEmployedBy = new QualifiedName("http://q#", "employedBy");
-    private final QualifiedName qnHasEmployees = new QualifiedName("http://q#", "hasEmployees");
-    private final QualifiedName qnKnows = new QualifiedName("http://q#", "knows");
+    protected final QualifiedName qnVehicle = new QualifiedName("http://q#", "Verhicle");
+    protected final QualifiedName qnCar = new QualifiedName("http://q#", "Car");
+    protected final QualifiedName qnBike = new QualifiedName("http://q#", "Bike");
+    protected final QualifiedName qnEmployedBy = new QualifiedName("http://q#", "employedBy");
+    protected final QualifiedName qnHasEmployees = new QualifiedName("http://q#", "hasEmployees");
+    protected final QualifiedName qnKnows = new QualifiedName("http://q#", "knows");
 
     // ----------------------------------------------------
 
