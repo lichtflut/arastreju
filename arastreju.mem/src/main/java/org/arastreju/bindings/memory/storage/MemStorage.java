@@ -1,10 +1,28 @@
+/*
+ * Copyright (C) 2013 lichtflut Forschungs- und Entwicklungsgesellschaft mbH
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package org.arastreju.bindings.memory.storage;
 
 import org.arastreju.bindings.memory.tx.MemTransactionProvider;
 import org.arastreju.sge.model.associations.AttachedAssociationKeeper;
 import org.arastreju.sge.naming.QualifiedName;
-import org.arastreju.sge.persistence.TxProvider;
+import org.arastreju.sge.spi.AssociationResolver;
+import org.arastreju.sge.spi.AssociationWriter;
 import org.arastreju.sge.spi.GraphDataStore;
+import org.arastreju.sge.spi.WorkingContext;
+import org.arastreju.sge.spi.tx.TxProvider;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -49,7 +67,28 @@ public class MemStorage implements GraphDataStore {
     }
 
     @Override
-    public TxProvider getTxProvider() {
+    public AssociationResolver createAssociationResolver(WorkingContext ctx) {
+        return new MemAssociationResolver(ctx, this);
+    }
+
+    @Override
+    public AssociationWriter crateAssociationWriter(WorkingContext ctx) {
+        return new MemAssociationWriter(ctx, this);
+    }
+
+    @Override
+    public TxProvider createTxProvider(WorkingContext ctx) {
         return new MemTransactionProvider();
+    }
+
+    @Override
+    public void close() {
+        store.clear();
+    }
+
+    // ----------------------------------------------------
+
+    StoredResource getStoreEntry(QualifiedName qn) {
+        return store.get(qn);
     }
 }

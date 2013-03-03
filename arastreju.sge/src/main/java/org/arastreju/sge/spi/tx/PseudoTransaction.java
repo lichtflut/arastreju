@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 lichtflut Forschungs- und Entwicklungsgesellschaft mbH
+ * Copyright (C) 2013 lichtflut Forschungs- und Entwicklungsgesellschaft mbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.arastreju.sge.persistence;
+package org.arastreju.sge.spi.tx;
 
 /**
  * <p>
@@ -26,56 +26,32 @@ package org.arastreju.sge.persistence;
  *
  * @author Raphael Esterle
  */
-public class PseudoTransaction implements TransactionControl {
+public class PseudoTransaction extends AbstractTransactionControl {
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void success() {
-	}
+    private boolean active = true;
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void fail() {
-	}
+    // ----------------------------------------------------
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void finish() {
-	}
-	
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void commit() {
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void rollback() {
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public void flush() {
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public boolean isActive() {
-		return true;
+		return active;
 	}
+
+    @Override
+    protected void onSuccess() {
+    }
+
+    @Override
+    protected void onFail() {
+    }
+
+    @Override
+    protected void onFinish() {
+        active = false;
+    }
 
 }

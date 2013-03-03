@@ -1,35 +1,43 @@
 /*
- * Copyright (C) 2012 lichtflut Forschungs- und Entwicklungsgesellschaft mbH
+ * Copyright (C) 2013 lichtflut Forschungs- und Entwicklungsgesellschaft mbH
  *
- * The Arastreju-Neo4j binding is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ *         http://www.apache.org/licenses/LICENSE-2.0
  *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
-package org.arastreju.sge.spi.abstracts;
+package org.arastreju.sge.spi.impl;
 
 import org.arastreju.sge.ConversationContext;
 import org.arastreju.sge.context.Context;
 import org.arastreju.sge.index.ArasIndexerImpl;
 import org.arastreju.sge.index.IndexSearcher;
 import org.arastreju.sge.index.IndexUpdator;
+import org.arastreju.sge.inferencing.implicit.InverseOfInferencer;
 import org.arastreju.sge.inferencing.implicit.SubClassOfInferencer;
 import org.arastreju.sge.inferencing.implicit.TypeInferencer;
 import org.arastreju.sge.model.Statement;
 import org.arastreju.sge.model.associations.AttachedAssociationKeeper;
 import org.arastreju.sge.naming.QualifiedName;
+import org.arastreju.sge.persistence.ResourceResolver;
 import org.arastreju.sge.persistence.TxAction;
-import org.arastreju.sge.persistence.TxProvider;
 import org.arastreju.sge.persistence.TxResultAction;
+import org.arastreju.sge.spi.AssociationResolver;
 import org.arastreju.sge.spi.GraphDataConnection;
+import org.arastreju.sge.spi.WorkingContext;
+import org.arastreju.sge.spi.tx.BoundTransactionControl;
+import org.arastreju.sge.spi.tx.TxProvider;
+import org.arastreju.sge.spi.uow.AssociationManager;
+import org.arastreju.sge.spi.uow.IndexUpdateUOW;
+import org.arastreju.sge.spi.uow.InferencingInterceptor;
+import org.arastreju.sge.spi.uow.OpenConversationNotifier;
 import org.arastreju.sge.spi.uow.ResourceResolverImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -51,11 +59,11 @@ import java.util.Set;
  *
  * @author Oliver Tigges
  */
-public abstract class AbstractConversationContext implements WorkingContext {
+public class WorkingContextImpl implements WorkingContext {
 
 	public static final Context[] NO_CTX = new Context[0];
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(AbstractConversationContext.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(WorkingContextImpl.class);
 
 	private static long ID_GEN = 0;
 
@@ -65,9 +73,15 @@ public abstract class AbstractConversationContext implements WorkingContext {
 
     private final GraphDataConnection connection;
 
+    private final AssociationResolver associationResolver;
+
     private final Map<QualifiedName, AttachedAssociationKeeper> register = new HashMap<QualifiedName, AttachedAssociationKeeper>();
 
     private final Set<Context> readContexts = new HashSet<Context>();
+
+    private final TxProvider txProvider;
+
+    private AssociationManager associationManager;
 
 	private Context primaryContext;
 
@@ -78,20 +92,13 @@ public abstract class AbstractConversationContext implements WorkingContext {
 	/**
 	 * Creates a new Working Context.
 	 */
-	public AbstractConversationContext(GraphDataConnection connection) {
-		LOGGER.debug("New Conversation Context startet. " + ctxId);
+	public WorkingContextImpl(GraphDataConnection connection) {
+		LOGGER.debug("New conversation context {} started.", ctxId);
         this.connection = connection;
+        this.associationResolver = connection.createAssociationResolver(this);
+        this.txProvider = connection.createTxProvider(this);
         connection.register(this);
 	}
-
-    /**
-     * Creates a new Working Context.
-     */
-    public AbstractConversationContext(GraphDataConnection connection, Context primaryContext, Context... readContexts) {
-        this(connection);
-        setPrimaryContext(primaryContext);
-        setReadContexts(readContexts);
-    }
 
 	// ----------------------------------------------------
 
@@ -129,7 +136,7 @@ public abstract class AbstractConversationContext implements WorkingContext {
             public AttachedAssociationKeeper execute() {
                 return connection.create(qn);
             }
-        });
+        }, this);
         attach(qn, keeper);
         return keeper;
     }
@@ -143,7 +150,7 @@ public abstract class AbstractConversationContext implements WorkingContext {
             public void execute() {
                 connection.remove(qn);
             }
-        });
+        }, this);
 
     }
 
@@ -167,15 +174,25 @@ public abstract class AbstractConversationContext implements WorkingContext {
 
     // ----------------------------------------------------
 
+    /**
+     * Resolve the associations of given association keeper.
+     * @param keeper The association keeper to be resolved.
+     */
+    @Override
+    public void resolveAssociations(AttachedAssociationKeeper keeper) {
+        assertActive();
+        associationResolver.resolveAssociations(keeper);
+    }
+
     @Override
     public void addAssociation(final AttachedAssociationKeeper keeper, final Statement stmt) {
         assertActive();
         getTxProvider().doTransacted(new TxAction() {
             @Override
             public void execute() {
-                getAssociationManager().addAssociation(keeper, stmt);
+                associationManager.addAssociation(keeper, stmt);
             }
-        });
+        }, this);
 
     }
 
@@ -185,18 +202,30 @@ public abstract class AbstractConversationContext implements WorkingContext {
         getTxProvider().doTransacted(new TxAction() {
             @Override
             public void execute() {
-                getAssociationManager().removeAssociation(keeper, stmt);
+                associationManager.removeAssociation(keeper, stmt);
             }
-        });
+        }, this);
         return true;
     }
 
     // ----------------------------------------------------
 
     @Override
-    public TxProvider getTxProvider() {
-        return connection.getTxProvider();
+    public void onModification(QualifiedName qualifiedName, WorkingContext otherContext) {
+        AttachedAssociationKeeper existing = lookup(qualifiedName);
+        if (existing != null) {
+            LOGGER.info("Concurrent change on node {} in other context {}.", qualifiedName, otherContext);
+            existing.notifyChanged();
+        }
     }
+
+    @Override
+    public void beginUnitOfWork(BoundTransactionControl tx) {
+        LOGGER.info("Starting new Unit of Work in conversation {}.", this);
+        this.associationManager = createAssociationManager(tx);
+    }
+
+    // ----------------------------------------------------
 
 	/**
 	 * Clear the cache.
@@ -216,7 +245,7 @@ public abstract class AbstractConversationContext implements WorkingContext {
 			clear();
             onClose();
 			active = false;
-			LOGGER.info("Conversation will be closed. " + ctxId);
+			LOGGER.info("Conversation '{}' will be closed.", ctxId);
 		}
 	}
 
@@ -224,13 +253,11 @@ public abstract class AbstractConversationContext implements WorkingContext {
 		return active;
 	}
 
+    // ----------------------------------------------------
+
     @Override
-    public void onModification(QualifiedName qualifiedName, WorkingContext otherContext) {
-        AttachedAssociationKeeper existing = lookup(qualifiedName);
-        if (existing != null) {
-            LOGGER.info("Concurrent change on node {} in other context {}.", qualifiedName, otherContext);
-            existing.notifyChanged();
-        }
+    public TxProvider getTxProvider() {
+        return txProvider;
     }
 
     @Override
@@ -288,7 +315,7 @@ public abstract class AbstractConversationContext implements WorkingContext {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        AbstractConversationContext that = (AbstractConversationContext) o;
+        WorkingContextImpl that = (WorkingContextImpl) o;
         return ctxId == that.ctxId;
     }
 
@@ -303,8 +330,6 @@ public abstract class AbstractConversationContext implements WorkingContext {
     }
 
     // ----------------------------------------------------
-
-    protected abstract AssociationManager getAssociationManager ();
 
     protected GraphDataConnection getConnection() {
         return connection;
@@ -323,7 +348,7 @@ public abstract class AbstractConversationContext implements WorkingContext {
 
 	protected void assertActive() {
 		if (!active) {
-			LOGGER.warn("Conversation context already closed. " + ctxId);
+			LOGGER.warn("Conversation context already closed: {}", ctxId);
 			throw new IllegalStateException("ConversationContext already closed.");
 		}
 	}
@@ -332,8 +357,23 @@ public abstract class AbstractConversationContext implements WorkingContext {
 	protected void finalize() throws Throwable {
         super.finalize();
 		if (active) {
-			LOGGER.debug("Conversation context will be removed by GC, but has not been closed. " + ctxId);
+			LOGGER.debug("Conversation context will be removed by GC, but has not been closed: {}", ctxId);
 		}
 	}
+
+    // ----------------------------------------------------
+
+    private AssociationManager createAssociationManager(BoundTransactionControl tx) {
+        ResourceResolver resolver = new ResourceResolverImpl(this);
+        IndexUpdateUOW indexUpdateUOW = new IndexUpdateUOW(getIndexUpdator());
+        tx.register(indexUpdateUOW);
+
+        AssociationManager am = new AssociationManager(resolver, tx);
+        am.register(connection.createAssociationWriter(this));
+        am.register(indexUpdateUOW);
+        am.register(new InferencingInterceptor(am).add(new InverseOfInferencer(resolver)));
+        am.register(new OpenConversationNotifier(getConnection(), this));
+        return am;
+    }
 
 }

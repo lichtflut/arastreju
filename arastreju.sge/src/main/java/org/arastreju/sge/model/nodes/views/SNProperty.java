@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 lichtflut Forschungs- und Entwicklungsgesellschaft mbH
+ * Copyright (C) 2013 lichtflut Forschungs- und Entwicklungsgesellschaft mbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,9 +15,6 @@
  */
 package org.arastreju.sge.model.nodes.views;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import org.arastreju.sge.apriori.Aras;
 import org.arastreju.sge.apriori.Owl;
 import org.arastreju.sge.apriori.RDF;
@@ -28,6 +25,9 @@ import org.arastreju.sge.model.nodes.ResourceNode;
 import org.arastreju.sge.model.nodes.SNResource;
 import org.arastreju.sge.model.nodes.SemanticNode;
 import org.arastreju.sge.naming.QualifiedName;
+
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * <p>

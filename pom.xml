@@ -10,6 +10,9 @@
 	<modules>
 		<module>arastreju.sge</module>
 		<module>arastreju.mem</module>
+		<module>samples</module>
+        <module>spi</module>
+        <module>tck</module>
 	</modules>
 	<build>
 		<pluginManagement>
@@ -49,7 +52,7 @@
 						<exclude>.git/**</exclude>
 						<exclude>.idea/**</exclude>
 						<exclude>.settings/**</exclude>
-						<exclude>header.xml</exclude>
+						<exclude>**/*.xml</exclude>
 						<exclude>**/*.rdf</exclude>
 					</excludes>
 				</configuration>
@@ -165,7 +168,6 @@
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>4.5</version>
 		</dependency>
 	</dependencies>
 

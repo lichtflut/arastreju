@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 lichtflut Forschungs- und Entwicklungsgesellschaft mbH
+ * Copyright (C) 2013 lichtflut Forschungs- und Entwicklungsgesellschaft mbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,10 +15,10 @@
  */
 package org.arastreju.sge.model;
 
-import java.io.Serializable;
-
 import org.arastreju.sge.context.Context;
 import org.arastreju.sge.model.nodes.SemanticNode;
+
+import java.io.Serializable;
 
 /**
  * <p>

@@ -1,11 +1,29 @@
-package org.arastreju.sge.spi.abstracts;
+/*
+ * Copyright (C) 2013 lichtflut Forschungs- und Entwicklungsgesellschaft mbH
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package org.arastreju.sge.spi.impl;
 
 import org.arastreju.sge.index.IndexProvider;
 import org.arastreju.sge.model.associations.AttachedAssociationKeeper;
 import org.arastreju.sge.naming.QualifiedName;
-import org.arastreju.sge.persistence.TxProvider;
+import org.arastreju.sge.spi.AssociationResolver;
+import org.arastreju.sge.spi.AssociationWriter;
 import org.arastreju.sge.spi.GraphDataConnection;
 import org.arastreju.sge.spi.GraphDataStore;
+import org.arastreju.sge.spi.WorkingContext;
+import org.arastreju.sge.spi.tx.TxProvider;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -23,7 +41,7 @@ import java.util.Set;
  *
  * @author Oliver Tigges
  */
-public class DefaultGraphDataConnection implements GraphDataConnection {
+public class GraphDataConnectionImpl implements GraphDataConnection {
 
     private final Set<WorkingContext> openConversations = new HashSet<WorkingContext>();
 
@@ -38,7 +56,7 @@ public class DefaultGraphDataConnection implements GraphDataConnection {
      * @param store The physical store.
      * @param indexProvider The provider for indexes.
      */
-    public DefaultGraphDataConnection(GraphDataStore store, IndexProvider indexProvider) {
+    public GraphDataConnectionImpl(GraphDataStore store, IndexProvider indexProvider) {
         this.store = store;
         this.indexProvider = indexProvider;
     }
@@ -58,6 +76,18 @@ public class DefaultGraphDataConnection implements GraphDataConnection {
     @Override
     public void remove(QualifiedName qn) {
         store.remove(qn);
+    }
+
+    // ----------------------------------------------------
+
+    @Override
+    public AssociationResolver createAssociationResolver(WorkingContext ctx) {
+        return store.createAssociationResolver(ctx);
+    }
+
+    @Override
+    public AssociationWriter createAssociationWriter(WorkingContext ctx) {
+        return store.crateAssociationWriter(ctx);
     }
 
     // ----------------------------------------------------
@@ -102,17 +132,12 @@ public class DefaultGraphDataConnection implements GraphDataConnection {
     // ----------------------------------------------------
 
     @Override
-    public GraphDataStore getStore() {
-        return store;
-    }
-
-    @Override
     public IndexProvider getIndexProvider() {
         return indexProvider;
     }
 
     @Override
-    public TxProvider getTxProvider() {
-        return store.getTxProvider();
+    public TxProvider createTxProvider(WorkingContext ctx) {
+        return store.createTxProvider(ctx);
     }
 }

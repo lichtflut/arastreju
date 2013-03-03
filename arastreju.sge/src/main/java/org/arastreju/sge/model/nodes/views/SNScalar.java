@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 lichtflut Forschungs- und Entwicklungsgesellschaft mbH
+ * Copyright (C) 2013 lichtflut Forschungs- und Entwicklungsgesellschaft mbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,11 +18,11 @@
  */
 package org.arastreju.sge.model.nodes.views;
 
-import java.math.BigDecimal;
-import java.math.BigInteger;
-
 import org.arastreju.sge.model.ElementaryDataType;
 import org.arastreju.sge.model.nodes.SNValue;
+
+import java.math.BigDecimal;
+import java.math.BigInteger;
 
 /**
  * Representation of a scalar value, i.e. a number without any direction or unit.
