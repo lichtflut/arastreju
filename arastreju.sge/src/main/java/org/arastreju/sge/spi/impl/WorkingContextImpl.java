@@ -149,6 +149,7 @@ public class WorkingContextImpl implements WorkingContext {
             @Override
             public void execute() {
                 connection.remove(qn);
+                getIndexUpdator().remove(qn);
             }
         }, this);
 
