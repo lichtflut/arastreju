@@ -214,7 +214,7 @@ public class ConversationImpl implements Conversation {
 
 	@Override
 	public void close() {
-		context.clear();
+		context.close();
 	}
 
 	// ----------------------------------------------------
