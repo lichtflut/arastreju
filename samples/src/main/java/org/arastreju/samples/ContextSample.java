@@ -26,8 +26,6 @@ import org.arastreju.sge.naming.QualifiedName;
  * @author Timo Buhrmester
  */
 
-/*
- */
 public class ContextSample {
     private QualifiedName RESOURCE_URI_ALICE = new QualifiedName("http://example.org/alice");
     private QualifiedName RESOURCE_URI_AGE = new QualifiedName("http://example.org/isofage");
@@ -61,13 +59,15 @@ public class ContextSample {
 
         /* create statement "alice is of age 44", and add it using
          * alice's and bob's conversations */
-        Statement stmt = associate(resource(id(RESOURCE_URI_ALICE)), id(RESOURCE_URI_AGE), new SNScalar(44));
+        Statement stmt = associate(resource(id(RESOURCE_URI_ALICE)), id(RESOURCE_URI_AGE),
+                new SNScalar(44));
         aliceConv.addStatement(stmt);
         bobConv.addStatement(stmt);
 
         /* create statement "alice is of age 25" and add it using
          * dave's conversation */
-        stmt = associate(resource(id(RESOURCE_URI_ALICE)), id(RESOURCE_URI_AGE), new SNScalar(25));
+        stmt = associate(resource(id(RESOURCE_URI_ALICE)), id(RESOURCE_URI_AGE),
+                new SNScalar(25));
         daveConv.addStatement(stmt);
 
         /* return the ResourceNode for alice from her conversation,
