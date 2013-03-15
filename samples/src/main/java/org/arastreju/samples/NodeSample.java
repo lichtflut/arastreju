@@ -34,31 +34,30 @@ import org.arastreju.sge.naming.QualifiedName;
  * @author Timo Buhrmester
  */
 public class NodeSample {
-	private final QualifiedName RESOURCE_URI = new QualifiedName("http://example.org/my_resource");
+    private final QualifiedName RESOURCE_URI = new QualifiedName("http://example.org/my_resource");
 
+    public void sample() {
+        /* create instance and open master gate */
+        Arastreju aras = Arastreju.getInstance();
+        ArastrejuGate gate = aras.openMasterGate();
 
-	public void sample() {
-		/* create instance and open master gate */
-		Arastreju aras = Arastreju.getInstance();
-		ArastrejuGate gate = aras.openMasterGate();
+        /* create conversation for manipulating a graph */
+        Conversation conv = gate.startConversation();
 
-		/* create conversation for manipulating a graph */
-		Conversation conv = gate.startConversation();
+        /* create a node */
+        ResourceNode node = new SNResource(RESOURCE_URI);
 
-		/* create a node */
-		ResourceNode node = new SNResource(RESOURCE_URI);
+        /* attach node, making it persist in the storage back-end */
+        conv.attach(node);
 
-		/* attach node, making it persist in the storage back-end */
-		conv.attach(node);
+        /* detach the node again */
+        conv.detach(node);
 
-		/* detach the node again */
-		conv.detach(node);
+        conv.close();
+        gate.close();
+    }
 
-		conv.close();
-		gate.close();
-	}
-
-	public static void main(String[] args) {
-		new NodeSample().sample();
-	}
+    public static void main(String[] args) {
+        new NodeSample().sample();
+    }
 }

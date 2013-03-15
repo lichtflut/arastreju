@@ -37,36 +37,36 @@ import static org.arastreju.sge.SNOPS.*;
  * @author Timo Buhrmester
  */
 public class StatementSample {
-	private QualifiedName RESOURCE_URI_ALICE = new QualifiedName("http://example.org/alice");
-	private QualifiedName RESOURCE_URI_BOB = new QualifiedName("http://example.org/bob");
-	private QualifiedName RESOURCE_URI_KNOWS = new QualifiedName("http://example.org/knows");
+    private QualifiedName RESOURCE_URI_ALICE = new QualifiedName("http://example.org/alice");
+    private QualifiedName RESOURCE_URI_BOB = new QualifiedName("http://example.org/bob");
+    private QualifiedName RESOURCE_URI_KNOWS = new QualifiedName("http://example.org/knows");
 
-	public void sample() {
-		/* create instance and open master gate */
-		Arastreju aras = Arastreju.getInstance();
-		ArastrejuGate gate = aras.openMasterGate();
+    public void sample() {
+        /* create instance and open master gate */
+        Arastreju aras = Arastreju.getInstance();
+        ArastrejuGate gate = aras.openMasterGate();
 
-		/* create conversation for manipulating a graph */
-		Conversation conv = gate.startConversation();
+        /* create conversation for manipulating a graph */
+        Conversation conv = gate.startConversation();
 
-		/* create a new statement "alice talks_to bob" */
-		ResourceNode subject = resource(id(RESOURCE_URI_ALICE));
-		ResourceID predicate = id(RESOURCE_URI_KNOWS);
-		ResourceID object = id(RESOURCE_URI_BOB);
+        /* create a new statement "alice talks_to bob" */
+        ResourceNode subject = resource(id(RESOURCE_URI_ALICE));
+        ResourceID predicate = id(RESOURCE_URI_KNOWS);
+        ResourceID object = id(RESOURCE_URI_BOB);
 
-		Statement stmt = associate(subject, predicate, object);
+        Statement stmt = associate(subject, predicate, object);
 
-		/* add statement to conversation, persisting it */
-		conv.addStatement(stmt);
+        /* add statement to conversation, persisting it */
+        conv.addStatement(stmt);
 
-		/* detach again if you want */
-		conv.removeStatement(stmt);
+        /* detach again if you want */
+        conv.removeStatement(stmt);
 
-		conv.close();
-		gate.close();
-	}
+        conv.close();
+        gate.close();
+    }
 
-	public static void main(String[] args) {
-	    new StatementSample().sample();
+    public static void main(String[] args) {
+        new StatementSample().sample();
     }
 }
