@@ -109,7 +109,11 @@ public class LuceneQueryResult implements QueryResult {
 
     @Override
     public ResourceNode getSingleNode() {
-        return iterator().next();
+        if (iterator().hasNext()) {
+            return iterator().next();
+        } else {
+            return null;
+        }
     }
 
     @Override

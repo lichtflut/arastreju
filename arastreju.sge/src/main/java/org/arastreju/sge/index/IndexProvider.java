@@ -90,4 +90,7 @@ public class IndexProvider {
         }
     }
 
+    public void shutdown() {
+        // TODO: shutdown lucene indexes.
+    }
 }

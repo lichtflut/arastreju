@@ -23,7 +23,6 @@ import org.arastreju.sge.apriori.RDF;
 import org.arastreju.sge.apriori.RDFS;
 import org.arastreju.sge.context.Context;
 import org.arastreju.sge.context.SimpleContextID;
-import org.arastreju.sge.index.IndexProvider;
 import org.arastreju.sge.io.RdfXmlBinding;
 import org.arastreju.sge.io.SemanticGraphIO;
 import org.arastreju.sge.io.SemanticIOException;
@@ -45,7 +44,6 @@ import org.arastreju.sge.spi.GraphDataStore;
 import org.arastreju.sge.spi.impl.ConversationImpl;
 import org.arastreju.sge.spi.impl.GraphDataConnectionImpl;
 import org.arastreju.sge.spi.impl.WorkingContextImpl;
-import org.arastreju.sge.spi.util.FileStoreUtil;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -103,7 +101,7 @@ public abstract class AbstractConversationTest {
     @Before
     public void setUp() throws Exception {
         store = createStore();
-        connection = new GraphDataConnectionImpl(store, new IndexProvider(FileStoreUtil.prepareTempStore("index")));
+        connection = new GraphDataConnectionImpl(store);
         conversation = new ConversationImpl(new WorkingContextImpl(connection));
     }
 

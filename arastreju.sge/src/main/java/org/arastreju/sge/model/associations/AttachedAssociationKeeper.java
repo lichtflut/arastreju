@@ -86,7 +86,7 @@ public class AttachedAssociationKeeper extends AbstractAssociationKeeper {
             return;
         }
         if (isAttached()) {
-            getConversationContext().addAssociation(this, assoc);
+            context.addAssociation(this, assoc);
         } else {
             super.addAssociation(assoc);
         }
@@ -98,7 +98,7 @@ public class AttachedAssociationKeeper extends AbstractAssociationKeeper {
             return false;
         }
         if (isAttached()) {
-            return getConversationContext().removeAssociation(this, assoc);
+            return context.removeAssociation(this, assoc);
         } else {
             return super.removeAssociation(assoc);
         }
@@ -107,7 +107,7 @@ public class AttachedAssociationKeeper extends AbstractAssociationKeeper {
     @Override
     protected void resolveAssociations() {
         if (isAttached()) {
-            getConversationContext().resolveAssociations(this);
+            context.resolveAssociations(this);
         } else {
             throw new IllegalStateException("This node is no longer attached. Cannot resolve associations.");
         }

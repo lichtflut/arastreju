@@ -47,18 +47,14 @@ public class GraphDataConnectionImpl implements GraphDataConnection {
 
     private final GraphDataStore store;
 
-    private final IndexProvider indexProvider;
-
     // ----------------------------------------------------
 
     /**
      * Constructor.
      * @param store The physical store.
-     * @param indexProvider The provider for indexes.
      */
-    public GraphDataConnectionImpl(GraphDataStore store, IndexProvider indexProvider) {
+    public GraphDataConnectionImpl(GraphDataStore store) {
         this.store = store;
-        this.indexProvider = indexProvider;
     }
 
     // ----------------------------------------------------
@@ -133,7 +129,7 @@ public class GraphDataConnectionImpl implements GraphDataConnection {
 
     @Override
     public IndexProvider getIndexProvider() {
-        return indexProvider;
+        return store.getIndexProvider();
     }
 
     @Override

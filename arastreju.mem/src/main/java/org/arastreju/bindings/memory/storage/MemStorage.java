@@ -16,6 +16,7 @@
 package org.arastreju.bindings.memory.storage;
 
 import org.arastreju.bindings.memory.tx.MemTransactionProvider;
+import org.arastreju.sge.index.IndexProvider;
 import org.arastreju.sge.model.associations.AttachedAssociationKeeper;
 import org.arastreju.sge.naming.QualifiedName;
 import org.arastreju.sge.spi.AssociationResolver;
@@ -23,7 +24,9 @@ import org.arastreju.sge.spi.AssociationWriter;
 import org.arastreju.sge.spi.GraphDataStore;
 import org.arastreju.sge.spi.WorkingContext;
 import org.arastreju.sge.spi.tx.TxProvider;
+import org.arastreju.sge.spi.util.FileStoreUtil;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -41,6 +44,18 @@ import java.util.Map;
 public class MemStorage implements GraphDataStore {
 
     private final Map<QualifiedName, StoredResource> store = new HashMap<QualifiedName, StoredResource>();
+
+    private final IndexProvider indexProvider;
+
+    // ----------------------------------------------------
+
+    public MemStorage() throws IOException {
+        this(new IndexProvider(FileStoreUtil.prepareTempStore()));
+    }
+
+    public MemStorage(IndexProvider indexProvider) {
+        this.indexProvider = indexProvider;
+    }
 
     // ----------------------------------------------------
 
@@ -79,6 +94,11 @@ public class MemStorage implements GraphDataStore {
     @Override
     public TxProvider createTxProvider(WorkingContext ctx) {
         return new MemTransactionProvider();
+    }
+
+    @Override
+    public IndexProvider getIndexProvider() {
+        return indexProvider;
     }
 
     @Override
