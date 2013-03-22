@@ -34,7 +34,7 @@ import java.io.IOException;
  * <p>
  *  Holds together everything needed to operate a lucene index.
  *  also takes care of mapping contexts to indexes and providing them
- *  to ArasIndexerImpl.
+ *  to ArastrejuIndex.
  * </p>
  *
  * <p>
@@ -43,19 +43,28 @@ import java.io.IOException;
  *
  * @author Timo Buhrmester
  */
-public class LuceneIndex {
+public class ContextIndex {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(LuceneIndex.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(ContextIndex.class);
+
+    // ----------------------------------------------------
 
 	private final Directory dir;
 	private final IndexWriter writer;
 	private IndexReader reader;
-	private org.apache.lucene.search.IndexSearcher searcher; //XXX name collision with our interface
+	private org.apache.lucene.search.IndexSearcher searcher;
 
-	/* create/open index for context ctx */
-	LuceneIndex(String indexRoot, Context ctx) throws IOException {
-		String path = indexRoot + File.separatorChar + new sun.misc.BASE64Encoder().encode(ctx.toURI().getBytes());
-		LOGGER.debug("creating LuceneIndex, root='" + indexRoot + "'; ctx='" + ctx.toString() + "'; (path='" + path + "')");
+    // ----------------------------------------------------
+
+    /**
+     * Constructor.
+     * @param baseDirectory The base directory of the indices.
+     * @param ctx The context to be used.
+     * @throws IOException When index cannot be obtained.
+     */
+	ContextIndex(String baseDirectory, Context ctx) throws IOException {
+		String path = baseDirectory + File.separatorChar + new sun.misc.BASE64Encoder().encode(ctx.toURI().getBytes());
+		LOGGER.debug("creating ContextIndex, root='" + baseDirectory + "'; ctx='" + ctx.toString() + "'; (path='" + path + "')");
 		this.dir = FSDirectory.open(new File(path));
 
 		IndexWriterConfig cfg = new IndexWriterConfig(Version.LUCENE_35, new LowercaseWhitespaceAnalyzer(Version.LUCENE_35));

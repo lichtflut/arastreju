@@ -53,8 +53,8 @@ import java.util.Set;
  *
  * @author Timo Buhrmester
  */
-public class  ArasIndexerImpl implements IndexUpdator, IndexSearcher {
-	private static final Logger LOGGER = LoggerFactory.getLogger(ArasIndexerImpl.class);
+public class ArastrejuIndex implements IndexUpdator, IndexSearcher {
+	private static final Logger LOGGER = LoggerFactory.getLogger(ArastrejuIndex.class);
 
 	private List<Inferencer> inferencers = new ArrayList<Inferencer>();
 
@@ -64,7 +64,7 @@ public class  ArasIndexerImpl implements IndexUpdator, IndexSearcher {
 
 	// ----------------------------------------------------
 
-	public ArasIndexerImpl(ConversationContext cc, IndexProvider provider) {
+	public ArastrejuIndex(ConversationContext cc, IndexProvider provider) {
 		this.conversationContext = cc;
 		this.provider = provider;
 	}
@@ -76,7 +76,7 @@ public class  ArasIndexerImpl implements IndexUpdator, IndexSearcher {
 	 * @param inferencer The inferencer.
 	 * @return This.
 	 */
-	public ArasIndexerImpl add(Inferencer... inferencer) {
+	public ArastrejuIndex add(Inferencer... inferencer) {
 		Collections.addAll(inferencers, inferencer);
 		return this;
 	}
@@ -93,7 +93,7 @@ public class  ArasIndexerImpl implements IndexUpdator, IndexSearcher {
 		LOGGER.debug("Indexing ({})", node);
 
 		Document doc = createDocument(node);
-		LuceneIndex index = provider.forContext(conversationContext.getPrimaryContext());
+		ContextIndex index = provider.forContext(conversationContext.getPrimaryContext());
 		try {
 			index.getWriter().updateDocument(new Term(IndexFields.QUALIFIED_NAME, normalizeQN(node.toURI())), doc); //creates if nonexistent
 //			index.getWriter().commit(); // XXX to be revised when transactions enter the play
@@ -111,7 +111,7 @@ public class  ArasIndexerImpl implements IndexUpdator, IndexSearcher {
 	@Override
 	public void remove(QualifiedName qn) {
 		LOGGER.debug("remove(" + qn + ")");
-		LuceneIndex index = provider.forContext(conversationContext.getPrimaryContext());
+		ContextIndex index = provider.forContext(conversationContext.getPrimaryContext());
 		try {
 			index.getWriter().deleteDocuments(new Term(IndexFields.QUALIFIED_NAME, normalizeQN(qn.toURI())));
 //			index.getWriter().commit();
@@ -125,7 +125,7 @@ public class  ArasIndexerImpl implements IndexUpdator, IndexSearcher {
 	@Override
 	public IndexSearchResult search(String query) {
 		LOGGER.debug("search(" + query + ")");
-		LuceneIndex index = provider.forContext(conversationContext.getPrimaryContext());
+		ContextIndex index = provider.forContext(conversationContext.getPrimaryContext());
 		org.apache.lucene.search.IndexSearcher searcher = index.getSearcher();
 
 		/* default field is 'qn' as this is the only field common to all resources.
@@ -154,7 +154,7 @@ public class  ArasIndexerImpl implements IndexUpdator, IndexSearcher {
 	}
 
 	public void dump() {
-		LuceneIndex index = provider.forContext(conversationContext.getPrimaryContext());
+		ContextIndex index = provider.forContext(conversationContext.getPrimaryContext());
 		org.apache.lucene.search.IndexSearcher searcher = index.getSearcher();
 		IndexReader reader = searcher.getIndexReader();
 
@@ -252,7 +252,7 @@ public class  ArasIndexerImpl implements IndexUpdator, IndexSearcher {
 
 	/* no more calls to this object after close() */
 	public void close() {
-		LuceneIndex index = provider.forContext(conversationContext.getPrimaryContext());
+		ContextIndex index = provider.forContext(conversationContext.getPrimaryContext());
 		provider.release(conversationContext.getPrimaryContext());
 		try {
 			index.getReader().close();
@@ -265,7 +265,7 @@ public class  ArasIndexerImpl implements IndexUpdator, IndexSearcher {
 	}
 
 	public void clear() {
-		LuceneIndex index = provider.forContext(conversationContext.getPrimaryContext());
+		ContextIndex index = provider.forContext(conversationContext.getPrimaryContext());
 		try {
 			index.getWriter().deleteAll();
 //			index.getWriter().commit();

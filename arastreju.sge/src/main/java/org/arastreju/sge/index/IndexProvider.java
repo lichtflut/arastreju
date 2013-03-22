@@ -43,7 +43,7 @@ public class IndexProvider {
     private static final Context nullCtxDummy = new SimpleContextID(new SimpleResourceID().getQualifiedName());
 
     /* stores one index per context */
-    private final Map<Context, LuceneIndex> indexMap = new HashMap<Context, LuceneIndex>();
+    private final Map<Context, ContextIndex> indexMap = new HashMap<Context, ContextIndex>();
 
     /* placeholder - to be turned into a proper configuration setting */
     private final String indexRoot;
@@ -61,14 +61,14 @@ public class IndexProvider {
      * @param context The context.
      * @return The corresponding index.
      */
-    public LuceneIndex forContext(Context context) {
+    public ContextIndex forContext(Context context) {
         if (context == null)
             context = nullCtxDummy;
-        LuceneIndex index;
+        ContextIndex index;
         synchronized (indexMap) {
             if ((index = indexMap.get(context)) == null) {
                 try {
-                    indexMap.put(context, (index = new LuceneIndex(indexRoot, context)));
+                    indexMap.put(context, (index = new ContextIndex(indexRoot, context)));
                 } catch (IOException e) {
                     String msg = "caught IOException while creating index for context " + context.toURI();
                     LOGGER.error(msg, e);

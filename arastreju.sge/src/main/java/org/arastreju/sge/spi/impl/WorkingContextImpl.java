@@ -17,7 +17,7 @@ package org.arastreju.sge.spi.impl;
 
 import org.arastreju.sge.ConversationContext;
 import org.arastreju.sge.context.Context;
-import org.arastreju.sge.index.ArasIndexerImpl;
+import org.arastreju.sge.index.ArastrejuIndex;
 import org.arastreju.sge.index.IndexSearcher;
 import org.arastreju.sge.index.IndexUpdator;
 import org.arastreju.sge.inferencing.implicit.InverseOfInferencer;
@@ -263,13 +263,13 @@ public class WorkingContextImpl implements WorkingContext {
 
     @Override
     public IndexSearcher getIndexSearcher() {
-        return new ArasIndexerImpl(this, connection.getIndexProvider());
+        return new ArastrejuIndex(this, connection.getIndexProvider());
     }
 
     @Override
     public IndexUpdator getIndexUpdator() {
         ResourceResolverImpl resolver = new ResourceResolverImpl(this);
-        return new ArasIndexerImpl(this, connection.getIndexProvider())
+        return new ArastrejuIndex(this, connection.getIndexProvider())
             .add(new TypeInferencer(resolver))
             .add(new SubClassOfInferencer(resolver));
     }
