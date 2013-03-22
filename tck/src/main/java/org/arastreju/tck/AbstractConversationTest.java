@@ -75,18 +75,18 @@ import static org.arastreju.sge.SNOPS.remove;
  */
 public abstract class AbstractConversationTest {
 
-    protected final QualifiedName qnVehicle = new QualifiedName("http://q#", "Verhicle");
-    protected final QualifiedName qnCar = new QualifiedName("http://q#", "Car");
-    protected final QualifiedName qnBike = new QualifiedName("http://q#", "Bike");
-    protected final QualifiedName qnEmployedBy = new QualifiedName("http://q#", "employedBy");
-    protected final QualifiedName qnHasEmployees = new QualifiedName("http://q#", "hasEmployees");
-    protected final QualifiedName qnKnows = new QualifiedName("http://q#", "knows");
+    protected static final QualifiedName qnVehicle = new QualifiedName("http://q#", "Verhicle");
+    protected static final QualifiedName qnCar = new QualifiedName("http://q#", "Car");
+    protected static final QualifiedName qnBike = new QualifiedName("http://q#", "Bike");
+    protected static final QualifiedName qnEmployedBy = new QualifiedName("http://q#", "employedBy");
+    protected static final QualifiedName qnHasEmployees = new QualifiedName("http://q#", "hasEmployees");
+    protected static final QualifiedName qnKnows = new QualifiedName("http://q#", "knows");
 
     // ----------------------------------------------------
 
-    protected GraphDataStore store;
-    protected GraphDataConnection connection;
-    protected Conversation conversation;
+    private GraphDataStore store;
+    private GraphDataConnection connection;
+    private Conversation conversation;
 
     // ----------------------------------------------------
 

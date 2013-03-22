@@ -54,9 +54,10 @@ import java.util.Set;
  * @author Timo Buhrmester
  */
 public class ArastrejuIndex implements IndexUpdator, IndexSearcher {
+
 	private static final Logger LOGGER = LoggerFactory.getLogger(ArastrejuIndex.class);
 
-	private List<Inferencer> inferencers = new ArrayList<Inferencer>();
+	private final List<Inferencer> inferencers = new ArrayList<Inferencer>();
 
 	private final ConversationContext conversationContext;
 
@@ -100,7 +101,7 @@ public class ArastrejuIndex implements IndexUpdator, IndexSearcher {
 		} catch (IOException e) {
 			String msg = "caught IOException while indexing resource " + node.toURI();
 			LOGGER.error(msg, e);
-			throw new RuntimeException(msg, e);
+			throw new IllegalStateException(msg, e);
 		}
 	}
 
@@ -110,21 +111,20 @@ public class ArastrejuIndex implements IndexUpdator, IndexSearcher {
 	 */
 	@Override
 	public void remove(QualifiedName qn) {
-		LOGGER.debug("remove(" + qn + ")");
+		LOGGER.debug("remove({})", qn);
 		ContextIndex index = provider.forContext(conversationContext.getPrimaryContext());
 		try {
 			index.getWriter().deleteDocuments(new Term(IndexFields.QUALIFIED_NAME, normalizeQN(qn.toURI())));
 //			index.getWriter().commit();
 		} catch (IOException e) {
-			String msg = "caught IOException while removing " + qn.toURI();
-			LOGGER.error(msg, e);
-			throw new RuntimeException(msg, e);
+			LOGGER.error("Could not remove node '{}' from index due to {}", qn, e.getMessage());
+			throw new IllegalStateException("Could not remove node.", e);
 		}
 	}
 
 	@Override
 	public IndexSearchResult search(String query) {
-		LOGGER.debug("search(" + query + ")");
+		LOGGER.debug("search({})", query);
 		ContextIndex index = provider.forContext(conversationContext.getPrimaryContext());
 		org.apache.lucene.search.IndexSearcher searcher = index.getSearcher();
 
@@ -141,41 +141,66 @@ public class ArastrejuIndex implements IndexUpdator, IndexSearcher {
 
 			resultList = collector.getList();
 		} catch (IOException e) {
-			String msg = "caught IOException while processing query '" + query + "'";
-			LOGGER.error(msg, e);
-			throw new RuntimeException(msg, e);
+			LOGGER.error("Caught IOException while processing query '" + query + "'", e);
+            throw new IllegalStateException("Could not remove node.", e);
 		} catch (ParseException e) {
-			String msg = "caught ParseException while processing query '" + query + "'";
-			LOGGER.error(msg, e);
-			throw new RuntimeException(msg, e);
+			LOGGER.error("Caught ParseException while processing query '" + query + "'", e);
+            throw new IllegalStateException("Could not perform search.", e);
 		}
 
 		return new FixedIndexSearchResult(resultList);
 	}
 
-	public void dump() {
-		ContextIndex index = provider.forContext(conversationContext.getPrimaryContext());
-		org.apache.lucene.search.IndexSearcher searcher = index.getSearcher();
-		IndexReader reader = searcher.getIndexReader();
+    // ----------------------------------------------------
 
-		try {
-			TopDocs top = searcher.search(new MatchAllDocsQuery(), 100);
-			for (int i = 0; i < top.totalHits; i++) {
-				Document doc = reader.document(top.scoreDocs[i].doc);
-				LOGGER.info("---Document--- id: " + top.scoreDocs[i].doc);
-				List<Fieldable> fields = doc.getFields();
-				for (Fieldable f : fields) {
-					LOGGER.info("\tField: name='" + f.name() + "', val='" + f.stringValue() + "'");
-				}
+    public void dump() {
+        ContextIndex index = provider.forContext(conversationContext.getPrimaryContext());
+        org.apache.lucene.search.IndexSearcher searcher = index.getSearcher();
+        IndexReader reader = searcher.getIndexReader();
 
-			}
-		} catch (IOException e) {
-			String msg = "caught IOException while dumping index";
-			LOGGER.error(msg, e);
-			throw new RuntimeException(msg, e);
-		}
+        try {
+            TopDocs top = searcher.search(new MatchAllDocsQuery(), 100);
+            for (int i = 0; i < top.totalHits; i++) {
+                Document doc = reader.document(top.scoreDocs[i].doc);
+                LOGGER.info("---Document--- id: " + top.scoreDocs[i].doc);
+                List<Fieldable> fields = doc.getFields();
+                for (Fieldable f : fields) {
+                    LOGGER.info("\tField: name='" + f.name() + "', val='" + f.stringValue() + "'");
+                }
 
-	}
+            }
+        } catch (IOException e) {
+            String msg = "caught IOException while dumping index";
+            LOGGER.error(msg, e);
+            throw new RuntimeException(msg, e);
+        }
+    }
+
+    /* no more calls to this object after close() */
+    public void close() {
+        ContextIndex index = provider.forContext(conversationContext.getPrimaryContext());
+        provider.release(conversationContext.getPrimaryContext());
+        try {
+            index.getReader().close();
+            index.getWriter().close();
+        } catch (IOException e) {
+            String msg = "caught IOException while closing reader/writer";
+            LOGGER.error(msg, e);
+            throw new RuntimeException(msg, e);
+        }
+    }
+
+    public void clear() {
+        ContextIndex index = provider.forContext(conversationContext.getPrimaryContext());
+        try {
+            index.getWriter().deleteAll();
+            // index.getWriter().commit();
+        } catch (IOException e) {
+            String msg = "caught IOException while clearing index";
+            LOGGER.error(msg, e);
+            throw new RuntimeException(msg, e);
+        }
+    }
 
 	// ----------------------------------------------------
 
@@ -250,29 +275,4 @@ public class ArastrejuIndex implements IndexUpdator, IndexSearcher {
 		return qn.toLowerCase();
 	}
 
-	/* no more calls to this object after close() */
-	public void close() {
-		ContextIndex index = provider.forContext(conversationContext.getPrimaryContext());
-		provider.release(conversationContext.getPrimaryContext());
-		try {
-			index.getReader().close();
-			index.getWriter().close();
-		} catch (IOException e) {
-			String msg = "caught IOException while closing reader/writer";
-			LOGGER.error(msg, e);
-			throw new RuntimeException(msg, e);
-		}
-	}
-
-	public void clear() {
-		ContextIndex index = provider.forContext(conversationContext.getPrimaryContext());
-		try {
-			index.getWriter().deleteAll();
-//			index.getWriter().commit();
-		} catch (IOException e) {
-			String msg = "caught IOException while clearing index";
-			LOGGER.error(msg, e);
-			throw new RuntimeException(msg, e);
-		}
-	}
 }
