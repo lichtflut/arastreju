@@ -43,7 +43,7 @@ import java.io.IOException;
  *
  * @author Timo Buhrmester
  */
-class LuceneIndex {
+public class LuceneIndex {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(LuceneIndex.class);
 

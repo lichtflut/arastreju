@@ -53,7 +53,7 @@ import java.util.Set;
  *
  * @author Timo Buhrmester
  */
-public class ArasIndexerImpl implements IndexUpdator, IndexSearcher {
+public class  ArasIndexerImpl implements IndexUpdator, IndexSearcher {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ArasIndexerImpl.class);
 
 	private List<Inferencer> inferencers = new ArrayList<Inferencer>();

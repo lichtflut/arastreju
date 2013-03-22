@@ -18,6 +18,8 @@ package org.arastreju.sge.persistence;
 import org.arastreju.sge.naming.QualifiedName;
 import org.arastreju.sge.spi.PhysicalNodeID;
 
+import java.io.IOException;
+
 /**
  * <p>
  *  Key table mapping qualified names to physical node IDs.
@@ -29,12 +31,14 @@ import org.arastreju.sge.spi.PhysicalNodeID;
  *
  * @author Oliver Tigges
  */
-public interface NodeKeyTable {
+public interface NodeKeyTable<T extends PhysicalNodeID> {
 
-    PhysicalNodeID lookup(QualifiedName qualifiedName);
+    T lookup(QualifiedName qualifiedName);
 
-    void put(QualifiedName qn, PhysicalNodeID physicalID);
+    void put(QualifiedName qn, T physicalID);
 
     void remove(QualifiedName qn);
+
+    void shutdown() throws IOException;
 
 }

@@ -37,6 +37,7 @@ import org.arastreju.sge.model.nodes.views.SNClass;
 import org.arastreju.sge.model.nodes.views.SNEntity;
 import org.arastreju.sge.model.nodes.views.SNText;
 import org.arastreju.sge.naming.QualifiedName;
+import org.arastreju.sge.persistence.TransactionControl;
 import org.arastreju.sge.query.Query;
 import org.arastreju.sge.query.QueryResult;
 import org.arastreju.sge.spi.GraphDataConnection;
@@ -572,6 +573,60 @@ public abstract class AbstractConversationTest {
         Assert.assertArrayEquals(new Context[]{ctx1}, cl1);
         Assert.assertArrayEquals(new Context[]{convCtx1, ctx1, ctx2}, cl2);
         Assert.assertArrayEquals(new Context[]{convCtx2, ctx1, ctx2, ctx3}, cl3);
+    }
+
+    @Test
+    public void testNonCommitNodeIndexing() throws IOException {
+        final ResourceNode car = new SNResource(qnCar);
+        SNOPS.associate(car, Aras.HAS_PROPER_NAME, new SNText("BMW"));
+
+        TransactionControl ctl = conversation.beginTransaction();
+        conversation.attach(car);
+
+        /* no commit here */
+
+        Query query = conversation.createQuery().addField(Aras.HAS_PROPER_NAME.toURI(), "BMW");
+        QueryResult result = query.getResult();
+        Assert.assertNotNull(result);
+        Assert.assertFalse(result.isEmpty());
+        Assert.assertEquals(qnCar, result.getSingleNode().getQualifiedName());
+
+        conversation.remove(car);
+
+        query = conversation.createQuery().addField(Aras.HAS_PROPER_NAME.toURI(), "BMW");
+        result = query.getResult();
+        Assert.assertNotNull(result);
+        Assert.assertTrue(result.isEmpty());
+
+        /* commit just for completeness */
+        ctl.finish();
+    }
+
+    @Test
+    public void testNonCommitStmtIndexing() throws IOException {
+        final ResourceNode car = new SNResource(qnCar);
+        Statement st1 = SNOPS.associate(car, Aras.HAS_PROPER_NAME, new SNText("BMW"));
+
+        TransactionControl ctl = conversation.beginTransaction();
+        conversation.attach(car);
+
+        /* no commit here */
+
+        Query query = conversation.createQuery().addField(Aras.HAS_PROPER_NAME.toURI(), "BMW");
+        QueryResult result = query.getResult();
+        Assert.assertNotNull(result);
+        Assert.assertFalse(result.isEmpty());
+        Assert.assertEquals(qnCar, result.getSingleNode().getQualifiedName());
+
+        conversation.removeStatement(st1);
+
+        query = conversation.createQuery().addField(Aras.HAS_PROPER_NAME.toURI(), "BMW");
+        result = query.getResult();
+        Assert.assertNotNull(result);
+        Assert.assertTrue(result.isEmpty());
+
+        /* commit just for completeness */
+        ctl.finish();
     }
 
 }
