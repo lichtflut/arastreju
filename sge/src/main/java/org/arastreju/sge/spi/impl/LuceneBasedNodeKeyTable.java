@@ -18,10 +18,12 @@ package org.arastreju.sge.spi.impl;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
-import org.apache.lucene.document.NumericField;
+import org.apache.lucene.document.LongField;
+import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
+import org.apache.lucene.index.IndexableField;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.TermQuery;
@@ -69,14 +71,13 @@ public abstract class LuceneBasedNodeKeyTable<T extends PhysicalNodeID> implemen
         return new LuceneBasedNodeKeyTable<NumericPhysicalNodeID>(baseDir) {
             @Override
             protected NumericPhysicalNodeID createID(Document doc) {
-                NumericField field = (NumericField) doc.getFieldable(PID);
-                return new NumericPhysicalNodeID(field.getNumericValue());
+                IndexableField field = doc.getField(PID);
+                return new NumericPhysicalNodeID(field.numericValue());
             }
 
             @Override
             protected void setID(Document doc, NumericPhysicalNodeID id) {
-                NumericField field = new NumericField(PID, Field.Store.YES, false);
-                field.setLongValue(id.asLong());
+                LongField field = new LongField(PID, id.asLong(), Field.Store.YES);
                 doc.add(field);
             }
         };
@@ -88,7 +89,7 @@ public abstract class LuceneBasedNodeKeyTable<T extends PhysicalNodeID> implemen
         final File indexDir = new File(baseDir, "__qn_index");
         LOGGER.info("Creating node key table index in {}.", indexDir);
         boolean created = indexDir.mkdir();
-        IndexWriterConfig config = new IndexWriterConfig(Version.LUCENE_35, new StandardAnalyzer(Version.LUCENE_35));
+        IndexWriterConfig config = new IndexWriterConfig(Version.LUCENE_42, new StandardAnalyzer(Version.LUCENE_35));
         this.dir = FSDirectory.open(indexDir);
         this.writer = new IndexWriter(dir, config);
         if (created) {
@@ -107,7 +108,6 @@ public abstract class LuceneBasedNodeKeyTable<T extends PhysicalNodeID> implemen
 
             IndexSearcher searcher = new IndexSearcher(reader);
             TopDocs result = searcher.search(query, 2);
-            searcher.close();
 
             if (result.scoreDocs.length == 1) {
                 Document document = reader.document(result.scoreDocs[0].doc);
@@ -170,7 +170,7 @@ public abstract class LuceneBasedNodeKeyTable<T extends PhysicalNodeID> implemen
 
     private IndexReader reader() {
         try {
-            return IndexReader.open(dir, true);
+            return DirectoryReader.open(dir);
         } catch (IOException e) {
             throw new RuntimeException("Unable to obtain an index reader.", e);
         }

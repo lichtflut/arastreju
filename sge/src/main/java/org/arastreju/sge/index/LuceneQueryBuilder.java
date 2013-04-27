@@ -40,8 +40,6 @@ import java.util.regex.Matcher;
  */
 public class LuceneQueryBuilder extends QueryBuilder {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(LuceneQueryBuilder.class);
-
     private final IndexSearcher searcher;
 
     private final QNResolver resolver;
@@ -135,7 +133,7 @@ public class LuceneQueryBuilder extends QueryBuilder {
     }
 
     private String normalizeKey(final String key) {
-        return key.replaceAll(":", Matcher.quoteReplacement("\\:"));
+        return escape(key);
     }
 
     private String normalizeValue(final Object value) {
@@ -146,7 +144,14 @@ public class LuceneQueryBuilder extends QueryBuilder {
         if (normalized.contains(" ")) {
             normalized = "\"" + normalized + "\"";
         }
-        return normalized.replaceAll(":", Matcher.quoteReplacement("\\:"));
+        return escape(normalized);
+    }
+
+    private String escape(final String orig) {
+        return orig
+                .replaceAll(":", Matcher.quoteReplacement("\\:"))
+                .replaceAll("/", Matcher.quoteReplacement("\\/"));
+
     }
 
 }

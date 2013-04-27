@@ -15,15 +15,16 @@
  */
 package org.arastreju.sge.index;
 
+import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.document.Field.Index;
 import org.apache.lucene.document.Field.Store;
-import org.apache.lucene.document.Fieldable;
 import org.apache.lucene.index.IndexReader;
+import org.apache.lucene.index.IndexableField;
 import org.apache.lucene.index.Term;
-import org.apache.lucene.queryParser.ParseException;
-import org.apache.lucene.queryParser.QueryParser;
+import org.apache.lucene.queryparser.classic.ParseException;
+import org.apache.lucene.queryparser.classic.QueryParser;
 import org.apache.lucene.search.MatchAllDocsQuery;
 import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.util.Version;
@@ -41,6 +42,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.regex.Matcher;
 
 /**
  * <p>
@@ -130,7 +132,7 @@ public class ArastrejuIndex implements IndexUpdator, IndexSearcher {
 
 		/* default field is 'qn' as this is the only field common to all resources.
 		 * (not that we're going to need a default field, anyway.) */
-		QueryParser qp = new QueryParser(Version.LUCENE_35, IndexFields.QUALIFIED_NAME, new LowercaseWhitespaceAnalyzer(Version.LUCENE_35));
+		QueryParser qp = new QueryParser(Version.LUCENE_42, IndexFields.QUALIFIED_NAME, new StandardAnalyzer(Version.LUCENE_42));
 		qp.setAllowLeadingWildcard(true); //such queries should be avoided where possible nevertheless
 
 		List<QualifiedName> resultList;
@@ -163,8 +165,8 @@ public class ArastrejuIndex implements IndexUpdator, IndexSearcher {
             for (int i = 0; i < top.totalHits; i++) {
                 Document doc = reader.document(top.scoreDocs[i].doc);
                 LOGGER.info("---Document--- id: " + top.scoreDocs[i].doc);
-                List<Fieldable> fields = doc.getFields();
-                for (Fieldable f : fields) {
+                List<IndexableField> fields = doc.getFields();
+                for (IndexableField f : fields) {
                     LOGGER.info("\tField: name='" + f.name() + "', val='" + f.stringValue() + "'");
                 }
 
@@ -272,7 +274,9 @@ public class ArastrejuIndex implements IndexUpdator, IndexSearcher {
 	 * XXX do we actually want case-insensitive search on URI?
 	 * LuceneQueryBuilder.normalizeValue() sort of enforces/suggests this. */
 	private String normalizeQN(String qn) {
-		return qn.toLowerCase();
+		return qn.toLowerCase()
+                .replaceAll(":", Matcher.quoteReplacement("\\:"))
+                .replaceAll("/", Matcher.quoteReplacement("\\/"));
 	}
 
 }

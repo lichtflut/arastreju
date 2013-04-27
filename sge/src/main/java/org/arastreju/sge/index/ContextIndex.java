@@ -15,12 +15,13 @@
  */
 package org.arastreju.sge.index;
 
+import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
+import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
-import org.apache.lucene.index.MergePolicy;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.util.Version;
@@ -68,11 +69,11 @@ public class ContextIndex {
 		LOGGER.debug("creating ContextIndex, root='" + baseDirectory + "'; ctx='" + ctx.toString() + "'; (path='" + path + "')");
 		this.dir = FSDirectory.open(new File(path));
 
-		IndexWriterConfig cfg = new IndexWriterConfig(Version.LUCENE_35, new LowercaseWhitespaceAnalyzer(Version.LUCENE_35));
+		IndexWriterConfig cfg = new IndexWriterConfig(Version.LUCENE_42, new StandardAnalyzer(Version.LUCENE_42));
 		this.writer = new IndexWriter(dir, cfg);
 		//		writer.setInfoStream(System.err);
 
-		if (!IndexReader.indexExists(dir)) {
+		if (!DirectoryReader.indexExists(dir)) {
 			/* cause the index to be created, this saves us a couple indexExists() checks */
 			Document dummyDoc = new Document();
 			dummyDoc.add(new Field("dummy_key", "dummy_value", Field.Store.NO, Field.Index.NOT_ANALYZED));
@@ -81,7 +82,7 @@ public class ContextIndex {
 			writer.deleteAll();
 			writer.commit();
 		}
-		this.reader = IndexReader.open(writer, true);
+		this.reader = DirectoryReader.open(writer, true);
 		this.searcher = new org.apache.lucene.search.IndexSearcher(reader);
 	}
 
@@ -90,12 +91,10 @@ public class ContextIndex {
 	}
 
 	public org.apache.lucene.search.IndexSearcher getSearcher() {
-		refreshReader();
 		return searcher;
 	}
 
 	public IndexReader getReader() {
-		refreshReader();
 		return reader;
 	}
 
@@ -106,29 +105,7 @@ public class ContextIndex {
     public void close() throws IOException {
         writer.close();
         reader.close();
-        searcher.close();
         dir.close();
     }
 
-    // ----------------------------------------------------
-
-	private void refreshReader() {
-		try {
-			if (reader.isCurrent()) {
-				return;
-			}
-
-			IndexReader nr = IndexReader.openIfChanged(reader, writer, true);
-			if (nr != null) {
-				searcher.close();
-				reader.close();
-				reader = nr;
-				searcher = new org.apache.lucene.search.IndexSearcher(reader);
-			}
-		} catch (IOException e) {
-			String msg = "caught IOException while refreshing IndexReader";
-			LOGGER.error(msg, e);
-			throw new RuntimeException(msg, e);
-		}
-	}
 }
