@@ -102,11 +102,13 @@ public abstract class LuceneBasedNodeKeyTable<T extends PhysicalNodeID> implemen
     @Override
     public T lookup(QualifiedName qualifiedName) {
         TermQuery query = new TermQuery(new Term(QN, qualifiedName.toURI()));
+        IndexReader reader = reader();
         try {
-            IndexReader reader = reader();
+
             IndexSearcher searcher = new IndexSearcher(reader);
             TopDocs result = searcher.search(query, 2);
             searcher.close();
+
             if (result.scoreDocs.length == 1) {
                 Document document = reader.document(result.scoreDocs[0].doc);
                 return createID(document);
@@ -118,6 +120,12 @@ public abstract class LuceneBasedNodeKeyTable<T extends PhysicalNodeID> implemen
             }
         } catch (IOException e) {
             throw new RuntimeException("Could not query by qualified name.", e);
+        } finally {
+            try {
+                reader.close();
+            } catch (IOException e) {
+                throw new RuntimeException("Could not close index reader.", e);
+            }
         }
     }
 
@@ -160,8 +168,12 @@ public abstract class LuceneBasedNodeKeyTable<T extends PhysicalNodeID> implemen
 
     // ----------------------------------------------------
 
-    private IndexReader reader() throws IOException {
-        return IndexReader.open(dir, true);
+    private IndexReader reader() {
+        try {
+            return IndexReader.open(dir, true);
+        } catch (IOException e) {
+            throw new RuntimeException("Unable to obtain an index reader.", e);
+        }
     }
 
     private IndexWriter writer() throws IOException {

@@ -8,8 +8,8 @@
 	</parent>
 	<groupId>org.arastreju</groupId>
 	<artifactId>arastreju.mem</artifactId>
-	<name>Arastreju Embedded in Memory Binding</name>
-	<description>Arastreju Binding - Embedded in Memory store</description>
+	<name>Arastreju in-memory binding</name>
+	<description>Arastreju Binding - Embedded in-memory store</description>
 	<properties>
 		<sesame.version>2.6.1</sesame.version>
 	</properties>

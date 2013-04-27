@@ -91,6 +91,13 @@ public class IndexProvider {
     }
 
     public void shutdown() {
-        // TODO: shutdown lucene indexes.
+        for (Context context : indexMap.keySet()) {
+            try {
+                indexMap.get(context).close();
+            } catch (IOException e) {
+                LOGGER.error("Failed to close context index.", e);
+            }
+        }
+        indexMap.clear();
     }
 }

@@ -8,7 +8,7 @@
 	</parent>
 	<groupId>org.arastreju</groupId>
 	<artifactId>arastreju-spi</artifactId>
-	<name>Service Provider Interface</name>
+	<name>Arastreju Service Provider Interface</name>
 	<description>Interface for data store bindings</description>
 	
 	<licenses>

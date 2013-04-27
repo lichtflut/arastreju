@@ -56,7 +56,7 @@ public class LuceneQueryResult implements QueryResult {
 
     @Override
     public void close() {
-        throw new NotYetSupportedException();
+        hits.close();
     }
 
     @Override

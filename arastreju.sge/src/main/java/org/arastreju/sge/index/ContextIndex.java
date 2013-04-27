@@ -20,6 +20,7 @@ import org.apache.lucene.document.Field;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
+import org.apache.lucene.index.MergePolicy;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.util.Version;
@@ -101,6 +102,15 @@ public class ContextIndex {
 	public IndexWriter getWriter() {
 		return writer;
 	}
+
+    public void close() throws IOException {
+        writer.close();
+        reader.close();
+        searcher.close();
+        dir.close();
+    }
+
+    // ----------------------------------------------------
 
 	private void refreshReader() {
 		try {
