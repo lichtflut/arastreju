@@ -7,9 +7,9 @@
 		<version>0.9.0-SNAPSHOT</version>
 	</parent>
 	<groupId>org.arastreju</groupId>
-	<artifactId>arastreju.mem</artifactId>
-	<name>Arastreju in-memory binding</name>
-	<description>Arastreju Binding - Embedded in-memory store</description>
+	<artifactId>arastreju-sge</artifactId>
+	<name>Arastreju SGE</name>
+	<description>Arastreju Semantic Graph Engine</description>
 	<properties>
 		<sesame.version>2.6.1</sesame.version>
 	</properties>
@@ -61,20 +61,34 @@
 	</build>
 	<dependencies>
 		<dependency>
-			<groupId>org.arastreju</groupId>
-			<artifactId>arastreju.sge</artifactId>
-			<version>${project.version}</version>
+			<groupId>org.openrdf.sesame</groupId>
+			<artifactId>sesame-rio-api</artifactId>
+			<version>${sesame.version}</version>
 		</dependency>
-        <dependency>
-            <groupId>org.arastreju</groupId>
-            <artifactId>arastreju-spi</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.arastreju</groupId>
-            <artifactId>arastreju-tck</artifactId>
-            <version>${project.version}</version>
-            <scope>test</scope>
-        </dependency>
+		<dependency>
+			<groupId>org.openrdf.sesame</groupId>
+			<artifactId>sesame-rio-rdfxml</artifactId>
+			<version>${sesame.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.openrdf.sesame</groupId>
+			<artifactId>sesame-rio-n3</artifactId>
+			<version>${sesame.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.openrdf.sesame</groupId>
+			<artifactId>sesame-model</artifactId>
+			<version>${sesame.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.lucene</groupId>
+			<artifactId>lucene-core</artifactId>
+		</dependency>
 	</dependencies>
+	<repositories>
+		<repository>
+			<id>Aduna Repo</id>
+			<url>http://repo.aduna-software.org/maven2/releases/</url>
+		</repository>
+	</repositories>
 </project>

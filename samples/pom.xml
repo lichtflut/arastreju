@@ -60,7 +60,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.arastreju</groupId>
-			<artifactId>arastreju.sge</artifactId>
+			<artifactId>arastreju-sge</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>

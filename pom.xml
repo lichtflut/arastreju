@@ -8,8 +8,8 @@
 	<description>Arastreju parent project</description>
 	<packaging>pom</packaging>
 	<modules>
-		<module>arastreju.sge</module>
-		<module>arastreju.mem</module>
+		<module>sge</module>
+		<module>mem</module>
 		<module>samples</module>
         <module>spi</module>
         <module>tck</module>
@@ -168,6 +168,7 @@
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
+            <scope>test</scope>
 		</dependency>
 	</dependencies>
 
