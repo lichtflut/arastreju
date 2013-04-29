@@ -4,12 +4,15 @@
 	<groupId>org.arastreju</groupId>
 	<artifactId>arastreju</artifactId>
 	<name>Arastreju</name>
-	<version>0.9.0-SNAPSHOT</version>
+	<version>0.9.0</version>
 	<description>Arastreju parent project</description>
 	<packaging>pom</packaging>
 	<modules>
-		<module>arastreju.sge</module>
-		<module>arastreju.mem</module>
+		<module>sge</module>
+		<module>mem</module>
+		<module>samples</module>
+        <module>spi</module>
+        <module>tck</module>
 	</modules>
 	<build>
 		<pluginManagement>
@@ -49,7 +52,7 @@
 						<exclude>.git/**</exclude>
 						<exclude>.idea/**</exclude>
 						<exclude>.settings/**</exclude>
-						<exclude>header.xml</exclude>
+						<exclude>**/*.xml</exclude>
 						<exclude>**/*.rdf</exclude>
 					</excludes>
 				</configuration>
@@ -165,7 +168,7 @@
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>4.5</version>
+            <scope>test</scope>
 		</dependency>
 	</dependencies>
 
