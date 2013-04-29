@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>org.arastreju</groupId>
 		<artifactId>arastreju</artifactId>
-		<version>0.9.0-SNAPSHOT</version>
+		<version>0.9.0</version>
 	</parent>
 	<groupId>org.arastreju</groupId>
 	<artifactId>arastreju-samples</artifactId>
@@ -65,7 +65,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.arastreju</groupId>
-			<artifactId>arastreju-neo4j</artifactId>
+			<artifactId>arastreju-mem</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 	</dependencies>
