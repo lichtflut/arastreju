@@ -43,4 +43,9 @@ public class NumericPhysicalNodeID implements PhysicalNodeID {
     public long asLong() {
         return id.longValue();
     }
+
+    @Override
+    public String toString() {
+        return "PhysID[" + id + "]";
+    }
 }
