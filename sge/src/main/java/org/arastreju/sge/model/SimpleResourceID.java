@@ -61,7 +61,7 @@ public class SimpleResourceID implements ResourceID, Serializable {
 	 * @param uri The URI.
 	 */
 	public SimpleResourceID(final String uri) {
-		this(QualifiedName.create(uri));
+		this(QualifiedName.fromURI(uri));
 	}
 	
 	/**
@@ -70,7 +70,7 @@ public class SimpleResourceID implements ResourceID, Serializable {
 	 * @param name The simple name.
 	 */
 	public SimpleResourceID(final String nsUri, final String name) {
-		this(QualifiedName.create(nsUri, name));
+		this(nsUri + name);
 	}
 	
 	// ----------------------------------------------------

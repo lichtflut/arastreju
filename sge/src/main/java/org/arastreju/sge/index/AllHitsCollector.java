@@ -63,7 +63,7 @@ public class AllHitsCollector extends Collector {
 	public void collect(int doc) {
 		try {
 			Document d = curReader.document(doc);
-	        docList.add(new QualifiedName(d.get(IndexFields.QUALIFIED_NAME)));
+	        docList.add(QualifiedName.fromURI(d.get(IndexFields.QUALIFIED_NAME)));
         } catch (IOException e) {
         	String msg = "caught IOException while collecting document " + doc + " on reader " + curReader;
 			LOGGER.error(msg, e);

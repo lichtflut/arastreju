@@ -18,6 +18,7 @@ package org.arastreju.sge.naming;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * <p>
@@ -32,7 +33,7 @@ import java.util.Map;
  */
 public class QualifiedName implements Comparable<QualifiedName>, Serializable {
 	
-	public static final String VOID_NAMESPACE = "void";
+	public static final String LOCAL = "local";
 	public static final String PREFIX_DELIM = ":";
 	public static final String HASH = "#";
 	public static final String SLASH = "/";
@@ -45,11 +46,11 @@ public class QualifiedName implements Comparable<QualifiedName>, Serializable {
 	
 	public static boolean isUri(final String name){
 		// TODO: Better URI check
-		return name.indexOf(SLASH) > -1;
+		return name.contains(SLASH);
 	}
 	
 	public static boolean isQname(final String name){
-		return !isUri(name) && name.indexOf(PREFIX_DELIM) > -1;
+		return !isUri(name) && name.contains(PREFIX_DELIM);
 	}
 	
 	public static String getSimpleName(final String name) {
@@ -71,13 +72,19 @@ public class QualifiedName implements Comparable<QualifiedName>, Serializable {
 		int pos = getSeperatorIndex(name);
 		return name.substring(0, pos + 1);
 	}
+
+    // ----------------------------------------------------
+
+    public static QualifiedName generate() {
+        return new QualifiedName(LOCAL + PREFIX_DELIM + UUID.randomUUID().toString());
+    }
 	
 	/**
 	 * Create a new QualifiedName for this URI - regarding a cache.
 	 * @param uri The URI.
 	 * @return A new URI or the corresponding from cache.
 	 */
-	public static QualifiedName create(final String uri) {
+	public static QualifiedName fromURI(final String uri) {
 		if (cache.containsKey(uri)) {
 			return cache.get(uri);
 		} else {
@@ -93,24 +100,17 @@ public class QualifiedName implements Comparable<QualifiedName>, Serializable {
      * @param name The name part
 	 * @return A new URI or the corresponding from cache.
 	 */
-	public static QualifiedName create(final String namespace, final String name) {
-		return create(namespace + name);
+	public static QualifiedName from(final String namespace, final String name) {
+		return fromURI(namespace + name);
 	}
 	
 	//------------------------------------------------------
-	
-	/**
-	 * Creates a new qualified name, where the prefix will be derived from managed namespace.
-	 */
-	public QualifiedName(final String namespace, final String name) {
-		this(namespace + name);
-	}
-	
+
 	/**
 	 * Creates a qualified name for resource reference.
 	 * @param uri The URI.
 	 */
-	public QualifiedName(final String uri){
+	private QualifiedName(final String uri){
 		this.uri = uri;
 	}
 	

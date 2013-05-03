@@ -34,7 +34,7 @@ import org.arastreju.sge.naming.QualifiedName;
  * @author Timo Buhrmester
  */
 public class NodeSample {
-    private final QualifiedName RESOURCE_URI = new QualifiedName("http://example.org/my_resource");
+    private final QualifiedName RESOURCE_URI = QualifiedName.fromURI("http://example.org/my_resource");
 
     public void sample() {
         /* create instance and open master gate */

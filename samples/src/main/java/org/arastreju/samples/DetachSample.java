@@ -38,10 +38,10 @@ import org.arastreju.sge.naming.QualifiedName;
  * @author Timo Buhrmester
  */
 public class DetachSample {
-    private QualifiedName RESOURCE_URI_ALICE = new QualifiedName("http://example.org/alice");
-    private QualifiedName RESOURCE_URI_BOB = new QualifiedName("http://example.org/bob");
-    private QualifiedName RESOURCE_URI_EVE = new QualifiedName("http://example.org/eve");
-    private QualifiedName RESOURCE_URI_KNOWS = new QualifiedName("http://example.org/knows");
+    private QualifiedName RESOURCE_URI_ALICE = QualifiedName.fromURI("http://example.org/alice");
+    private QualifiedName RESOURCE_URI_BOB = QualifiedName.fromURI("http://example.org/bob");
+    private QualifiedName RESOURCE_URI_EVE = QualifiedName.fromURI("http://example.org/eve");
+    private QualifiedName RESOURCE_URI_KNOWS = QualifiedName.fromURI("http://example.org/knows");
 
     private final Arastreju aras;
     private final ArastrejuGate gate;

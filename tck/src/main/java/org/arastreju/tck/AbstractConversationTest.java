@@ -75,12 +75,12 @@ import static org.arastreju.sge.SNOPS.remove;
  */
 public abstract class AbstractConversationTest {
 
-    protected static final QualifiedName qnVehicle = new QualifiedName("http://q#", "Verhicle");
-    protected static final QualifiedName qnCar = new QualifiedName("http://q#", "Car");
-    protected static final QualifiedName qnBike = new QualifiedName("http://q#", "Bike");
-    protected static final QualifiedName qnEmployedBy = new QualifiedName("http://q#", "employedBy");
-    protected static final QualifiedName qnHasEmployees = new QualifiedName("http://q#", "hasEmployees");
-    protected static final QualifiedName qnKnows = new QualifiedName("http://q#", "knows");
+    protected static final QualifiedName qnVehicle = QualifiedName.from("http://q#", "Verhicle");
+    protected static final QualifiedName qnCar = QualifiedName.from("http://q#", "Car");
+    protected static final QualifiedName qnBike = QualifiedName.from("http://q#", "Bike");
+    protected static final QualifiedName qnEmployedBy = QualifiedName.from("http://q#", "employedBy");
+    protected static final QualifiedName qnHasEmployees = QualifiedName.from("http://q#", "hasEmployees");
+    protected static final QualifiedName qnKnows = QualifiedName.from("http://q#", "knows");
 
     // ----------------------------------------------------
 
@@ -117,13 +117,13 @@ public abstract class AbstractConversationTest {
 
     @Test
     public void testInstantiation() throws IOException {
-        ResourceNode node = new SNResource(new QualifiedName("http://q#", "N1"));
+        ResourceNode node = new SNResource(QualifiedName.from("http://q#", "N1"));
         conversation.attach(node);
     }
 
     @Test
     public void testFind() throws IOException {
-        QualifiedName qn = new QualifiedName("http://q#", "N1");
+        QualifiedName qn = QualifiedName.from("http://q#", "N1");
         ResourceNode node = new SNResource(qn);
         conversation.attach(node);
 
@@ -146,7 +146,7 @@ public abstract class AbstractConversationTest {
 
     @Test
     public void testMerge() throws IOException {
-        QualifiedName qn = new QualifiedName("http://q#", "N1");
+        QualifiedName qn = QualifiedName.from("http://q#", "N1");
         ResourceNode node = new SNResource(qn);
         conversation.attach(node);
 
@@ -378,11 +378,11 @@ public abstract class AbstractConversationTest {
 
     @Test
     public void testSNViews() throws IOException {
-        final QualifiedName qnVehicle = new QualifiedName("http://q#", "Verhicle");
+        final QualifiedName qnVehicle = QualifiedName.from("http://q#", "Verhicle");
         ResourceNode vehicle = new SNResource(qnVehicle);
         conversation.attach(vehicle);
 
-        final QualifiedName qnCar = new QualifiedName("http://q#", "Car");
+        final QualifiedName qnCar = QualifiedName.from("http://q#", "Car");
         ResourceNode car = new SNResource(qnCar);
         conversation.attach(car);
 
@@ -403,7 +403,7 @@ public abstract class AbstractConversationTest {
 
         conversation.attach(graph);
 
-        final QualifiedName qn = new QualifiedName("http://test.arastreju.org/common#Person");
+        final QualifiedName qn = QualifiedName.fromURI("http://test.arastreju.org/common#Person");
         final ResourceNode node = conversation.findResource(qn);
         Assert.assertNotNull(node);
 
@@ -422,7 +422,7 @@ public abstract class AbstractConversationTest {
         final SemanticGraph graph = io.read(getClass().getClassLoader().getResourceAsStream("test-statements.rdf.xml"));
         conversation.attach(graph);
 
-        final QualifiedName qn = new QualifiedName("http://test.arastreju.org/common#Person");
+        final QualifiedName qn = QualifiedName.fromURI("http://test.arastreju.org/common#Person");
         final ResourceNode node = conversation.findResource(qn);
 
         Assert.assertTrue(node.isAttached());

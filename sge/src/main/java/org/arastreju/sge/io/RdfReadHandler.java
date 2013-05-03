@@ -133,7 +133,7 @@ public class RdfReadHandler implements RDFHandler {
 		if (ctx == null) {
 			return null;
 		} else {
-			return new SimpleContextID(QualifiedName.create(ctx.stringValue()));
+			return new SimpleContextID(QualifiedName.fromURI(ctx.stringValue()));
 		}
 	}
 	
@@ -177,7 +177,7 @@ public class RdfReadHandler implements RDFHandler {
 	}
 	
 	protected QualifiedName toQualifiedName(final URI uri){
-		return QualifiedName.create(uri.getNamespace(), uri.getLocalName());
+		return QualifiedName.fromURI(uri.toString());
 	}
 	
 }

@@ -46,10 +46,10 @@ public class RdfXmlBindingTest {
 	
 	@Test
 	public void testXmlWriter() throws RDFHandlerException, IOException, SemanticIOException{
-		final QualifiedName qnVehicle = new QualifiedName("http://q#", "Verhicle");
+		final QualifiedName qnVehicle = QualifiedName.from("http://q#", "Verhicle");
 		final ResourceNode vehicle = new SNResource(qnVehicle);
 		
-		final QualifiedName qnCar = new QualifiedName("http://q#", "Car");
+		final QualifiedName qnCar = QualifiedName.from("http://q#", "Car");
 		final ResourceNode car = new SNResource(qnCar);
 		
 		final Statement association = SNOPS.associate(car, RDFS.SUB_CLASS_OF, vehicle);

@@ -56,7 +56,7 @@ public class SNResource implements ResourceNode, Serializable {
 	 * Default constructor for new unattached resource.
 	 */
 	public SNResource() {
-		this(QualifiedName.create(Namespace.UUID, UUID.randomUUID().toString()));
+		this(QualifiedName.generate());
 	}
 	
 	/**
