@@ -18,11 +18,9 @@ package org.arastreju.sge.model;
 import org.arastreju.sge.model.nodes.ResourceNode;
 import org.arastreju.sge.model.nodes.SNResource;
 import org.arastreju.sge.model.nodes.ValueNode;
-import org.arastreju.sge.naming.Namespace;
 import org.arastreju.sge.naming.QualifiedName;
 
 import java.io.Serializable;
-import java.util.UUID;
 
 /**
  * <p>
@@ -45,7 +43,7 @@ public class SimpleResourceID implements ResourceID, Serializable {
 	 * Creates a new unique ResourceID with random URI in Namespace.UUID namespace.
 	 */
 	public SimpleResourceID() {
-		this(Namespace.UUID, UUID.randomUUID().toString());
+		this(QualifiedName.generate());
 	}
 	
 	/**

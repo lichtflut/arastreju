@@ -75,6 +75,10 @@ public class QualifiedName implements Comparable<QualifiedName>, Serializable {
 
     // ----------------------------------------------------
 
+    /**
+     * Generates a new qualified name in 'local:' namespace.
+     * @return The new qualified name.
+     */
     public static QualifiedName generate() {
         return new QualifiedName(LOCAL + PREFIX_DELIM + UUID.randomUUID().toString());
     }
