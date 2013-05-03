@@ -55,9 +55,6 @@ public class SortCriteria {
 	
 	// ----------------------------------------------------
 	
-	/** 
-	* {@inheritDoc}
-	*/
 	@Override
 	public String toString() {
 		return Arrays.toString(columns);

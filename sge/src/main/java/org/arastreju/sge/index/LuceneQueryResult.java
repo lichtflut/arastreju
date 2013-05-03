@@ -88,12 +88,13 @@ public class LuceneQueryResult implements QueryResult {
 
     @Override
     public List<ResourceNode> toList(int offset, int max) {
-        if (offset >= max) {
+        int last = Math.min(offset + max, hits.size());
+        if (offset >= last) {
             return Collections.emptyList();
         }
-        final List<ResourceNode> result = new ArrayList<ResourceNode>(max - offset);
+        final List<ResourceNode> result = new ArrayList<ResourceNode>(last - offset);
         final Iterator<QualifiedName> iterator = hits.iterator();
-        for (int i=0; i < max; i++) {
+        for (int i=0; i < last; i++) {
             final QualifiedName next = iterator.next();
             if (i >= offset) {
                 result.add(resolver.resolve(next));
