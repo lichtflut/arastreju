@@ -32,11 +32,14 @@ import org.apache.lucene.util.Version;
 import org.arastreju.sge.naming.QualifiedName;
 import org.arastreju.sge.persistence.NodeKeyTable;
 import org.arastreju.sge.spi.PhysicalNodeID;
+import org.arastreju.sge.spi.tx.TxListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * <p>
@@ -49,7 +52,8 @@ import java.io.IOException;
  *
  * @author Oliver Tigges
  */
-public abstract class LuceneBasedNodeKeyTable<T extends PhysicalNodeID> implements NodeKeyTable<T> {
+public abstract class LuceneBasedNodeKeyTable<T extends PhysicalNodeID>
+        implements NodeKeyTable<T>, TxListener {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(LuceneBasedNodeKeyTable.class);
 
@@ -58,6 +62,8 @@ public abstract class LuceneBasedNodeKeyTable<T extends PhysicalNodeID> implemen
     public static final String QN = "qn";
 
     // ----------------------------------------------------
+
+    private final NodeKeyTableTxCache<T> txCache = new NodeKeyTableTxCache<T>();
 
     private final Directory dir;
 
@@ -101,6 +107,11 @@ public abstract class LuceneBasedNodeKeyTable<T extends PhysicalNodeID> implemen
 
     @Override
     public T lookup(QualifiedName qualifiedName) {
+        T cachedValue = txCache.lookup(qualifiedName);
+        if (cachedValue != null) {
+            return cachedValue;
+        }
+
         TermQuery query = new TermQuery(new Term(QN, qualifiedName.toURI()));
         IndexReader reader = reader();
         try {
@@ -131,33 +142,53 @@ public abstract class LuceneBasedNodeKeyTable<T extends PhysicalNodeID> implemen
 
     @Override
     public synchronized void put(QualifiedName qn, T physicalID) {
-        Document doc = new Document();
-        doc.add(new Field(QN, qn.toURI(), Field.Store.YES, Field.Index.NOT_ANALYZED));
-        setID(doc, physicalID);
-        try {
-            final IndexWriter writer = writer();
-            writer.addDocument(doc);
-            writer.commit();
-        } catch (IOException e) {
-            throw new RuntimeException("Could not map phyiscal ID to qualified name in index.", e);
-        }
+        txCache.put(qn, physicalID);
     }
 
     @Override
     public void remove(QualifiedName qn) {
-        try {
-            final IndexWriter writer = writer();
-            writer.deleteDocuments(new Term(QN, qn.toURI()));
-            writer.commit();
-        } catch (IOException e) {
-            throw new RuntimeException("Could not remove qualified name from index.", e);
-        }
+        txCache.remove(qn);
     }
 
     @Override
     public void shutdown() throws IOException {
         writer.close();
         dir.close();
+    }
+
+    // -- TxListener --------------------------------------
+
+    @Override
+    public void onBeforeCommit() {
+        try {
+            final IndexWriter writer = writer();
+
+            Map<QualifiedName,T> added = txCache.getAddedEntries();
+            for (QualifiedName qn : added.keySet()) {
+                Document doc = new Document();
+                doc.add(new Field(QN, qn.toURI(), Field.Store.YES, Field.Index.NOT_ANALYZED));
+                setID(doc, added.get(qn));
+                writer.addDocument(doc);
+            }
+
+            Set<QualifiedName> removed = txCache.getRemovedEntries();
+            for (QualifiedName qn : removed) {
+                writer.deleteDocuments(new Term(QN, qn.toURI()));
+            }
+
+            writer.commit();
+        } catch (IOException e) {
+            throw new RuntimeException("Could not commit changes in node key table to lucene index.", e);
+        }
+    }
+
+    @Override
+    public void onAfterCommit() {
+    }
+
+    @Override
+    public void onRollback() {
+        LOGGER.warn("Transaction is being rolled back, but cannot remove entries from node key table.");
     }
 
     // ----------------------------------------------------

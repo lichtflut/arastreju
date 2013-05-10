@@ -26,19 +26,39 @@ import java.io.IOException;
  * </p>
  *
  * <p>
- *  Created 27.01.13
+ *  Created Jan 27, 2013
  * </p>
  *
  * @author Oliver Tigges
  */
 public interface NodeKeyTable<T extends PhysicalNodeID> {
 
+    /**
+     * Lookup the physical ID for a qualified name.
+     * @param qualifiedName The qualified name.
+     * @return The corresponding ID.
+     */
     T lookup(QualifiedName qualifiedName);
 
+    /**
+     * Add new record of qualified name and according physical ID to table.
+     * @param qn The qualified name.
+     * @param physicalID The physical ID.
+     */
     void put(QualifiedName qn, T physicalID);
 
+    /**
+     * Remove qualified name from table.
+     * @param qn The qualified name to remove.
+     */
     void remove(QualifiedName qn);
 
+    // ----------------------------------------------------
+
+    /**
+     * Shutdown the table and potentially release all resources.
+     * @throws IOException When shutdown fails.
+     */
     void shutdown() throws IOException;
 
 }

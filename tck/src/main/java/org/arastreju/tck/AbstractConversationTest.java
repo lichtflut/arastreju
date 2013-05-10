@@ -580,7 +580,10 @@ public abstract class AbstractConversationTest {
         final ResourceNode car = new SNResource(qnCar);
         SNOPS.associate(car, Aras.HAS_PROPER_NAME, new SNText("BMW"));
 
-        TransactionControl ctl = conversation.beginTransaction();
+        //TransactionControl tx = conversation.beginTransaction();
+        try {
+
+
         conversation.attach(car);
 
         /* no commit here */
@@ -598,16 +601,18 @@ public abstract class AbstractConversationTest {
         Assert.assertNotNull(result);
         Assert.assertTrue(result.isEmpty());
 
-        /* commit just for completeness */
-        ctl.finish();
+        } finally {
+            /* commit just for completeness */
+           // tx.finish();
+        }
     }
 
     @Test
     public void testNonCommitStmtIndexing() throws IOException {
         final ResourceNode car = new SNResource(qnCar);
-        Statement st1 = SNOPS.associate(car, Aras.HAS_PROPER_NAME, new SNText("BMW"));
+        final Statement stmt1 = SNOPS.associate(car, Aras.HAS_PROPER_NAME, new SNText("BMW"));
 
-        TransactionControl ctl = conversation.beginTransaction();
+        TransactionControl tx = conversation.beginTransaction();
         conversation.attach(car);
 
         /* no commit here */
@@ -618,15 +623,17 @@ public abstract class AbstractConversationTest {
         Assert.assertFalse(result.isEmpty());
         Assert.assertEquals(qnCar, result.getSingleNode().getQualifiedName());
 
-        conversation.removeStatement(st1);
+        conversation.removeStatement(stmt1);
+
+        /* for removing we need a commit first */
+        tx.finish();
 
         query = conversation.createQuery().addField(Aras.HAS_PROPER_NAME.toURI(), "BMW");
         result = query.getResult();
         Assert.assertNotNull(result);
-        Assert.assertTrue(result.isEmpty());
+        Assert.assertTrue("Result should be empty: " + result.toList(), result.isEmpty());
 
-        /* commit just for completeness */
-        ctl.finish();
+
     }
 
 }

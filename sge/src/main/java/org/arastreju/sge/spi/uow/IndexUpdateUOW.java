@@ -79,7 +79,7 @@ public class IndexUpdateUOW extends AbstractUnitOfWork implements AssociationLis
     @Override
     public void onBeforeCommit() {
         LOGGER.debug("On Before Commit.");
-        // TODO: Commit index
+        indexUpdator.adviseCommit();
     }
 
     @Override

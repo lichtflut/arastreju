@@ -44,4 +44,11 @@ public interface IndexUpdator {
      */
     void remove(QualifiedName qn);
 
+    // ----------------------------------------------------
+
+    /**
+     * Advise the index to perform a commit at next suitable condition.
+     */
+    void adviseCommit();
+
 }

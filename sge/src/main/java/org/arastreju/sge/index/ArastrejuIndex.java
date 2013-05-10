@@ -44,7 +44,7 @@ import java.util.Set;
 
 /**
  * <p>
- *  Indexer implementation using Lucene
+ *  Conversation scoped indexer implementation using Lucene.
  * </p>
  *
  * <p>
@@ -94,10 +94,9 @@ public class ArastrejuIndex implements IndexUpdator, IndexSearcher {
 		LOGGER.debug("Indexing ({})", node);
 
 		Document doc = createDocument(node);
-		ContextIndex index = provider.forContext(conversationContext.getPrimaryContext());
+		ContextIndex index = ctxIndex();
 		try {
 			index.getWriter().updateDocument(new Term(IndexFields.QUALIFIED_NAME, normalizeQN(node.toURI())), doc); //creates if nonexistent
-//			index.getWriter().commit(); // XXX to be revised when transactions enter the play
 		} catch (IOException e) {
 			String msg = "caught IOException while indexing resource " + node.toURI();
 			LOGGER.error(msg, e);
@@ -112,34 +111,50 @@ public class ArastrejuIndex implements IndexUpdator, IndexSearcher {
 	@Override
 	public void remove(QualifiedName qn) {
 		LOGGER.debug("remove({})", qn);
-		ContextIndex index = provider.forContext(conversationContext.getPrimaryContext());
+		ContextIndex index = ctxIndex();
 		try {
 			index.getWriter().deleteDocuments(new Term(IndexFields.QUALIFIED_NAME, normalizeQN(qn.toURI())));
-//			index.getWriter().commit();
 		} catch (IOException e) {
 			LOGGER.error("Could not remove node '{}' from index due to {}", qn, e.getMessage());
 			throw new IllegalStateException("Could not remove node.", e);
 		}
 	}
 
-	@Override
+
+
+    @Override
+    public void adviseCommit() {
+        try {
+            ctxIndex().getWriter().commit();
+        } catch (IOException e) {
+            throw new IllegalStateException("Could not perform commit on index for context:" +
+                    conversationContext.getPrimaryContext());
+        }
+    }
+
+    @Override
 	public IndexSearchResult search(String query) {
 		LOGGER.debug("search({})", query);
-		ContextIndex index = provider.forContext(conversationContext.getPrimaryContext());
-		org.apache.lucene.search.IndexSearcher searcher = index.getSearcher();
 
-		/* default field is 'qn' as this is the only field common to all resources.
-		 * (not that we're going to need a default field, anyway.) */
-		QueryParser qp = new QueryParser(Version.LUCENE_35, IndexFields.QUALIFIED_NAME, new LowercaseWhitespaceAnalyzer(Version.LUCENE_35));
-		qp.setAllowLeadingWildcard(true); //such queries should be avoided where possible nevertheless
-
-		List<QualifiedName> resultList;
 		try {
+            IndexReader reader = ctxIndex().createReader();
+            org.apache.lucene.search.IndexSearcher searcher =
+                    new org.apache.lucene.search.IndexSearcher(reader);
+
+            /* default field is 'qn' as this is the only field common to all resources.
+            * (not that we're going to need a default field, anyway.) */
+            QueryParser qp = new QueryParser(Version.LUCENE_35, IndexFields.QUALIFIED_NAME,
+                    new LowercaseWhitespaceAnalyzer(Version.LUCENE_35));
+            qp.setAllowLeadingWildcard(true); //such queries should be avoided where possible nevertheless
+
 			/* we can use searcher.search(String, Collector) if we need all them results */
 			AllHitsCollector collector = new AllHitsCollector();
 			searcher.search(qp.parse(query), collector);
 
-			resultList = collector.getList();
+            List<QualifiedName> resultList = collector.getList();
+            reader.close();
+            searcher.close();
+            return new FixedIndexSearchResult(resultList);
 		} catch (IOException e) {
 			LOGGER.error("Caught IOException while processing query '" + query + "'", e);
             throw new IllegalStateException("Could not remove node.", e);
@@ -148,15 +163,17 @@ public class ArastrejuIndex implements IndexUpdator, IndexSearcher {
             throw new IllegalStateException("Could not perform search.", e);
 		}
 
-		return new FixedIndexSearchResult(resultList);
+
 	}
 
     // ----------------------------------------------------
 
-    public void dump() {
-        ContextIndex index = provider.forContext(conversationContext.getPrimaryContext());
-        org.apache.lucene.search.IndexSearcher searcher = index.getSearcher();
-        IndexReader reader = searcher.getIndexReader();
+    @SuppressWarnings(value = "unused")
+    public void dump() throws IOException {
+        ContextIndex index = ctxIndex();
+        IndexReader reader = ctxIndex().createReader();
+        org.apache.lucene.search.IndexSearcher searcher =
+                new org.apache.lucene.search.IndexSearcher(reader);
 
         try {
             TopDocs top = searcher.search(new MatchAllDocsQuery(), 100);
@@ -169,6 +186,8 @@ public class ArastrejuIndex implements IndexUpdator, IndexSearcher {
                 }
 
             }
+            searcher.close();
+            reader.close();
         } catch (IOException e) {
             String msg = "caught IOException while dumping index";
             LOGGER.error(msg, e);
@@ -176,33 +195,11 @@ public class ArastrejuIndex implements IndexUpdator, IndexSearcher {
         }
     }
 
-    /* no more calls to this object after close() */
-    public void close() {
-        ContextIndex index = provider.forContext(conversationContext.getPrimaryContext());
-        provider.release(conversationContext.getPrimaryContext());
-        try {
-            index.getReader().close();
-            index.getWriter().close();
-        } catch (IOException e) {
-            String msg = "caught IOException while closing reader/writer";
-            LOGGER.error(msg, e);
-            throw new RuntimeException(msg, e);
-        }
-    }
-
-    public void clear() {
-        ContextIndex index = provider.forContext(conversationContext.getPrimaryContext());
-        try {
-            index.getWriter().deleteAll();
-            // index.getWriter().commit();
-        } catch (IOException e) {
-            String msg = "caught IOException while clearing index";
-            LOGGER.error(msg, e);
-            throw new RuntimeException(msg, e);
-        }
-    }
-
 	// ----------------------------------------------------
+
+    private ContextIndex ctxIndex() {
+        return provider.forContext(conversationContext.getPrimaryContext());
+    }
 
 	private Document createDocument(ResourceNode node) {
 		Document doc = new Document();
@@ -258,8 +255,8 @@ public class ArastrejuIndex implements IndexUpdator, IndexSearcher {
 	}
 
 	private boolean findValue(Document doc, String fieldName, String val) {
-		String[] vals = doc.getValues(fieldName);
-		for (String v : vals) {
+		String[] values = doc.getValues(fieldName);
+		for (String v : values) {
 			if (v.equals(val)) {
 				return true;
 			}
