@@ -580,9 +580,7 @@ public abstract class AbstractConversationTest {
         final ResourceNode car = new SNResource(qnCar);
         SNOPS.associate(car, Aras.HAS_PROPER_NAME, new SNText("BMW"));
 
-        //TransactionControl tx = conversation.beginTransaction();
-        try {
-
+        TransactionControl tx = conversation.beginTransaction();
 
         conversation.attach(car);
 
@@ -596,15 +594,14 @@ public abstract class AbstractConversationTest {
 
         conversation.remove(car);
 
+        /* commit after remove operations statements */
+        tx.finish();
+
         query = conversation.createQuery().addField(Aras.HAS_PROPER_NAME.toURI(), "BMW");
         result = query.getResult();
         Assert.assertNotNull(result);
         Assert.assertTrue(result.isEmpty());
 
-        } finally {
-            /* commit just for completeness */
-           // tx.finish();
-        }
     }
 
     @Test

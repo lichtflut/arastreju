@@ -67,7 +67,6 @@ public class InferencingInterceptor implements AssociationListener {
         if (!stmt.getObject().isResourceNode()) {
             return;
         }
-        AttachedAssociationKeeper newSubject = getObjectAsKeeper(stmt);
         for (Statement newStatement : inference(stmt)) {
             target.onCreate(newStatement);
         }

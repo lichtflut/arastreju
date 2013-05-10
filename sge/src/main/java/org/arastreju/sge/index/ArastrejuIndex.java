@@ -170,7 +170,6 @@ public class ArastrejuIndex implements IndexUpdator, IndexSearcher {
 
     @SuppressWarnings(value = "unused")
     public void dump() throws IOException {
-        ContextIndex index = ctxIndex();
         IndexReader reader = ctxIndex().createReader();
         org.apache.lucene.search.IndexSearcher searcher =
                 new org.apache.lucene.search.IndexSearcher(reader);

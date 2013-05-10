@@ -163,11 +163,11 @@ public abstract class LuceneBasedNodeKeyTable<T extends PhysicalNodeID>
         try {
             final IndexWriter writer = writer();
 
-            Map<QualifiedName,T> added = txCache.getAddedEntries();
-            for (QualifiedName qn : added.keySet()) {
+            Set<Map.Entry<QualifiedName, T>> entries = txCache.getAddedEntries().entrySet();
+            for (Map.Entry<QualifiedName, T> entry : entries) {
                 Document doc = new Document();
-                doc.add(new Field(QN, qn.toURI(), Field.Store.YES, Field.Index.NOT_ANALYZED));
-                setID(doc, added.get(qn));
+                doc.add(new Field(QN, entry.getKey().toURI(), Field.Store.YES, Field.Index.NOT_ANALYZED));
+                setID(doc, entry.getValue());
                 writer.addDocument(doc);
             }
 
