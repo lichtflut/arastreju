@@ -70,12 +70,12 @@ public class InverseOfInferencer implements Inferencer {
 	// ----------------------------------------------------
 
 	private void addInverted(Statement originalStmt, Set<SemanticNode> invertedPredicates, Set<Statement> target) {
-		for (SemanticNode sn : invertedPredicates) {
-			if (sn.isResourceNode()) {
-				final Statement inverted = new DetachedStatement(originalStmt.getObject().asResource(), sn.asResource(), 
+		for (SemanticNode predicate : invertedPredicates) {
+			if (predicate.isResourceNode()) {
+				final Statement inverted = new DetachedStatement(originalStmt.getObject().asResource(), predicate.asResource(),
 						originalStmt.getSubject(), originalStmt.getContexts());
 				target.add(inverted);
-				LOGGER.debug("Added inverted Stmt: " + inverted);
+				LOGGER.debug("Added inverted Stmt: {} ", inverted);
 			}
 		}
 	}
