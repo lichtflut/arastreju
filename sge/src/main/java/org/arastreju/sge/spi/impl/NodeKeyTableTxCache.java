@@ -60,6 +60,7 @@ public class NodeKeyTableTxCache<T extends PhysicalNodeID> implements NodeKeyTab
 
     public void clear() {
         added.clear();
+        removed.clear();
     }
 
     // ----------------------------------------------------

@@ -179,6 +179,8 @@ public abstract class LuceneBasedNodeKeyTable<T extends PhysicalNodeID>
             writer.commit();
         } catch (IOException e) {
             throw new RuntimeException("Could not commit changes in node key table to lucene index.", e);
+        } finally {
+            txCache.clear();
         }
     }
 
@@ -201,7 +203,7 @@ public abstract class LuceneBasedNodeKeyTable<T extends PhysicalNodeID>
 
     private IndexReader reader() {
         try {
-            return IndexReader.open(dir, true);
+            return IndexReader.open(writer, true);
         } catch (IOException e) {
             throw new RuntimeException("Unable to obtain an index reader.", e);
         }

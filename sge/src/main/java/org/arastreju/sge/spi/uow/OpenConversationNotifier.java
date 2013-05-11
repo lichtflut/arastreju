@@ -22,9 +22,9 @@ import org.arastreju.sge.spi.WorkingContext;
 
 /**
  * <p>
- *  Listener for statement changes. Notifies other open conversations through connection.
+ *  Listener for statement changes. Notifies other open conversations through graph data connection.
  * </p>
- * <p/>
+ *
  * <p>
  *  Created 15.02.13
  * </p>

@@ -16,8 +16,7 @@
 package org.arastreju.sge.spi;
 
 import org.arastreju.sge.ConversationContext;
-import org.arastreju.sge.index.IndexSearcher;
-import org.arastreju.sge.index.IndexUpdator;
+import org.arastreju.sge.index.ConversationIndex;
 import org.arastreju.sge.model.Statement;
 import org.arastreju.sge.model.associations.AttachedAssociationKeeper;
 import org.arastreju.sge.naming.QualifiedName;
@@ -103,16 +102,10 @@ public interface WorkingContext extends ConversationContext {
     // ----------------------------------------------------
 
     /**
-     * Get a searcher for indexed elements.
-     * @return The index searcher.
+     * Get the index access for this conversation.
+     * @return The index.
      */
-    IndexSearcher getIndexSearcher();
-
-    /**
-     * Get an updator for indexing of elements.
-     * @return The updator.
-     */
-    IndexUpdator getIndexUpdator();
+    ConversationIndex getIndex();
 
     // ----------------------------------------------------
 

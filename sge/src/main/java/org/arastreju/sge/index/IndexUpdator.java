@@ -47,6 +47,11 @@ public interface IndexUpdator {
     // ----------------------------------------------------
 
     /**
+     * Bring queued changes to index.
+     */
+    void flush();
+
+    /**
      * Advise the index to perform a commit at next suitable condition.
      */
     void adviseCommit();

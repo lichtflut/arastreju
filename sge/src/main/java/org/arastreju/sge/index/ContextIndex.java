@@ -34,7 +34,7 @@ import java.io.IOException;
  * <p>
  *  Holds together everything needed to operate a lucene index.
  *  also takes care of mapping contexts to indexes and providing them
- *  to ArastrejuIndex.
+ *  to ConversationIndex.
  * </p>
  *
  * <p>

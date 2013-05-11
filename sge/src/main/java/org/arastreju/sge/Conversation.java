@@ -41,7 +41,6 @@ public interface Conversation {
 	/**
 	 * Adds a statement to the semantic model.
 	 * @param stmt The statement.
-	 * @return The attached association.
 	 */
 	void addStatement(Statement stmt);
 	
@@ -91,7 +90,6 @@ public interface Conversation {
 	 * All changes to the attached node will immediately be persistent.
      * If the node is attached to another conversation, it will be reattached here.
 	 * @param node The node to be attached.
-	 * @return The attached node.
 	 */
 	void attach(ResourceNode node);
 	

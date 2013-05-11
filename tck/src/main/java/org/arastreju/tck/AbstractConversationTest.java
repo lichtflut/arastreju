@@ -629,8 +629,6 @@ public abstract class AbstractConversationTest {
         result = query.getResult();
         Assert.assertNotNull(result);
         Assert.assertTrue("Result should be empty: " + result.toList(), result.isEmpty());
-
-
     }
 
 }

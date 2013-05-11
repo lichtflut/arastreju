@@ -19,7 +19,6 @@ import de.lichtflut.infra.exceptions.NotYetImplementedException;
 import org.arastreju.sge.Conversation;
 import org.arastreju.sge.ConversationContext;
 import org.arastreju.sge.SNOPS;
-import org.arastreju.sge.index.IndexSearcher;
 import org.arastreju.sge.index.LuceneQueryBuilder;
 import org.arastreju.sge.index.QNResolver;
 import org.arastreju.sge.model.ResourceID;
@@ -46,7 +45,7 @@ import java.util.Set;
 
 /**
  * <p>
- * Abstract base for modeling conversations.
+ *  Abstract base for modeling conversations.
  * </p>
  *
  * <p>
@@ -191,8 +190,7 @@ public class ConversationImpl implements Conversation {
 	@Override
 	public Query createQuery() {
         assertActive();
-        IndexSearcher searcher = context.getIndexSearcher();
-		return new LuceneQueryBuilder(searcher, getQNResolver());
+		return new LuceneQueryBuilder(context.getIndex(), getQNResolver());
 	}
 
     @Override

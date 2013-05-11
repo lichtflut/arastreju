@@ -21,6 +21,7 @@ import org.apache.lucene.document.Field.Index;
 import org.apache.lucene.document.Field.Store;
 import org.apache.lucene.document.Fieldable;
 import org.apache.lucene.index.IndexReader;
+import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.queryParser.ParseException;
 import org.apache.lucene.queryParser.QueryParser;
@@ -53,19 +54,23 @@ import java.util.Set;
  *
  * @author Timo Buhrmester
  */
-public class ArastrejuIndex implements IndexUpdator, IndexSearcher {
+public class ConversationIndex implements IndexUpdator, IndexSearcher {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(ArastrejuIndex.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(ConversationIndex.class);
 
 	private final List<Inferencer> inferencers = new ArrayList<Inferencer>();
 
-	private final ConversationContext conversationContext;
+    private final Set<ResourceNode> commitQueue = new HashSet<ResourceNode>();
+
+    private final Set<ResourceNode> rollbackQueue = new HashSet<ResourceNode>();
+
+    private final ConversationContext conversationContext;
 
 	private final IndexProvider provider;
 
 	// ----------------------------------------------------
 
-	public ArastrejuIndex(ConversationContext cc, IndexProvider provider) {
+	public ConversationIndex(ConversationContext cc, IndexProvider provider) {
 		this.conversationContext = cc;
 		this.provider = provider;
 	}
@@ -77,7 +82,7 @@ public class ArastrejuIndex implements IndexUpdator, IndexSearcher {
 	 * @param inferencer The inferencer.
 	 * @return This.
 	 */
-	public ArastrejuIndex add(Inferencer... inferencer) {
+	public ConversationIndex add(Inferencer... inferencer) {
 		Collections.addAll(inferencers, inferencer);
 		return this;
 	}
@@ -91,17 +96,8 @@ public class ArastrejuIndex implements IndexUpdator, IndexSearcher {
 	 */
 	@Override
 	public void index(ResourceNode node) {
-		LOGGER.debug("Indexing ({})", node);
-
-		Document doc = createDocument(node);
-		ContextIndex index = ctxIndex();
-		try {
-			index.getWriter().updateDocument(new Term(IndexFields.QUALIFIED_NAME, normalizeQN(node.toURI())), doc); //creates if nonexistent
-		} catch (IOException e) {
-			String msg = "caught IOException while indexing resource " + node.toURI();
-			LOGGER.error(msg, e);
-			throw new IllegalStateException(msg, e);
-		}
+		LOGGER.debug("Queued {} for indexing in conversation {}.", node, conversationContext);
+        commitQueue.add(node);
 	}
 
 	/**
@@ -110,7 +106,7 @@ public class ArastrejuIndex implements IndexUpdator, IndexSearcher {
 	 */
 	@Override
 	public void remove(QualifiedName qn) {
-		LOGGER.debug("remove({})", qn);
+        LOGGER.debug("Removing {} from in conversation {}.", qn, conversationContext);
 		ContextIndex index = ctxIndex();
 		try {
 			index.getWriter().deleteDocuments(new Term(IndexFields.QUALIFIED_NAME, normalizeQN(qn.toURI())));
@@ -120,21 +116,10 @@ public class ArastrejuIndex implements IndexUpdator, IndexSearcher {
 		}
 	}
 
-
-
-    @Override
-    public void adviseCommit() {
-        try {
-            ctxIndex().getWriter().commit();
-        } catch (IOException e) {
-            throw new IllegalStateException("Could not perform commit on index for context:" +
-                    conversationContext.getPrimaryContext());
-        }
-    }
-
     @Override
 	public IndexSearchResult search(String query) {
-		LOGGER.debug("search({})", query);
+		LOGGER.debug("Searching ({}) in conversation {}.", query, conversationContext);
+        flush();
 
 		try {
             IndexReader reader = ctxIndex().createReader();
@@ -165,6 +150,38 @@ public class ArastrejuIndex implements IndexUpdator, IndexSearcher {
 
 
 	}
+
+    // ----------------------------------------------------
+
+    @Override
+    public void flush() {
+        final IndexWriter writer = ctxIndex().getWriter();
+        for (ResourceNode node : commitQueue) {
+            LOGGER.debug("Indexing ({}) in conversation {}.", node, conversationContext);
+            Document doc = createDocument(node);
+            try {
+                //creates if nonexistent
+                writer.updateDocument(new Term(IndexFields.QUALIFIED_NAME, normalizeQN(node.toURI())), doc);
+                rollbackQueue.add(node);
+            } catch (IOException e) {
+                String msg = "caught IOException while indexing resource " + node.toURI();
+                LOGGER.error(msg, e);
+                throw new IllegalStateException(msg, e);
+            }
+        }
+        commitQueue.clear();
+    }
+
+    @Override
+    public void adviseCommit() {
+        try {
+            flush();
+            ctxIndex().getWriter().commit();
+        } catch (IOException e) {
+            throw new IllegalStateException("Could not perform commit on index for context:" +
+                    conversationContext.getPrimaryContext());
+        }
+    }
 
     // ----------------------------------------------------
 
@@ -247,7 +264,8 @@ public class ArastrejuIndex implements IndexUpdator, IndexSearcher {
 			/* This replicates the behaviour of the old neo index, for now.
 			 * TODO: Should probably use different sorts of fields  (like
 			 * NumericField) where applicable to leverage more of lucenes functionality */
-			f = new Field(stmt.getPredicate().toURI(), stmt.getObject().asValue().getStringValue(), Store.YES, Index.ANALYZED); //analyzed, right?
+			f = new Field(stmt.getPredicate().toURI(),
+                    stmt.getObject().asValue().getStringValue(), Store.YES, Index.ANALYZED); //analyzed, right?
 		}
 
 		return f;

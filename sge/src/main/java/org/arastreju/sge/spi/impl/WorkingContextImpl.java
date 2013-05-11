@@ -17,7 +17,7 @@ package org.arastreju.sge.spi.impl;
 
 import org.arastreju.sge.ConversationContext;
 import org.arastreju.sge.context.Context;
-import org.arastreju.sge.index.ArastrejuIndex;
+import org.arastreju.sge.index.ConversationIndex;
 import org.arastreju.sge.index.IndexSearcher;
 import org.arastreju.sge.index.IndexUpdator;
 import org.arastreju.sge.inferencing.implicit.InverseOfInferencer;
@@ -81,6 +81,8 @@ public class WorkingContextImpl implements WorkingContext {
 
     private final TxProvider txProvider;
 
+    private final ConversationIndex conversationIndex;
+
     private AssociationManager associationManager;
 
 	private Context primaryContext;
@@ -97,6 +99,12 @@ public class WorkingContextImpl implements WorkingContext {
         this.connection = connection;
         this.associationResolver = connection.createAssociationResolver(this);
         this.txProvider = connection.createTxProvider(this);
+
+        ResourceResolverImpl resolver = new ResourceResolverImpl(this);
+        this.conversationIndex = new ConversationIndex(this, connection.getIndexProvider())
+                .add(new TypeInferencer(resolver))
+                .add(new SubClassOfInferencer(resolver));
+
         connection.register(this);
 	}
 
@@ -149,7 +157,7 @@ public class WorkingContextImpl implements WorkingContext {
             @Override
             public void execute() {
                 connection.remove(qn);
-                getIndexUpdator().remove(qn);
+                conversationIndex.remove(qn);
             }
         }, this);
 
@@ -262,16 +270,8 @@ public class WorkingContextImpl implements WorkingContext {
     }
 
     @Override
-    public IndexSearcher getIndexSearcher() {
-        return new ArastrejuIndex(this, connection.getIndexProvider());
-    }
-
-    @Override
-    public IndexUpdator getIndexUpdator() {
-        ResourceResolverImpl resolver = new ResourceResolverImpl(this);
-        return new ArastrejuIndex(this, connection.getIndexProvider())
-            .add(new TypeInferencer(resolver))
-            .add(new SubClassOfInferencer(resolver));
+    public ConversationIndex getIndex() {
+        return conversationIndex;
     }
 
     // ----------------------------------------------------
@@ -366,7 +366,7 @@ public class WorkingContextImpl implements WorkingContext {
 
     private AssociationManager createAssociationManager(BoundTransactionControl tx) {
         ResourceResolver resolver = new ResourceResolverImpl(this);
-        IndexUpdateUOW indexUpdateUOW = new IndexUpdateUOW(getIndexUpdator());
+        IndexUpdateUOW indexUpdateUOW = new IndexUpdateUOW(conversationIndex);
         tx.register(indexUpdateUOW);
 
         AssociationManager am = new AssociationManager(resolver, tx);
