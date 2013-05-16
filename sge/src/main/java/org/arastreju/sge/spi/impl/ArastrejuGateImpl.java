@@ -17,6 +17,7 @@ package org.arastreju.sge.spi.impl;
 
 import org.arastreju.sge.ArastrejuGate;
 import org.arastreju.sge.Conversation;
+import org.arastreju.sge.ConversationContext;
 import org.arastreju.sge.context.Context;
 import org.arastreju.sge.context.DomainIdentifier;
 import org.arastreju.sge.spi.GraphDataConnection;
@@ -61,8 +62,9 @@ public class ArastrejuGateImpl implements ArastrejuGate {
     @Override
     public Conversation startConversation(Context primary, Context... readContexts) {
         WorkingContext ctx = newWorkingContext(connection);
-        ctx.setPrimaryContext(primary);
-        ctx.setReadContexts(readContexts);
+        ConversationContext cc = ctx.getConversationContext();
+        cc.setPrimaryContext(primary);
+        cc.setReadContexts(readContexts);
         return newConversation(ctx);
     }
 

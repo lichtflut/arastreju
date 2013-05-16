@@ -88,7 +88,7 @@ public class MemStorage implements GraphDataStore {
 
     @Override
     public AssociationWriter crateAssociationWriter(WorkingContext ctx) {
-        return new MemAssociationWriter(ctx, this);
+        return new MemAssociationWriter(ctx.getConversationContext(), this);
     }
 
     @Override

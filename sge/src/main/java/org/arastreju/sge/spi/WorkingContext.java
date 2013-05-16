@@ -16,6 +16,7 @@
 package org.arastreju.sge.spi;
 
 import org.arastreju.sge.ConversationContext;
+import org.arastreju.sge.context.Context;
 import org.arastreju.sge.index.ConversationIndex;
 import org.arastreju.sge.model.Statement;
 import org.arastreju.sge.model.associations.AttachedAssociationKeeper;
@@ -34,7 +35,13 @@ import org.arastreju.sge.spi.tx.TxProvider;
  *
  * @author Oliver Tigges
  */
-public interface WorkingContext extends ConversationContext {
+public interface WorkingContext {
+
+    boolean isActive();
+
+    ConversationContext getConversationContext();
+
+    // ----------------------------------------------------
 
     /**
      * Lookup the qualified name in the register.

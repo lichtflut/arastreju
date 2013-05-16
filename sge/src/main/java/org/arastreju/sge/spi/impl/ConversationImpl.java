@@ -201,8 +201,8 @@ public class ConversationImpl implements Conversation {
     // ----------------------------------------------------
 
 	@Override
-	public WorkingContext getConversationContext() {
-		return context;
+	public ConversationContext getConversationContext() {
+		return context.getConversationContext();
 	}
 
     @Override
@@ -266,7 +266,7 @@ public class ConversationImpl implements Conversation {
      */
     protected boolean isAttached(ResourceNode resource) {
         AssociationKeeper given = AssocKeeperAccess.getInstance().getAssociationKeeper(resource);
-        ConversationContext givenCtx = given.getConversationContext();
+        WorkingContext givenCtx = given.getConversationContext();
         return givenCtx != null && givenCtx.equals(getConversationContext());
     }
 

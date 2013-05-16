@@ -16,10 +16,7 @@
 package org.arastreju.sge.spi.impl;
 
 import org.arastreju.sge.ConversationContext;
-import org.arastreju.sge.context.Context;
 import org.arastreju.sge.index.ConversationIndex;
-import org.arastreju.sge.index.IndexSearcher;
-import org.arastreju.sge.index.IndexUpdator;
 import org.arastreju.sge.inferencing.implicit.InverseOfInferencer;
 import org.arastreju.sge.inferencing.implicit.SubClassOfInferencer;
 import org.arastreju.sge.inferencing.implicit.TypeInferencer;
@@ -42,12 +39,6 @@ import org.arastreju.sge.spi.uow.ResourceResolverImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-
 /**
  * <p>
  *  Handler for resolving, adding and removing of a node's association.
@@ -61,23 +52,15 @@ import java.util.Set;
  */
 public class WorkingContextImpl implements WorkingContext {
 
-	public static final Context[] NO_CTX = new Context[0];
-
 	private static final Logger LOGGER = LoggerFactory.getLogger(WorkingContextImpl.class);
-
-	private static long ID_GEN = 0;
 
 	// ----------------------------------------------------
 
-    private final long ctxId = ++ID_GEN;
+    private final ConversationContextImpl conversationContext = new ConversationContextImpl();
 
     private final GraphDataConnection connection;
 
     private final AssociationResolver associationResolver;
-
-    private final Map<QualifiedName, AttachedAssociationKeeper> register = new HashMap<QualifiedName, AttachedAssociationKeeper>();
-
-    private final Set<Context> readContexts = new HashSet<Context>();
 
     private final TxProvider txProvider;
 
@@ -85,23 +68,19 @@ public class WorkingContextImpl implements WorkingContext {
 
     private AssociationManager associationManager;
 
-	private Context primaryContext;
-
-	private boolean active = true;
-
 	// ----------------------------------------------------
 
 	/**
 	 * Creates a new Working Context.
 	 */
 	public WorkingContextImpl(GraphDataConnection connection) {
-		LOGGER.debug("New conversation context {} started.", ctxId);
+		LOGGER.debug("New conversation context {} started.", conversationContext.getID());
         this.connection = connection;
         this.associationResolver = connection.createAssociationResolver(this);
         this.txProvider = connection.createTxProvider(this);
 
         ResourceResolverImpl resolver = new ResourceResolverImpl(this);
-        this.conversationIndex = new ConversationIndex(this, connection.getIndexProvider())
+        this.conversationIndex = new ConversationIndex(conversationContext, connection.getIndexProvider())
                 .add(new TypeInferencer(resolver))
                 .add(new SubClassOfInferencer(resolver));
 
@@ -112,8 +91,7 @@ public class WorkingContextImpl implements WorkingContext {
 
     @Override
     public AttachedAssociationKeeper lookup(QualifiedName qn) {
-        assertActive();
-        AttachedAssociationKeeper registered = register.get(qn);
+        AttachedAssociationKeeper registered = conversationContext.get(qn);
         if (registered != null && !registered.isAttached()) {
             LOGGER.warn("There is a detached AssociationKeeper in the conversation register: {}.", qn);
         }
@@ -122,7 +100,6 @@ public class WorkingContextImpl implements WorkingContext {
 
     @Override
     public AttachedAssociationKeeper find(QualifiedName qn) {
-        assertActive();
         AttachedAssociationKeeper registered = lookup(qn);
         if (registered != null) {
             return registered;
@@ -138,7 +115,7 @@ public class WorkingContextImpl implements WorkingContext {
 
     @Override
     public AttachedAssociationKeeper create(final QualifiedName qn) {
-        assertActive();
+        conversationContext.assertActive();
         AttachedAssociationKeeper keeper = getTxProvider().doTransacted(new TxResultAction<AttachedAssociationKeeper>() {
             @Override
             public AttachedAssociationKeeper execute() {
@@ -151,7 +128,7 @@ public class WorkingContextImpl implements WorkingContext {
 
     @Override
     public void remove(final QualifiedName qn) {
-        assertActive();
+        conversationContext.assertActive();
         detach(qn);
         getTxProvider().doTransacted(new TxAction() {
             @Override
@@ -167,15 +144,13 @@ public class WorkingContextImpl implements WorkingContext {
 
     @Override
     public void attach(QualifiedName qn, AttachedAssociationKeeper keeper) {
-        assertActive();
-        register.put(qn, keeper);
+        conversationContext.put(qn, keeper);
         keeper.setConversationContext(this);
     }
 
     @Override
     public void detach(QualifiedName qn) {
-        assertActive();
-        final AttachedAssociationKeeper removed = register.remove(qn);
+        final AttachedAssociationKeeper removed = conversationContext.remove(qn);
         if (removed != null) {
             removed.detach();
         }
@@ -189,13 +164,13 @@ public class WorkingContextImpl implements WorkingContext {
      */
     @Override
     public void resolveAssociations(AttachedAssociationKeeper keeper) {
-        assertActive();
+        conversationContext.assertActive();
         associationResolver.resolveAssociations(keeper);
     }
 
     @Override
     public void addAssociation(final AttachedAssociationKeeper keeper, final Statement stmt) {
-        assertActive();
+        conversationContext.assertActive();
         getTxProvider().doTransacted(new TxAction() {
             @Override
             public void execute() {
@@ -207,7 +182,7 @@ public class WorkingContextImpl implements WorkingContext {
 
     @Override
     public boolean removeAssociation(final AttachedAssociationKeeper keeper, final Statement stmt) {
-        assertActive();
+        conversationContext.assertActive();
         getTxProvider().doTransacted(new TxAction() {
             @Override
             public void execute() {
@@ -237,29 +212,19 @@ public class WorkingContextImpl implements WorkingContext {
     // ----------------------------------------------------
 
 	/**
-	 * Clear the cache.
-	 */
-    @Override
-	public void clear() {
-		assertActive();
-		clearCaches();
-	}
-
-	/**
 	 * Close and invalidate this context.
 	 */
     @Override
 	public void close() {
-		if (active) {
-			clear();
-            onClose();
-			active = false;
-			LOGGER.info("Conversation '{}' will be closed.", ctxId);
+		if (conversationContext.isActive()) {
+            conversationContext.close();
+            connection.unregister(this);
 		}
 	}
 
+    @Override
     public boolean isActive() {
-		return active;
+		return conversationContext.isActive();
 	}
 
     // ----------------------------------------------------
@@ -274,91 +239,26 @@ public class WorkingContextImpl implements WorkingContext {
         return conversationIndex;
     }
 
-    // ----------------------------------------------------
-
-	public Context[] getReadContexts() {
-		assertActive();
-		if (readContexts != null) {
-			return readContexts.toArray(new Context[readContexts.size()]);
-		} else {
-			return NO_CTX;
-		}
-	}
-
-    public Context getPrimaryContext() {
-    	return primaryContext;
+    @Override
+    public ConversationContext getConversationContext() {
+        return conversationContext;
     }
-
-    @Override
-	public ConversationContext setPrimaryContext(Context ctx) {
-		this.primaryContext = ctx;
-        if (primaryContext != null) {
-            readContexts.add(primaryContext);
-        }
-		return this;
-	}
-
-    @Override
-	public ConversationContext setReadContexts(Context... ctxs) {
-        this.readContexts.clear();
-        if (ctxs != null) {
-            Collections.addAll(readContexts, ctxs);
-        }
-        if (primaryContext != null) {
-            readContexts.add(primaryContext);
-        }
-        return this;
-	}
 
     // ----------------------------------------------------
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        WorkingContextImpl that = (WorkingContextImpl) o;
-        return ctxId == that.ctxId;
-    }
-
-    @Override
-    public int hashCode() {
-        return (int) (ctxId ^ (ctxId >>> 32));
-    }
 
     @Override
     public String toString() {
-        return "ConversationContext[" +  ctxId + "]";
+        return "WorkingContext[" +  conversationContext.toString() + "]";
     }
 
     // ----------------------------------------------------
-
-    protected GraphDataConnection getConnection() {
-        return connection;
-    }
-
-    protected void onClose() {
-        connection.unregister(this);
-    }
-
-    protected void clearCaches() {
-        for (AttachedAssociationKeeper keeper : register.values()) {
-            keeper.detach();
-        }
-        register.clear();
-    }
-
-	protected void assertActive() {
-		if (!active) {
-			LOGGER.warn("Conversation context already closed: {}", ctxId);
-			throw new IllegalStateException("ConversationContext already closed.");
-		}
-	}
 
 	@Override
 	protected void finalize() throws Throwable {
         super.finalize();
-		if (active) {
-			LOGGER.debug("Conversation context will be removed by GC, but has not been closed: {}", ctxId);
+		if (conversationContext.isActive()) {
+			LOGGER.warn("Conversation context will be removed by GC, but has not been closed: {}"
+                    , conversationContext.getID());
 		}
 	}
 
@@ -373,7 +273,7 @@ public class WorkingContextImpl implements WorkingContext {
         am.register(connection.createAssociationWriter(this));
         am.register(indexUpdateUOW);
         am.register(new InferencingInterceptor(am).add(new InverseOfInferencer(resolver)));
-        am.register(new OpenConversationNotifier(getConnection(), this));
+        am.register(new OpenConversationNotifier(connection, this));
         return am;
     }
 

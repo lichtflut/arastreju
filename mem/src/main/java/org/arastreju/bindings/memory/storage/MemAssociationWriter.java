@@ -15,11 +15,10 @@
  */
 package org.arastreju.bindings.memory.storage;
 
+import org.arastreju.sge.ConversationContext;
 import org.arastreju.sge.context.Context;
 import org.arastreju.sge.model.DetachedStatement;
 import org.arastreju.sge.model.Statement;
-import org.arastreju.sge.spi.AssociationWriter;
-import org.arastreju.sge.spi.WorkingContext;
 import org.arastreju.sge.spi.impl.AbstractAssociationWriter;
 
 /**
@@ -39,7 +38,7 @@ public class MemAssociationWriter extends AbstractAssociationWriter {
 
     // ----------------------------------------------------
 
-    public MemAssociationWriter(WorkingContext ctx, MemStorage storage) {
+    public MemAssociationWriter(ConversationContext ctx, MemStorage storage) {
         super(ctx, storage);
         this.storage = storage;
     }
