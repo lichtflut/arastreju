@@ -63,7 +63,7 @@ public class ContextID extends SimpleResourceID implements Context {
 	
 	@Override
 	public SNContext asResource() {
-		return new SNContext(super.asResource());
+		return new SNContext(getQualifiedName());
 	}
 
 	public int compareTo(final Context other) {

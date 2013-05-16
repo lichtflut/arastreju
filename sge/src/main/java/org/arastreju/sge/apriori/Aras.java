@@ -71,10 +71,11 @@ public interface Aras {
 
     ResourceID HAS_VISIBILITY = new SimpleResourceID("http://arastreju.org/kernel#", "hasVisibility");
     ResourceID HAS_ACCESSIBILITY = new SimpleResourceID("http://arastreju.org/kernel#", "hasAccessibility");
+    ResourceID HAS_ACCESS_CONTEXT = new SimpleResourceID("http://arastreju.org/kernel#", "hasAccessContext");
 
-	// -- NAMESPACES --------------------------------------
+    // -- NAMESPACES --------------------------------------
 
-	ResourceID HAS_NAME = new SimpleResourceID(NAMESPACE_URI, "hasName");
+    ResourceID HAS_NAME = new SimpleResourceID(NAMESPACE_URI, "hasName");
 	ResourceID HAS_PREFIX = new SimpleResourceID(NAMESPACE_URI, "hasPrefix");
 	ResourceID HAS_URI = new SimpleResourceID(NAMESPACE_URI, "hasURI");
 

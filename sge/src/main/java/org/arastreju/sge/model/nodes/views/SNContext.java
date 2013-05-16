@@ -16,12 +16,13 @@
 package org.arastreju.sge.model.nodes.views;
 
 import de.lichtflut.infra.exceptions.NotYetSupportedException;
-import org.arastreju.sge.SNOPS;
 import org.arastreju.sge.apriori.Aras;
 import org.arastreju.sge.context.Accessibility;
 import org.arastreju.sge.context.Context;
 import org.arastreju.sge.model.ResourceID;
 import org.arastreju.sge.model.nodes.ResourceNode;
+import org.arastreju.sge.model.nodes.SemanticNode;
+import org.arastreju.sge.naming.QualifiedName;
 
 /**
  * <p>
@@ -36,18 +37,80 @@ import org.arastreju.sge.model.nodes.ResourceNode;
  */
 public class SNContext extends ResourceView implements Context {
 
+    public static SNContext from(SemanticNode node) {
+        if (node instanceof SNContext) {
+            return (SNContext) node;
+        } else if (node instanceof ResourceNode) {
+            return new SNContext((ResourceNode) node);
+        } else if (node instanceof ResourceID) {
+            return new SNContext(node.asResource());
+        } else {
+            return null;
+        }
+    }
+
+    // ----------------------------------------------------
+
+    /**
+     * Create a new context with given qualified name.
+     * @param qn The qualified name of the context.
+     */
+    public SNContext(QualifiedName qn) {
+        super(qn);
+    }
+
 	/**
 	 * Create a new context view for given resource.
 	 * @param resource The context resource to be wrapped.
 	 */
-	public SNContext(final ResourceNode resource) {
+	public SNContext(ResourceNode resource) {
 		super(resource);
 	}
 	
 	// ----------------------------------------------------
 
     public Accessibility getVisibility() {
-        ResourceID visibility = resourceValue(Aras.HAS_VISIBILITY);
+        return get(Aras.HAS_VISIBILITY);
+    }
+
+    public void setVisibility(Accessibility accessibility) {
+        set(Aras.HAS_VISIBILITY, accessibility);
+    }
+
+    public Accessibility getAccessibility() {
+        return get(Aras.HAS_ACCESSIBILITY);
+    }
+
+    public void setAccessibility(Accessibility accessibility) {
+        set(Aras.HAS_ACCESSIBILITY, accessibility);
+    }
+
+    // ----------------------------------------------------
+
+    public Context getAccessContext() {
+        ResourceID ac = resourceValue(Aras.HAS_ACCESS_CONTEXT);
+        if (ac != null) {
+            return SNContext.from(ac);
+        } else {
+            return this;
+        }
+    }
+
+    public void setAccessContext(Context accessContext) {
+        setValue(Aras.HAS_ACCESS_CONTEXT, accessContext);
+    }
+
+    // ----------------------------------------------------
+	
+	@Override
+	public int compareTo(final Context other) {
+		return getQualifiedName().compareTo(other.getQualifiedName());
+	}
+
+    // ----------------------------------------------------
+
+    private Accessibility get(ResourceID predicate) {
+        ResourceID visibility = resourceValue(predicate);
         if (Aras.PRIVATE.equals(visibility)) {
             return Accessibility.PRIVATE;
         } else if (Aras.PROTECTED.equals(visibility)) {
@@ -59,30 +122,23 @@ public class SNContext extends ResourceView implements Context {
         }
     }
 
-    public void setVisibility(Accessibility accessibility) {
+    private void set(ResourceID predicate, Accessibility accessibility) {
         switch (accessibility) {
             case PRIVATE:
-                setValue(Aras.HAS_VISIBILITY, Aras.PRIVATE);
+                setValue(predicate, Aras.PRIVATE);
                 break;
             case PROTECTED:
-                setValue(Aras.HAS_VISIBILITY, Aras.PROTECTED);
+                setValue(predicate, Aras.PROTECTED);
                 break;
             case PUBLIC:
-                setValue(Aras.HAS_VISIBILITY, Aras.PUBLIC);
+                setValue(predicate, Aras.PUBLIC);
                 break;
             case UNKNOWN:
-                setValue(Aras.HAS_VISIBILITY, Aras.UNKOWN);
+                setValue(predicate, Aras.UNKOWN);
                 break;
             default:
                 throw new NotYetSupportedException(accessibility);
         }
     }
 
-    // ----------------------------------------------------
-	
-	@Override
-	public int compareTo(final Context other) {
-		return getQualifiedName().compareTo(other.getQualifiedName());
-	}
-	
 }
