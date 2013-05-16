@@ -15,7 +15,12 @@
  */
 package org.arastreju.sge.model.nodes.views;
 
+import de.lichtflut.infra.exceptions.NotYetSupportedException;
+import org.arastreju.sge.SNOPS;
+import org.arastreju.sge.apriori.Aras;
+import org.arastreju.sge.context.Accessibility;
 import org.arastreju.sge.context.Context;
+import org.arastreju.sge.model.ResourceID;
 import org.arastreju.sge.model.nodes.ResourceNode;
 
 /**
@@ -24,11 +29,10 @@ import org.arastreju.sge.model.nodes.ResourceNode;
  * </p>
  * 
  * <p>
- * 	Created: 22.02.2010
+ * 	Created: Feb 22, 2010
  * </p>
  *
  * @author Oliver Tigges
- *
  */
 public class SNContext extends ResourceView implements Context {
 
@@ -40,11 +44,43 @@ public class SNContext extends ResourceView implements Context {
 		super(resource);
 	}
 	
-	// -----------------------------------------------------
+	// ----------------------------------------------------
+
+    public Accessibility getVisibility() {
+        ResourceID visibility = resourceValue(Aras.HAS_VISIBILITY);
+        if (Aras.PRIVATE.equals(visibility)) {
+            return Accessibility.PRIVATE;
+        } else if (Aras.PROTECTED.equals(visibility)) {
+            return Accessibility.PROTECTED;
+        } else if (Aras.PUBLIC.equals(visibility)) {
+            return Accessibility.PUBLIC;
+        } else {
+            return Accessibility.UNKNOWN;
+        }
+    }
+
+    public void setVisibility(Accessibility accessibility) {
+        switch (accessibility) {
+            case PRIVATE:
+                setValue(Aras.HAS_VISIBILITY, Aras.PRIVATE);
+                break;
+            case PROTECTED:
+                setValue(Aras.HAS_VISIBILITY, Aras.PROTECTED);
+                break;
+            case PUBLIC:
+                setValue(Aras.HAS_VISIBILITY, Aras.PUBLIC);
+                break;
+            case UNKNOWN:
+                setValue(Aras.HAS_VISIBILITY, Aras.UNKOWN);
+                break;
+            default:
+                throw new NotYetSupportedException(accessibility);
+        }
+    }
+
+    // ----------------------------------------------------
 	
-	/**
-	 * {@inheritDoc}
-	 */
+	@Override
 	public int compareTo(final Context other) {
 		return getQualifiedName().compareTo(other.getQualifiedName());
 	}

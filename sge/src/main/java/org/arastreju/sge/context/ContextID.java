@@ -30,13 +30,23 @@ import org.arastreju.sge.naming.QualifiedName;
  *
  * @author Oliver Tigges
  */
-public class SimpleContextID extends SimpleResourceID implements Context {
+public class ContextID extends SimpleResourceID implements Context {
+
+    public static Context forContext(QualifiedName qn) {
+        return new ContextID(qn);
+    }
+
+    public static Context forContext(String nsUri, String name) {
+        return new ContextID(nsUri, name);
+    }
+
+    // ----------------------------------------------------
 
 	/**
      * Create a context with given qualified name.
 	 * @param qn The qualified name of the context.
 	 */
-	public SimpleContextID(QualifiedName qn) {
+	private ContextID(QualifiedName qn) {
 		super(qn);
 	}
 
@@ -45,7 +55,7 @@ public class SimpleContextID extends SimpleResourceID implements Context {
 	 * @param nsUri T.he namespace part.
 	 * @param name The name part
 	 */
-	public SimpleContextID(String nsUri, String name) {
+	private ContextID(String nsUri, String name) {
 		super(nsUri, name);
 	}
 

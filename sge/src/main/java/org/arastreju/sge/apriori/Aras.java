@@ -62,7 +62,17 @@ public interface Aras {
 
     ResourceID ANY = new SimpleResourceID("http://arastreju.org/kernel#", "Any");
 
-	// -- ORGANIZATION --------------------------------
+    // -- CONTEXTS ----------------------------------------
+
+    ResourceID PRIVATE = new SimpleResourceID("http://arastreju.org/kernel#", "Private");
+    ResourceID PROTECTED = new SimpleResourceID("http://arastreju.org/kernel#", "Protected");
+    ResourceID PUBLIC = new SimpleResourceID("http://arastreju.org/kernel#", "Public");
+    ResourceID UNKOWN = new SimpleResourceID("http://arastreju.org/kernel#", "Unkown");
+
+    ResourceID HAS_VISIBILITY = new SimpleResourceID("http://arastreju.org/kernel#", "hasVisibility");
+    ResourceID HAS_ACCESSIBILITY = new SimpleResourceID("http://arastreju.org/kernel#", "hasAccessibility");
+
+	// -- NAMESPACES --------------------------------------
 
 	ResourceID HAS_NAME = new SimpleResourceID(NAMESPACE_URI, "hasName");
 	ResourceID HAS_PREFIX = new SimpleResourceID(NAMESPACE_URI, "hasPrefix");

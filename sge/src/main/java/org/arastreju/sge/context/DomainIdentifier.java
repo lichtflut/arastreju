@@ -36,7 +36,7 @@ public abstract class DomainIdentifier {
 
 	private String domainName;
 
-    private SimpleContextID context;
+    private Context context;
 
 	// -----------------------------------------------------
 	
@@ -45,7 +45,7 @@ public abstract class DomainIdentifier {
 	 */
 	public DomainIdentifier(final String domainName) {
 	    this.domainName = domainName;
-        this.context = new SimpleContextID(Namespace.LOCAL_CONTEXTS, domainName);
+        this.context = ContextID.forContext(Namespace.LOCAL_CONTEXTS, domainName);
     }
 	
 	// -----------------------------------------------------

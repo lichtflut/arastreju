@@ -23,7 +23,7 @@ import org.arastreju.sge.Arastreju;
 import org.arastreju.sge.ArastrejuGate;
 import org.arastreju.sge.Conversation;
 import org.arastreju.sge.context.Context;
-import org.arastreju.sge.context.SimpleContextID;
+import org.arastreju.sge.context.ContextID;
 import org.arastreju.sge.model.Statement;
 import org.arastreju.sge.model.nodes.ResourceNode;
 import org.arastreju.sge.model.nodes.views.SNScalar;
@@ -63,9 +63,9 @@ public class ContextSample {
      */
     public void sample() {
         /* create a context for everyone */
-        Context aliceCtx = new SimpleContextID(CONTEXT_URI_ALICE);
-        Context bobCtx = new SimpleContextID(CONTEXT_URI_BOB);
-        Context daveCtx = new SimpleContextID(CONTEXT_URI_DAVE);
+        Context aliceCtx = ContextID.forContext(CONTEXT_URI_ALICE);
+        Context bobCtx = ContextID.forContext(CONTEXT_URI_BOB);
+        Context daveCtx = ContextID.forContext(CONTEXT_URI_DAVE);
 
         /* create a conversation for everyone with their respective context */
         Conversation aliceConv = gate.startConversation(aliceCtx);

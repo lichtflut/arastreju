@@ -22,7 +22,7 @@ import org.arastreju.sge.apriori.Aras;
 import org.arastreju.sge.apriori.RDF;
 import org.arastreju.sge.apriori.RDFS;
 import org.arastreju.sge.context.Context;
-import org.arastreju.sge.context.SimpleContextID;
+import org.arastreju.sge.context.ContextID;
 import org.arastreju.sge.io.RdfXmlBinding;
 import org.arastreju.sge.io.SemanticGraphIO;
 import org.arastreju.sge.io.SemanticIOException;
@@ -541,12 +541,12 @@ public abstract class AbstractConversationTest {
         final ResourceNode car1 = new SNResource(qnCar);
 
         final String ctxNamepsace = "http://lf.de/ctx#";
-        final SimpleContextID ctx1 = new SimpleContextID(ctxNamepsace, "ctx1");
-        final SimpleContextID ctx2 = new SimpleContextID(ctxNamepsace, "ctx2");
-        final SimpleContextID ctx3 = new SimpleContextID(ctxNamepsace, "ctx3");
+        final Context ctx1 = ContextID.forContext(ctxNamepsace, "ctx1");
+        final Context ctx2 = ContextID.forContext(ctxNamepsace, "ctx2");
+        final Context ctx3 = ContextID.forContext(ctxNamepsace, "ctx3");
 
-        final SimpleContextID convCtx1 = new SimpleContextID(ctxNamepsace, "convCtx1");
-        final SimpleContextID convCtx2 = new SimpleContextID(ctxNamepsace, "convCtx1");
+        final Context convCtx1 = ContextID.forContext(ctxNamepsace, "convCtx1");
+        final Context convCtx2 = ContextID.forContext(ctxNamepsace, "convCtx1");
 
         conversation.attach(car1);
 

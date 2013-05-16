@@ -20,7 +20,7 @@ import org.arastreju.sge.Conversation;
 import org.arastreju.sge.apriori.Aras;
 import org.arastreju.sge.apriori.RDF;
 import org.arastreju.sge.context.Context;
-import org.arastreju.sge.context.SimpleContextID;
+import org.arastreju.sge.context.ContextID;
 import org.arastreju.sge.io.StatementContainer;
 import org.arastreju.sge.model.Statement;
 import org.arastreju.sge.model.nodes.ResourceNode;
@@ -110,7 +110,7 @@ public class Organizer {
     public Context registerContext(final QualifiedName qn) {
         final ResourceNode node = createContextNode(qn);
         conversation().attach(node);
-        return new SimpleContextID(qn);
+        return ContextID.forContext(qn);
     }
 
     // ----------------------------------------------------
@@ -149,7 +149,7 @@ public class Organizer {
 	}
 	
 	protected Context createContext(final ResourceNode node) {
-		return new SimpleContextID(node.getQualifiedName());
+		return ContextID.forContext(node.getQualifiedName());
 	}
 	
 	protected ResourceNode createContextNode(final QualifiedName qn) {

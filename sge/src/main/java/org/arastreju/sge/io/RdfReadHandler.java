@@ -16,8 +16,6 @@
 package org.arastreju.sge.io;
 
 import de.lichtflut.infra.exceptions.NotYetSupportedException;
-import org.arastreju.sge.context.Context;
-import org.arastreju.sge.context.SimpleContextID;
 import org.arastreju.sge.model.DetachedStatement;
 import org.arastreju.sge.model.ResourceID;
 import org.arastreju.sge.model.SimpleResourceID;
@@ -53,7 +51,7 @@ public class RdfReadHandler implements RDFHandler {
 	
 	private static final int MAX_TEXT_LENGTH = 100 * 1000;
 
-	private final Logger logger = LoggerFactory.getLogger(RdfReadHandler.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(RdfReadHandler.class);
 	
 	private final ReadStatementListener listener;
 	
@@ -70,25 +68,25 @@ public class RdfReadHandler implements RDFHandler {
 	// -- RDFHandler --------------------------------------
 	
 	public void startRDF() throws RDFHandlerException {
-		logger.debug("start RDF");
+		LOGGER.debug("start RDF");
 	}
 
 	public void endRDF() throws RDFHandlerException {
-		logger.debug("end RDF");
+		LOGGER.debug("end RDF");
 	}
 
 	public void handleComment(final String comment) throws RDFHandlerException {
-		logger.debug("comment: " + comment);
+		LOGGER.debug("comment: " + comment);
 	}
 
 	public void handleNamespace(final String prefix, final String uri)
 			throws RDFHandlerException {
-		logger.debug("namespace: " + prefix + " -> " + uri);
+		LOGGER.debug("namespace: " + prefix + " -> " + uri);
 	}
 
 	public void handleStatement(final Statement stmt)
 			throws RDFHandlerException {
-		logger.debug("statement: " + stmt.getSubject() + " " + stmt.getPredicate() + " " + stmt.getObject());
+		LOGGER.debug("statement: " + stmt.getSubject() + " " + stmt.getPredicate() + " " + stmt.getObject());
 			
 		Resource subject = stmt.getSubject();
 		URI predicate = stmt.getPredicate();
@@ -129,14 +127,6 @@ public class RdfReadHandler implements RDFHandler {
 		return new SimpleResourceID(toQualifiedName(uri));
 	}
 	
-	protected Context toContext(final Resource ctx) {
-		if (ctx == null) {
-			return null;
-		} else {
-			return new SimpleContextID(QualifiedName.fromURI(ctx.stringValue()));
-		}
-	}
-	
 	protected SemanticNode toNode(final Value value) {
 		if (isUriNode(value)){
 			return toResourceRef((URI) value);
@@ -144,7 +134,7 @@ public class RdfReadHandler implements RDFHandler {
 			final LiteralImpl literal = (LiteralImpl) value;
 			String content = value.stringValue();
 			if (content.length() > MAX_TEXT_LENGTH){
-				logger.warn("Text too long; chopping content: " + content);
+				LOGGER.warn("Text too long; chopping content: " + content);
 				content = content.substring(0, MAX_TEXT_LENGTH);
 			}
 			final Locale locale = getLocale(literal);

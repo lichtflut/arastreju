@@ -16,8 +16,8 @@
 package org.arastreju.sge.index;
 
 import org.arastreju.sge.context.Context;
-import org.arastreju.sge.context.SimpleContextID;
-import org.arastreju.sge.model.SimpleResourceID;
+import org.arastreju.sge.context.ContextID;
+import org.arastreju.sge.naming.QualifiedName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -40,7 +40,7 @@ public class IndexProvider {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(IndexProvider.class);
 
-    private static final Context nullCtxDummy = new SimpleContextID(new SimpleResourceID().getQualifiedName());
+    private static final Context nullCtxDummy = ContextID.forContext(QualifiedName.generate());
 
     /* stores one index per context */
     private final Map<Context, ContextIndex> indexMap = new HashMap<Context, ContextIndex>();
