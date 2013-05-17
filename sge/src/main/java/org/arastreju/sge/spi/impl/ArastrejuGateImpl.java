@@ -64,13 +64,16 @@ public class ArastrejuGateImpl implements ArastrejuGate {
 
     @Override
     public Conversation startConversation(Context primary, Context... readContexts) {
+        // Wire conversation context and controller
         ConversationContextImpl ctx = new ConversationContextImpl();
+        ConversationController controller = newController(connection, ctx);
+        ctx.setContexResolver(new ContextResolverImpl(controller));
+
+        // Set initial contexts to be resolved by conversation context
         ctx.setPrimaryContext(primary);
         ctx.setReadContexts(readContexts);
 
         LOGGER.debug("New conversation context {} started.", ctx.getID());
-
-        ConversationController controller = newController(connection, ctx);
         return newConversation(controller);
     }
 

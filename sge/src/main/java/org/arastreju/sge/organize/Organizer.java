@@ -25,6 +25,7 @@ import org.arastreju.sge.io.StatementContainer;
 import org.arastreju.sge.model.Statement;
 import org.arastreju.sge.model.nodes.ResourceNode;
 import org.arastreju.sge.model.nodes.SNResource;
+import org.arastreju.sge.model.nodes.views.SNContext;
 import org.arastreju.sge.model.nodes.views.SNText;
 import org.arastreju.sge.naming.Namespace;
 import org.arastreju.sge.naming.QualifiedName;
@@ -108,9 +109,9 @@ public class Organizer {
     }
 
     public Context registerContext(final QualifiedName qn) {
-        final ResourceNode node = createContextNode(qn);
-        conversation().attach(node);
-        return ContextID.forContext(qn);
+        final SNContext context = new SNContext(qn);
+        conversation().attach(context);
+        return context;
     }
 
     // ----------------------------------------------------
@@ -152,12 +153,6 @@ public class Organizer {
 		return ContextID.forContext(node.getQualifiedName());
 	}
 	
-	protected ResourceNode createContextNode(final QualifiedName qn) {
-		final SNResource node = new SNResource(qn);
-		assure(node, RDF.TYPE, Aras.CONTEXT);
-		return node;
-	}
-
     // ----------------------------------------------------
 
     protected Conversation conversation() {

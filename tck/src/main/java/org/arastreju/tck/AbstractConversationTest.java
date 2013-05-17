@@ -34,6 +34,7 @@ import org.arastreju.sge.model.nodes.ResourceNode;
 import org.arastreju.sge.model.nodes.SNResource;
 import org.arastreju.sge.model.nodes.ValueNode;
 import org.arastreju.sge.model.nodes.views.SNClass;
+import org.arastreju.sge.model.nodes.views.SNContext;
 import org.arastreju.sge.model.nodes.views.SNEntity;
 import org.arastreju.sge.model.nodes.views.SNText;
 import org.arastreju.sge.naming.QualifiedName;
@@ -42,6 +43,7 @@ import org.arastreju.sge.query.Query;
 import org.arastreju.sge.query.QueryResult;
 import org.arastreju.sge.spi.GraphDataConnection;
 import org.arastreju.sge.spi.GraphDataStore;
+import org.arastreju.sge.spi.impl.ContextResolverImpl;
 import org.arastreju.sge.spi.impl.ConversationContextImpl;
 import org.arastreju.sge.spi.impl.ConversationImpl;
 import org.arastreju.sge.spi.impl.GraphDataConnectionImpl;
@@ -104,7 +106,10 @@ public abstract class AbstractConversationTest {
     public void setUp() throws Exception {
         store = createStore();
         connection = new GraphDataConnectionImpl(store);
-        conversation = new ConversationImpl(new ConversationControllerImpl(connection, new ConversationContextImpl()));
+        ConversationContextImpl context = new ConversationContextImpl();
+        ConversationControllerImpl controller = new ConversationControllerImpl(connection, context);
+        conversation = new ConversationImpl(controller);
+        context.setContexResolver(new ContextResolverImpl(controller));
     }
 
     @After
@@ -217,7 +222,7 @@ public abstract class AbstractConversationTest {
 
         conversation.attach(car);
 
-// detach and find again
+        // detach and find again
         conversation.detach(car);
         final ResourceNode car2 = conversation.findResource(qnCar);
         Assert.assertNotSame(car, car2);
@@ -630,6 +635,37 @@ public abstract class AbstractConversationTest {
         result = query.getResult();
         Assert.assertNotNull(result);
         Assert.assertTrue("Result should be empty: " + result.toList(), result.isEmpty());
+    }
+
+    @Test
+    public void testAccessContextsDuringIndexing() {
+        final SNClass car = SNClass.from(new SNResource(qnCar));
+        final SNEntity aCar = car.createInstance();
+
+        SNContext accessContext = new SNContext(QualifiedName.generate());
+        SNContext sourceContext = new SNContext(QualifiedName.generate());
+        sourceContext.setAccessContext(accessContext);
+        conversation.attach(sourceContext);
+        Assert.assertTrue(accessContext.isAttached());
+
+        conversation.getConversationContext().setPrimaryContext(sourceContext);
+        conversation.attach(aCar);
+
+        // Check with independent context
+        SNContext otherContext = new SNContext(QualifiedName.generate());
+        conversation.getConversationContext().setPrimaryContext(otherContext);
+        Query query1 = conversation.createQuery().addField(RDF.TYPE, qnCar);
+        Assert.assertEquals(0, query1.getResult().size());
+
+        // Check with access context
+        conversation.getConversationContext().setPrimaryContext(accessContext);
+        Query query2 = conversation.createQuery().addField(RDF.TYPE, qnCar);
+        Assert.assertEquals(1, query2.getResult().size());
+
+        // Check with source context
+        conversation.getConversationContext().setPrimaryContext(sourceContext);
+        Query query3 = conversation.createQuery().addField(RDF.TYPE, qnCar);
+        Assert.assertEquals(1, query3.getResult().size());
     }
 
 }

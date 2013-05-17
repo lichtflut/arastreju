@@ -29,9 +29,11 @@ import org.apache.lucene.search.MatchAllDocsQuery;
 import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.util.Version;
 import org.arastreju.sge.ConversationContext;
+import org.arastreju.sge.context.Context;
 import org.arastreju.sge.inferencing.Inferencer;
 import org.arastreju.sge.model.Statement;
 import org.arastreju.sge.model.nodes.ResourceNode;
+import org.arastreju.sge.model.nodes.views.SNContext;
 import org.arastreju.sge.naming.QualifiedName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -214,7 +216,13 @@ public class ConversationIndex implements IndexUpdator, IndexSearcher {
 	// ----------------------------------------------------
 
     private ContextIndex ctxIndex() {
-        return provider.forContext(conversationContext.getPrimaryContext());
+        Context ctxID = conversationContext.getPrimaryContext();
+        if (ctxID != null) {
+            SNContext context = SNContext.from(ctxID);
+            return provider.forContext(context.getAccessContext());
+        } else {
+            return provider.forContext(null);
+        }
     }
 
 	private Document createDocument(ResourceNode node) {

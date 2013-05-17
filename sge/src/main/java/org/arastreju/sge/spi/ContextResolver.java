@@ -13,21 +13,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.arastreju.sge.spi.admin;
+package org.arastreju.sge.spi;
 
-import org.arastreju.sge.config.Administrator;
+import org.arastreju.sge.context.Context;
+import org.arastreju.sge.model.nodes.views.SNContext;
+import org.arastreju.sge.naming.QualifiedName;
 
 /**
  * <p>
- *  Abstract base for Administrator implementations.
+ *  Resolver for Contexts.
  * </p>
  *
  * <p>
- *  Created 10.05.13
+ *  Created May 05, 2013
  * </p>
  *
  * @author Oliver Tigges
  */
-public abstract class AbstractAdministrator implements Administrator {
+public interface ContextResolver {
+
+    SNContext resolve(QualifiedName qn);
+
+    SNContext resolve(Context ctx);
 
 }

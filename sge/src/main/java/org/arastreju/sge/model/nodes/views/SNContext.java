@@ -17,12 +17,15 @@ package org.arastreju.sge.model.nodes.views;
 
 import de.lichtflut.infra.exceptions.NotYetSupportedException;
 import org.arastreju.sge.apriori.Aras;
+import org.arastreju.sge.apriori.RDF;
 import org.arastreju.sge.context.Accessibility;
 import org.arastreju.sge.context.Context;
 import org.arastreju.sge.model.ResourceID;
 import org.arastreju.sge.model.nodes.ResourceNode;
 import org.arastreju.sge.model.nodes.SemanticNode;
 import org.arastreju.sge.naming.QualifiedName;
+
+import static org.arastreju.sge.SNOPS.assure;
 
 /**
  * <p>
@@ -57,6 +60,7 @@ public class SNContext extends ResourceView implements Context {
      */
     public SNContext(QualifiedName qn) {
         super(qn);
+        setValue(RDF.TYPE, Aras.CONTEXT);
     }
 
 	/**
