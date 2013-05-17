@@ -34,6 +34,12 @@ import java.io.Serializable;
  * @author Oliver Tigges
  */
 public class SimpleResourceID implements ResourceID, Serializable {
+
+    public static SimpleResourceID from(QualifiedName qn) {
+        return new SimpleResourceID(qn);
+    }
+
+    // ----------------------------------------------------
 	
 	private final QualifiedName qualifiedName;
 	

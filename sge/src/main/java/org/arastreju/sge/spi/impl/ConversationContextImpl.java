@@ -42,7 +42,7 @@ import java.util.Set;
  */
 public class ConversationContextImpl implements ConversationContext {
 
-    public static final Context[] NO_CTX = new Context[0];
+    public static final SNContext[] NO_CTX = new SNContext[0];
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ConversationContextImpl.class);
 
@@ -59,26 +59,33 @@ public class ConversationContextImpl implements ConversationContext {
     private SNContext primaryContext;
 
     private boolean active = true;
+
     private ContextResolver resolver;
 
     // ----------------------------------------------------
 
+    /**
+     * Get the unique conversation ID.
+     * @return The unique ID of the conversation.
+     */
     public long getID() {
         return ctxId;
     }
 
     // ----------------------------------------------------
 
-    public Context[] getReadContexts() {
+    @Override
+    public SNContext[] getReadContexts() {
         assertActive();
         if (readContexts != null) {
-            return readContexts.toArray(new Context[readContexts.size()]);
+            return readContexts.toArray(new SNContext[readContexts.size()]);
         } else {
             return NO_CTX;
         }
     }
 
-    public Context getPrimaryContext() {
+    @Override
+    public SNContext getPrimaryContext() {
         return primaryContext;
     }
 

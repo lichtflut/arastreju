@@ -15,10 +15,10 @@
  */
 package org.arastreju.bindings.memory.storage;
 
-import org.arastreju.sge.model.Statement;
+import org.arastreju.sge.model.SimpleResourceID;
 import org.arastreju.sge.model.associations.AttachedAssociationKeeper;
-import org.arastreju.sge.spi.AssociationResolver;
 import org.arastreju.sge.spi.ConversationController;
+import org.arastreju.sge.spi.impl.AbstractAssociationResolver;
 
 /**
  * <p>
@@ -31,13 +31,14 @@ import org.arastreju.sge.spi.ConversationController;
  *
  * @author Oliver Tigges
  */
-public class MemAssociationResolver implements AssociationResolver {
+public class MemAssociationResolver extends AbstractAssociationResolver {
 
     private MemStorage storage;
 
     // ----------------------------------------------------
 
     public MemAssociationResolver(ConversationController cc, MemStorage storage) {
+        super(cc);
         this.storage = storage;
     }
 
@@ -46,8 +47,10 @@ public class MemAssociationResolver implements AssociationResolver {
     @Override
     public void resolveAssociations(AttachedAssociationKeeper keeper) {
         StoredResource entry = storage.getStoreEntry(keeper.getQualifiedName());
-        for (Statement statement : entry.getStatements()) {
-            keeper.addAssociationDirectly(statement);
+        for (StoredStatement storedStmt : entry.getStatements()) {
+            if (regardContext(storedStmt.getContexts())) {
+                keeper.addAssociationDirectly(storedStmt.load(SimpleResourceID.from(keeper.getQualifiedName())));
+            }
         }
     }
 

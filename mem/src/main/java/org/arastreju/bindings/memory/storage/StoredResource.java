@@ -39,7 +39,7 @@ public class StoredResource {
 
     private final QualifiedName qn;
 
-    private final Set<Statement> statements = new HashSet<Statement>();
+    private final Set<StoredStatement> statements = new HashSet<StoredStatement>();
 
     // ----------------------------------------------------
 
@@ -57,15 +57,16 @@ public class StoredResource {
         return qn;
     }
 
-    public Set<Statement> getStatements() {
+    public Set<StoredStatement> getStatements() {
         return statements;
     }
 
     public void addAssociation(Statement stmt) {
-        statements.add(stmt);
+        statements.add(new StoredStatement(stmt));
     }
 
     public void remove(Statement stmt) {
-        statements.remove(stmt);
+        statements.remove(new StoredStatement(stmt));
     }
+
 }

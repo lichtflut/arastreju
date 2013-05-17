@@ -21,6 +21,7 @@ import org.arastreju.sge.SNOPS;
 import org.arastreju.sge.apriori.Aras;
 import org.arastreju.sge.apriori.RDF;
 import org.arastreju.sge.apriori.RDFS;
+import org.arastreju.sge.context.Accessibility;
 import org.arastreju.sge.context.Context;
 import org.arastreju.sge.context.ContextID;
 import org.arastreju.sge.io.RdfXmlBinding;
@@ -37,6 +38,7 @@ import org.arastreju.sge.model.nodes.views.SNClass;
 import org.arastreju.sge.model.nodes.views.SNContext;
 import org.arastreju.sge.model.nodes.views.SNEntity;
 import org.arastreju.sge.model.nodes.views.SNText;
+import org.arastreju.sge.naming.Namespace;
 import org.arastreju.sge.naming.QualifiedName;
 import org.arastreju.sge.persistence.TransactionControl;
 import org.arastreju.sge.query.Query;
@@ -61,6 +63,7 @@ import java.io.ObjectOutputStream;
 
 import static org.arastreju.sge.SNOPS.associate;
 import static org.arastreju.sge.SNOPS.associations;
+import static org.arastreju.sge.SNOPS.fetchObject;
 import static org.arastreju.sge.SNOPS.objects;
 import static org.arastreju.sge.SNOPS.qualify;
 import static org.arastreju.sge.SNOPS.remove;
@@ -539,8 +542,6 @@ public abstract class AbstractConversationTest {
 
     }
 
-
-
     @Test
     public void testMultipleContexts() {
         final ResourceNode vehicle = new SNResource(qnVehicle);
@@ -666,6 +667,44 @@ public abstract class AbstractConversationTest {
         conversation.getConversationContext().setPrimaryContext(sourceContext);
         Query query3 = conversation.createQuery().addField(RDF.TYPE, qnCar);
         Assert.assertEquals(1, query3.getResult().size());
+    }
+
+    @Test
+    public void testContextRegarding() {
+        final SNClass car = SNClass.from(new SNResource(qnCar));
+        final SNEntity aCar = car.createInstance();
+
+        SNContext accessContext = new SNContext(QualifiedName.from(Namespace.LOCAL_CONTEXTS, "Access"));
+        SNContext sourceContext = new SNContext(QualifiedName.from(Namespace.LOCAL_CONTEXTS, "Source"));
+        sourceContext.setAccessContext(accessContext);
+        SNContext publicContext = new SNContext(QualifiedName.from(Namespace.LOCAL_CONTEXTS, "Public"));
+        publicContext.setVisibility(Accessibility.PUBLIC);
+        SNContext privateContext = new SNContext(QualifiedName.from(Namespace.LOCAL_CONTEXTS, "Private"));
+        privateContext.setVisibility(Accessibility.PRIVATE);
+        conversation.attach(sourceContext);
+        conversation.attach(publicContext);
+        conversation.attach(privateContext);
+
+        conversation.attach(aCar);
+
+        associate(aCar, Aras.HAS_BRAND_NAME, new SNText("BMW"), sourceContext);
+        associate(aCar, RDFS.LABEL, new SNText("A BMW car"), publicContext);
+        associate(aCar, Aras.HAS_PROPER_NAME, new SNText("Knut"), privateContext);
+
+        conversation.detach(aCar);
+
+        conversation.getConversationContext().setPrimaryContext(sourceContext);
+
+        final ResourceNode car2 = conversation.findResource(aCar.getQualifiedName());
+        Assert.assertNotSame(aCar, car2);
+
+        // primary context
+        Assert.assertEquals(new SNText("BMW"), fetchObject(car2, Aras.HAS_BRAND_NAME));
+        // public
+        Assert.assertEquals(new SNText("A BMW car"), fetchObject(car2, RDFS.LABEL));
+        // private
+        Assert.assertNull(fetchObject(car2, Aras.HAS_PROPER_NAME));
+
     }
 
 }
