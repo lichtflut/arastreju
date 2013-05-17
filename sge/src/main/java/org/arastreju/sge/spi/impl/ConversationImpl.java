@@ -36,7 +36,7 @@ import org.arastreju.sge.persistence.TxResultAction;
 import org.arastreju.sge.query.Query;
 import org.arastreju.sge.spi.AssocKeeperAccess;
 import org.arastreju.sge.spi.AttachedResourceNode;
-import org.arastreju.sge.spi.WorkingContext;
+import org.arastreju.sge.spi.ConversationController;
 import org.arastreju.sge.spi.tx.TxProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -58,23 +58,23 @@ public class ConversationImpl implements Conversation {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ConversationImpl.class);
 
-	private final WorkingContext context;
+	private final ConversationController controller;
 
 	// ----------------------------------------------------
 
     /**
      * Constructor.
-     * @param context The context of this conversation.
+     * @param controller The controller of this conversation.
      */
-	public ConversationImpl(WorkingContext context) {
-		this.context = context;
+	public ConversationImpl(ConversationController controller) {
+		this.controller = controller;
 	}
 
     // -- Node operations ---------------------------------
 
     @Override
     public ResourceNode findResource(final QualifiedName qn) {
-        AssociationKeeper existing = context.find(qn);
+        AssociationKeeper existing = controller.find(qn);
         if (existing != null) {
             return new AttachedResourceNode(qn, existing);
         }
@@ -83,11 +83,11 @@ public class ConversationImpl implements Conversation {
 
     @Override
     public ResourceNode resolve(final ResourceID resourceID) {
-        AttachedAssociationKeeper existing = context.find(resourceID.getQualifiedName());
+        AttachedAssociationKeeper existing = controller.find(resourceID.getQualifiedName());
         if (existing != null) {
             return new AttachedResourceNode(resourceID.getQualifiedName(), existing);
         } else {
-            AssociationKeeper created = context.create(resourceID.getQualifiedName());
+            AssociationKeeper created = controller.create(resourceID.getQualifiedName());
             return new AttachedResourceNode(resourceID.getQualifiedName(), created);
         }
     }
@@ -103,7 +103,7 @@ public class ConversationImpl implements Conversation {
         tx().doTransacted(new TxAction() {
             public void execute() {
                 // 2nd: check if node for qualified name exists and has to be merged
-                final AssociationKeeper attachedKeeper = context.find(resource.getQualifiedName());
+                final AssociationKeeper attachedKeeper = controller.find(resource.getQualifiedName());
                 if (attachedKeeper != null) {
                     merge(attachedKeeper, resource);
                 } else {
@@ -111,7 +111,7 @@ public class ConversationImpl implements Conversation {
                     persist(resource);
                 }
             }
-        }, context);
+        }, controller);
     }
 
     @Override
@@ -119,13 +119,13 @@ public class ConversationImpl implements Conversation {
         assertActive();
         AssocKeeperAccess.getInstance().setAssociationKeeper(
                 node, new DetachedAssociationKeeper(node.getAssociations()));
-        context.detach(node.getQualifiedName());
+        controller.detach(node.getQualifiedName());
     }
 
     @Override
     public void remove(final ResourceID id) {
         assertActive();
-        context.remove(id.getQualifiedName());
+        controller.remove(id.getQualifiedName());
     }
 
     @Override
@@ -134,7 +134,7 @@ public class ConversationImpl implements Conversation {
         if (isAttached(node)) {
             return;
         }
-        AssociationKeeper existing = context.find(node.getQualifiedName());
+        AssociationKeeper existing = controller.find(node.getQualifiedName());
         if (existing != null) {
             AssocKeeperAccess.getInstance().setAssociationKeeper(node, existing);
         } else {
@@ -172,7 +172,7 @@ public class ConversationImpl implements Conversation {
                 }
                 return graph;
             }
-        }, context);
+        }, controller);
 	}
 
 	@Override
@@ -190,7 +190,7 @@ public class ConversationImpl implements Conversation {
 	@Override
 	public Query createQuery() {
         assertActive();
-		return new LuceneQueryBuilder(context.getIndex(), getQNResolver());
+		return new LuceneQueryBuilder(controller.getIndex(), getQNResolver());
 	}
 
     @Override
@@ -202,17 +202,17 @@ public class ConversationImpl implements Conversation {
 
 	@Override
 	public ConversationContext getConversationContext() {
-		return context.getConversationContext();
+		return controller.getConversationContext();
 	}
 
     @Override
     public TransactionControl beginTransaction() {
-        return context.getTxProvider().begin().bind(context);
+        return controller.getTxProvider().begin().bind(controller);
     }
 
 	@Override
 	public void close() {
-		context.close();
+		controller.close();
 	}
 
 	// ----------------------------------------------------
@@ -234,8 +234,8 @@ public class ConversationImpl implements Conversation {
      * @return The persisted ResourceNode.
      */
     protected ResourceNode persist(final ResourceNode node) {
-        // 1st: create a corresponding Neo node and attach the Resource with the current context.
-        AssociationKeeper keeper = context.create(node.getQualifiedName());
+        // 1st: create a corresponding Neo node and attach the Resource with the current controller.
+        AssociationKeeper keeper = controller.create(node.getQualifiedName());
 
         // 2nd: retain copy of current associations
         final Set<Statement> copy = node.getAssociations();
@@ -258,7 +258,7 @@ public class ConversationImpl implements Conversation {
         final AssociationKeeper detached = AssocKeeperAccess.getInstance().getAssociationKeeper(changed);
         AssocKeeperAccess.getInstance().merge(attached, detached);
         AssocKeeperAccess.getInstance().setAssociationKeeper(changed, attached);
-        context.attach(changed.getQualifiedName(), (AttachedAssociationKeeper) attached);
+        controller.attach(changed.getQualifiedName(), (AttachedAssociationKeeper) attached);
     }
 
     /**
@@ -266,25 +266,26 @@ public class ConversationImpl implements Conversation {
      */
     protected boolean isAttached(ResourceNode resource) {
         AssociationKeeper given = AssocKeeperAccess.getInstance().getAssociationKeeper(resource);
-        WorkingContext givenCtx = given.getConversationContext();
+        ConversationContext givenCtx = given.getConversationContext();
         return givenCtx != null && givenCtx.equals(getConversationContext());
     }
 
     protected void assertActive() {
-        if (!context.isActive()) {
+        if (!controller.isActive()) {
             throw new IllegalStateException("Conversation already closed.");
         }
     }
 
     protected void verifySameContext(ResourceNode resource) {
         AssociationKeeper given = AssocKeeperAccess.getInstance().getAssociationKeeper(resource);
-        if (!given.getConversationContext().equals(context)) {
-            LOGGER.warn("Resource {} is not in current conversation context {}: ", resource, context);
+        ConversationContext ctx = controller.getConversationContext();
+        if (!given.getConversationContext().equals(ctx)) {
+            LOGGER.warn("Resource {} is not in current conversation {}: ", resource, ctx);
         }
     }
 
     private TxProvider tx() {
-        return context.getTxProvider();
+        return controller.getTxProvider();
     }
 
 }

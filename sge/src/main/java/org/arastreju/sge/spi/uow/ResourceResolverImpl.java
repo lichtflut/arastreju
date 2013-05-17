@@ -23,7 +23,7 @@ import org.arastreju.sge.naming.QualifiedName;
 import org.arastreju.sge.persistence.ResourceResolver;
 import org.arastreju.sge.spi.AssocKeeperAccess;
 import org.arastreju.sge.spi.AttachedResourceNode;
-import org.arastreju.sge.spi.WorkingContext;
+import org.arastreju.sge.spi.ConversationController;
 
 import java.util.Set;
 
@@ -40,11 +40,11 @@ import java.util.Set;
  */
 public class ResourceResolverImpl implements ResourceResolver {
 
-    private WorkingContext context;
+    private ConversationController context;
 
     // ----------------------------------------------------
 
-    public ResourceResolverImpl(WorkingContext context) {
+    public ResourceResolverImpl(ConversationController context) {
         this.context = context;
     }
 

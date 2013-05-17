@@ -15,7 +15,7 @@
  */
 package org.arastreju.sge.spi.tx;
 
-import org.arastreju.sge.spi.WorkingContext;
+import org.arastreju.sge.spi.ConversationController;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -36,7 +36,7 @@ public abstract class AbstractTransactionControl implements BoundTransactionCont
 
     private List<TxListener> listeners = new ArrayList<TxListener>();
 
-    private WorkingContext ctx;
+    private ConversationController ctx;
 
     private boolean success;
 
@@ -94,14 +94,14 @@ public abstract class AbstractTransactionControl implements BoundTransactionCont
     }
 
     @Override
-    public BoundTransactionControl bind(WorkingContext ctx) {
+    public BoundTransactionControl bind(ConversationController ctx) {
         this.ctx = ctx;
         ctx.beginUnitOfWork(this);
         return this;
     }
 
     @Override
-    public WorkingContext getContext() {
+    public ConversationController getContext() {
         return ctx;
     }
 

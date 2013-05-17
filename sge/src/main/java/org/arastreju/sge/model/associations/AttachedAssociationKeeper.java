@@ -15,10 +15,11 @@
  */
 package org.arastreju.sge.model.associations;
 
+import org.arastreju.sge.ConversationContext;
 import org.arastreju.sge.model.Statement;
 import org.arastreju.sge.naming.QualifiedName;
+import org.arastreju.sge.spi.ConversationController;
 import org.arastreju.sge.spi.PhysicalNodeID;
-import org.arastreju.sge.spi.WorkingContext;
 
 import java.util.Set;
 
@@ -39,7 +40,7 @@ public class AttachedAssociationKeeper extends AbstractAssociationKeeper {
 
     private final PhysicalNodeID physicalID;
 
-    private WorkingContext context;
+    private ConversationController controller;
 
     // ----------------------------------------------------
 
@@ -65,17 +66,17 @@ public class AttachedAssociationKeeper extends AbstractAssociationKeeper {
     }
 
     @Override
-    public WorkingContext getConversationContext() {
-        return context;
+    public ConversationContext getConversationContext() {
+        return controller.getConversationContext();
     }
 
     /**
-     * Set the conversation context this association keeper is bound to.
-     * If this keeper is detached, there will be no conversation context.
-     * @return The conversation context or null.
+     * Set the controller this association keeper is bound to.
+     * If this keeper is detached, there will be no controller.
+     * @return The controller or null.
      */
-    public void setConversationContext(WorkingContext ctx) {
-        this.context = ctx;
+    public void setController(ConversationController controller) {
+        this.controller = controller;
     }
 
     // ----------------------------------------------------
@@ -86,7 +87,7 @@ public class AttachedAssociationKeeper extends AbstractAssociationKeeper {
             return;
         }
         if (isAttached()) {
-            context.addAssociation(this, assoc);
+            controller.addAssociation(this, assoc);
         } else {
             super.addAssociation(assoc);
         }
@@ -98,7 +99,7 @@ public class AttachedAssociationKeeper extends AbstractAssociationKeeper {
             return false;
         }
         if (isAttached()) {
-            return context.removeAssociation(this, assoc);
+            return controller.removeAssociation(this, assoc);
         } else {
             return super.removeAssociation(assoc);
         }
@@ -107,7 +108,7 @@ public class AttachedAssociationKeeper extends AbstractAssociationKeeper {
     @Override
     protected void resolveAssociations() {
         if (isAttached()) {
-            context.resolveAssociations(this);
+            controller.resolveAssociations(this);
         } else {
             throw new IllegalStateException("This node is no longer attached. Cannot resolve associations.");
         }
@@ -143,7 +144,7 @@ public class AttachedAssociationKeeper extends AbstractAssociationKeeper {
 
     @Override
     public boolean isAttached() {
-        return context != null && context.isActive();
+        return controller != null && controller.isActive();
     }
 
     /**
@@ -151,7 +152,7 @@ public class AttachedAssociationKeeper extends AbstractAssociationKeeper {
      */
     public void detach() {
         markResolved();
-        context = null;
+        controller = null;
     }
 
     // ----------------------------------------------------

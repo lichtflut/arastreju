@@ -35,7 +35,7 @@
 		<level value="warn" />
 	</logger>
     
-    <logger name="org.arastreju.sge.spi.impl.WorkingContextImpl">
+    <logger name="org.arastreju.sge.spi.impl.ConversationControllerImpl">
         <level value="info" />
     </logger>
 

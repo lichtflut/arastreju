@@ -17,8 +17,8 @@ package org.arastreju.sge.spi.uow;
 
 import org.arastreju.sge.model.Statement;
 import org.arastreju.sge.spi.AssociationListener;
+import org.arastreju.sge.spi.ConversationController;
 import org.arastreju.sge.spi.GraphDataConnection;
-import org.arastreju.sge.spi.WorkingContext;
 
 /**
  * <p>
@@ -34,11 +34,11 @@ import org.arastreju.sge.spi.WorkingContext;
 public class OpenConversationNotifier implements AssociationListener {
 
     private final GraphDataConnection connection;
-    private final WorkingContext ctx;
+    private final ConversationController ctx;
 
     // ----------------------------------------------------
 
-    public OpenConversationNotifier(GraphDataConnection connection, WorkingContext ctx) {
+    public OpenConversationNotifier(GraphDataConnection connection, ConversationController ctx) {
         this.ctx = ctx;
         this.connection = connection;
     }

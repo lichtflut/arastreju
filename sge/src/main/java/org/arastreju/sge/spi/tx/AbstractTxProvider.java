@@ -17,7 +17,7 @@ package org.arastreju.sge.spi.tx;
 
 import org.arastreju.sge.persistence.TxAction;
 import org.arastreju.sge.persistence.TxResultAction;
-import org.arastreju.sge.spi.WorkingContext;
+import org.arastreju.sge.spi.ConversationController;
 
 /**
  * <p>
@@ -62,7 +62,7 @@ public abstract class AbstractTxProvider implements TxProvider {
 	// -----------------------------------------------------
 	
 	@Override
-    public void doTransacted(final TxAction action, WorkingContext ctx){
+    public void doTransacted(final TxAction action, ConversationController ctx){
 		final BoundTransactionControl tx = begin();
         tx.bind(ctx);
 		try {
@@ -78,7 +78,7 @@ public abstract class AbstractTxProvider implements TxProvider {
 	}
 	
 	@Override
-    public <T> T doTransacted(final TxResultAction<T> action, WorkingContext ctx){
+    public <T> T doTransacted(final TxResultAction<T> action, ConversationController ctx){
 		final BoundTransactionControl tx = begin();
         tx.bind(ctx);
 		try {

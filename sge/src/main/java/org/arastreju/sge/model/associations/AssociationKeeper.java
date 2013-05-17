@@ -15,9 +15,9 @@
  */
 package org.arastreju.sge.model.associations;
 
+import org.arastreju.sge.ConversationContext;
 import org.arastreju.sge.model.Statement;
 import org.arastreju.sge.model.nodes.ResourceNode;
-import org.arastreju.sge.spi.WorkingContext;
 
 import java.util.Set;
 
@@ -63,7 +63,7 @@ public interface AssociationKeeper {
      * If this keeper is detached, there will be no conversation context.
      * @return The conversation context or null.
      */
-    WorkingContext getConversationContext();
+    ConversationContext getConversationContext();
 
 	/**
 	 * Check if this keeper is attached or detached.

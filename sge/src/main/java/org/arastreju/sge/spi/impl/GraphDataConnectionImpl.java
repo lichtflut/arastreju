@@ -22,7 +22,7 @@ import org.arastreju.sge.spi.AssociationResolver;
 import org.arastreju.sge.spi.AssociationWriter;
 import org.arastreju.sge.spi.GraphDataConnection;
 import org.arastreju.sge.spi.GraphDataStore;
-import org.arastreju.sge.spi.WorkingContext;
+import org.arastreju.sge.spi.ConversationController;
 import org.arastreju.sge.spi.tx.TxProvider;
 
 import java.util.ArrayList;
@@ -43,7 +43,7 @@ import java.util.Set;
  */
 public class GraphDataConnectionImpl implements GraphDataConnection {
 
-    private final Set<WorkingContext> openConversations = new HashSet<WorkingContext>();
+    private final Set<ConversationController> openConversations = new HashSet<ConversationController>();
 
     private final GraphDataStore store;
 
@@ -77,24 +77,24 @@ public class GraphDataConnectionImpl implements GraphDataConnection {
     // ----------------------------------------------------
 
     @Override
-    public AssociationResolver createAssociationResolver(WorkingContext ctx) {
+    public AssociationResolver createAssociationResolver(ConversationController ctx) {
         return store.createAssociationResolver(ctx);
     }
 
     @Override
-    public AssociationWriter createAssociationWriter(WorkingContext ctx) {
+    public AssociationWriter createAssociationWriter(ConversationController ctx) {
         return store.crateAssociationWriter(ctx);
     }
 
     // ----------------------------------------------------
 
     @Override
-    public void register(WorkingContext conversationContext) {
+    public void register(ConversationController conversationContext) {
         openConversations.add(conversationContext);
     }
 
     @Override
-    public void unregister(WorkingContext conversationContext) {
+    public void unregister(ConversationController conversationContext) {
         openConversations.remove(conversationContext);
     }
 
@@ -104,9 +104,9 @@ public class GraphDataConnectionImpl implements GraphDataConnection {
      * @param context The context, where the modification occurred.
      */
     @Override
-    public void notifyModification(QualifiedName qn, WorkingContext context) {
-        List<WorkingContext> copy = new ArrayList<WorkingContext>(openConversations);
-        for (WorkingContext current : copy) {
+    public void notifyModification(QualifiedName qn, ConversationController context) {
+        List<ConversationController> copy = new ArrayList<ConversationController>(openConversations);
+        for (ConversationController current : copy) {
             if (!current.equals(context)) {
                 current.onModification(qn, context);
             }
@@ -118,9 +118,9 @@ public class GraphDataConnectionImpl implements GraphDataConnection {
      */
     @Override
     public void close() {
-        List<WorkingContext> copy = new ArrayList<WorkingContext>(openConversations);
+        List<ConversationController> copy = new ArrayList<ConversationController>(openConversations);
         // iterating over copy because original will be remove itself while closing.
-        for (WorkingContext cc : copy) {
+        for (ConversationController cc : copy) {
             cc.close();
         }
     }
@@ -133,7 +133,7 @@ public class GraphDataConnectionImpl implements GraphDataConnection {
     }
 
     @Override
-    public TxProvider createTxProvider(WorkingContext ctx) {
+    public TxProvider createTxProvider(ConversationController ctx) {
         return store.createTxProvider(ctx);
     }
 }

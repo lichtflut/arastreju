@@ -60,21 +60,21 @@ public interface GraphDataStore {
      * @param ctx The context of the new resolver.
      * @return The resolver.
      */
-    AssociationResolver createAssociationResolver(WorkingContext ctx);
+    AssociationResolver createAssociationResolver(ConversationController ctx);
 
     /**
      * Create a new association writer for given working context.
      * @param ctx The context of the new writer.
      * @return The writer.
      */
-    AssociationWriter crateAssociationWriter(WorkingContext ctx);
+    AssociationWriter crateAssociationWriter(ConversationController ctx);
 
     /**
      * Create a new provider for transactions.
      * @param ctx The context.
      * @return The transaction provider.
      */
-    TxProvider createTxProvider(WorkingContext ctx);
+    TxProvider createTxProvider(ConversationController ctx);
 
     /**
      * Obtain the provider for indices for this store.

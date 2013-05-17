@@ -17,7 +17,7 @@ package org.arastreju.sge.spi.tx;
 
 import org.arastreju.sge.persistence.TxAction;
 import org.arastreju.sge.persistence.TxResultAction;
-import org.arastreju.sge.spi.WorkingContext;
+import org.arastreju.sge.spi.ConversationController;
 
 /**
  * <p>
@@ -49,13 +49,13 @@ public interface TxProvider {
      * @param action The action.
      * @param ctx The context to bind the transaction to.
      */
-    void doTransacted(TxAction action, WorkingContext ctx);
+    void doTransacted(TxAction action, ConversationController ctx);
 
     /**
      * Perform given action in a transaction.
      * @param action The action.
      * @param ctx The context to bind the transaction to.
      */
-    <T> T doTransacted(TxResultAction<T> action, WorkingContext ctx);
+    <T> T doTransacted(TxResultAction<T> action, ConversationController ctx);
 
 }

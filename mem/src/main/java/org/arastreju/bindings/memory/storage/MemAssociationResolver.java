@@ -18,7 +18,7 @@ package org.arastreju.bindings.memory.storage;
 import org.arastreju.sge.model.Statement;
 import org.arastreju.sge.model.associations.AttachedAssociationKeeper;
 import org.arastreju.sge.spi.AssociationResolver;
-import org.arastreju.sge.spi.WorkingContext;
+import org.arastreju.sge.spi.ConversationController;
 
 /**
  * <p>
@@ -33,14 +33,11 @@ import org.arastreju.sge.spi.WorkingContext;
  */
 public class MemAssociationResolver implements AssociationResolver {
 
-    private WorkingContext ctx;
-
     private MemStorage storage;
 
     // ----------------------------------------------------
 
-    public MemAssociationResolver(WorkingContext ctx, MemStorage storage) {
-        this.ctx = ctx;
+    public MemAssociationResolver(ConversationController cc, MemStorage storage) {
         this.storage = storage;
     }
 

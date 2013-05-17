@@ -16,7 +16,7 @@
 package org.arastreju.sge.spi.tx;
 
 import org.arastreju.sge.persistence.TransactionControl;
-import org.arastreju.sge.spi.WorkingContext;
+import org.arastreju.sge.spi.ConversationController;
 
 /**
  * <p>
@@ -36,13 +36,13 @@ public interface BoundTransactionControl extends TransactionControl {
      * @param ctx The context.
      * @return This.
      */
-    BoundTransactionControl bind(WorkingContext ctx);
+    BoundTransactionControl bind(ConversationController ctx);
 
     /**
      * Get the working context.
      * @return The context.
      */
-    WorkingContext getContext();
+    ConversationController getContext();
 
     // ----------------------------------------------------
 

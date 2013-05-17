@@ -17,11 +17,12 @@ package org.arastreju.sge.spi.impl;
 
 import org.arastreju.sge.ArastrejuGate;
 import org.arastreju.sge.Conversation;
-import org.arastreju.sge.ConversationContext;
 import org.arastreju.sge.context.Context;
 import org.arastreju.sge.context.DomainIdentifier;
+import org.arastreju.sge.spi.ConversationController;
 import org.arastreju.sge.spi.GraphDataConnection;
-import org.arastreju.sge.spi.WorkingContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * <p>
@@ -35,6 +36,8 @@ import org.arastreju.sge.spi.WorkingContext;
  * @author Oliver Tigges
  */
 public class ArastrejuGateImpl implements ArastrejuGate {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(ArastrejuGateImpl.class);
 
     private final GraphDataConnection connection;
 
@@ -61,11 +64,14 @@ public class ArastrejuGateImpl implements ArastrejuGate {
 
     @Override
     public Conversation startConversation(Context primary, Context... readContexts) {
-        WorkingContext ctx = newWorkingContext(connection);
-        ConversationContext cc = ctx.getConversationContext();
-        cc.setPrimaryContext(primary);
-        cc.setReadContexts(readContexts);
-        return newConversation(ctx);
+        ConversationContextImpl ctx = new ConversationContextImpl();
+        ctx.setPrimaryContext(primary);
+        ctx.setReadContexts(readContexts);
+
+        LOGGER.debug("New conversation context {} started.", ctx.getID());
+
+        ConversationController controller = newController(connection, ctx);
+        return newConversation(controller);
     }
 
     @Override
@@ -75,12 +81,12 @@ public class ArastrejuGateImpl implements ArastrejuGate {
 
     // ----------------------------------------------------
 
-    protected Conversation newConversation(WorkingContext ctx) {
+    protected Conversation newConversation(ConversationController ctx) {
         return new ConversationImpl(ctx);
     }
 
-    protected WorkingContext newWorkingContext(GraphDataConnection connection) {
-        return new WorkingContextImpl(connection);
+    protected ConversationController newController(GraphDataConnection connection, ConversationContextImpl ctx) {
+        return new ConversationControllerImpl(connection, ctx);
     }
 
 }

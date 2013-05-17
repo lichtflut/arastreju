@@ -18,9 +18,6 @@ package org.arastreju.sge.spi;
 import org.arastreju.sge.index.IndexProvider;
 import org.arastreju.sge.model.associations.AttachedAssociationKeeper;
 import org.arastreju.sge.naming.QualifiedName;
-import org.arastreju.sge.spi.AssociationResolver;
-import org.arastreju.sge.spi.AssociationWriter;
-import org.arastreju.sge.spi.WorkingContext;
 import org.arastreju.sge.spi.tx.TxProvider;
 
 /**
@@ -63,14 +60,14 @@ public interface GraphDataConnection {
      * @param ctx The context of the new resolver.
      * @return The resolver.
      */
-    AssociationResolver createAssociationResolver(WorkingContext ctx);
+    AssociationResolver createAssociationResolver(ConversationController ctx);
 
     /**
      * Create a new association writer for given working context.
      * @param ctx The context of the new writer.
      * @return The writer.
      */
-    AssociationWriter createAssociationWriter(WorkingContext ctx);
+    AssociationWriter createAssociationWriter(ConversationController ctx);
 
     // ----------------------------------------------------
 
@@ -84,7 +81,7 @@ public interface GraphDataConnection {
      * Get the provider for transactions.
      * @return The transaction provider.
      */
-    TxProvider createTxProvider(WorkingContext ctx);
+    TxProvider createTxProvider(ConversationController ctx);
 
     // ----------------------------------------------------
 
@@ -93,11 +90,11 @@ public interface GraphDataConnection {
      * @param qn The qualified name.
      * @param context The context in which occurred the change.
      */
-    void notifyModification(QualifiedName qn, WorkingContext context);
+    void notifyModification(QualifiedName qn, ConversationController context);
 
-    void register(WorkingContext conversationContext);
+    void register(ConversationController conversationContext);
 
-    void unregister(WorkingContext conversationContext);
+    void unregister(ConversationController conversationContext);
 
     void close();
 }

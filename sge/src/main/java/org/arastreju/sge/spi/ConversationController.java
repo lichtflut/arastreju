@@ -16,7 +16,6 @@
 package org.arastreju.sge.spi;
 
 import org.arastreju.sge.ConversationContext;
-import org.arastreju.sge.context.Context;
 import org.arastreju.sge.index.ConversationIndex;
 import org.arastreju.sge.model.Statement;
 import org.arastreju.sge.model.associations.AttachedAssociationKeeper;
@@ -35,13 +34,7 @@ import org.arastreju.sge.spi.tx.TxProvider;
  *
  * @author Oliver Tigges
  */
-public interface WorkingContext {
-
-    boolean isActive();
-
-    ConversationContext getConversationContext();
-
-    // ----------------------------------------------------
+public interface ConversationController {
 
     /**
      * Lookup the qualified name in the register.
@@ -109,19 +102,22 @@ public interface WorkingContext {
     // ----------------------------------------------------
 
     /**
+     * Get the context of the conversation.
+     * @return The context.
+     */
+    ConversationContext getConversationContext();
+
+    /**
      * Get the index access for this conversation.
      * @return The index.
      */
     ConversationIndex getIndex();
 
-    // ----------------------------------------------------
-
-    TxProvider getTxProvider();
-
     /**
-     * Close this context and clear all registered resources.
+     * Get the provider for transactions.
+     * @return The transaction provider.
      */
-    void close();
+    TxProvider getTxProvider();
 
     /**
      * Begin a new Unit of Work.
@@ -129,11 +125,24 @@ public interface WorkingContext {
      */
     void beginUnitOfWork(BoundTransactionControl tx);
 
+    // ----------------------------------------------------
+
+    /**
+     * Close this context and clear all registered resources.
+     */
+    void close();
+
+    /**
+     * Check if the conversation is still active.
+     * @return true if conversation is active.
+     */
+    boolean isActive();
+
     /**
      * Called when a resource has been modified by another conversation context with same graph data connection.
      * @param qn The qualified name of the modified resource.
      * @param otherContext The other context, where the modification occurred.
      */
-    void onModification(QualifiedName qn, WorkingContext otherContext);
+    void onModification(QualifiedName qn, ConversationController otherContext);
 
 }

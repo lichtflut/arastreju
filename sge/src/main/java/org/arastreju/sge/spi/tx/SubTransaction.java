@@ -16,7 +16,7 @@
 package org.arastreju.sge.spi.tx;
 
 
-import org.arastreju.sge.spi.WorkingContext;
+import org.arastreju.sge.spi.ConversationController;
 
 /**
  * <p>
@@ -82,7 +82,7 @@ public class SubTransaction implements BoundTransactionControl {
     // -- BoundTransactionControl -------------------------
 
     @Override
-    public BoundTransactionControl bind(WorkingContext ctx) {
+    public BoundTransactionControl bind(ConversationController ctx) {
         if (!ctx.equals(getContext())) {
             throw new UnsupportedOperationException("The context may not be changed for sub transactions.");
         }
@@ -90,7 +90,7 @@ public class SubTransaction implements BoundTransactionControl {
     }
 
     @Override
-    public WorkingContext getContext() {
+    public ConversationController getContext() {
         return superTx.getContext();
     }
 

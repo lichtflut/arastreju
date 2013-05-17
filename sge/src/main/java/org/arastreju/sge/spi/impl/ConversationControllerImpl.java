@@ -27,8 +27,8 @@ import org.arastreju.sge.persistence.ResourceResolver;
 import org.arastreju.sge.persistence.TxAction;
 import org.arastreju.sge.persistence.TxResultAction;
 import org.arastreju.sge.spi.AssociationResolver;
+import org.arastreju.sge.spi.ConversationController;
 import org.arastreju.sge.spi.GraphDataConnection;
-import org.arastreju.sge.spi.WorkingContext;
 import org.arastreju.sge.spi.tx.BoundTransactionControl;
 import org.arastreju.sge.spi.tx.TxProvider;
 import org.arastreju.sge.spi.uow.AssociationManager;
@@ -50,13 +50,13 @@ import org.slf4j.LoggerFactory;
  *
  * @author Oliver Tigges
  */
-public class WorkingContextImpl implements WorkingContext {
+public class ConversationControllerImpl implements ConversationController {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(WorkingContextImpl.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(ConversationControllerImpl.class);
 
 	// ----------------------------------------------------
 
-    private final ConversationContextImpl conversationContext = new ConversationContextImpl();
+    private final ConversationContextImpl conversationContext;
 
     private final GraphDataConnection connection;
 
@@ -73,9 +73,9 @@ public class WorkingContextImpl implements WorkingContext {
 	/**
 	 * Creates a new Working Context.
 	 */
-	public WorkingContextImpl(GraphDataConnection connection) {
-		LOGGER.debug("New conversation context {} started.", conversationContext.getID());
+	public ConversationControllerImpl(GraphDataConnection connection, ConversationContextImpl ctx) {
         this.connection = connection;
+        this.conversationContext = ctx;
         this.associationResolver = connection.createAssociationResolver(this);
         this.txProvider = connection.createTxProvider(this);
 
@@ -145,7 +145,7 @@ public class WorkingContextImpl implements WorkingContext {
     @Override
     public void attach(QualifiedName qn, AttachedAssociationKeeper keeper) {
         conversationContext.put(qn, keeper);
-        keeper.setConversationContext(this);
+        keeper.setController(this);
     }
 
     @Override
@@ -195,7 +195,7 @@ public class WorkingContextImpl implements WorkingContext {
     // ----------------------------------------------------
 
     @Override
-    public void onModification(QualifiedName qualifiedName, WorkingContext otherContext) {
+    public void onModification(QualifiedName qualifiedName, ConversationController otherContext) {
         AttachedAssociationKeeper existing = lookup(qualifiedName);
         if (existing != null) {
             LOGGER.info("Concurrent change on node {} in other context {}.", qualifiedName, otherContext);
@@ -248,7 +248,7 @@ public class WorkingContextImpl implements WorkingContext {
 
     @Override
     public String toString() {
-        return "WorkingContext[" +  conversationContext.toString() + "]";
+        return "ConversationController[" +  conversationContext.toString() + "]";
     }
 
     // ----------------------------------------------------
