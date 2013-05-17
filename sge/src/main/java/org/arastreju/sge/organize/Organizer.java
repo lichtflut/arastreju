@@ -78,7 +78,7 @@ public class Organizer {
         final List<Context> result = new ArrayList<Context>();
         final Query query = conversation().createQuery().addField(RDF.TYPE, Aras.CONTEXT);
         for (ResourceNode node : query.getResult()) {
-            result.add(createContext(node));
+            result.add(ContextID.forContext(node.getQualifiedName()));
         }
         return result;
     }
@@ -147,10 +147,6 @@ public class Organizer {
 		assure(node, Aras.HAS_URI, new SNText(namespace.getUri()));
 		assure(node, Aras.HAS_PREFIX, new SNText(namespace.getPrefix()));
 		return node;
-	}
-	
-	protected Context createContext(final ResourceNode node) {
-		return ContextID.forContext(node.getQualifiedName());
 	}
 	
     // ----------------------------------------------------
