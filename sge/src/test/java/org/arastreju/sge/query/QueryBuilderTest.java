@@ -39,9 +39,6 @@ public class QueryBuilderTest {
 		public QueryResult getResult() {
 			throw new NotYetImplementedException();
 		}
-		public ResourceNode getSingleNode() {
-			throw new NotYetImplementedException();
-		}
 	}
 	
 	@Test
@@ -112,6 +109,7 @@ public class QueryBuilderTest {
 			.add(new FieldParam("e4", 3));
 		
 		final QueryExpression root = builder.getRoot();
+        System.out.println(root);
 		Assert.assertTrue(root != null);
 		Assert.assertEquals(2, root.getChildren().size());
 		Assert.assertEquals(4, root.getChildren().get(0).getChildren().size());
@@ -128,5 +126,25 @@ public class QueryBuilderTest {
 		Assert.assertTrue(root != null);
 		Assert.assertEquals(2, root.getChildren().size());
 	}
+
+    @Test
+    public void testStringRepresentation() {
+        final QueryBuilder query = new TestQueryBuilder();
+        query.beginAnd()
+                    .add(new FieldParam("a", 1))
+                    .addURI("http://bla")
+                    .addValue("hello")
+                    .not().addRelation("ns:a")
+                    .beginOr()
+                        .add(new FieldParam("d1", 1))
+                        .add(new FieldParam("d2", 2))
+                        .add(new FieldParam("d3", 3))
+                    .end()
+                .end();
+
+        String queryString = query.toString();
+        Assert.assertEquals("AND('a'='1',QN='http://bla',VAL='hello',NOT(REL='ns:a',OR('d1'='1','d2'='2','d3'='3')))",
+                queryString.replaceAll(" ", ""));
+    }
 	
 }

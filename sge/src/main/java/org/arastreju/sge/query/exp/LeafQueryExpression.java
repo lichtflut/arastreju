@@ -37,7 +37,7 @@ class LeafQueryExpression extends AbstractQueryExpression {
 
 	/**
 	 * Constructor.
-	 * @param param
+	 * @param param The query param.
 	 */
 	public LeafQueryExpression(final QueryParam param) {
 		super(param.getOperator());
@@ -45,25 +45,17 @@ class LeafQueryExpression extends AbstractQueryExpression {
 	}
 
 	// -----------------------------------------------------
-	
-	/** 
-	 * {@inheritDoc}
-	 */
+
+    @Override
 	public boolean isLeaf() {
 		return true;
 	}
 	
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public QueryParam getQueryParam() {
 		return param;
 	}
 	
-	/** 
-	 * {@inheritDoc}
-	 */
 	@Override
 	public void add(final QueryExpression expr) {
 		throw new UnsupportedOperationException("Can't append a query expression to a leaf. Mayb you forget a 'and'?");
@@ -71,9 +63,6 @@ class LeafQueryExpression extends AbstractQueryExpression {
 	
 	// -----------------------------------------------------
 	
-	/** 
-	 * {@inheritDoc}
-	 */
 	@Override
 	public String toString() {
 		return param.toString();

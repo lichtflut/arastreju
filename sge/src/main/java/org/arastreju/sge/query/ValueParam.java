@@ -33,43 +33,35 @@ public class ValueParam implements QueryParam {
 	// -----------------------------------------------------
 	
 	/**
-	 * @param term
+     * Constructor.
+	 * @param term The term.
 	 */
 	public ValueParam(final String term) {
 		this.term = term;
 	}
 	
 	// -----------------------------------------------------
-	
-	/**
-	 * {@inheritDoc}
-	 */
+
+    @Override
 	public QueryOperator getOperator() {
 		return QueryOperator.HAS_VALUE;
-	};
-	
-	/** 
-	 * {@inheritDoc}
-	 */
-	public String getName() {
-		return "VALUE";
 	}
 
-	/** 
-	 * {@inheritDoc}
-	 */
+    @Override
+	public String getName() {
+		return "VAL";
+	}
+
+    @Override
 	public Object getValue() {
 		return term;
 	}
 	
 	// -----------------------------------------------------
 	
-	/** 
-	 * {@inheritDoc}
-	 */
 	@Override
 	public String toString() {
-		return term;
+		return "VAL='" + term + "'";
 	}
 
 }

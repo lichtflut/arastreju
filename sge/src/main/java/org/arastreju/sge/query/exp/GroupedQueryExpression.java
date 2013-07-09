@@ -40,10 +40,8 @@ class GroupedQueryExpression extends AbstractQueryExpression {
 	}
 	
 	// -----------------------------------------------------
-	
-	/** 
-	 * {@inheritDoc}
-	 */
+
+    @Override
 	public boolean isLeaf() {
 		return false;
 	}
@@ -61,17 +59,17 @@ class GroupedQueryExpression extends AbstractQueryExpression {
 	@Override
 	public String toString() {
 		final StringBuilder sb = new StringBuilder(getOperator().name());
-		sb.append("(");
+		sb.append("( ");
 		boolean first = true;
 		for (QueryExpression child : children) {
 			if (first) {
 				first = false;
 			} else {
-				sb.append(",");
+				sb.append(", ");
 			}
 			sb.append(child);
 		}
-		sb.append(")");
+		sb.append(" )");
 		return sb.toString();
 	}
 

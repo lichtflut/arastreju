@@ -33,43 +33,35 @@ public class RelationQuery implements QueryParam {
 	// -----------------------------------------------------
 	
 	/**
-	 * @param term
+     * Constructor.
+	 * @param term The relation.
 	 */
 	public RelationQuery(final String term) {
 		this.term = term;
 	}
 	
 	// -----------------------------------------------------
-	
-	/**
-	 * {@inheritDoc}
-	 */
+
+    @Override
 	public QueryOperator getOperator() {
 		return QueryOperator.HAS_RELATION;
-	};
-	
-	/** 
-	 * {@inheritDoc}
-	 */
-	public String getName() {
-		return "VALUE";
 	}
 
-	/** 
-	 * {@inheritDoc}
-	 */
+    @Override
+	public String getName() {
+		return "REL";
+	}
+
+    @Override
 	public Object getValue() {
 		return term;
 	}
 	
 	// -----------------------------------------------------
 	
-	/** 
-	 * {@inheritDoc}
-	 */
 	@Override
 	public String toString() {
-		return term;
+		return "REL='" + term + "'";
 	}
 
 }

@@ -16,7 +16,6 @@
 package org.arastreju.sge.query;
 
 import org.arastreju.sge.model.ResourceID;
-import org.arastreju.sge.model.nodes.ResourceNode;
 import org.arastreju.sge.naming.QualifiedName;
 import org.arastreju.sge.query.exp.AbstractQueryExpression;
 
@@ -48,18 +47,8 @@ public abstract class QueryBuilder implements Query {
 	
 	// -----------------------------------------------------
 
-    /**
-     * Get the single node from the query result.
-     * @return A single node.
-     */
-    public ResourceNode getSingleNode() {
-        return getResult().getSingleNode();
-    }
-
-    // ----------------------------------------------------
-	
 	@Override
-	public QueryBuilder add(final QueryParam param) {
+	public Query add(final QueryParam param) {
 		return append(param);
 	}
 
@@ -80,7 +69,7 @@ public abstract class QueryBuilder implements Query {
 
     @Override
 	public Query addURI(String term) {
-		return append(new UriParam(term));
+		return append(new QnParam(term));
 	}
 
     @Override
@@ -127,7 +116,8 @@ public abstract class QueryBuilder implements Query {
 	}
 	
 	// ----------------------------------------------------
-	
+
+    @Override
 	public QueryBuilder setSortCriteria(final SortCriteria sortCriteria) {
 		this.criteria = sortCriteria;
 		return this;

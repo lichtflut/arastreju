@@ -39,60 +39,52 @@ public class FieldParam implements QueryParam {
 
 	/**
 	 * Constructor.
-	 * @param name
-	 * @param value
+	 * @param name The field name.
+	 * @param value The value.
 	 */
 	public FieldParam(final String name, final Object value) {
 		this.name = name;
 		this.value = value;
 	}
-	
-	/**
-	 * Constructor.
-	 * @param name
-	 * @param value
-	 */
-	public FieldParam(final ResourceID name, final Object value) {
+
+    /**
+     * Constructor.
+     * @param name The field name.
+     * @param value The value.
+     */
+    public FieldParam(final ResourceID name, final Object value) {
 		this(name.getQualifiedName(), value);
 	}
-	
-	/**
-	 * @param name
-	 * @param value
-	 */
-	public FieldParam(final QualifiedName name, final Object value) {
+
+    /**
+     * Constructor.
+     * @param name The field name.
+     * @param value The value.
+     */
+    public FieldParam(final QualifiedName name, final Object value) {
 		this(name.toURI(), value);
 	}
 
 	// -----------------------------------------------------
 
-	/**
-	 * {@inheritDoc}
-	 */
+	@Override
 	public QueryOperator getOperator() {
 		return QueryOperator.EQUALS;
-	};
-	
-	/** 
-	 * {@inheritDoc}
-	 */
+	}
+
+    @Override
 	public String getName() {
 		return name;
 	}
 
-	/** 
-	 * {@inheritDoc}
-	 */
+    @Override
 	public Object getValue() {
 		return value;
 	}
-	
-	/** 
-	 * {@inheritDoc}
-	 */
+
 	@Override
 	public String toString() {
-		return name + "=" + value;
+		return "'" + name + "'='" + value + "'";
 	}
 	
 }

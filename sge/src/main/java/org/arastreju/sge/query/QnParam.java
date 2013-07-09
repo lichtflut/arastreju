@@ -17,7 +17,7 @@ package org.arastreju.sge.query;
 
 /**
  * <p>
- *  Parameter for query nodes by their URI.
+ *  Parameter for query nodes by their qualified name.
  * </p>
  *
  * <p>
@@ -26,48 +26,40 @@ package org.arastreju.sge.query;
  *
  * @author Oliver Tigges
  */
-public class UriParam implements QueryParam {
+public class QnParam implements QueryParam {
 
 	private final String term;
 	
 	// -----------------------------------------------------
 	
 	/**
-	 * @param term
+     * Constructor.
+	 * @param qn The qn
 	 */
-	public UriParam(final String term) {
-		this.term = term;
+	public QnParam(final String qn) {
+		this.term = qn;
 	}
-	
-	
+
 	// -----------------------------------------------------
-	/**
-	 * {@inheritDoc}
-	 */
+
+    @Override
 	public QueryOperator getOperator() {
 		return QueryOperator.HAS_URI;
 	}
-	
-	/** 
-	 * {@inheritDoc}
-	 */
+
+    @Override
 	public String getName() {
-		return "URI";
+		return "QN";
 	}
 
-	/** 
-	 * {@inheritDoc}
-	 */
+    @Override
 	public Object getValue() {
 		return term;
 	}
 	
-	/** 
-	* {@inheritDoc}
-	*/
 	@Override
 	public String toString() {
-		return "URI=" + term;
+		return "QN='" + term + "'";
 	}
 
 }

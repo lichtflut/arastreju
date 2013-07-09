@@ -133,14 +133,11 @@ public class NamespaceMap {
 	
 	// -----------------------------------------------------
 	
-	/* (non-Javadoc)
-	 * @see java.lang.Object#toString()
-	 */
 	@Override
 	public String toString() {
 		final StringBuilder sb = new StringBuilder();
 		for (String prefix : getPrefixes()) {
-			sb.append(prefix + " --> " + getNamespace(prefix) + "\n");
+			sb.append(prefix).append(" --> ").append(getNamespace(prefix)).append("\n");
 		}
 		return sb.toString();
 	}
