@@ -41,12 +41,12 @@ public abstract class DomainIdentifier {
 	/**
 	 * Constructor.
 	 */
-	public DomainIdentifier(final String domainName) {
-	    this.domainName = domainName;
-        this.context = ContextID.forContext(Context.DOMAIN_CONTEXT);
+    protected DomainIdentifier(String domainName, Context context) {
+        this.domainName = domainName;
+        this.context = context;
     }
-	
-	// -----------------------------------------------------
+
+    // -----------------------------------------------------
 
 	/**
 	 * @return the domain name.

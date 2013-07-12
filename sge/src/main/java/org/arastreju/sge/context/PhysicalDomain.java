@@ -34,7 +34,7 @@ public class PhysicalDomain extends DomainIdentifier {
 	 * @param domainName The domain name.
 	 */
 	public PhysicalDomain(final String domainName) {
-		super(domainName);
+		super(domainName, ContextID.forContext(Context.DOMAIN_CONTEXT));
 	}
 
 	// ----------------------------------------------------

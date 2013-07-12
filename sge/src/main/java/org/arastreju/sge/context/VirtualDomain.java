@@ -39,7 +39,7 @@ public class VirtualDomain extends DomainIdentifier {
 	// ----------------------------------------------------
 
 	public VirtualDomain(final String name) {
-		super(name);
+		super(name, ContextID.localContext(name));
 		this.physicalStore = DEFAULT_STORAGE_NAME;
 	}
 
