@@ -31,10 +31,6 @@ import java.io.Serializable;
  */
 public interface Namespace extends Serializable {
 
-    String LOCAL_CONTEXTS = "http://local.arasteju.org/contexts/";
-
-    // ----------------------------------------------------
-
 	/**
 	 * The URI of this namespace.
 	 * @return The URI of this namespace.

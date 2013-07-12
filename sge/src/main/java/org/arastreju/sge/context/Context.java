@@ -16,6 +16,7 @@
 package org.arastreju.sge.context;
 
 import org.arastreju.sge.model.ResourceID;
+import org.arastreju.sge.naming.QualifiedName;
 
 /**
  * <p>
@@ -29,5 +30,9 @@ import org.arastreju.sge.model.ResourceID;
  * @author Oliver Tigges
  */
 public interface Context extends ResourceID, Comparable<Context> {
+
+    String LOCAL_CONTEXTS_NAMESPACE = "local:contexts:";
+
+    QualifiedName DOMAIN_CONTEXT = QualifiedName.from(LOCAL_CONTEXTS_NAMESPACE, "domain");
 
 }

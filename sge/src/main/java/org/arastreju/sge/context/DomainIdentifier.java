@@ -15,8 +15,6 @@
  */
 package org.arastreju.sge.context;
 
-import org.arastreju.sge.naming.Namespace;
-
 /**
  * <p>
  *  Identifies a domain of an Arastreju instance.
@@ -45,7 +43,7 @@ public abstract class DomainIdentifier {
 	 */
 	public DomainIdentifier(final String domainName) {
 	    this.domainName = domainName;
-        this.context = ContextID.forContext(Namespace.LOCAL_CONTEXTS, domainName);
+        this.context = ContextID.forContext(Context.DOMAIN_CONTEXT);
     }
 	
 	// -----------------------------------------------------

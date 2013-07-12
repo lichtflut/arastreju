@@ -37,9 +37,9 @@ import static org.arastreju.sge.SNOPS.*;
  * @author Timo Buhrmester
  */
 public class StatementSample {
-    private QualifiedName RESOURCE_URI_ALICE = QualifiedName.fromURI("http://example.org/alice");
-    private QualifiedName RESOURCE_URI_BOB = QualifiedName.fromURI("http://example.org/bob");
-    private QualifiedName RESOURCE_URI_KNOWS = QualifiedName.fromURI("http://example.org/knows");
+    private QualifiedName RESOURCE_URI_ALICE = QualifiedName.from("http://example.org/alice");
+    private QualifiedName RESOURCE_URI_BOB = QualifiedName.from("http://example.org/bob");
+    private QualifiedName RESOURCE_URI_KNOWS = QualifiedName.from("http://example.org/knows");
 
     public void sample() {
         /* create instance and open master gate */

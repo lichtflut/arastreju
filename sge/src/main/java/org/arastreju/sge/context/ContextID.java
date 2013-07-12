@@ -40,6 +40,10 @@ public class ContextID extends SimpleResourceID implements Context {
         return new ContextID(nsUri, name);
     }
 
+    public static Context localContext(String name) {
+        return new ContextID(Context.LOCAL_CONTEXTS_NAMESPACE, name);
+    }
+
     // ----------------------------------------------------
 
 	/**

@@ -38,7 +38,6 @@ import org.arastreju.sge.model.nodes.views.SNClass;
 import org.arastreju.sge.model.nodes.views.SNContext;
 import org.arastreju.sge.model.nodes.views.SNEntity;
 import org.arastreju.sge.model.nodes.views.SNText;
-import org.arastreju.sge.naming.Namespace;
 import org.arastreju.sge.naming.QualifiedName;
 import org.arastreju.sge.persistence.TransactionControl;
 import org.arastreju.sge.query.Query;
@@ -412,7 +411,7 @@ public abstract class AbstractConversationTest {
 
         conversation.attach(graph);
 
-        final QualifiedName qn = QualifiedName.fromURI("http://test.arastreju.org/common#Person");
+        final QualifiedName qn = QualifiedName.from("http://test.arastreju.org/common#Person");
         final ResourceNode node = conversation.findResource(qn);
         Assert.assertNotNull(node);
 
@@ -431,7 +430,7 @@ public abstract class AbstractConversationTest {
         final SemanticGraph graph = io.read(getClass().getClassLoader().getResourceAsStream("test-statements.rdf.xml"));
         conversation.attach(graph);
 
-        final QualifiedName qn = QualifiedName.fromURI("http://test.arastreju.org/common#Person");
+        final QualifiedName qn = QualifiedName.from("http://test.arastreju.org/common#Person");
         final ResourceNode node = conversation.findResource(qn);
 
         Assert.assertTrue(node.isAttached());
@@ -674,12 +673,12 @@ public abstract class AbstractConversationTest {
         final SNClass car = SNClass.from(new SNResource(qnCar));
         final SNEntity aCar = car.createInstance();
 
-        SNContext accessContext = new SNContext(QualifiedName.from(Namespace.LOCAL_CONTEXTS, "Access"));
-        SNContext sourceContext = new SNContext(QualifiedName.from(Namespace.LOCAL_CONTEXTS, "Source"));
+        SNContext accessContext = new SNContext(QualifiedName.from(Context.LOCAL_CONTEXTS_NAMESPACE, "Access"));
+        SNContext sourceContext = new SNContext(QualifiedName.from(Context.LOCAL_CONTEXTS_NAMESPACE, "Source"));
         sourceContext.setAccessContext(accessContext);
-        SNContext publicContext = new SNContext(QualifiedName.from(Namespace.LOCAL_CONTEXTS, "Public"));
+        SNContext publicContext = new SNContext(QualifiedName.from(Context.LOCAL_CONTEXTS_NAMESPACE, "Public"));
         publicContext.setVisibility(Accessibility.PUBLIC);
-        SNContext privateContext = new SNContext(QualifiedName.from(Namespace.LOCAL_CONTEXTS, "Private"));
+        SNContext privateContext = new SNContext(QualifiedName.from(Context.LOCAL_CONTEXTS_NAMESPACE, "Private"));
         privateContext.setVisibility(Accessibility.PRIVATE);
         conversation.attach(sourceContext);
         conversation.attach(publicContext);

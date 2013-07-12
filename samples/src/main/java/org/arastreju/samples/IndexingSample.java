@@ -41,10 +41,10 @@ import org.arastreju.sge.query.QueryResult;
  * @author Timo Buhrmester
  */
 public class IndexingSample {
-    private QualifiedName RESOURCE_URI_ALICE = QualifiedName.fromURI("http://example.org/alice");
-    private QualifiedName RESOURCE_URI_BOB = QualifiedName.fromURI("http://example.org/bob");
-    private QualifiedName RESOURCE_URI_EVE = QualifiedName.fromURI("http://example.org/eve");
-    private QualifiedName RESOURCE_URI_KNOWS = QualifiedName.fromURI("http://example.org/knows");
+    private QualifiedName RESOURCE_URI_ALICE = QualifiedName.from("http://example.org/alice");
+    private QualifiedName RESOURCE_URI_BOB = QualifiedName.from("http://example.org/bob");
+    private QualifiedName RESOURCE_URI_EVE = QualifiedName.from("http://example.org/eve");
+    private QualifiedName RESOURCE_URI_KNOWS = QualifiedName.from("http://example.org/knows");
 
     private final Arastreju aras;
     private final ArastrejuGate gate;

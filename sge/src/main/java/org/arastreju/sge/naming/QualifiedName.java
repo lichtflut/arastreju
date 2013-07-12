@@ -38,7 +38,7 @@ public class QualifiedName implements Comparable<QualifiedName>, Serializable {
 	public static final String HASH = "#";
 	public static final String SLASH = "/";
 	
-	private final String uri;
+	private final String qn;
 	
 	private static final Map<String, QualifiedName> cache = new HashMap<String, QualifiedName>();
 	
@@ -84,16 +84,16 @@ public class QualifiedName implements Comparable<QualifiedName>, Serializable {
     }
 	
 	/**
-	 * Create a new QualifiedName for this URI - regarding a cache.
-	 * @param uri The URI.
-	 * @return A new URI or the corresponding from cache.
+	 * Create a new QualifiedName from a string - regarding a cache.
+	 * @param qualifiedName The qualifed name.
+	 * @return A new qualified name or the corresponding from cache.
 	 */
-	public static QualifiedName fromURI(final String uri) {
-		if (cache.containsKey(uri)) {
-			return cache.get(uri);
+	public static QualifiedName from(final String qualifiedName) {
+		if (cache.containsKey(qualifiedName)) {
+			return cache.get(qualifiedName);
 		} else {
-			final QualifiedName qn = new QualifiedName(uri);
-			cache.put(uri, qn);
+			final QualifiedName qn = new QualifiedName(qualifiedName);
+			cache.put(qualifiedName, qn);
 			return qn;
 		}
 	}
@@ -105,9 +105,9 @@ public class QualifiedName implements Comparable<QualifiedName>, Serializable {
 	 * @return A new URI or the corresponding from cache.
 	 */
 	public static QualifiedName from(final String namespace, final String name) {
-		return fromURI(namespace + name);
+		return from(namespace + name);
 	}
-	
+
 	//------------------------------------------------------
 
 	/**
@@ -115,44 +115,44 @@ public class QualifiedName implements Comparable<QualifiedName>, Serializable {
 	 * @param uri The URI.
 	 */
 	private QualifiedName(final String uri){
-		this.uri = uri;
+		this.qn = uri;
 	}
 	
 	// ----------------------------------------------------
 	
 	public String getSimpleName() {
-		return getSimpleName(uri);
+		return getSimpleName(qn);
 	}
 	
 	public String getNamespace(){
-		return getNamespace(uri);
+		return getNamespace(qn);
 	}
 	
 	public String toURI() {
-		return uri;
+		return qn;
 	}
 	
 	//------------------------------------------------------
 	
 	public int compareTo(QualifiedName other) {
-		return uri.compareTo(other.uri);
+		return qn.compareTo(other.qn);
 	}
 	
 	@Override
 	public String toString() {
-		return uri;
+		return qn;
 	}
 	
 	@Override
 	public int hashCode() {
-		return uri.hashCode();
+		return qn.hashCode();
 	}
 	
 	@Override
 	public boolean equals(Object obj) {
 		if (obj instanceof QualifiedName) {
 			QualifiedName other = (QualifiedName) obj;
-			return uri.equals(other.uri);
+			return qn.equals(other.qn);
 		}
 		return false;
 	}

@@ -42,12 +42,12 @@ import org.arastreju.sge.naming.QualifiedName;
  */
 
 public class ContextSample {
-    private QualifiedName RESOURCE_URI_ALICE = QualifiedName.fromURI("http://example.org/alice");
-    private QualifiedName RESOURCE_URI_AGE = QualifiedName.fromURI("http://example.org/isofage");
+    private QualifiedName RESOURCE_URI_ALICE = QualifiedName.from("http://example.org/alice");
+    private QualifiedName RESOURCE_URI_AGE = QualifiedName.from("http://example.org/isofage");
 
-    private QualifiedName CONTEXT_URI_ALICE = QualifiedName.fromURI("http://example.org/alicectx");
-    private QualifiedName CONTEXT_URI_BOB = QualifiedName.fromURI("http://example.org/bobctx");
-    private QualifiedName CONTEXT_URI_DAVE = QualifiedName.fromURI("http://example.org/davectx");
+    private QualifiedName CONTEXT_URI_ALICE = QualifiedName.from("http://example.org/alicectx");
+    private QualifiedName CONTEXT_URI_BOB = QualifiedName.from("http://example.org/bobctx");
+    private QualifiedName CONTEXT_URI_DAVE = QualifiedName.from("http://example.org/davectx");
 
     private final Arastreju aras;
     private final ArastrejuGate gate;

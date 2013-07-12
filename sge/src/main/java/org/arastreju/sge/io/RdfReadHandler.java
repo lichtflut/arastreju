@@ -167,7 +167,7 @@ public class RdfReadHandler implements RDFHandler {
 	}
 	
 	protected QualifiedName toQualifiedName(final URI uri){
-		return QualifiedName.fromURI(uri.toString());
+		return QualifiedName.from(uri.toString());
 	}
 	
 }

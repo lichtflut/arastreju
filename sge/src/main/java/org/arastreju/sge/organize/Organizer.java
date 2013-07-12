@@ -22,6 +22,7 @@ import org.arastreju.sge.apriori.RDF;
 import org.arastreju.sge.context.Context;
 import org.arastreju.sge.context.ContextID;
 import org.arastreju.sge.io.StatementContainer;
+import org.arastreju.sge.model.SemanticGraph;
 import org.arastreju.sge.model.Statement;
 import org.arastreju.sge.model.nodes.ResourceNode;
 import org.arastreju.sge.model.nodes.SNResource;
@@ -126,7 +127,7 @@ public class Organizer {
 
             @Override
             public Iterator<Statement> iterator() {
-                final QueryResult queryResult = conversation.createQuery().addValue("*").getResult();
+                final QueryResult queryResult = conversation.createQuery().addURI("*").getResult();
                 final Iterator<ResourceNode> nodeIterator = queryResult.iterator();
                 return new StatementIterator(nodeIterator);
             }
