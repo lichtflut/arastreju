@@ -126,7 +126,7 @@ public interface Query {
 	 * @param sortCriteria The sort criteria.
 	 * @return This.
 	 */
-	QueryBuilder setSortCriteria(SortCriteria sortCriteria);
+    Query setSortCriteria(SortCriteria sortCriteria);
 	
 	// -----------------------------------------------------
 

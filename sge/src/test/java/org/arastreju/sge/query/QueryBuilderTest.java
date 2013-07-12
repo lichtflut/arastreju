@@ -17,14 +17,13 @@ package org.arastreju.sge.query;
 
 import junit.framework.Assert;
 
-import org.arastreju.sge.model.nodes.ResourceNode;
 import org.junit.Test;
 
 import de.lichtflut.infra.exceptions.NotYetImplementedException;
 
 /**
  * <p>
- *  [DESCRIPTION]
+ *  Test case for query builder.
  * </p>
  *
  * <p>
