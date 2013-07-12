@@ -53,7 +53,7 @@ public class SNOPS {
 	// -- TRANSFORMATION ----------------------------------
 
 	public static String uri(final ResourceID rid){
-		return rid.toURI();
+        return rid != null ? rid.toURI() : null;
 	}
 	
 	public static QualifiedName qualify(final String uri){
