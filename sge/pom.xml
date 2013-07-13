@@ -10,9 +10,6 @@
 	<artifactId>arastreju-sge</artifactId>
 	<name>Arastreju SGE</name>
 	<description>Arastreju Semantic Graph Engine</description>
-	<properties>
-		<sesame.version>2.6.1</sesame.version>
-	</properties>
 	<licenses>
 		<license>
 			<name>Apache 2</name>
@@ -58,32 +55,38 @@
 				</excludes>
 			</testResource>
 		</testResources>
+        <plugins>
+            <plugin>
+                <groupId>org.antlr</groupId>
+                <artifactId>antlr4-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
 	</build>
 	<dependencies>
 		<dependency>
 			<groupId>org.openrdf.sesame</groupId>
 			<artifactId>sesame-rio-api</artifactId>
-			<version>${sesame.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.openrdf.sesame</groupId>
 			<artifactId>sesame-rio-rdfxml</artifactId>
-			<version>${sesame.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.openrdf.sesame</groupId>
 			<artifactId>sesame-rio-n3</artifactId>
-			<version>${sesame.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.openrdf.sesame</groupId>
 			<artifactId>sesame-model</artifactId>
-			<version>${sesame.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.lucene</groupId>
 			<artifactId>lucene-core</artifactId>
 		</dependency>
+        <dependency>
+            <groupId>org.antlr</groupId>
+            <artifactId>antlr4</artifactId>
+        </dependency>
 	</dependencies>
 	<repositories>
 		<repository>

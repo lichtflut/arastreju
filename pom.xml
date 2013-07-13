@@ -14,24 +14,46 @@
         <module>spi</module>
         <module>tck</module>
 	</modules>
+
+    <properties>
+        <sesame.version>2.6.1</sesame.version>
+        <slf4j.version>1.6.1</slf4j.version>
+        <antlr.version>4.1</antlr.version>
+    </properties>
+
 	<build>
 		<pluginManagement>
 			<plugins>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-deploy-plugin</artifactId>
-					<version>2.5</version>
+					<version>2.7</version>
 				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-compiler-plugin</artifactId>
-					<version>2.3.2</version>
+					<version>3.1</version>
 					<configuration>
-						<source>1.6</source>
-						<target>1.6</target>
+						<source>1.7</source>
+						<target>1.7</target>
 						<encoding>UTF-8</encoding>
 					</configuration>
 				</plugin>
+                <plugin>
+                    <groupId>org.antlr</groupId>
+                    <artifactId>antlr4-maven-plugin</artifactId>
+                    <version>${antlr.version}</version>
+                    <configuration>
+                        <sourceDirectory>src</sourceDirectory>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <goals>
+                                <goal>antlr4</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
 			</plugins>
 		</pluginManagement>
 		<plugins>
@@ -125,12 +147,12 @@
 			<dependency>
 				<groupId>org.slf4j</groupId>
 				<artifactId>slf4j-log4j12</artifactId>
-				<version>1.6.1</version>
+				<version>${slf4j.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.slf4j</groupId>
 				<artifactId>slf4j-api</artifactId>
-				<version>1.6.1</version>
+				<version>${slf4j.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>de.lichtflut</groupId>
@@ -138,17 +160,46 @@
 				<version>1.1.1</version>
 			</dependency>
 			<dependency>
-				<groupId>junit</groupId>
-				<artifactId>junit</artifactId>
-				<version>4.5</version>
-				<scope>test</scope>
-			</dependency>
-			<dependency>
 				<groupId>org.apache.lucene</groupId>
 				<artifactId>lucene-core</artifactId>
 				<version>3.5.0</version>
 			</dependency>
-		</dependencies>
+            <dependency>
+                <groupId>org.antlr</groupId>
+                <artifactId>antlr4</artifactId>
+                <version>${antlr.version}</version>
+            </dependency>
+
+            <!-- Sesame -->
+            <dependency>
+                <groupId>org.openrdf.sesame</groupId>
+                <artifactId>sesame-rio-api</artifactId>
+                <version>${sesame.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.openrdf.sesame</groupId>
+                <artifactId>sesame-rio-rdfxml</artifactId>
+                <version>${sesame.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.openrdf.sesame</groupId>
+                <artifactId>sesame-rio-n3</artifactId>
+                <version>${sesame.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.openrdf.sesame</groupId>
+                <artifactId>sesame-model</artifactId>
+                <version>${sesame.version}</version>
+            </dependency>
+
+            <!-- Test -->
+            <dependency>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+                <version>4.5</version>
+                <scope>test</scope>
+            </dependency>
+        </dependencies>
 	</dependencyManagement>
 
 	<dependencies>
