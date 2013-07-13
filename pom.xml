@@ -1,12 +1,31 @@
 <?xml version="1.0"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-	<modelVersion>4.0.0</modelVersion>
+
+    <modelVersion>4.0.0</modelVersion>
+
 	<groupId>org.arastreju</groupId>
 	<artifactId>arastreju</artifactId>
-	<name>Arastreju</name>
 	<version>0.9.1-SNAPSHOT</version>
+    <packaging>pom</packaging>
+
+    <name>Arastreju</name>
 	<description>Arastreju parent project</description>
-	<packaging>pom</packaging>
+    <inceptionYear>2001</inceptionYear>
+
+    <licenses>
+        <license>
+            <name>Apache 2</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+            <comments>A business-friendly OSS license</comments>
+        </license>
+    </licenses>
+
+    <organization>
+        <name>lichtflut Forschungs- und Entwicklungsgesellschaft mbH</name>
+        <url>http://www.lichtflut.de</url>
+    </organization>
+
 	<modules>
 		<module>sge</module>
 		<module>mem</module>
@@ -56,28 +75,6 @@
 			</plugins>
 		</pluginManagement>
 		<plugins>
-			<plugin>
-				<groupId>com.google.code.maven-license-plugin</groupId>
-				<artifactId>maven-license-plugin</artifactId>
-				<version>1.4.0</version>
-				<configuration>
-					<header>license.txt</header>
-					<headerDefinitions>
-						<headerDefinition>header.xml</headerDefinition>
-					</headerDefinitions>
-					<includes>
-						<include>src/**</include>
-					</includes>
-					<excludes>
-						<exclude>target/**</exclude>
-						<exclude>.git/**</exclude>
-						<exclude>.idea/**</exclude>
-						<exclude>.settings/**</exclude>
-						<exclude>**/*.xml</exclude>
-						<exclude>**/*.rdf</exclude>
-					</excludes>
-				</configuration>
-			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-resources-plugin</artifactId>
@@ -138,6 +135,28 @@
 				<artifactId>maven-deploy-plugin</artifactId>
 				<version>2.5</version>
 			</plugin>
+            <plugin>
+                <groupId>com.google.code.maven-license-plugin</groupId>
+                <artifactId>maven-license-plugin</artifactId>
+                <version>1.4.0</version>
+                <configuration>
+                    <header>license.txt</header>
+                    <headerDefinitions>
+                        <headerDefinition>header.xml</headerDefinition>
+                    </headerDefinitions>
+                    <includes>
+                        <include>src/**</include>
+                    </includes>
+                    <excludes>
+                        <exclude>target/**</exclude>
+                        <exclude>.git/**</exclude>
+                        <exclude>.idea/**</exclude>
+                        <exclude>.settings/**</exclude>
+                        <exclude>**/*.xml</exclude>
+                        <exclude>**/*.rdf</exclude>
+                    </excludes>
+                </configuration>
+            </plugin>
 		</plugins>
 	</build>
 
@@ -152,11 +171,6 @@
 				<groupId>org.slf4j</groupId>
 				<artifactId>slf4j-api</artifactId>
 				<version>${slf4j.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>de.lichtflut</groupId>
-				<artifactId>lf.foundation.infra</artifactId>
-				<version>1.1.1</version>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.lucene</groupId>
@@ -211,12 +225,6 @@
 			<artifactId>slf4j-log4j12</artifactId>
 			<scope>runtime</scope>
 		</dependency>
-		<!--
-		<dependency>
-			<groupId>de.lichtflut</groupId>
-			<artifactId>lf.foundation.infra</artifactId>
-		</dependency>
-		-->
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
@@ -224,26 +232,6 @@
 		</dependency>
 	</dependencies>
 
-	<repositories>
-		<repository>
-			<id>lf-releases</id>
-			<name>lichtflut release repository</name>
-			<url>http://nexus.lichtflut.de/nexus/content/repositories/releases/</url>
-		</repository>
-	</repositories>
-	<pluginRepositories>
-		<pluginRepository>
-			<id>mc-release</id>
-			<name>Local Maven repository of releases</name>
-			<url>http://mc-repo.googlecode.com/svn/maven2/releases</url>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-			<releases>
-				<enabled>true</enabled>
-			</releases>
-		</pluginRepository>
-	</pluginRepositories>
 	<distributionManagement>
 		<repository>
 			<id>lf-releases</id>
@@ -256,8 +244,10 @@
 			<url>http://nexus.lichtflut.de/nexus/content/repositories/snapshots</url>
 		</snapshotRepository>
 	</distributionManagement>
+
 	<scm>
 		<developerConnection>scm:git:git@github.com:lichtflut/arastreju.git</developerConnection>
 		<tag>HEAD</tag>
 	</scm>
+
 </project>

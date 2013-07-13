@@ -1,15 +1,18 @@
 <?xml version="1.0"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
+
 	<parent>
 		<groupId>org.arastreju</groupId>
 		<artifactId>arastreju</artifactId>
 		<version>0.9.1-SNAPSHOT</version>
 	</parent>
+
 	<groupId>org.arastreju</groupId>
 	<artifactId>arastreju-sge</artifactId>
 	<name>Arastreju SGE</name>
 	<description>Arastreju Semantic Graph Engine</description>
+
 	<licenses>
 		<license>
 			<name>Apache 2</name>
@@ -18,10 +21,12 @@
 			<comments>A business-friendly OSS license</comments>
 		</license>
 	</licenses>
+
 	<organization>
 		<name>lichtflut Forschungs- und Entwicklungsgesellschaft mbH</name>
 		<url>http://www.lichtflut.de</url>
 	</organization>
+
 	<build>
 		<resources>
 			<resource>
@@ -62,6 +67,7 @@
             </plugin>
         </plugins>
 	</build>
+
 	<dependencies>
 		<dependency>
 			<groupId>org.openrdf.sesame</groupId>
@@ -88,10 +94,5 @@
             <artifactId>antlr4</artifactId>
         </dependency>
 	</dependencies>
-	<repositories>
-		<repository>
-			<id>Aduna Repo</id>
-			<url>http://repo.aduna-software.org/maven2/releases/</url>
-		</repository>
-	</repositories>
+
 </project>

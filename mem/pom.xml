@@ -10,10 +10,8 @@
 	<artifactId>arastreju-mem</artifactId>
 	<name>Arastreju in-memory binding</name>
 	<description>Arastreju Binding - Embedded in-memory store</description>
-	<properties>
-		<sesame.version>2.6.1</sesame.version>
-	</properties>
-	<licenses>
+
+    <licenses>
 		<license>
 			<name>Apache 2</name>
 			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
@@ -21,10 +19,12 @@
 			<comments>A business-friendly OSS license</comments>
 		</license>
 	</licenses>
+
 	<organization>
 		<name>lichtflut Forschungs- und Entwicklungsgesellschaft mbH</name>
 		<url>http://www.lichtflut.de</url>
 	</organization>
+
 	<build>
 		<resources>
 			<resource>
@@ -59,6 +59,7 @@
 			</testResource>
 		</testResources>
 	</build>
+
 	<dependencies>
 		<dependency>
 			<groupId>org.arastreju</groupId>
@@ -77,4 +78,5 @@
             <scope>test</scope>
         </dependency>
 	</dependencies>
+
 </project>
