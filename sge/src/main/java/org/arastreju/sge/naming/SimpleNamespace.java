@@ -16,17 +16,17 @@
 package org.arastreju.sge.naming;
 
 
-import de.lichtflut.infra.Infra;
+import org.arastreju.sge.model.Infra;
 
 import java.io.Serializable;
 
 /**
  * <p>
- * 	An unmanaged namespace.
+ * 	A simple namespace implementation.
  * </p>
  * 
  * <p>
- * 	Created: 14.07.2009
+ * 	Created: July 14, 2009
  * </p>
  *
  * @author Oliver Tigges
@@ -59,47 +59,23 @@ public class SimpleNamespace implements Namespace, Comparable<Namespace>, Serial
 	
 	// -----------------------------------------------------
 
-	/**
-	 * {@inheritDoc}
-	 */
+    @Override
 	public String getUri() {
 		return uri;
 	}
-	
-	/**
-	 * {@inheritDoc}
-	 */
+
+    @Override
 	public String getPrefix() {
 		return prefix;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
-	public void setPrefix(final String prefix) {
-		this.prefix = prefix;
-	}
-	
-	/**
-	 * {@inheritDoc}
-	 */
-	public void setUri(final String uri) {
-		this.uri = uri;
-	}
-	
 	// -----------------------------------------------------
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public int hashCode() {
 		return uri.hashCode();
 	}
 	
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public boolean equals(Object obj) {
 		if (obj instanceof Namespace){
@@ -109,17 +85,12 @@ public class SimpleNamespace implements Namespace, Comparable<Namespace>, Serial
 		return super.equals(obj);
 	}
 	
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public String toString() {
 		return uri;
 	}
-	
-	/**
-	 * {@inheritDoc}
-	 */
+
+    @Override
 	public int compareTo(final Namespace other) {
 		return Infra.compare(getUri(), other.getUri());
 	}

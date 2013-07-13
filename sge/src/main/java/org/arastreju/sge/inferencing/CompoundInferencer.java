@@ -15,7 +15,7 @@
  */
 package org.arastreju.sge.inferencing;
 
-import de.lichtflut.infra.data.MultiMap;
+import org.arastreju.sge.model.MultiMap;
 import org.arastreju.sge.model.ResourceID;
 import org.arastreju.sge.model.Statement;
 

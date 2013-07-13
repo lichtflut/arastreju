@@ -15,7 +15,7 @@
  */
 package org.arastreju.sge.io;
 
-import de.lichtflut.infra.exceptions.NotYetImplementedException;
+import org.arastreju.sge.eh.meta.NotYetImplementedException;
 import org.arastreju.sge.model.SemanticGraph;
 import org.arastreju.sge.model.Statement;
 import org.arastreju.sge.model.nodes.ResourceNode;
@@ -37,18 +37,13 @@ import java.util.Set;
  * @author Oliver Tigges
  */
 public class JsonBinding implements SemanticGraphIO {
-	
-	/** 
-	 * {@inheritDoc}
-	 */
+
 	@Override
 	public void read(InputStream in, ReadStatementListener listener) throws IOException, SemanticIOException {
 		throw new NotYetImplementedException();
 	}
 
-	/** 
-	 * {@inheritDoc}
-	 */
+    @Override
 	public SemanticGraph read(final InputStream in) throws IOException,
 			SemanticIOException {
 		throw new NotYetImplementedException();
@@ -56,9 +51,7 @@ public class JsonBinding implements SemanticGraphIO {
 	
 	// ----------------------------------------------------
 
-	/** 
-	 * {@inheritDoc}
-	 */
+	@Override
 	public void write(final SemanticGraph graph, final OutputStream out)
 			throws IOException, SemanticIOException {
 		

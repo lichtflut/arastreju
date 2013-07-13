@@ -16,10 +16,8 @@
 package org.arastreju.sge.query;
 
 import junit.framework.Assert;
-
+import org.arastreju.sge.eh.meta.NotYetImplementedException;
 import org.junit.Test;
-
-import de.lichtflut.infra.exceptions.NotYetImplementedException;
 
 /**
  * <p>

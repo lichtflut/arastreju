@@ -15,10 +15,10 @@
  */
 package org.arastreju.sge.spi.impl;
 
-import de.lichtflut.infra.exceptions.NotYetImplementedException;
 import org.arastreju.sge.Conversation;
 import org.arastreju.sge.ConversationContext;
 import org.arastreju.sge.SNOPS;
+import org.arastreju.sge.eh.meta.NotYetImplementedException;
 import org.arastreju.sge.index.LuceneQueryBuilder;
 import org.arastreju.sge.index.QNResolver;
 import org.arastreju.sge.model.ResourceID;

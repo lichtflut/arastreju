@@ -15,7 +15,7 @@
  */
 package org.arastreju.sge.io;
 
-import de.lichtflut.infra.exceptions.NotYetSupportedException;
+import org.arastreju.sge.eh.meta.NotYetSupportedException;
 import org.arastreju.sge.model.DetachedStatement;
 import org.arastreju.sge.model.ResourceID;
 import org.arastreju.sge.model.SimpleResourceID;

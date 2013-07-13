@@ -18,7 +18,7 @@
  */
 package org.arastreju.sge.model.nodes.views;
 
-import de.lichtflut.infra.exceptions.NotYetSupportedException;
+import org.arastreju.sge.eh.meta.NotYetSupportedException;
 import org.arastreju.sge.model.ElementaryDataType;
 import org.arastreju.sge.model.TimeMask;
 import org.arastreju.sge.model.nodes.SNValue;

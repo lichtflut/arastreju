@@ -15,7 +15,6 @@
  */
 package org.arastreju.sge.index;
 
-import de.lichtflut.infra.exceptions.NotYetSupportedException;
 import org.arastreju.sge.model.nodes.ResourceNode;
 import org.arastreju.sge.naming.QualifiedName;
 import org.arastreju.sge.query.QueryResult;

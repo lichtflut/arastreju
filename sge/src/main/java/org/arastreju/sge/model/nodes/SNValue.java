@@ -15,8 +15,8 @@
  */
 package org.arastreju.sge.model.nodes;
 
-import de.lichtflut.infra.Infra;
 import org.arastreju.sge.model.ElementaryDataType;
+import org.arastreju.sge.model.Infra;
 import org.arastreju.sge.model.nodes.views.SNScalar;
 import org.arastreju.sge.model.nodes.views.SNText;
 import org.arastreju.sge.model.nodes.views.SNTimeSpec;

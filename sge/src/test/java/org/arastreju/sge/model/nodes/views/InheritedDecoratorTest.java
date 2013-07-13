@@ -15,15 +15,12 @@
  */
 package org.arastreju.sge.model.nodes.views;
 
-import de.lichtflut.infra.logging.StopWatch;
 import org.arastreju.sge.SNOPS;
 import org.arastreju.sge.apriori.Aras;
 import org.arastreju.sge.model.nodes.ResourceNode;
 import org.arastreju.sge.model.nodes.SNResource;
 import org.junit.Assert;
 import org.junit.Test;
-
-import java.awt.image.AreaAveragingScaleFilter;
 
 /**
  * <p>

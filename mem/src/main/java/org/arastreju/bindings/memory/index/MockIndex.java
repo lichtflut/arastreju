@@ -15,7 +15,7 @@
  */
 package org.arastreju.bindings.memory.index;
 
-import de.lichtflut.infra.exceptions.NotYetImplementedException;
+import org.arastreju.sge.eh.meta.NotYetImplementedException;
 import org.arastreju.sge.index.IndexSearchResult;
 import org.arastreju.sge.index.IndexSearcher;
 

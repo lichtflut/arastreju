@@ -15,7 +15,7 @@
  */
 package org.arastreju.sge.index;
 
-import de.lichtflut.infra.exceptions.NotYetSupportedException;
+import org.arastreju.sge.eh.meta.NotYetSupportedException;
 import org.arastreju.sge.query.QueryBuilder;
 import org.arastreju.sge.query.QueryException;
 import org.arastreju.sge.query.QueryExpression;
