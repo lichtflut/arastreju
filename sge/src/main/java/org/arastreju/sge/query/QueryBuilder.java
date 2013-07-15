@@ -32,7 +32,7 @@ import java.util.Stack;
  *
  * @author Oliver Tigges
  */
-public abstract class QueryBuilder implements Query {
+public class QueryBuilder implements Query {
 	
 	private Stack<QueryExpression> stack = new Stack<QueryExpression>();
 	
@@ -122,8 +122,13 @@ public abstract class QueryBuilder implements Query {
 		this.criteria = sortCriteria;
 		return this;
 	}
-	
-	// -----------------------------------------------------
+
+    @Override
+    public QueryResult getResult() {
+        throw new UnsupportedOperationException("This query builder is not attached to conversation.");
+    }
+
+    // -----------------------------------------------------
 
 	@Override
 	public String toString() {

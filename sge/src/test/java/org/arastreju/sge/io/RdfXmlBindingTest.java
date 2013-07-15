@@ -63,9 +63,6 @@ public class RdfXmlBindingTest {
 		final SemanticGraphIO io = new RdfXmlBinding();
 		final SemanticGraph graph = io.read(getClass().getClassLoader().getResourceAsStream("test-input.rdf.xml"));
 		Assert.assertNotNull(graph);
-		
-		System.out.println(graph);
-		
 	}
 	
 }

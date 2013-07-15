@@ -106,7 +106,6 @@ public class QueryBuilderTest {
 			.add(new FieldParam("e4", 3));
 		
 		final QueryExpression root = builder.getRoot();
-        System.out.println(root);
 		Assert.assertTrue(root != null);
 		Assert.assertEquals(2, root.getChildren().size());
 		Assert.assertEquals(4, root.getChildren().get(0).getChildren().size());
