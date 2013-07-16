@@ -83,7 +83,7 @@ public class SNProperty extends ResourceView {
 	 * @return A set with all super properties.
 	 */
 	public Set<SNProperty> getSuperProperties() {
-		final Set<SNProperty> targetSet = new HashSet<SNProperty>();
+		final Set<SNProperty> targetSet = new HashSet<>();
 		addSuperProperties(targetSet);
 		return targetSet;
 	}

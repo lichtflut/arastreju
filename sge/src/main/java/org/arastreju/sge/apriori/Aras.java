@@ -90,7 +90,10 @@ public interface Aras {
 
 	// -- DATA_STRUCTURE ----------------------------------
 
-	ResourceID IS_PREDECESSOR_OF = new SimpleResourceID(NAMESPACE_URI, "isPredecessorOf");
+    ResourceID HAS_CHILD_NODE = new SimpleResourceID(NAMESPACE_URI, "hasChildNode");
+    ResourceID HAS_PARENT_NODE = new SimpleResourceID(NAMESPACE_URI, "hasParentNode");
+
+    ResourceID IS_PREDECESSOR_OF = new SimpleResourceID(NAMESPACE_URI, "isPredecessorOf");
 	ResourceID IS_SUCCESSOR_OF = new SimpleResourceID(NAMESPACE_URI, "isSuccessorOf");
 
 	ResourceID HAS_SERIAL_NUMBER = new SimpleResourceID(NAMESPACE_URI, "hasSerialNumber");
