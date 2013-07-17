@@ -676,10 +676,12 @@ public abstract class AbstractConversationTest {
         SNContext accessContext = new SNContext(QualifiedName.from(Context.LOCAL_CONTEXTS_NAMESPACE, "Access"));
         SNContext sourceContext = new SNContext(QualifiedName.from(Context.LOCAL_CONTEXTS_NAMESPACE, "Source"));
         sourceContext.setAccessContext(accessContext);
+
         SNContext publicContext = new SNContext(QualifiedName.from(Context.LOCAL_CONTEXTS_NAMESPACE, "Public"));
         publicContext.setVisibility(Accessibility.PUBLIC);
         SNContext privateContext = new SNContext(QualifiedName.from(Context.LOCAL_CONTEXTS_NAMESPACE, "Private"));
         privateContext.setVisibility(Accessibility.PRIVATE);
+
         conversation.attach(sourceContext);
         conversation.attach(publicContext);
         conversation.attach(privateContext);
@@ -692,7 +694,7 @@ public abstract class AbstractConversationTest {
 
         conversation.detach(aCar);
 
-        conversation.getConversationContext().setPrimaryContext(sourceContext);
+        conversation.getConversationContext().setPrimaryContext(accessContext);
 
         final ResourceNode car2 = conversation.findResource(aCar.getQualifiedName());
         Assert.assertNotSame(aCar, car2);
