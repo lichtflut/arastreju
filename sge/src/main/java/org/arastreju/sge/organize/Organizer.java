@@ -17,6 +17,7 @@ package org.arastreju.sge.organize;
 
 import org.arastreju.sge.ArastrejuGate;
 import org.arastreju.sge.Conversation;
+import org.arastreju.sge.SNOPS;
 import org.arastreju.sge.apriori.Aras;
 import org.arastreju.sge.apriori.RDF;
 import org.arastreju.sge.context.Context;
@@ -38,6 +39,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import static org.arastreju.sge.SNOPS.assure;
 import static org.arastreju.sge.SNOPS.singleObject;
@@ -106,6 +108,17 @@ public class Organizer {
             }
         } finally {
             conversation.close();
+        }
+    }
+
+    public Context findContext(QualifiedName qn) {
+        ResourceNode node = conversation().findResource(qn);
+        if (node == null) {
+            return null;
+        } else if (SNOPS.objectsAsResources(node, RDF.TYPE).contains(Aras.CONTEXT)) {
+            return SNContext.from(node);
+        } else {
+            throw new IllegalArgumentException("Node with given qualified name is not a context.");
         }
     }
 

@@ -84,11 +84,12 @@ public abstract class AbstractAssociationResolver implements AssociationResolver
         }
         SNContext[] readContexts = readContexts();
         for (Context stmtContext : stmtContexts) {
-            if (isPublicVisible(stmtContext)) {
+            Context accessContext = SNContext.from(stmtContext).getAccessContext();
+            if (isPublicVisible(accessContext)) {
                 return true;
             }
             for (Context readContext : readContexts) {
-                if (readContext.equals(stmtContext)) {
+                if (readContext.equals(accessContext)) {
                     return true;
                 }
             }
