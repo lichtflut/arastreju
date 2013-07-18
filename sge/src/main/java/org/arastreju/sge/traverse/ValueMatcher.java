@@ -34,7 +34,6 @@ public abstract class ValueMatcher implements Matcher {
         };
     }
 
-
     // ----------------------------------------------------
 
     @Override

@@ -29,6 +29,10 @@
 	<logger name="org.arastreju">
 		<level value="warn" />
 	</logger>
+
+    <logger name="org.arastreju.sge.query.script">
+        <level value="debug" />
+    </logger>
 	
 	<logger name="org.xml.sax">
 		<level value="warn" />

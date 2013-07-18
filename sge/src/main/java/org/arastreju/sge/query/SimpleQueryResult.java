@@ -48,62 +48,48 @@ public class SimpleQueryResult implements QueryResult {
 	}
 	
 	// -----------------------------------------------------
-	
-	/** 
-	 * {@inheritDoc}
-	 */
+
+    @Override
 	public int size() {
 		return list.size();
-	};
-	
-	/** 
-	 * {@inheritDoc}
-	 */
-	public List<ResourceNode> toList() {
+	}
+
+    @Override
+    public List<ResourceNode> toList() {
 		return list;
 	}
-	
-	/** 
-	* {@inheritDoc}
-	*/
+
+    @Override
 	public List<ResourceNode> toList(int max) {
 		if (list.size() > max) {
 			return list.subList(0, max -1);
 		}
 		return list;
 	}
-	
-	/** 
-	* {@inheritDoc}
-	*/
+
+    @Override
 	public List<ResourceNode> toList(int offset, int max) {
 		if (offset >= list.size()) {
 			return Collections.emptyList();
 		}
 		if (max + offset > list.size()) {
-			return list.subList(offset, list.size() -1);
+			return list.subList(offset, list.size());
 		} else  {
-			return list.subList(offset, offset + max -1);	
+			return list.subList(offset, offset + max);
 		}
 	}
-	
-	/** 
-	 * {@inheritDoc}
-	 */
+
+    @Override
 	public Iterator<ResourceNode> iterator() {
 		return list.iterator();
 	}
-	
-	/** 
-	 * {@inheritDoc}
-	 */
+
+    @Override
 	public boolean isEmpty() {
 		return list.isEmpty();
 	}
-	
-	/** 
-	* {@inheritDoc}
-	*/
+
+    @Override
 	public ResourceNode getSingleNode() {
 		if (list.isEmpty()) {
 			return null;
@@ -113,10 +99,8 @@ public class SimpleQueryResult implements QueryResult {
 			return list.get(0);
 		}
 	}
-	
-	/** 
-	 * {@inheritDoc}
-	 */
+
+    @Override
 	public void close() {
 		// do nothing.
 	}

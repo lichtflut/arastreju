@@ -43,9 +43,7 @@ public class Walker {
 	// ----------------------------------------------------
 
 	protected Walker(final SemanticNode... nodes) {
-		for (SemanticNode current : nodes) {
-			this.nodes.add(current);
-		}
+        Collections.addAll(this.nodes, nodes);
 	}
 
 	protected Walker(final Collection<? extends SemanticNode> nodes) {
@@ -99,7 +97,11 @@ public class Walker {
 		}
 	}
 
-	// ----------------------------------------------------
+    public Set<SemanticNode> all() {
+        return nodes;
+    }
+
+    // ----------------------------------------------------
 
 	public boolean matches(final String value) {
 		return matches(ValueMatcher.equals(value));
