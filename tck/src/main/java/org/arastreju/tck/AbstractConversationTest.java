@@ -676,6 +676,45 @@ public abstract class AbstractConversationTest {
         SNContext accessContext = new SNContext(QualifiedName.from(Context.LOCAL_CONTEXTS_NAMESPACE, "Access"));
         SNContext sourceContext = new SNContext(QualifiedName.from(Context.LOCAL_CONTEXTS_NAMESPACE, "Source"));
         sourceContext.setAccessContext(accessContext);
+        SNContext publicContext = new SNContext(QualifiedName.from(Context.LOCAL_CONTEXTS_NAMESPACE, "Public"));
+        publicContext.setVisibility(Accessibility.PUBLIC);
+        SNContext privateContext = new SNContext(QualifiedName.from(Context.LOCAL_CONTEXTS_NAMESPACE, "Private"));
+        privateContext.setVisibility(Accessibility.PRIVATE);
+
+        conversation.attach(sourceContext);
+        conversation.attach(publicContext);
+        conversation.attach(privateContext);
+
+        conversation.attach(aCar);
+
+        associate(aCar, Aras.HAS_BRAND_NAME, new SNText("BMW"), sourceContext);
+        associate(aCar, RDFS.LABEL, new SNText("A BMW car"), publicContext);
+        associate(aCar, Aras.HAS_PROPER_NAME, new SNText("Knut"), privateContext);
+
+        // 1st: Checking with Access Context
+        conversation.detach(aCar);
+        conversation.getConversationContext().setPrimaryContext(sourceContext);
+
+        final ResourceNode car2 = conversation.findResource(aCar.getQualifiedName());
+        Assert.assertNotSame(aCar, car2);
+
+        // primary context
+        Assert.assertEquals(new SNText("BMW"), fetchObject(car2, Aras.HAS_BRAND_NAME));
+        // public
+        Assert.assertEquals(new SNText("A BMW car"), fetchObject(car2, RDFS.LABEL));
+        // private
+        Assert.assertNull(fetchObject(car2, Aras.HAS_PROPER_NAME));
+
+    }
+
+    @Test
+    public void testAccessContextRegarding() {
+        final SNClass car = SNClass.from(new SNResource(qnCar));
+        final SNEntity aCar = car.createInstance();
+
+        SNContext accessContext = new SNContext(QualifiedName.from(Context.LOCAL_CONTEXTS_NAMESPACE, "Access"));
+        SNContext sourceContext = new SNContext(QualifiedName.from(Context.LOCAL_CONTEXTS_NAMESPACE, "Source"));
+        sourceContext.setAccessContext(accessContext);
 
         SNContext publicContext = new SNContext(QualifiedName.from(Context.LOCAL_CONTEXTS_NAMESPACE, "Public"));
         publicContext.setVisibility(Accessibility.PUBLIC);
@@ -692,8 +731,8 @@ public abstract class AbstractConversationTest {
         associate(aCar, RDFS.LABEL, new SNText("A BMW car"), publicContext);
         associate(aCar, Aras.HAS_PROPER_NAME, new SNText("Knut"), privateContext);
 
+        // 1st: Checking with Access Context
         conversation.detach(aCar);
-
         conversation.getConversationContext().setPrimaryContext(accessContext);
 
         final ResourceNode car2 = conversation.findResource(aCar.getQualifiedName());
@@ -705,7 +744,6 @@ public abstract class AbstractConversationTest {
         Assert.assertEquals(new SNText("A BMW car"), fetchObject(car2, RDFS.LABEL));
         // private
         Assert.assertNull(fetchObject(car2, Aras.HAS_PROPER_NAME));
-
     }
 
 }
