@@ -21,8 +21,12 @@ import org.arastreju.sge.apriori.RDFS;
 import org.arastreju.sge.naming.Namespace;
 import org.arastreju.sge.naming.SimpleNamespace;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
@@ -39,6 +43,8 @@ import java.util.TreeSet;
  * @author Oliver Tigges
  */
 public class NamespaceMap {
+
+    private final List<String> orderedPrefixes = new ArrayList<>();
 	
 	private final Map<String, Namespace> prefixMap = new HashMap<String, Namespace>();
 
@@ -68,25 +74,46 @@ public class NamespaceMap {
 	
 	// -----------------------------------------------------
 
-	/**
-	 * @return the prefixMap
-	 */
-	public Map<String, Namespace> getPrefixMap() {
-		return prefixMap;
-	}
-	
+    public String qualify(String in) {
+        for (String prefix : orderedPrefixes) {
+            String token = prefix + ":";
+            if (in.startsWith(token)) {
+                Namespace namespace = prefixMap.get(prefix);
+                return namespace.getUri() + in.substring(token.length());
+            }
+        }
+        return in;
+    }
+
+    public String replaceAll(String in) {
+        for (String prefix : orderedPrefixes) {
+            Namespace namespace = prefixMap.get(prefix);
+            String token = prefix + ":";
+            in = in.replaceAll(token, namespace.getUri());
+        }
+        return in;
+    }
+
+    // ----------------------------------------------------
+
+    /**
+     * Get all registered prefixes.
+     * @return The prefixes.
+     */
 	public Set<String> getPrefixes(){
-		return new TreeSet<String>(prefixMap.keySet());
+		return new TreeSet<>(prefixMap.keySet());
 	}
 	
 	/**
+     * Get all registered namespaces.
 	 * @return the namespaces
 	 */
 	public Set<Namespace> getNamespaces() {
 		return nsMap.keySet();
 	}
 	
-	/** Check if there exists a namespace for given prefix.
+	/**
+     * Check if there exists a namespace for given prefix.
 	 * @param prefix The prefix.
 	 * @return true if there is a namespace.
 	 */
@@ -123,9 +150,10 @@ public class NamespaceMap {
 		}
 	}
 	
-	public synchronized void addNamespace(final Namespace namespace){
+	public void addNamespace(final Namespace namespace){
 		if (!this.nsMap.containsKey(namespace)){
             String prefix = prefix(namespace);
+            prefixToOrderedList(prefix);
             nsMap.put(namespace, prefix);
 			prefixMap.put(prefix, namespace);
 		}
@@ -137,7 +165,7 @@ public class NamespaceMap {
 	public String toString() {
 		final StringBuilder sb = new StringBuilder();
 		for (String prefix : getPrefixes()) {
-			sb.append(prefix).append(" --> ").append(getNamespace(prefix)).append("\n");
+			sb.append(prefix).append(" -> ").append(getNamespace(prefix)).append(" ");
 		}
 		return sb.toString();
 	}
@@ -156,5 +184,16 @@ public class NamespaceMap {
 			return "ns" + nextId++;
 		}
 	}
+
+    private void prefixToOrderedList(String prefix) {
+        orderedPrefixes.add(prefix);
+        Collections.sort(orderedPrefixes, new Comparator<String>() {
+            @Override
+            public int compare(String s1, String s2) {
+                return s2.length() - s1.length();
+            }
+        });
+
+    }
 
 }

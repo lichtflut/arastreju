@@ -54,9 +54,7 @@ public abstract class AbstractRioBinding implements SemanticGraphIO {
              RdfReadHandler handler = new RdfReadHandler(listener);
              parser.setRDFHandler(handler);
              parser.parse(in, "void");
-         } catch (RDFParseException e) {
-             throw new SemanticIOException(ErrorCodes.GRAPH_READ_ERROR, "error while reading RDF", e);
-         } catch (RDFHandlerException e) {
+         } catch (RDFParseException | RDFHandlerException e) {
              throw new SemanticIOException(ErrorCodes.GRAPH_READ_ERROR, "error while reading RDF", e);
          }
      }
@@ -83,9 +81,7 @@ public abstract class AbstractRioBinding implements SemanticGraphIO {
             }
             writer.endRDF();
             
-        } catch(IllegalArgumentException e){
-            throw new SemanticIOException(ErrorCodes.GRAPH_WRITE_ERROR, "associations couldn't be written", e);
-        } catch(RDFHandlerException e){
+        } catch(IllegalArgumentException | RDFHandlerException e) {
             throw new SemanticIOException(ErrorCodes.GRAPH_WRITE_ERROR, "associations couldn't be written", e);
         }
     }
@@ -106,9 +102,7 @@ public abstract class AbstractRioBinding implements SemanticGraphIO {
             }
             writer.endRDF();
 
-        } catch(IllegalArgumentException e){
-            throw new SemanticIOException(ErrorCodes.GRAPH_WRITE_ERROR, "associations couldn't be written", e);
-        } catch(RDFHandlerException e){
+        } catch(IllegalArgumentException | RDFHandlerException e) {
             throw new SemanticIOException(ErrorCodes.GRAPH_WRITE_ERROR, "associations couldn't be written", e);
         }
     }

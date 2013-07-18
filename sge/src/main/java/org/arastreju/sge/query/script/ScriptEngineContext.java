@@ -55,6 +55,16 @@ public class ScriptEngineContext {
         this.conversation = conversation;
     }
 
+    // ----------------------------------------------------
+
+    /**
+     * Fetch the result of query script execution.
+     * @return The query result.
+     */
+    public QueryResult getQueryResult() {
+        return new SimpleQueryResult(results);
+    }
+
     // -- Methods exposed to Java Script ------------------
 
     public NodeSet query(String queryString) {
@@ -66,6 +76,10 @@ public class ScriptEngineContext {
         return nodeSet;
     }
 
+    public void log(String message) {
+        LOGGER.info("Script-LOG: {}", message);
+    }
+
     // ----------------------------------------------------
 
     protected void result(NodeSet result) {
@@ -75,10 +89,6 @@ public class ScriptEngineContext {
                 this.results.add(node.asResource());
             }
         }
-    }
-
-    protected QueryResult getQueryResult() {
-        return new SimpleQueryResult(results);
     }
 
 }

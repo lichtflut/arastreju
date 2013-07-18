@@ -15,13 +15,9 @@
  */
 package org.arastreju.sge.query.script;
 
-import org.arastreju.sge.SNOPS;
 import org.arastreju.sge.model.ResourceID;
 import org.arastreju.sge.model.Statement;
 import org.arastreju.sge.model.nodes.SemanticNode;
-import org.arastreju.sge.traverse.Matcher;
-import org.arastreju.sge.traverse.ResourceMatcher;
-import org.arastreju.sge.traverse.ValueMatcher;
 import org.arastreju.sge.traverse.Walker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,7 +29,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 
 import static org.arastreju.sge.SNOPS.id;
 import static org.arastreju.sge.SNOPS.qualify;
@@ -74,6 +69,7 @@ public class NodeSet {
     public NodeSet walk(String predicate) {
         Walker walker = Walker.start(nodes);
         walker.walk(id(qualify(predicate)));
+        LOGGER.debug("Walked along '{}'. New node set: {}", predicate, walker.all());
         return new NodeSet(walker.all(), ctx);
     }
 
@@ -101,11 +97,10 @@ public class NodeSet {
         value = value.trim();
         // Redundant implementation to spare collection instantiation
         for (SemanticNode node : nodes) {
-            if (node.isValueNode()) {
-                if (hasValue(node, value)) {
-                    return true;
-                }
-            } else {
+            if (hasValue(node, value)) {
+                return true;
+            }
+            if (node.isResourceNode()) {
                 for (Statement stmt : node.asResource().getAssociations()) {
                     if (hasValue(stmt.getObject(), value)) {
                         return true;

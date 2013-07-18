@@ -38,6 +38,7 @@
         <sesame.version>2.7.3</sesame.version>
         <slf4j.version>1.6.1</slf4j.version>
         <antlr.version>4.1</antlr.version>
+        <rhino.version>1.7R4</rhino.version>
     </properties>
 
 	<build>
@@ -203,6 +204,13 @@
                 <groupId>org.openrdf.sesame</groupId>
                 <artifactId>sesame-model</artifactId>
                 <version>${sesame.version}</version>
+            </dependency>
+
+            <!-- JavaScript -->
+            <dependency>
+                <groupId>org.mozilla</groupId>
+                <artifactId>rhino</artifactId>
+                <version>${rhino.version}</version>
             </dependency>
 
             <!-- Test -->
