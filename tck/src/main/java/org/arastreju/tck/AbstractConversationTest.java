@@ -111,7 +111,7 @@ public abstract class AbstractConversationTest {
         ConversationContextImpl context = new ConversationContextImpl();
         ConversationControllerImpl controller = new ConversationControllerImpl(connection, context);
         conversation = new ConversationImpl(controller);
-        context.setContexResolver(new ContextResolverImpl(controller));
+        context.setContextResolver(new ContextResolverImpl(controller));
     }
 
     @After
@@ -673,9 +673,7 @@ public abstract class AbstractConversationTest {
         final SNClass car = SNClass.from(new SNResource(qnCar));
         final SNEntity aCar = car.createInstance();
 
-        SNContext accessContext = new SNContext(QualifiedName.from(Context.LOCAL_CONTEXTS_NAMESPACE, "Access"));
         SNContext sourceContext = new SNContext(QualifiedName.from(Context.LOCAL_CONTEXTS_NAMESPACE, "Source"));
-        sourceContext.setAccessContext(accessContext);
         SNContext publicContext = new SNContext(QualifiedName.from(Context.LOCAL_CONTEXTS_NAMESPACE, "Public"));
         publicContext.setVisibility(Accessibility.PUBLIC);
         SNContext privateContext = new SNContext(QualifiedName.from(Context.LOCAL_CONTEXTS_NAMESPACE, "Private"));
@@ -691,7 +689,6 @@ public abstract class AbstractConversationTest {
         associate(aCar, RDFS.LABEL, new SNText("A BMW car"), publicContext);
         associate(aCar, Aras.HAS_PROPER_NAME, new SNText("Knut"), privateContext);
 
-        // 1st: Checking with Access Context
         conversation.detach(aCar);
         conversation.getConversationContext().setPrimaryContext(sourceContext);
 
@@ -703,7 +700,7 @@ public abstract class AbstractConversationTest {
         // public
         Assert.assertEquals(new SNText("A BMW car"), fetchObject(car2, RDFS.LABEL));
         // private
-        Assert.assertNull(fetchObject(car2, Aras.HAS_PROPER_NAME));
+        Assert.assertNull("Expected not to see a proper name.",fetchObject(car2, Aras.HAS_PROPER_NAME));
 
     }
 
@@ -731,7 +728,6 @@ public abstract class AbstractConversationTest {
         associate(aCar, RDFS.LABEL, new SNText("A BMW car"), publicContext);
         associate(aCar, Aras.HAS_PROPER_NAME, new SNText("Knut"), privateContext);
 
-        // 1st: Checking with Access Context
         conversation.detach(aCar);
         conversation.getConversationContext().setPrimaryContext(accessContext);
 

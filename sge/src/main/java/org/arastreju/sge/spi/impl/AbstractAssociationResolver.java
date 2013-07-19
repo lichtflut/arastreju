@@ -67,12 +67,7 @@ public abstract class AbstractAssociationResolver implements AssociationResolver
     }
 
     protected Context[] readContexts() {
-        Context[] readContexts = controller().getConversationContext().getReadContexts();
-        Context[] accessContexts = new SNContext[readContexts.length];
-        for (int i = 0; i < readContexts.length; i++) {
-            accessContexts[i] = SNContext.from(readContexts[i]).getAccessContext();
-        }
-        return accessContexts;
+        return controller().getConversationContext().getReadContexts();
     }
 
     // ----------------------------------------------------
@@ -89,7 +84,7 @@ public abstract class AbstractAssociationResolver implements AssociationResolver
         }
         Context[] readContexts = readContexts();
         for (Context stmtContext : stmtContexts) {
-            Context accessContext = SNContext.from(stmtContext).getAccessContext();
+            Context accessContext = contextResolver.resolve(stmtContext).getAccessContext();
             if (isPublicVisible(accessContext)) {
                 return true;
             }

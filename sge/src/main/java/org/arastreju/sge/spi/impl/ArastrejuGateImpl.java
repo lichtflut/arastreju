@@ -67,7 +67,7 @@ public class ArastrejuGateImpl implements ArastrejuGate {
         // Wire conversation context and controller
         ConversationContextImpl ctx = new ConversationContextImpl();
         ConversationController controller = newController(connection, ctx);
-        ctx.setContexResolver(new ContextResolverImpl(controller));
+        ctx.setContextResolver(new ContextResolverImpl(controller));
 
         // Set initial contexts to be resolved by conversation context
         ctx.setPrimaryContext(primary);

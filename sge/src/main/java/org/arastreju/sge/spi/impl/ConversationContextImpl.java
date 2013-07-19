@@ -91,6 +91,7 @@ public class ConversationContextImpl implements ConversationContext {
 
     @Override
     public ConversationContext setPrimaryContext(Context ctx) {
+        readContexts.remove(primaryContext);
         this.primaryContext = resolver.resolve(ctx);
         if (primaryContext != null) {
             readContexts.add(primaryContext);
@@ -105,7 +106,7 @@ public class ConversationContextImpl implements ConversationContext {
             addAllResolved(readContexts, ctxs);
         }
         if (primaryContext != null) {
-            readContexts.add(primaryContext);
+            readContexts.add(resolver.resolve(primaryContext));
         }
         return this;
     }
@@ -167,7 +168,7 @@ public class ConversationContextImpl implements ConversationContext {
         register.clear();
     }
 
-    public void setContexResolver(ContextResolver resolver) {
+    public void setContextResolver(ContextResolver resolver) {
         this.resolver = resolver;
     }
 
