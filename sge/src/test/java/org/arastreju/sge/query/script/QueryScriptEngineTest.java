@@ -85,7 +85,7 @@ public class QueryScriptEngineTest {
         QueryScriptEngine engine = new QueryScriptEngine(ctx);
         engine.execute("query(\"'x'='y'\").filter(" +
                 "function (e) { " +
-                "   return e.getQualifiedName() == 'local:b'; " +
+                "   return e.matches('local:b'); " +
                 "}).result();");
 
 

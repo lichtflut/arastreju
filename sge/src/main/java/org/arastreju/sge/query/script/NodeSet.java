@@ -19,11 +19,10 @@ import org.arastreju.sge.model.ResourceID;
 import org.arastreju.sge.model.Statement;
 import org.arastreju.sge.model.nodes.SemanticNode;
 import org.arastreju.sge.traverse.Walker;
+import org.mozilla.javascript.Context;
+import org.mozilla.javascript.Scriptable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import sun.org.mozilla.javascript.internal.BaseFunction;
-import sun.org.mozilla.javascript.internal.Context;
-import sun.org.mozilla.javascript.internal.Scriptable;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -73,7 +72,7 @@ public class NodeSet {
         return new NodeSet(walker.all(), ctx);
     }
 
-    public NodeSet filter(BaseFunction f) {
+    public NodeSet filter(org.mozilla.javascript.Function f) {
         List<SemanticNode> filtered = new ArrayList<>();
         Scriptable scope = f.getParentScope();
         Scriptable thisObj = f.getParentScope();

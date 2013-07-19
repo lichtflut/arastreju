@@ -15,6 +15,8 @@
  */
 package org.arastreju.sge.query.script;
 
+import org.mozilla.javascript.Context;
+import org.mozilla.javascript.Scriptable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -46,33 +48,34 @@ public class QueryScriptEngine {
 
     // ----------------------------------------------------
 
-    private ScriptEngine engine;
+    private ScriptEngineContext arasCtx;
 
     // ----------------------------------------------------
 
     public QueryScriptEngine(ScriptEngineContext arasCtx) throws QueryScriptException {
-        ScriptEngineManager mgr = new ScriptEngineManager();
-        engine = mgr.getEngineByName("JavaScript");
-        engine.put(ARAS_SCRIPT_ENGINE_CONTEXT, arasCtx);
-        loadJsBinding(engine);
+        this.arasCtx = arasCtx;
     }
 
     // ----------------------------------------------------
 
     public void execute(String script) throws QueryScriptException {
         try {
-            engine.eval(script);
-        } catch (ScriptException e) {
-            throw new QueryScriptException("Failed to execute script.", e);
+            Context cx = Context.enter();
+            Scriptable scope = cx.initStandardObjects();
+            scope.put(ARAS_SCRIPT_ENGINE_CONTEXT, scope, arasCtx);
+            loadRhinoBinding(scope, cx);
+            cx.evaluateString(scope, script, "queryscript", 0, null);
+        } finally {
+            Context.exit();
         }
     }
 
     // ----------------------------------------------------
 
-    private void loadJsBinding(ScriptEngine engine) throws QueryScriptException {
+    private void loadRhinoBinding(Scriptable scope, Context cx) throws QueryScriptException {
         try (InputStream in = Thread.currentThread().getContextClassLoader().getResourceAsStream(BINDING_SCRIPT)) {
-            engine.eval(new InputStreamReader(in, "UTF-8"));
-        } catch (IOException | ScriptException e) {
+            cx.evaluateReader(scope, new InputStreamReader(in, "UTF-8"), BINDING_SCRIPT, 0, null);
+        } catch (IOException e) {
             throw new QueryScriptException("Failed to initialize script engine.", e);
         }
     }
