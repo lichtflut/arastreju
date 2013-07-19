@@ -30,6 +30,8 @@ import java.util.Date;
 import java.util.Set;
 
 import static org.arastreju.sge.SNOPS.associations;
+import static org.arastreju.sge.SNOPS.fetchObject;
+import static org.arastreju.sge.SNOPS.string;
 
 /**
  * <p>
@@ -143,11 +145,11 @@ public abstract class ResourceView implements ResourceNode, Serializable {
     }
 
 	protected String stringValue(ResourceID attribute) {
-		return SNOPS.string(SNOPS.fetchObject(this, attribute));
+		return string(fetchObject(this, attribute));
 	}
 
     protected ResourceID resourceValue(ResourceID attribute) {
-        final SemanticNode node = SNOPS.fetchObject(this, attribute);
+        final SemanticNode node = fetchObject(this, attribute);
         if (node != null && node.isResourceNode()) {
             return node.asResource();
         } else {
@@ -156,7 +158,7 @@ public abstract class ResourceView implements ResourceNode, Serializable {
     }
 
     protected Boolean booleanValue(ResourceID attribute) {
-        final SemanticNode value = SNOPS.fetchObject(this, attribute);
+        final SemanticNode value = fetchObject(this, attribute);
         if (value != null && value.isValueNode()) {
             return value.asValue().getBooleanValue();
         } else {
@@ -165,7 +167,7 @@ public abstract class ResourceView implements ResourceNode, Serializable {
     }
 	
 	protected Integer intValue(ResourceID attribute) {
-		final SemanticNode value = SNOPS.fetchObject(this, attribute);
+		final SemanticNode value = fetchObject(this, attribute);
 		if (value != null && value.isValueNode()) {
 			return value.asValue().getIntegerValue().intValue();
 		} else {
@@ -174,7 +176,7 @@ public abstract class ResourceView implements ResourceNode, Serializable {
 	}
 
     protected Date timeValue(ResourceID attribute) {
-        final SemanticNode value = SNOPS.fetchObject(this, attribute);
+        final SemanticNode value = fetchObject(this, attribute);
         if (value != null && value.isValueNode()) {
             return value.asValue().getTimeValue();
         } else {

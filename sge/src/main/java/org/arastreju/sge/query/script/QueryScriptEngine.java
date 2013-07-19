@@ -65,6 +65,8 @@ public class QueryScriptEngine {
             scope.put(ARAS_SCRIPT_ENGINE_CONTEXT, scope, arasCtx);
             loadRhinoBinding(scope, cx);
             cx.evaluateString(scope, script, "queryscript", 0, null);
+        } catch (Exception e) {
+            throw new QueryScriptException("Execution of query script failed.", e);
         } finally {
             Context.exit();
         }
