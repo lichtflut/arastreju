@@ -30,16 +30,62 @@ import org.arastreju.sge.context.Context;
  */
 public interface ConversationContext {
 
+    /**
+     * Get the current primary context.
+     * @return The primary context.
+     */
+    Context getPrimaryContext();
+
+    /**
+     * Get the current contexts to be read when loading and traversing graph data, includes the primary context.
+     * @return All contexts to be read.
+     */
 	Context[] getReadContexts();
 
-	Context getPrimaryContext();
-	
-	ConversationContext setPrimaryContext(Context context);
-	
-	ConversationContext setReadContexts(Context... contexts);
+    /**
+     * Check if 'strict' context regarding has been enabled.
+     * @return true if in 'strict' mode.
+     */
+    boolean isStrictContextRegarding();
 
+    // ----------------------------------------------------
+
+    /**
+     * Set the primary context operating in. New statements without explicit context set, will be attached to
+     * this primary context. The primary context will also always be a read context.
+     * @param context The primary context.
+     * @return This.
+     */
+	ConversationContext setPrimaryContext(Context context);
+
+    /**
+     * Set the contexts to be read when loading and traversing graph data.
+     * @param contexts The read contexts to use.
+     * @return This.
+     */
+    ConversationContext setReadContexts(Context... contexts);
+
+    /**
+     * Specify if context regarding shall be performed in a strict way.
+     * In strict mode, only the given read contexts will be regarded for reading and traversing of graphs.
+     * Access contexts and visibility (public) will be ignored.
+     * Default is non strict.
+     * @param strict Flag indicating if strict.
+     * @return This.
+     */
+    ConversationContext setStrictContextRegarding(boolean strict);
+
+    // ----------------------------------------------------
+
+    /**
+     * Clear all cached data of this context.
+     */
 	void clear();
 
+    /**
+     * Check if this context is still open and active.
+     * @return true if active.
+     */
 	boolean isActive();
 
 }

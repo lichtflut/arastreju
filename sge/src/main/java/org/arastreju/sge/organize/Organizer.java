@@ -23,7 +23,6 @@ import org.arastreju.sge.apriori.RDF;
 import org.arastreju.sge.context.Context;
 import org.arastreju.sge.context.ContextID;
 import org.arastreju.sge.io.StatementContainer;
-import org.arastreju.sge.model.SemanticGraph;
 import org.arastreju.sge.model.Statement;
 import org.arastreju.sge.model.nodes.ResourceNode;
 import org.arastreju.sge.model.nodes.SNResource;
@@ -39,7 +38,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
-import java.util.regex.Pattern;
 
 import static org.arastreju.sge.SNOPS.assure;
 import static org.arastreju.sge.SNOPS.singleObject;
@@ -89,8 +87,7 @@ public class Organizer {
     // ----------------------------------------------------
 
     public Namespace registerNamespace(final String uri, final String prefix) {
-        final Conversation conversation = conversation();
-        try {
+        try (Conversation conversation = conversation()) {
             final Query query = conversation.createQuery()
                     .addField(RDF.TYPE, Aras.NAMESPACE)
                     .and()
@@ -98,7 +95,7 @@ public class Organizer {
             final QueryResult result = query.getResult();
             if (!result.isEmpty()) {
                 final ResourceNode node = conversation.resolve(result.iterator().next());
-                assure(node,  Aras.HAS_PREFIX, new SNText(prefix));
+                assure(node, Aras.HAS_PREFIX, new SNText(prefix));
                 return new SimpleNamespace(uri, prefix);
             } else {
                 final Namespace ns = new SimpleNamespace(uri, prefix);
@@ -106,9 +103,8 @@ public class Organizer {
                 conversation.attach(node);
                 return ns;
             }
-        } finally {
-            conversation.close();
         }
+
     }
 
     public Context findContext(QualifiedName qn) {
@@ -130,8 +126,7 @@ public class Organizer {
 
     // ----------------------------------------------------
 
-    public StatementContainer getStatements(final Context... ctx) {
-        final Conversation conversation = conversation(ctx);
+    public StatementContainer getStatements(final Context ctx) {
         return new StatementContainer() {
             @Override
             public Collection<Namespace> getNamespaces() {
@@ -140,11 +135,13 @@ public class Organizer {
 
             @Override
             public Iterator<Statement> iterator() {
+                final Conversation conversation = conversation(ctx);
+                conversation.getConversationContext().setStrictContextRegarding(true);
                 final QueryResult queryResult = conversation.createQuery().addURI("*").getResult();
                 final Iterator<ResourceNode> nodeIterator = queryResult.iterator();
                 return new StatementIterator(nodeIterator);
             }
-        } ;
+        };
     }
 
     // ----------------------------------------------------
@@ -169,9 +166,9 @@ public class Organizer {
         return gate.startConversation();
     }
 
-    protected Conversation conversation(final Context... readContexts) {
+    protected Conversation conversation(final Context readContext) {
         Conversation conversation = gate.startConversation();
-        conversation.getConversationContext().setReadContexts(readContexts);
+        conversation.getConversationContext().setPrimaryContext(readContext);
         return conversation;
     }
 

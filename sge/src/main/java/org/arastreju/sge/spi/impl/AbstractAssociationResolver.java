@@ -70,6 +70,10 @@ public abstract class AbstractAssociationResolver implements AssociationResolver
         return controller().getConversationContext().getReadContexts();
     }
 
+    protected boolean isStrictContextRegarding() {
+        return controller().getConversationContext().isStrictContextRegarding();
+    }
+
     // ----------------------------------------------------
 
     /**
@@ -82,19 +86,11 @@ public abstract class AbstractAssociationResolver implements AssociationResolver
             LOGGER.debug("Statement has no context.");
             return true;
         }
-        Context[] readContexts = readContexts();
-        for (Context stmtContext : stmtContexts) {
-            Context accessContext = contextResolver.resolve(stmtContext).getAccessContext();
-            if (isPublicVisible(accessContext)) {
-                return true;
-            }
-            for (Context readContext : readContexts) {
-                if (readContext.equals(accessContext)) {
-                    return true;
-                }
-            }
+        if (isStrictContextRegarding()) {
+            return regardContextStrict(stmtContexts, readContexts());
+        } else {
+            return regardContext(stmtContexts, readContexts());
         }
-        return false;
     }
 
     protected ResourceNode resolve(String uri) {
@@ -114,6 +110,40 @@ public abstract class AbstractAssociationResolver implements AssociationResolver
     private boolean isPublicVisible(Context ctx) {
         SNContext resolved = contextResolver.resolve(ctx);
         return resolved != null && Accessibility.PUBLIC.equals(resolved.getVisibility());
+    }
+
+    private Context getContextToRegard(Context ctx, boolean strict) {
+        if (strict) {
+            return ctx;
+        } else {
+            return contextResolver.resolve(ctx).getAccessContext();
+        }
+    }
+
+    private boolean regardContextStrict(Context[] stmtContexts, Context[] readContexts) {
+        for (Context stmtContext : stmtContexts) {
+            for (Context readContext : readContexts) {
+                if (readContext.equals(stmtContext)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private boolean regardContext(Context[] stmtContexts, Context[] readContexts) {
+        for (Context stmtContext : stmtContexts) {
+            Context accessContext = contextResolver.resolve(stmtContext).getAccessContext();
+            if (isPublicVisible(accessContext)) {
+                return true;
+            }
+            for (Context readContext : readContexts) {
+                if (readContext.equals(accessContext) || readContext.equals(stmtContext)) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
 }

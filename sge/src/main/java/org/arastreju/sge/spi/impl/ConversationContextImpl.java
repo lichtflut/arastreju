@@ -52,15 +52,25 @@ public class ConversationContextImpl implements ConversationContext {
 
     private final long ctxId = ++ID_GEN;
 
-    private final Map<QualifiedName, AttachedAssociationKeeper> register = new HashMap<QualifiedName, AttachedAssociationKeeper>();
+    private final Map<QualifiedName, AttachedAssociationKeeper> register = new HashMap<>();
 
-    private final Set<SNContext> readContexts = new HashSet<SNContext>();
+    private final Set<SNContext> readContexts = new HashSet<>();
 
     private SNContext primaryContext;
 
     private boolean active = true;
 
+    private boolean strict = false;
+
     private ContextResolver resolver;
+
+    // ----------------------------------------------------
+
+    /**
+     * Constructor.
+     */
+    public ConversationContextImpl() {
+    }
 
     // ----------------------------------------------------
 
@@ -75,8 +85,12 @@ public class ConversationContextImpl implements ConversationContext {
     // ----------------------------------------------------
 
     @Override
+    public SNContext getPrimaryContext() {
+        return primaryContext;
+    }
+
+    @Override
     public SNContext[] getReadContexts() {
-        assertActive();
         if (readContexts != null) {
             return readContexts.toArray(new SNContext[readContexts.size()]);
         } else {
@@ -85,22 +99,21 @@ public class ConversationContextImpl implements ConversationContext {
     }
 
     @Override
-    public SNContext getPrimaryContext() {
-        return primaryContext;
-    }
-
-    @Override
     public ConversationContext setPrimaryContext(Context ctx) {
+        assertActive();
         readContexts.remove(primaryContext);
-        this.primaryContext = resolver.resolve(ctx);
-        if (primaryContext != null) {
+        if (ctx != null) {
+            primaryContext = resolver.resolve(ctx);
             readContexts.add(primaryContext);
+        } else {
+            primaryContext = null;
         }
         return this;
     }
 
     @Override
     public ConversationContext setReadContexts(Context... ctxs) {
+        assertActive();
         this.readContexts.clear();
         if (ctxs != null) {
             addAllResolved(readContexts, ctxs);
@@ -108,6 +121,18 @@ public class ConversationContextImpl implements ConversationContext {
         if (primaryContext != null) {
             readContexts.add(resolver.resolve(primaryContext));
         }
+        return this;
+    }
+
+    @Override
+    public boolean isStrictContextRegarding() {
+        return strict;
+    }
+
+    @Override
+    public ConversationContext setStrictContextRegarding(boolean strict) {
+        assertActive();
+        this.strict = strict;
         return this;
     }
 

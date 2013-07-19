@@ -36,7 +36,7 @@ import java.util.Set;
  *
  * @author Oliver Tigges
  */
-public interface Conversation {
+public interface Conversation extends AutoCloseable {
 	
 	/**
 	 * Adds a statement to the semantic model.

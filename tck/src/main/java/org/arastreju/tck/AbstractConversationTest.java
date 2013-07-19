@@ -87,6 +87,20 @@ public abstract class AbstractConversationTest {
     protected static final QualifiedName qnHasEmployees = QualifiedName.from("http://q#", "hasEmployees");
     protected static final QualifiedName qnKnows = QualifiedName.from("http://q#", "knows");
 
+    protected static final SNContext accessContext =
+            new SNContext(QualifiedName.from(Context.LOCAL_CONTEXTS_NAMESPACE, "Access"));
+    protected static final SNContext sourceContext =
+            new SNContext(QualifiedName.from(Context.LOCAL_CONTEXTS_NAMESPACE, "Source"));
+    protected static final SNContext publicContext = new SNContext(QualifiedName.from(Context.LOCAL_CONTEXTS_NAMESPACE, "Public"));
+    protected static final SNContext privateContext = new SNContext(QualifiedName.from(Context.LOCAL_CONTEXTS_NAMESPACE, "Private"));
+
+    static {
+        sourceContext.setAccessContext(accessContext);
+        publicContext.setVisibility(Accessibility.PUBLIC);
+        privateContext.setVisibility(Accessibility.PRIVATE);
+
+    }
+
     // ----------------------------------------------------
 
     private GraphDataStore store;
@@ -673,12 +687,6 @@ public abstract class AbstractConversationTest {
         final SNClass car = SNClass.from(new SNResource(qnCar));
         final SNEntity aCar = car.createInstance();
 
-        SNContext sourceContext = new SNContext(QualifiedName.from(Context.LOCAL_CONTEXTS_NAMESPACE, "Source"));
-        SNContext publicContext = new SNContext(QualifiedName.from(Context.LOCAL_CONTEXTS_NAMESPACE, "Public"));
-        publicContext.setVisibility(Accessibility.PUBLIC);
-        SNContext privateContext = new SNContext(QualifiedName.from(Context.LOCAL_CONTEXTS_NAMESPACE, "Private"));
-        privateContext.setVisibility(Accessibility.PRIVATE);
-
         conversation.attach(sourceContext);
         conversation.attach(publicContext);
         conversation.attach(privateContext);
@@ -709,15 +717,6 @@ public abstract class AbstractConversationTest {
         final SNClass car = SNClass.from(new SNResource(qnCar));
         final SNEntity aCar = car.createInstance();
 
-        SNContext accessContext = new SNContext(QualifiedName.from(Context.LOCAL_CONTEXTS_NAMESPACE, "Access"));
-        SNContext sourceContext = new SNContext(QualifiedName.from(Context.LOCAL_CONTEXTS_NAMESPACE, "Source"));
-        sourceContext.setAccessContext(accessContext);
-
-        SNContext publicContext = new SNContext(QualifiedName.from(Context.LOCAL_CONTEXTS_NAMESPACE, "Public"));
-        publicContext.setVisibility(Accessibility.PUBLIC);
-        SNContext privateContext = new SNContext(QualifiedName.from(Context.LOCAL_CONTEXTS_NAMESPACE, "Private"));
-        privateContext.setVisibility(Accessibility.PRIVATE);
-
         conversation.attach(sourceContext);
         conversation.attach(publicContext);
         conversation.attach(privateContext);
@@ -738,6 +737,40 @@ public abstract class AbstractConversationTest {
         Assert.assertEquals(new SNText("BMW"), fetchObject(car2, Aras.HAS_BRAND_NAME));
         // public
         Assert.assertEquals(new SNText("A BMW car"), fetchObject(car2, RDFS.LABEL));
+        // private
+        Assert.assertNull(fetchObject(car2, Aras.HAS_PROPER_NAME));
+    }
+
+    @Test
+    public void testStrictContextRegarding() {
+        final SNClass car = SNClass.from(new SNResource(qnCar));
+        final SNEntity aCar = car.createInstance();
+
+        conversation.attach(sourceContext);
+        conversation.attach(publicContext);
+        conversation.attach(privateContext);
+
+        conversation.attach(aCar);
+
+        associate(aCar, Aras.HAS_BRAND_NAME, new SNText("BMW"), sourceContext);
+        associate(aCar, Aras.HAS_NAME_PART, new SNText("M3"), accessContext);
+        associate(aCar, RDFS.LABEL, new SNText("A BMW car"), publicContext);
+        associate(aCar, Aras.HAS_PROPER_NAME, new SNText("Knut"), privateContext);
+
+        conversation.detach(aCar);
+
+        // Set to strict
+        conversation.getConversationContext().setPrimaryContext(sourceContext).setStrictContextRegarding(true);
+
+        final ResourceNode car2 = conversation.findResource(aCar.getQualifiedName());
+        Assert.assertNotSame(aCar, car2);
+
+        // primary context
+        Assert.assertEquals(new SNText("BMW"), fetchObject(car2, Aras.HAS_BRAND_NAME));
+        // access context
+        Assert.assertNull(fetchObject(car2, Aras.HAS_NAME_PART));
+        // public
+        Assert.assertNull(fetchObject(car2, RDFS.LABEL));
         // private
         Assert.assertNull(fetchObject(car2, Aras.HAS_PROPER_NAME));
     }
