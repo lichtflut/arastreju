@@ -32,16 +32,16 @@ import org.arastreju.sge.context.Context;
 public interface ArastrejuGate {
 
 	/**
-	 * Starts a new Modeling Conversation allowing to read and change the model.
-	 * @return The modeling conversation.
+	 * Starts a new conversation allowing to read and change the semantic network.
+	 * @return The conversation.
 	 */
 	Conversation startConversation();
 
     /**
-     * Starts a new Modeling Conversation using the given contexts.
+     * Starts a new conversation using the given contexts.
      * @param primary The primary context in which new statements will be placed.
      * @param readContexts The additional contexts to be regarded when traversing through the graph.
-     * @return The modeling conversation.
+     * @return The conversation.
      */
     Conversation startConversation(Context primary, Context... readContexts);
 	

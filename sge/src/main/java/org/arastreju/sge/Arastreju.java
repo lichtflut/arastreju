@@ -23,7 +23,6 @@ import org.arastreju.sge.spi.ArastrejuGateFactory;
 
 import java.lang.reflect.Constructor;
 import java.util.HashMap;
-import java.util.Properties;
 
 /**
  * <p>
@@ -43,15 +42,16 @@ import java.util.Properties;
  */
 public final class Arastreju {
 
-	private final static Arastreju DEFAULT_INSTANCE = new Arastreju();
+	private static final Arastreju DEFAULT_INSTANCE = new Arastreju();
+
+    private static final HashMap<String, DomainIdentifier> contextMap = new HashMap<>();
 
 	// -----------------------------------------------------
 
     private final ArastrejuGateFactory factory;
+
 	private final ArastrejuProfile profile;
 	
-	private static HashMap<String, DomainIdentifier> contextMap = new HashMap<String, DomainIdentifier>();
-
 	// -----------------------------------------------------
 
 	/**
@@ -61,28 +61,7 @@ public final class Arastreju {
 	public static Arastreju getInstance() {
 		return DEFAULT_INSTANCE;
 	}
-	
-	/**
-	 * Get a Arastreju instance for a given profile.
-	 * A profile describes the binding to the graph store (e.g. Neo4j).
-	 * @param profile The name/path of the Arastreju profile.
-	 * @return the instance
-	 */
-	public static Arastreju getInstance(final String profile) {
-		return new Arastreju(profile);
-	}
-	
-	/**
-	 * Get a Arastreju instance for a given profile.
-	 * A profile describes the binding to the graph store (e.g. Neo4j).
-	 * @param profile The name/path of the Arastreju profile.
-	 * @param properties Additional properties.
-	 * @return the instance
-	 */
-	public static Arastreju getInstance(final String profile, final Properties properties) {
-		return getInstance(ArastrejuProfile.read(profile).addProperties(properties));
-	}
-	
+
 	/**
 	 * Get a Arastreju instance for a given profile.
 	 * A profile describes the binding to the graph store (e.g. Neo4j).
@@ -129,37 +108,6 @@ public final class Arastreju {
         return factory.create(identifier);
     }
 
-    /**
-     * @deprecated  Use openMasterGate() instead.
-     */
-    @Deprecated
-    public ArastrejuGate rootContext() {
-        return openMasterGate();
-    }
-
-	/**
-	 * @deprecated  Use openGate() instead.
-	 */
-    @Deprecated
-	public ArastrejuGate rootContext(String domain) {
-       return openGate(domain);
-	}
-
-	// -----------------------------------------------------
-	
-	/**
-	 * Create and initialize the Gate Context.
-	 */
-	private DomainIdentifier createDomainIdentifier(String domain) {
-        if (DomainIdentifier.MASTER_DOMAIN.equals(domain)) {
-            return new MasterDomain();
-        } else if (profile.isPropertyEnabled(ArastrejuProfile.ENABLE_VIRTUAL_DOMAINS)) {
-            return new VirtualDomain(domain);
-        } else {
-            return new PhysicalDomain(domain);
-        }
-	}
-	
 	// -- PRIVATE CONSTRUCTORS -----------------------------
 
 	/**
@@ -167,14 +115,6 @@ public final class Arastreju {
 	 */
 	private Arastreju() {
 		this(ArastrejuProfile.read());
-	}
-	
-	/**
-	 * Private constructor.
-	 * @param profile path to the profile file.
-	 */
-	private Arastreju(final String profile) {
-		this(ArastrejuProfile.read(profile));
 	}
 	
 	/**
@@ -193,5 +133,21 @@ public final class Arastreju {
 			throw new RuntimeException(e);
 		}
 	}
+
+    // -----------------------------------------------------
+
+    /**
+     * Create and initialize the Gate Context.
+     */
+    private DomainIdentifier createDomainIdentifier(String domain) {
+        if (DomainIdentifier.MASTER_DOMAIN.equals(domain)) {
+            return new MasterDomain();
+        } else if (profile.isPropertyEnabled(ArastrejuProfile.ENABLE_VIRTUAL_DOMAINS)) {
+            return new VirtualDomain(domain);
+        } else {
+            return new PhysicalDomain(domain);
+        }
+    }
+
 
 }

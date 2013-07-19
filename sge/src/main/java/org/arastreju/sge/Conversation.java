@@ -145,6 +145,7 @@ public interface Conversation extends AutoCloseable {
 	/**
 	 * Finish the conversation and release all resources.
 	 */
+    @Override
 	void close();
 
 }
