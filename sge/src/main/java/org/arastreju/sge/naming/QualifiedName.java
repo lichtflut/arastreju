@@ -33,14 +33,19 @@ import java.util.UUID;
  */
 public class QualifiedName implements Comparable<QualifiedName>, Serializable {
 	
-	public static final String LOCAL = "local";
+	public static final String LOCAL = "local:";
+    public static final String UUID_NS = "local:uuid:";
+    public static final String BLANK_NS = "local:blank:";
+
+    // ----------------------------------------------------
+
 	public static final String PREFIX_DELIM = ":";
 	public static final String HASH = "#";
 	public static final String SLASH = "/";
 	
 	private final String qn;
 	
-	private static final Map<String, QualifiedName> cache = new HashMap<String, QualifiedName>();
+	private static final Map<String, QualifiedName> CACHE = new HashMap<String, QualifiedName>();
 	
 	//------------------------------------------------------
 	
@@ -80,29 +85,29 @@ public class QualifiedName implements Comparable<QualifiedName>, Serializable {
      * @return The new qualified name.
      */
     public static QualifiedName generate() {
-        return new QualifiedName(LOCAL + PREFIX_DELIM + UUID.randomUUID().toString());
+        return new QualifiedName(UUID_NS + UUID.randomUUID().toString());
     }
 	
 	/**
-	 * Create a new QualifiedName from a string - regarding a cache.
+	 * Create a new QualifiedName from a string - regarding a CACHE.
 	 * @param qualifiedName The qualifed name.
-	 * @return A new qualified name or the corresponding from cache.
+	 * @return A new qualified name or the corresponding from CACHE.
 	 */
 	public static QualifiedName from(final String qualifiedName) {
-		if (cache.containsKey(qualifiedName)) {
-			return cache.get(qualifiedName);
+		if (CACHE.containsKey(qualifiedName)) {
+			return CACHE.get(qualifiedName);
 		} else {
 			final QualifiedName qn = new QualifiedName(qualifiedName);
-			cache.put(qualifiedName, qn);
+			CACHE.put(qualifiedName, qn);
 			return qn;
 		}
 	}
 	
 	/**
-	 * Create a new QualifiedName for this URI - regarding a cache.
+	 * Create a new QualifiedName for this URI - regarding a CACHE.
 	 * @param namespace The namespace part
      * @param name The name part
-	 * @return A new URI or the corresponding from cache.
+	 * @return A new URI or the corresponding from CACHE.
 	 */
 	public static QualifiedName from(final String namespace, final String name) {
 		return from(namespace + name);

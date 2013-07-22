@@ -24,6 +24,8 @@ import org.openrdf.model.Value;
 import org.openrdf.model.impl.BNodeImpl;
 import org.openrdf.model.impl.LiteralImpl;
 import org.openrdf.model.impl.URIImpl;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -40,6 +42,8 @@ import java.text.SimpleDateFormat;
  * @author Oliver Tigges
  */
 public class RioStatement implements org.openrdf.model.Statement {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(RioStatement.class);
 	
 	private static DateFormat XML_DATE = new SimpleDateFormat("yyyy-MM-dd");
 	
@@ -60,43 +64,36 @@ public class RioStatement implements org.openrdf.model.Statement {
 	
 	// -----------------------------------------------------
 
-	/**
-	 * {@inheritDoc}
-	 */
-	public Resource getContext() {
-		return null;
-	}
+    @Override
+    public Resource getSubject() {
+        final ResourceID subject = arasStmt.getSubject();
+        if (subject.asResource().isBlankNode()){
+            return new BNodeImpl(subject.getQualifiedName().getSimpleName());
+        }
+        return sesameURI(subject);
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
+    @Override
+    public URI getPredicate() {
+        return sesameURI(arasStmt.getPredicate());
+    }
+
+
+    @Override
 	public Value getObject() {
 		final SemanticNode object = arasStmt.getObject();
 		if (object.isResourceNode()){
-			return new URIImpl(object.asResource().getQualifiedName().toURI());
+			return sesameURI(object.asResource());
 		} else {
 			return createLiteral(object.asValue());
 		}
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
-	public URI getPredicate() {
-		return new URIImpl(arasStmt.getPredicate().getQualifiedName().toURI());
-	}
+    @Override
+    public Resource getContext() {
+        return null;
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	public Resource getSubject() {
-		final ResourceID subject = arasStmt.getSubject();
-		if (subject.asResource().isBlankNode()){
-			return new BNodeImpl(subject.getQualifiedName().getSimpleName());
-		}
-		return new URIImpl(subject.getQualifiedName().toURI());
-	}
-	
 	// ----------------------------------------------------
 	
 	private Value createLiteral(ValueNode value) {
@@ -125,5 +122,14 @@ public class RioStatement implements org.openrdf.model.Statement {
 	private String xmlDate(ValueNode value) {
 		return XML_DATE.format(value.getTimeValue());
 	}
-	
+
+    private URI sesameURI(ResourceID rid) {
+        try {
+            return new URIImpl(rid.toURI());
+        } catch (IllegalArgumentException e) {
+            LOGGER.error("Error while serializing statement {}: {}", arasStmt, e.getMessage());
+            return new URIImpl("error:" +rid.toURI());
+        }
+    }
+
 }

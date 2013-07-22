@@ -112,14 +112,6 @@ public abstract class AbstractAssociationResolver implements AssociationResolver
         return resolved != null && Accessibility.PUBLIC.equals(resolved.getVisibility());
     }
 
-    private Context getContextToRegard(Context ctx, boolean strict) {
-        if (strict) {
-            return ctx;
-        } else {
-            return contextResolver.resolve(ctx).getAccessContext();
-        }
-    }
-
     private boolean regardContextStrict(Context[] stmtContexts, Context[] readContexts) {
         for (Context stmtContext : stmtContexts) {
             for (Context readContext : readContexts) {

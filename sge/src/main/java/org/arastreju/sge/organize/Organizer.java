@@ -70,7 +70,7 @@ public class Organizer {
         final List<Namespace> result = new ArrayList<Namespace>();
         final Query query = conversation().createQuery().addField(RDF.TYPE, Aras.NAMESPACE);
         for (ResourceNode node : query.getResult()) {
-            result.add(createNamespace(node));
+            result.add(toNamespace(node));
         }
         return result;
     }
@@ -146,14 +146,14 @@ public class Organizer {
 
     // ----------------------------------------------------
 
-	protected Namespace createNamespace(final ResourceNode node) {
+	protected Namespace toNamespace(final ResourceNode node) {
 		final String uri = string(singleObject(node, Aras.HAS_URI));
 		final String prefix = string(singleObject(node, Aras.HAS_PREFIX));
 		return new SimpleNamespace(uri, prefix);
 	}
 	
 	protected ResourceNode createNamespaceNode(final Namespace namespace) {
-		final SNResource node = new SNResource();
+		final SNResource node = new SNResource(QualifiedName.from(namespace.getUri()));
 		assure(node, RDF.TYPE, Aras.NAMESPACE);
 		assure(node, Aras.HAS_URI, new SNText(namespace.getUri()));
 		assure(node, Aras.HAS_PREFIX, new SNText(namespace.getPrefix()));
