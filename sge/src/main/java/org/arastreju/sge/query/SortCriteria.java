@@ -52,7 +52,7 @@ public class SortCriteria {
 	public String[] getColumns() {
 		return columns;
 	}
-	
+
 	// ----------------------------------------------------
 	
 	@Override

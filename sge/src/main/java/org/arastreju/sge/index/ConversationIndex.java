@@ -26,6 +26,9 @@ import org.apache.lucene.index.Term;
 import org.apache.lucene.queryParser.ParseException;
 import org.apache.lucene.queryParser.QueryParser;
 import org.apache.lucene.search.MatchAllDocsQuery;
+import org.apache.lucene.search.Query;
+import org.apache.lucene.search.Sort;
+import org.apache.lucene.search.SortField;
 import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.util.Version;
 import org.arastreju.sge.ConversationContext;
@@ -35,6 +38,8 @@ import org.arastreju.sge.model.Statement;
 import org.arastreju.sge.model.nodes.ResourceNode;
 import org.arastreju.sge.model.nodes.views.SNContext;
 import org.arastreju.sge.naming.QualifiedName;
+import org.arastreju.sge.query.QueryResult;
+import org.arastreju.sge.query.SortCriteria;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -119,32 +124,21 @@ public class ConversationIndex implements IndexUpdator, IndexSearcher {
 	}
 
     @Override
-	public IndexSearchResult search(String query) {
+	public DynamicIndexSearch search(String query, SortCriteria sortCriteria) {
 		LOGGER.debug("Searching ({}) in conversation {}.", query, conversationContext);
         flush();
 
 		try {
-            IndexReader reader = ctxIndex().createReader();
-            org.apache.lucene.search.IndexSearcher searcher =
-                    new org.apache.lucene.search.IndexSearcher(reader);
-
             /* default field is 'qn' as this is the only field common to all resources.
             * (not that we're going to need a default field, anyway.) */
             QueryParser qp = new QueryParser(Version.LUCENE_35, IndexFields.QUALIFIED_NAME,
                     new LowercaseWhitespaceAnalyzer(Version.LUCENE_35));
             qp.setAllowLeadingWildcard(true); //such queries should be avoided where possible nevertheless
+            Query luceneQuery = qp.parse(query);
 
-			/* we can use searcher.search(String, Collector) if we need all them results */
-			AllHitsCollector collector = new AllHitsCollector();
-			searcher.search(qp.parse(query), collector);
+            Sort sort = toLuceneSort(sortCriteria);
+            return new DynamicIndexSearch(luceneQuery, sort, ctxIndex());
 
-            List<QualifiedName> resultList = collector.getList();
-            reader.close();
-            searcher.close();
-            return new FixedIndexSearchResult(resultList);
-		} catch (IOException e) {
-			LOGGER.error("Caught IOException while processing query '" + query + "'", e);
-            throw new IllegalStateException("Could not remove node.", e);
 		} catch (ParseException e) {
 			LOGGER.error("Caught ParseException while processing query '" + query + "'", e);
             throw new IllegalStateException("Could not perform search.", e);
@@ -296,5 +290,17 @@ public class ConversationIndex implements IndexUpdator, IndexSearcher {
 	private String normalizeQN(String qn) {
 		return qn.toLowerCase();
 	}
+
+    private Sort toLuceneSort(SortCriteria criteria) {
+        if (criteria == null) {
+            return new Sort();
+        }
+        String[] columns = criteria.getColumns();
+        SortField[] fields = new SortField[columns.length];
+        for (int i = 0; i < columns.length; i++) {
+            fields[i] = new SortField(columns[i], SortField.STRING);
+        }
+        return new Sort(fields);
+    }
 
 }

@@ -15,6 +15,9 @@
  */
 package org.arastreju.sge.index;
 
+import org.arastreju.sge.query.QueryResult;
+import org.arastreju.sge.query.SortCriteria;
+
 /**
  * <p>
  *  Searcher for the Arastreju index.
@@ -32,7 +35,9 @@ public interface IndexSearcher {
      * Search the index.
      *
      * @param query The lucene query.
+     * @param sort The sort criteria.
      * @return An iterator over the search results.
      */
-    IndexSearchResult search(String query);
+    DynamicIndexSearch search(String query, SortCriteria sort);
+
 }

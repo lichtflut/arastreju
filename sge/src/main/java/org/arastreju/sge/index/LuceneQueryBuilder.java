@@ -40,8 +40,6 @@ import java.util.regex.Matcher;
  */
 public class LuceneQueryBuilder extends QueryBuilder {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(LuceneQueryBuilder.class);
-
     private final IndexSearcher searcher;
 
     private final QNResolver resolver;
@@ -62,14 +60,14 @@ public class LuceneQueryBuilder extends QueryBuilder {
 
     @Override
     public QueryResult getResult() {
-        final IndexSearchResult hits = searcher.search(toQueryString());
-        return new LuceneQueryResult(hits, resolver);
+        DynamicIndexSearch search = searcher.search(toQueryString(), getSortCriteria());
+        return new DynamicQueryResult(search, resolver);
     }
 
     // -----------------------------------------------------
 
     /**
-     * Return the Lucence query.
+     * Return the Lucene query.
      * @return The query.
      */
     protected String toQueryString() {

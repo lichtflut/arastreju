@@ -47,8 +47,11 @@ public interface ErrorCodes {
 	public static final Long GENERAL_QUERY_ERROR = 7000L;
 	
 	public static final Long GENERAL_IO_ERROR = 8000L;
+
 	public static final Long GRAPH_IO_ERROR = 8100L;
 	public static final Long GRAPH_READ_ERROR = 8101L;
 	public static final Long GRAPH_WRITE_ERROR = 8101L;
+
+    public static final Long QUERY_IO_ERROR = 8200L;
 
 }
