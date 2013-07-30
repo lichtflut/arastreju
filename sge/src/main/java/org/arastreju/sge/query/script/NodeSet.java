@@ -73,10 +73,11 @@ public class NodeSet {
     }
 
     public NodeSet filter(org.mozilla.javascript.Function f) {
-        List<SemanticNode> filtered = new ArrayList<>();
-        Scriptable scope = f.getParentScope();
-        Scriptable thisObj = f.getParentScope();
         Context context = Context.getCurrentContext();
+        Scriptable scope = context.newObject(f.getParentScope());
+        Scriptable thisObj = f.getParentScope();
+
+        List<SemanticNode> filtered = new ArrayList<>();
         for (SemanticNode node : nodes) {
             Object result = f.call(context, scope, thisObj,
                     new Object[]{new NodeSet(node, ctx)});

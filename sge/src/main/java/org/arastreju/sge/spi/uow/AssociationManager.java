@@ -47,7 +47,9 @@ public class AssociationManager implements AssociationListener {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AssociationManager.class);
 
-    private final List<AssociationListener> listeners = new ArrayList<AssociationListener>();
+    // ----------------------------------------------------
+
+    private final List<AssociationListener> listeners = new ArrayList<>();
 
     private final ResourceResolver resolver;
 
@@ -55,6 +57,11 @@ public class AssociationManager implements AssociationListener {
 
     // ----------------------------------------------------
 
+    /**
+     * Constructor.
+     * @param resolver A resolver for resources.
+     * @param tx A transaction control handle.
+     */
     public AssociationManager(ResourceResolver resolver, TransactionControl tx) {
         this.resolver = resolver;
         this.tx = tx;
