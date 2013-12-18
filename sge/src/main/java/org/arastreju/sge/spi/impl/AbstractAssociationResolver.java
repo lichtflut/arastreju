@@ -18,7 +18,7 @@ package org.arastreju.sge.spi.impl;
 import org.arastreju.sge.context.Accessibility;
 import org.arastreju.sge.context.Context;
 import org.arastreju.sge.model.SimpleResourceID;
-import org.arastreju.sge.model.StatementMetaInfo;
+import org.arastreju.sge.model.associations.StatementMetaInfo;
 import org.arastreju.sge.model.nodes.ResourceNode;
 import org.arastreju.sge.model.nodes.views.SNContext;
 import org.arastreju.sge.persistence.ResourceResolver;

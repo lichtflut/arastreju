@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.arastreju.sge.model;
+package org.arastreju.sge.model.associations;
 
 import org.arastreju.sge.context.Context;
 import org.arastreju.sge.model.nodes.StatementOrigin;
@@ -46,7 +46,7 @@ public class StatementMetaInfo implements Serializable, Cloneable {
     /**
      * Constructor.
      * @param contexts The contexts.
-     * @param timestamp The timestamp of the creation of the statment.
+     * @param timestamp The timestamp of the creation of the statement.
      */
     public StatementMetaInfo(Context[] contexts, Date timestamp, StatementOrigin origin) {
         this.timestamp = timestamp;
@@ -68,7 +68,7 @@ public class StatementMetaInfo implements Serializable, Cloneable {
 	/**
 	 * Constructor.
      * @param contexts The contexts.
-	 * @param timestamp The timestamp of the creation of the statment.
+	 * @param timestamp The timestamp of the creation of the statement.
 	 */
 	public StatementMetaInfo(Context[] contexts, Date timestamp) {
         this(contexts, timestamp, StatementOrigin.ASSERTED);

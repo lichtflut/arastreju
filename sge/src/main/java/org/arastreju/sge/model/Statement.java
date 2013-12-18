@@ -16,6 +16,7 @@
 package org.arastreju.sge.model;
 
 import org.arastreju.sge.context.Context;
+import org.arastreju.sge.model.associations.StatementMetaInfo;
 import org.arastreju.sge.model.nodes.SemanticNode;
 
 import java.io.Serializable;
@@ -43,5 +44,5 @@ public interface Statement extends Serializable {
 	Context[] getContexts();
 	
 	StatementMetaInfo getMetaInfo();
-	
+
 }

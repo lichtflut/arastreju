@@ -16,6 +16,7 @@
 package org.arastreju.sge.model;
 
 import org.arastreju.sge.context.Context;
+import org.arastreju.sge.model.associations.StatementMetaInfo;
 import org.arastreju.sge.model.nodes.SemanticNode;
 
 /**
@@ -46,18 +47,6 @@ public class AbstractStatement implements Statement {
 	 * @param subject The subject.
 	 * @param predicate The predicate.
 	 * @param object The object.
-	 * @param contexts The contexts of this statement.
-	 */
-	public AbstractStatement(final ResourceID subject, final ResourceID predicate,
-			final SemanticNode object, final Context... contexts) {
-		this(subject, predicate, object, new StatementMetaInfo(contexts));
-	}
-	
-	/**
-	 * Creates a new Statement.
-	 * @param subject The subject.
-	 * @param predicate The predicate.
-	 * @param object The object.
 	 * @param metaInfo The statement meta information.
 	 */
 	public AbstractStatement(final ResourceID subject, final ResourceID predicate,
@@ -71,37 +60,26 @@ public class AbstractStatement implements Statement {
 	
 	// -----------------------------------------------------
 
-	/**
-	 * {@inheritDoc}
-	 */
+    @Override
 	public ResourceID getSubject() {
 		return subject;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
+    @Override
 	public ResourceID getPredicate() {
 		return predicate;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
+    @Override
 	public SemanticNode getObject() {
 		return object;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
+    @Override
 	public Context[] getContexts() {
 		return metaInfo.getContexts();
 	}
 	
-	/** 
-	 * {@inheritDoc}
-	 */
 	@Override
 	public StatementMetaInfo getMetaInfo() {
 		return metaInfo;
@@ -138,8 +116,7 @@ public class AbstractStatement implements Statement {
 	@Override
 	public String toString() {
         StringBuilder sb = new StringBuilder(subject.toString());
-		sb.append(" " + predicate + " ");
-		sb.append(object);
+		sb.append(" ").append(predicate).append(" ").append(object);
 		return sb.toString();
 	}
 	

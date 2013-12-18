@@ -18,7 +18,6 @@ package org.arastreju.sge.model.associations;
 import org.arastreju.sge.model.DetachedStatement;
 import org.arastreju.sge.model.ResourceID;
 import org.arastreju.sge.model.Statement;
-import org.arastreju.sge.model.StatementMetaInfo;
 import org.arastreju.sge.model.nodes.SemanticNode;
 
 /**
