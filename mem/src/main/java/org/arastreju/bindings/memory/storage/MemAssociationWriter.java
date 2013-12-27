@@ -16,8 +16,7 @@
 package org.arastreju.bindings.memory.storage;
 
 import org.arastreju.sge.ConversationContext;
-import org.arastreju.sge.context.Context;
-import org.arastreju.sge.model.DetachedStatement;
+import org.arastreju.sge.model.Assertor;
 import org.arastreju.sge.model.Statement;
 import org.arastreju.sge.spi.impl.AbstractAssociationWriter;
 
@@ -60,7 +59,11 @@ public class MemAssociationWriter extends AbstractAssociationWriter {
     // ----------------------------------------------------
 
     private Statement copyForStorage(Statement original) {
-        Context[] ctxs = getCurrentContexts(original);
-        return new DetachedStatement(original.getSubject(), original.getPredicate(), original.getObject(), ctxs);
+       return Assertor.start(original.getSubject(), original.getPredicate(), original.getObject())
+                .context(getCurrentContexts(original))
+                .timestamp(original.getMetaInfo().getTimestamp())
+                .validFrom(original.getMetaInfo().getValidFrom())
+                .validUntil(original.getMetaInfo().getValidUntil())
+                .build();
     }
 }
