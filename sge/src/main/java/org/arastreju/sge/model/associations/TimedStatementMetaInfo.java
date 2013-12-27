@@ -31,7 +31,7 @@ import java.util.Date;
  *
  * @author Oliver Tigges
  */
-public class TimedStatementMetaInfo extends StatementMetaInfo {
+public class TimedStatementMetaInfo extends DefaultStatementMetaInfo {
 
     private Date validFrom;
     private Date validUntil;
@@ -46,6 +46,7 @@ public class TimedStatementMetaInfo extends StatementMetaInfo {
 
     //-----------------------------------------------------
 
+    @Override
     public Date getValidFrom() {
         return validFrom;
     }
@@ -54,6 +55,7 @@ public class TimedStatementMetaInfo extends StatementMetaInfo {
         this.validFrom = validFrom;
     }
 
+    @Override
     public Date getValidUntil() {
         return validUntil;
     }

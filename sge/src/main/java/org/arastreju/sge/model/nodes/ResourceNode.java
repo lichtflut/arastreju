@@ -15,9 +15,9 @@
  */
 package org.arastreju.sge.model.nodes;
 
-import org.arastreju.sge.context.Context;
 import org.arastreju.sge.model.ResourceID;
 import org.arastreju.sge.model.Statement;
+import org.arastreju.sge.model.associations.StatementMetaInfo;
 
 import java.util.Set;
 
@@ -60,10 +60,18 @@ public interface ResourceNode extends ResourceID {
 	 * Add an association.
 	 * @param predicate The predicate of the association.
      * @param object The object.
-     * @param ctx The optional contexts of this association.
 	 * @return The created statement.
 	 */
-	Statement addAssociation(ResourceID predicate, SemanticNode object, Context... ctx);
+	Statement addAssociation(ResourceID predicate, SemanticNode object);
+
+    /**
+     * Add an association.
+     * @param predicate The predicate of the association.
+     * @param object The object.
+     * @param metaInfo The meta information for this statement.
+     * @return The created statement.
+     */
+    Statement addAssociation(ResourceID predicate, SemanticNode object, StatementMetaInfo metaInfo);
 
 	/**
 	 * Removes the association from this resource object. This will have no effect on the database when this node isn't

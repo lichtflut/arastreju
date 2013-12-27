@@ -16,9 +16,9 @@
 package org.arastreju.sge.model.nodes.views;
 
 import org.arastreju.sge.SNOPS;
-import org.arastreju.sge.context.Context;
 import org.arastreju.sge.model.ResourceID;
 import org.arastreju.sge.model.Statement;
+import org.arastreju.sge.model.associations.StatementMetaInfo;
 import org.arastreju.sge.model.nodes.ResourceNode;
 import org.arastreju.sge.model.nodes.SNResource;
 import org.arastreju.sge.model.nodes.SemanticNode;
@@ -29,9 +29,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
 
-import static org.arastreju.sge.SNOPS.associations;
-import static org.arastreju.sge.SNOPS.fetchObject;
-import static org.arastreju.sge.SNOPS.string;
+import static org.arastreju.sge.SNOPS.*;
 
 /**
  * <p>
@@ -100,9 +98,14 @@ public abstract class ResourceView implements ResourceNode, Serializable {
 	}
 
     @Override
-	public Statement addAssociation(ResourceID predicate, SemanticNode object, Context... ctx) {
-		return resource.addAssociation(predicate, object, ctx);
-	}
+    public Statement addAssociation(ResourceID predicate, SemanticNode object) {
+        return resource.addAssociation(predicate, object);
+    }
+
+    @Override
+    public Statement addAssociation(ResourceID predicate, SemanticNode object, StatementMetaInfo metaInfo) {
+        return resource.addAssociation(predicate, object, metaInfo);
+    }
 
     @Override
 	public boolean removeAssociation(final Statement stmt) {

@@ -22,6 +22,7 @@ import org.arastreju.sge.model.DetachedStatement;
 import org.arastreju.sge.model.ResourceID;
 import org.arastreju.sge.model.SimpleResourceID;
 import org.arastreju.sge.model.Statement;
+import org.arastreju.sge.model.associations.DefaultStatementMetaInfo;
 import org.arastreju.sge.model.nodes.ResourceNode;
 import org.arastreju.sge.model.nodes.SemanticNode;
 import org.arastreju.sge.model.nodes.views.SNBoolean;
@@ -29,13 +30,7 @@ import org.arastreju.sge.model.nodes.views.SNScalar;
 import org.arastreju.sge.model.nodes.views.SNText;
 import org.arastreju.sge.naming.QualifiedName;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * <p>
@@ -282,8 +277,8 @@ public class SNOPS {
     /**
      * Create a new associated statement, that will be added to the subject.
      */
-    public static Statement associate(final ResourceNode subject, final ResourceID predicate, final SemanticNode object, final Context... ctx){
-        return subject.addAssociation(predicate, object, ctx);
+    public static Statement associate(final ResourceNode subject, final ResourceID predicate, final SemanticNode object){
+        return subject.addAssociation(predicate, object, new DefaultStatementMetaInfo());
     }
 	
 	/**
@@ -291,13 +286,13 @@ public class SNOPS {
 	 * @param subject The subject.
 	 * @param predicate The predicate.
 	 * @param object The object to be set.
-	 * @param contexts The contexts.
 	 */
-	public static Statement assure(final ResourceNode subject, final ResourceID predicate, final SemanticNode object, final Context... contexts){
+	public static Statement assure(final ResourceNode subject, final ResourceID predicate, final SemanticNode object){
+        final Context[] contexts = null;
         final Statement statement = new DetachedStatement(subject, predicate, object, contexts);
 		final Set<Statement> all = associations(subject, predicate);
         if (all.isEmpty()) {
-            return subject.addAssociation(predicate, object, contexts);
+            return subject.addAssociation(predicate, object, DefaultStatementMetaInfo.from(contexts));
         }
         else if (all.contains(statement)) {
             for (Statement existing : all) {
@@ -308,7 +303,7 @@ public class SNOPS {
             return statement;
         } else {
             remove(subject, predicate);
-            return subject.addAssociation(predicate, object, contexts);
+            return subject.addAssociation(predicate, object, DefaultStatementMetaInfo.from(contexts));
         }
 	}
 	
@@ -317,9 +312,8 @@ public class SNOPS {
 	 * @param subject The subject.
 	 * @param predicate The predicate.
 	 * @param object The object to be set.
-	 * @param contexts The contexts.
 	 */
-	public static Statement assure(final ResourceNode subject, final ResourceID predicate, final Object object, final Context... contexts){
+	public static Statement assure(final ResourceNode subject, final ResourceID predicate, final Object object){
 		final SemanticNode node;
 		if (object instanceof SemanticNode) {
 			node = (SemanticNode) object;
@@ -332,7 +326,7 @@ public class SNOPS {
         } else {
 			throw new IllegalArgumentException("Unsupported value: " + object);
 		}
-		return assure(subject, predicate, node, contexts);
+		return assure(subject, predicate, node);
 	}
 	
 	/**
@@ -340,9 +334,8 @@ public class SNOPS {
 	 * @param subject The subject.
 	 * @param predicate The predicate.
 	 * @param objects The collection of objects to be added.
-	 * @param contexts The contexts.
 	 */
-	public static void assure(final ResourceNode subject, final ResourceID predicate, final Collection<? extends SemanticNode> objects, final Context... contexts){
+	public static void assure(final ResourceNode subject, final ResourceID predicate, final Collection<? extends SemanticNode> objects){
 		final List<SemanticNode> existing = new ArrayList<SemanticNode>();
 		// 1st: remove no longer existing
 		for(Statement assoc: associations(subject, predicate)){
@@ -355,7 +348,7 @@ public class SNOPS {
 		// 2nd: add not yet existing
 		for (SemanticNode current: objects){
 			if (!existing.contains(current)){
-				associate(subject, predicate, current, contexts);
+				associate(subject, predicate, current);
 			}
 		}
 	}

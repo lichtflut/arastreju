@@ -56,7 +56,7 @@ public class HalfStatement {
     public HalfStatement(final ResourceID predicate, final SemanticNode object) {
         this.predicate = predicate;
         this.object = object;
-        metaInfo = new StatementMetaInfo();
+        metaInfo = new DefaultStatementMetaInfo();
         hash = calculateHash();
     }
 

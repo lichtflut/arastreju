@@ -17,6 +17,7 @@ package org.arastreju.sge.model;
 
 
 import org.arastreju.sge.context.Context;
+import org.arastreju.sge.model.associations.DefaultStatementMetaInfo;
 import org.arastreju.sge.model.associations.StatementMetaInfo;
 import org.arastreju.sge.model.nodes.SemanticNode;
 
@@ -43,7 +44,7 @@ public class DetachedStatement extends AbstractStatement {
 	 */
 	public DetachedStatement(final ResourceID subject, final ResourceID predicate,
 			final SemanticNode object, final Context... contexts) {
-		super(subject, predicate, object, new StatementMetaInfo(contexts));
+		super(subject, predicate, object, new DefaultStatementMetaInfo(contexts));
 	}
 
 

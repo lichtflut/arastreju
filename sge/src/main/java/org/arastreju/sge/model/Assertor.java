@@ -16,6 +16,7 @@
 package org.arastreju.sge.model;
 
 import org.arastreju.sge.context.Context;
+import org.arastreju.sge.model.associations.DefaultStatementMetaInfo;
 import org.arastreju.sge.model.associations.StatementMetaInfo;
 import org.arastreju.sge.model.associations.TimedStatementMetaInfo;
 import org.arastreju.sge.model.nodes.SemanticNode;
@@ -41,6 +42,7 @@ public class Assertor {
     private Context[] contexts = NO_CTX;
     private StatementOrigin origin = StatementOrigin.ASSERTED;
 
+    private Date timetamp;
     private ResourceID subject;
     private ResourceID predicate;
     private SemanticNode object;
@@ -67,6 +69,25 @@ public class Assertor {
         return this;
     }
 
+    public Assertor timestamp(long tsp) {
+        return timestamp(toDate(tsp));
+    }
+
+    public Assertor timestamp(Date tsp) {
+        this.timetamp = tsp;
+        return this;
+    }
+
+    public Assertor validFrom(Long validFrom) {
+        this.validFrom = toDate(validFrom);
+        return this;
+    }
+
+    public Assertor validUntil(Long validUntil) {
+        this.validUntil = toDate(validUntil);
+        return this;
+    }
+
     public Assertor validFrom(Date validFrom) {
         this.validFrom = validFrom;
         return this;
@@ -84,10 +105,21 @@ public class Assertor {
     }
 
     StatementMetaInfo createMetaInfo() {
+        Date tsp = timetamp != null ? timetamp : new Date();
         if (validFrom != null || validUntil != null) {
-            return new TimedStatementMetaInfo(contexts, new Date(), origin, validFrom, validUntil);
+            return new TimedStatementMetaInfo(contexts, tsp, origin, validFrom, validUntil);
         }
-        else return new StatementMetaInfo(contexts, new Date(), origin);
+        else return new DefaultStatementMetaInfo(contexts, tsp, origin);
+    }
+
+    //-----------------------------------------------------
+
+    private Date toDate(Long tsp) {
+        if (tsp == null || tsp == 0) {
+            return null;
+        } else {
+            return new Date(tsp);
+        }
     }
 
 }

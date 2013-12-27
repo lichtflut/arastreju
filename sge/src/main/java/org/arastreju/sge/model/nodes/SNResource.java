@@ -20,7 +20,9 @@ import org.arastreju.sge.model.DetachedStatement;
 import org.arastreju.sge.model.ResourceID;
 import org.arastreju.sge.model.Statement;
 import org.arastreju.sge.model.associations.AssociationKeeper;
+import org.arastreju.sge.model.associations.DefaultStatementMetaInfo;
 import org.arastreju.sge.model.associations.DetachedAssociationKeeper;
+import org.arastreju.sge.model.associations.StatementMetaInfo;
 import org.arastreju.sge.naming.Namespace;
 import org.arastreju.sge.naming.QualifiedName;
 
@@ -131,11 +133,16 @@ public class SNResource implements ResourceNode, Serializable {
 	}
 
     @Override
-	public Statement addAssociation(ResourceID predicate, SemanticNode object, Context... ctx) {
-		final Statement statement = new DetachedStatement(this, predicate, object, ctx);
-		associationKeeper.addAssociation(statement);
-		return statement;
-	}
+    public Statement addAssociation(ResourceID predicate, SemanticNode object) {
+        return addAssociation(predicate, object, new DefaultStatementMetaInfo());
+    }
+
+    @Override
+    public Statement addAssociation(ResourceID predicate, SemanticNode object, StatementMetaInfo metaInfo) {
+        final Statement statement = new DetachedStatement(this, predicate, object, metaInfo);
+        associationKeeper.addAssociation(statement);
+        return statement;
+    }
 	
 	// -- DENY ASSOC --------------------------------------
 

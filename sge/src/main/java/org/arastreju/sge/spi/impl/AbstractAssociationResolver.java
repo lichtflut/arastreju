@@ -18,6 +18,7 @@ package org.arastreju.sge.spi.impl;
 import org.arastreju.sge.context.Accessibility;
 import org.arastreju.sge.context.Context;
 import org.arastreju.sge.model.SimpleResourceID;
+import org.arastreju.sge.model.associations.DefaultStatementMetaInfo;
 import org.arastreju.sge.model.associations.StatementMetaInfo;
 import org.arastreju.sge.model.nodes.ResourceNode;
 import org.arastreju.sge.model.nodes.views.SNContext;
@@ -98,7 +99,7 @@ public abstract class AbstractAssociationResolver implements AssociationResolver
     }
 
     protected StatementMetaInfo createMetaInfo(Context[] stmtContexts, Date date) {
-        return new StatementMetaInfo(stmtContexts, date);
+        return new DefaultStatementMetaInfo(stmtContexts, date);
     }
 
     protected StatementMetaInfo createMetaInfo(Context[] stmtContexts, long date) {

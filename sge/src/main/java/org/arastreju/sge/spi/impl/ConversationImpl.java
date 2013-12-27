@@ -148,7 +148,7 @@ public class ConversationImpl implements Conversation {
 	public void addStatement(final Statement stmt) {
 		assertActive();
 		final ResourceNode subject = resolve(stmt.getSubject());
-		SNOPS.associate(subject, stmt.getPredicate(), stmt.getObject(), stmt.getContexts());
+        subject.addAssociation(stmt.getPredicate(), stmt.getObject(), stmt.getMetaInfo());
 	}
 
 	@Override
@@ -168,7 +168,7 @@ public class ConversationImpl implements Conversation {
             public SemanticGraph execute() {
                 for (Statement stmt : graph.getStatements()) {
                     final ResourceNode subject = resolve(stmt.getSubject());
-                    SNOPS.associate(subject, stmt.getPredicate(), stmt.getObject(), stmt.getContexts());
+                    subject.addAssociation(stmt.getPredicate(), stmt.getObject(), stmt.getMetaInfo());
                 }
                 return graph;
             }

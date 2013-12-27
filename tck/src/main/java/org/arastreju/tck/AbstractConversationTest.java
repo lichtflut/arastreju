@@ -27,10 +27,8 @@ import org.arastreju.sge.context.ContextID;
 import org.arastreju.sge.io.RdfXmlBinding;
 import org.arastreju.sge.io.SemanticGraphIO;
 import org.arastreju.sge.io.SemanticIOException;
-import org.arastreju.sge.model.ResourceID;
-import org.arastreju.sge.model.SemanticGraph;
-import org.arastreju.sge.model.SimpleResourceID;
-import org.arastreju.sge.model.Statement;
+import org.arastreju.sge.model.*;
+import org.arastreju.sge.model.associations.DefaultStatementMetaInfo;
 import org.arastreju.sge.model.nodes.ResourceNode;
 import org.arastreju.sge.model.nodes.SNResource;
 import org.arastreju.sge.model.nodes.ValueNode;
@@ -44,28 +42,17 @@ import org.arastreju.sge.query.Query;
 import org.arastreju.sge.query.QueryResult;
 import org.arastreju.sge.spi.GraphDataConnection;
 import org.arastreju.sge.spi.GraphDataStore;
-import org.arastreju.sge.spi.impl.ContextResolverImpl;
-import org.arastreju.sge.spi.impl.ConversationContextImpl;
-import org.arastreju.sge.spi.impl.ConversationImpl;
-import org.arastreju.sge.spi.impl.GraphDataConnectionImpl;
-import org.arastreju.sge.spi.impl.ConversationControllerImpl;
+import org.arastreju.sge.spi.impl.*;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.*;
 
-import static org.arastreju.sge.SNOPS.associate;
-import static org.arastreju.sge.SNOPS.associations;
-import static org.arastreju.sge.SNOPS.fetchObject;
-import static org.arastreju.sge.SNOPS.objects;
-import static org.arastreju.sge.SNOPS.qualify;
-import static org.arastreju.sge.SNOPS.remove;
+import static org.arastreju.sge.SNOPS.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 /**
  * <p>
@@ -157,7 +144,7 @@ public abstract class AbstractConversationTest {
     @Test
     public void testResolveAndFind() throws IOException {
         ResourceNode found = conversation.findResource(qnVehicle);
-        Assert.assertNull(found);
+        assertNull(found);
 
         ResourceNode resolved = conversation.resolve(SNOPS.id(qnVehicle));
         Assert.assertNotNull(resolved);
@@ -185,7 +172,7 @@ public abstract class AbstractConversationTest {
         conversation.attach(car);
 
         final ResourceNode car3 = conversation.findResource(qnCar);
-        Assert.assertEquals(car, car3);
+        assertEquals(car, car3);
 
         conversation.detach(car);
 
@@ -219,13 +206,13 @@ public abstract class AbstractConversationTest {
         Assert.assertNotSame(car1, car2);
 
         final ResourceNode subClasss = SNOPS.singleObject(car2, RDFS.SUB_CLASS_OF).asResource();
-        Assert.assertEquals(vehicle, subClasss);
+        assertEquals(vehicle, subClasss);
 
         final ValueNode brandname = SNOPS.singleObject(car2, Aras.HAS_BRAND_NAME).asValue();
-        Assert.assertEquals(brandname.getStringValue(), "BMW");
+        assertEquals(brandname.getStringValue(), "BMW");
 
         final ValueNode propername = SNOPS.singleObject(car2, Aras.HAS_PROPER_NAME).asValue();
-        Assert.assertEquals(propername.getStringValue(), "Knut");
+        assertEquals(propername.getStringValue(), "Knut");
     }
 
     @Test
@@ -244,10 +231,10 @@ public abstract class AbstractConversationTest {
         Assert.assertNotSame(car, car2);
 
         final ResourceNode res = SNOPS.singleObject(car2, RDFS.SUB_CLASS_OF).asResource();
-        Assert.assertEquals(vehicle, res);
+        assertEquals(vehicle, res);
 
         final ValueNode value = SNOPS.singleObject(car2, Aras.HAS_PROPER_NAME).asValue();
-        Assert.assertEquals(value.getStringValue(), "BMW");
+        assertEquals(value.getStringValue(), "BMW");
     }
 
     @Test
@@ -271,7 +258,7 @@ public abstract class AbstractConversationTest {
         conversation.attach(car1);
 
         conversation.remove(car);
-        Assert.assertNull(conversation.findResource(qnCar));
+        assertNull(conversation.findResource(qnCar));
         conversation.remove(car1);
 
         Assert.assertFalse(car1.isAttached());
@@ -283,7 +270,7 @@ public abstract class AbstractConversationTest {
 
         ResourceNode found = conversation.findResource(qnVehicle);
         Assert.assertNotNull(found);
-        Assert.assertEquals(RDF.TYPE, SNOPS.singleObject(found, RDFS.SUB_CLASS_OF));
+        assertEquals(RDF.TYPE, SNOPS.singleObject(found, RDFS.SUB_CLASS_OF));
     }
 
     @Test
@@ -298,16 +285,16 @@ public abstract class AbstractConversationTest {
         conversation.attach(car1);
 
         final Statement stored = SNOPS.singleAssociation(car1, Aras.HAS_BRAND_NAME);
-        Assert.assertEquals(association.hashCode(), stored.hashCode());
+        assertEquals(association.hashCode(), stored.hashCode());
 
-        Assert.assertEquals(3, car1.getAssociations().size());
+        assertEquals(3, car1.getAssociations().size());
         Assert.assertFalse(associations(car1, Aras.HAS_BRAND_NAME).isEmpty());
         Assert.assertTrue("Association not present", car1.getAssociations().contains(association));
 
         final boolean removedFlag = car1.removeAssociation(association);
         Assert.assertTrue(removedFlag);
 
-        Assert.assertEquals(2, car1.getAssociations().size());
+        assertEquals(2, car1.getAssociations().size());
         Assert.assertTrue(associations(car1, Aras.HAS_BRAND_NAME).isEmpty());
 
     }
@@ -326,7 +313,7 @@ public abstract class AbstractConversationTest {
         // detach
         conversation.detach(car1);
 
-        Assert.assertEquals(3, car1.getAssociations().size());
+        assertEquals(3, car1.getAssociations().size());
         Assert.assertFalse(associations(car1, Aras.HAS_BRAND_NAME).isEmpty());
         Assert.assertTrue("Association not present", car1.getAssociations().contains(association));
 
@@ -338,7 +325,7 @@ public abstract class AbstractConversationTest {
         final ResourceNode car2 = conversation.findResource(qnCar);
         Assert.assertNotSame(car1, car2);
 
-        Assert.assertEquals(2, car2.getAssociations().size());
+        assertEquals(2, car2.getAssociations().size());
         Assert.assertTrue(associations(car2, Aras.HAS_BRAND_NAME).isEmpty());
 
     }
@@ -379,7 +366,7 @@ public abstract class AbstractConversationTest {
 
         Assert.assertFalse(result.isEmpty());
 
-        Assert.assertEquals(qnCar, result.getSingleNode().getQualifiedName());
+        assertEquals(qnCar, result.getSingleNode().getQualifiedName());
     }
 
     @Test
@@ -395,7 +382,7 @@ public abstract class AbstractConversationTest {
         Assert.assertNotSame(car, car2);
         final ValueNode value = SNOPS.singleObject(car2, Aras.HAS_PROPER_NAME).asValue();
 
-        Assert.assertEquals(value.getStringValue(), "BMW");
+        assertEquals(value.getStringValue(), "BMW");
     }
 
     @Test
@@ -431,11 +418,11 @@ public abstract class AbstractConversationTest {
 
         final ResourceNode hasChild = conversation.findResource(SNOPS.qualify("http://test.arastreju.org/common#hasChild"));
         Assert.assertNotNull(hasChild);
-        Assert.assertEquals(new SimpleResourceID("http://test.arastreju.org/common#hasParent"), objects(hasChild, Aras.INVERSE_OF).iterator().next());
+        assertEquals(new SimpleResourceID("http://test.arastreju.org/common#hasParent"), objects(hasChild, Aras.INVERSE_OF).iterator().next());
 
         final ResourceNode marriedTo = conversation.findResource(SNOPS.qualify("http://test.arastreju.org/common#isMarriedTo"));
         Assert.assertNotNull(marriedTo);
-        Assert.assertEquals(marriedTo, objects(marriedTo, Aras.INVERSE_OF).iterator().next());
+        assertEquals(marriedTo, objects(marriedTo, Aras.INVERSE_OF).iterator().next());
     }
 
     @Test
@@ -544,14 +531,14 @@ public abstract class AbstractConversationTest {
         QueryResult res = conversation.createQuery().addField(RDF.TYPE.toURI(), qnVehicle).getResult();
         Assert.assertNotNull(res);
 
-        Assert.assertEquals(2, res.size());
+        assertEquals(2, res.size());
 
         remove(car, RDF.TYPE);
 
         res = conversation.createQuery().addField(RDF.TYPE.toURI(), qnVehicle).getResult();
         Assert.assertNotNull(res);
 
-        Assert.assertEquals(1, res.size());
+        assertEquals(1, res.size());
 
     }
 
@@ -574,11 +561,11 @@ public abstract class AbstractConversationTest {
 
         ctx.setReadContexts(ctx1, ctx2, ctx3, convCtx1, convCtx2);
 
-        associate(car1, Aras.HAS_BRAND_NAME, new SNText("BMW"), ctx1);
+        car1.addAssociation(Aras.HAS_BRAND_NAME, new SNText("BMW"), DefaultStatementMetaInfo.from(ctx1));
         ctx.setPrimaryContext(convCtx1);
-        associate(car1, RDFS.SUB_CLASS_OF, vehicle, ctx1, ctx2);
+        car1.addAssociation(RDFS.SUB_CLASS_OF, vehicle, DefaultStatementMetaInfo.from(ctx1, ctx2));
         ctx.setPrimaryContext(convCtx2);
-        associate(car1, Aras.HAS_PROPER_NAME, new SNText("Knut"), ctx1, ctx2, ctx3);
+        car1.addAssociation(Aras.HAS_PROPER_NAME, new SNText("Knut"), DefaultStatementMetaInfo.from(ctx1, ctx2, ctx3));
 
         // detach
         conversation.detach(car1);
@@ -610,7 +597,7 @@ public abstract class AbstractConversationTest {
         QueryResult result = query.getResult();
         Assert.assertNotNull(result);
         Assert.assertFalse(result.isEmpty());
-        Assert.assertEquals(qnCar, result.getSingleNode().getQualifiedName());
+        assertEquals(qnCar, result.getSingleNode().getQualifiedName());
 
         conversation.remove(car);
 
@@ -638,7 +625,7 @@ public abstract class AbstractConversationTest {
         QueryResult result = query.getResult();
         Assert.assertNotNull(result);
         Assert.assertFalse(result.isEmpty());
-        Assert.assertEquals(qnCar, result.getSingleNode().getQualifiedName());
+        assertEquals(qnCar, result.getSingleNode().getQualifiedName());
 
         conversation.removeStatement(stmt1);
 
@@ -669,17 +656,17 @@ public abstract class AbstractConversationTest {
         SNContext otherContext = new SNContext(QualifiedName.generate());
         conversation.getConversationContext().setPrimaryContext(otherContext);
         Query query1 = conversation.createQuery().addField(RDF.TYPE, qnCar);
-        Assert.assertEquals(0, query1.getResult().size());
+        assertEquals(0, query1.getResult().size());
 
         // Check with access context
         conversation.getConversationContext().setPrimaryContext(accessContext);
         Query query2 = conversation.createQuery().addField(RDF.TYPE, qnCar);
-        Assert.assertEquals(1, query2.getResult().size());
+        assertEquals(1, query2.getResult().size());
 
         // Check with source context
         conversation.getConversationContext().setPrimaryContext(sourceContext);
         Query query3 = conversation.createQuery().addField(RDF.TYPE, qnCar);
-        Assert.assertEquals(1, query3.getResult().size());
+        assertEquals(1, query3.getResult().size());
     }
 
     @Test
@@ -693,9 +680,9 @@ public abstract class AbstractConversationTest {
 
         conversation.attach(aCar);
 
-        associate(aCar, Aras.HAS_BRAND_NAME, new SNText("BMW"), sourceContext);
-        associate(aCar, RDFS.LABEL, new SNText("A BMW car"), publicContext);
-        associate(aCar, Aras.HAS_PROPER_NAME, new SNText("Knut"), privateContext);
+        aCar.addAssociation(Aras.HAS_BRAND_NAME, new SNText("BMW"), DefaultStatementMetaInfo.from(sourceContext));
+        aCar.addAssociation(RDFS.LABEL, new SNText("A BMW car"), DefaultStatementMetaInfo.from(publicContext));
+        aCar.addAssociation(Aras.HAS_PROPER_NAME, new SNText("Knut"), DefaultStatementMetaInfo.from(privateContext));
 
         conversation.detach(aCar);
         conversation.getConversationContext().setPrimaryContext(sourceContext);
@@ -704,11 +691,11 @@ public abstract class AbstractConversationTest {
         Assert.assertNotSame(aCar, car2);
 
         // primary context
-        Assert.assertEquals(new SNText("BMW"), fetchObject(car2, Aras.HAS_BRAND_NAME));
+        assertEquals(new SNText("BMW"), fetchObject(car2, Aras.HAS_BRAND_NAME));
         // public
-        Assert.assertEquals(new SNText("A BMW car"), fetchObject(car2, RDFS.LABEL));
+        assertEquals(new SNText("A BMW car"), fetchObject(car2, RDFS.LABEL));
         // private
-        Assert.assertNull("Expected not to see a proper name.",fetchObject(car2, Aras.HAS_PROPER_NAME));
+        assertNull("Expected not to see a proper name.", fetchObject(car2, Aras.HAS_PROPER_NAME));
 
     }
 
@@ -723,9 +710,9 @@ public abstract class AbstractConversationTest {
 
         conversation.attach(aCar);
 
-        associate(aCar, Aras.HAS_BRAND_NAME, new SNText("BMW"), sourceContext);
-        associate(aCar, RDFS.LABEL, new SNText("A BMW car"), publicContext);
-        associate(aCar, Aras.HAS_PROPER_NAME, new SNText("Knut"), privateContext);
+        aCar.addAssociation(Aras.HAS_BRAND_NAME, new SNText("BMW"), DefaultStatementMetaInfo.from(sourceContext));
+        aCar.addAssociation(RDFS.LABEL, new SNText("A BMW car"), DefaultStatementMetaInfo.from(publicContext));
+        aCar.addAssociation(Aras.HAS_PROPER_NAME, new SNText("Knut"), DefaultStatementMetaInfo.from(privateContext));
 
         conversation.detach(aCar);
         conversation.getConversationContext().setPrimaryContext(accessContext);
@@ -734,11 +721,11 @@ public abstract class AbstractConversationTest {
         Assert.assertNotSame(aCar, car2);
 
         // primary context
-        Assert.assertEquals(new SNText("BMW"), fetchObject(car2, Aras.HAS_BRAND_NAME));
+        assertEquals(new SNText("BMW"), fetchObject(car2, Aras.HAS_BRAND_NAME));
         // public
-        Assert.assertEquals(new SNText("A BMW car"), fetchObject(car2, RDFS.LABEL));
+        assertEquals(new SNText("A BMW car"), fetchObject(car2, RDFS.LABEL));
         // private
-        Assert.assertNull(fetchObject(car2, Aras.HAS_PROPER_NAME));
+        assertNull(fetchObject(car2, Aras.HAS_PROPER_NAME));
     }
 
     @Test
@@ -752,10 +739,10 @@ public abstract class AbstractConversationTest {
 
         conversation.attach(aCar);
 
-        associate(aCar, Aras.HAS_BRAND_NAME, new SNText("BMW"), sourceContext);
-        associate(aCar, Aras.HAS_NAME_PART, new SNText("M3"), accessContext);
-        associate(aCar, RDFS.LABEL, new SNText("A BMW car"), publicContext);
-        associate(aCar, Aras.HAS_PROPER_NAME, new SNText("Knut"), privateContext);
+        aCar.addAssociation(Aras.HAS_BRAND_NAME, new SNText("BMW"), DefaultStatementMetaInfo.from(sourceContext));
+        aCar.addAssociation(Aras.HAS_NAME_PART, new SNText("M3"), DefaultStatementMetaInfo.from(accessContext));
+        aCar.addAssociation(RDFS.LABEL, new SNText("A BMW car"), DefaultStatementMetaInfo.from(publicContext));
+        aCar.addAssociation(Aras.HAS_PROPER_NAME, new SNText("Knut"), DefaultStatementMetaInfo.from(privateContext));
 
         conversation.detach(aCar);
 
@@ -766,13 +753,44 @@ public abstract class AbstractConversationTest {
         Assert.assertNotSame(aCar, car2);
 
         // primary context
-        Assert.assertEquals(new SNText("BMW"), fetchObject(car2, Aras.HAS_BRAND_NAME));
+        assertEquals(new SNText("BMW"), fetchObject(car2, Aras.HAS_BRAND_NAME));
         // access context
-        Assert.assertNull(fetchObject(car2, Aras.HAS_NAME_PART));
+        assertNull(fetchObject(car2, Aras.HAS_NAME_PART));
         // public
-        Assert.assertNull(fetchObject(car2, RDFS.LABEL));
+        assertNull(fetchObject(car2, RDFS.LABEL));
         // private
-        Assert.assertNull(fetchObject(car2, Aras.HAS_PROPER_NAME));
+        assertNull(fetchObject(car2, Aras.HAS_PROPER_NAME));
+    }
+
+    @Test
+    public void testTimeConstraints() {
+        final ResourceNode thing = new SNResource();
+
+        conversation.attach(thing);
+
+        Statement stmt1 = Assertor.start(thing, Aras.HAS_PROPER_NAME, new SNText("ShortTimeValid"))
+                .validFrom(1000 * 1000L)
+                .validUntil(1000 * 2000L)
+                .build();
+        conversation.addStatement(stmt1);
+
+        Statement stmt2 = Assertor.start(thing, RDFS.LABEL, new SNText("AllTimeValid"))
+                .build();
+        conversation.addStatement(stmt2);
+
+        conversation.detach(thing);
+
+        final ResourceNode thing2 = conversation.findResource(thing.getQualifiedName());
+        Assert.assertNotSame(thing, thing2);
+
+        Statement s1 = fetchAssociation(thing2, Aras.HAS_PROPER_NAME);
+        assertEquals(1000 * 1000L, s1.getMetaInfo().getValidFrom().getTime());
+        assertEquals(1000 * 2000L, s1.getMetaInfo().getValidUntil().getTime());
+
+        Statement s2 = fetchAssociation(thing2, RDFS.LABEL);
+        assertNull(s2.getMetaInfo().getValidFrom());
+        assertNull(s2.getMetaInfo().getValidUntil());
+
     }
 
 }
