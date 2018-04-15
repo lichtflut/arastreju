@@ -44,7 +44,7 @@ The node 'bart' is now attached which means two things:
 1. It is persistent 
 2. All operations to an attached node are reflected directly to the datastore
 
-While attaching a node all associated nodes not yet attached will be attached two.
+While attaching a node all associated nodes not yet attached will be attached too.
 
 If we now lookup an existing node for the city 'Springfield' 
 
@@ -73,7 +73,7 @@ As soon if we re-attach 'bart' his relationships will be persistent in the datas
 
     conversation.attach(bart);
     
-Detaching has not to be confused with removing.
+Detaching must not be confused with removing.
 
     conversation.remove(milhouse);
     
